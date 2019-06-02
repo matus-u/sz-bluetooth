@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
 
-WORKDIR /src/blue-app
-
 RUN apt-get update \
     && apt-get install -y \
       python3 \
@@ -9,4 +7,6 @@ RUN apt-get update \
       qtcreator \
       vim \
       pyqt5-dev-tools
+
+WORKDIR /src
 

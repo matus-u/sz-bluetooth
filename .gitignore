@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+
+blue-app/generated/
