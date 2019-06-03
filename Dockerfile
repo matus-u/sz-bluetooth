@@ -10,4 +10,4 @@ RUN apt-get update \
 
 WORKDIR /src
 
-ENV RUN_FROM_DOCKER Yes
+ENV RUN_FROM_DOCKER TRUE

@@ -1,22 +1,25 @@
 #!/bin/bash
+if [ $RUN_FROM_DOCKER == "TRUE" ]; then
+	sleep 1
+else
+	rm -rf /tmp/bluetooth-scan-pipe
+	mkfifo /tmp/bluetooth-scan-pipe
 
-rm -rf /tmp/bluetooth-scan-pipe
-mkfifo /tmp/bluetooth-scan-pipe
+	tail -f /tmp/bluetooth-scan-pipe | bluetoothctl &
 
-tail -f /tmp/bluetooth-scan-pipe | bluetoothctl &
+	PID=$(ps | grep tail  | cut -f 2 -d ' ')
 
-PID=$(ps | grep tail  | cut -f 2 -d ' ')
+	echo "scan on" >> /tmp/bluetooth-scan-pipe
 
-echo "scan on" >> /tmp/bluetooth-scan-pipe
+	sleep 15
 
-sleep 15
+	echo "scan off" >> /tmp/bluetooth-scan-pipe
 
-echo "scan off" >> /tmp/bluetooth-scan-pipe
+	echo "quit" >> /tmp/bluetooth-scan-pipe
 
-echo "quit" >> /tmp/bluetooth-scan-pipe
+	sleep 1
 
-sleep 1
+	kill -9 $PID
 
-kill -9 $PID
-
-rm -rf /tmp/bluetooth-scan-pipe
+	rm -rf /tmp/bluetooth-scan-pipe
+fi
