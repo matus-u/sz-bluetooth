@@ -20,6 +20,3 @@ sleep 1
 kill -9 $PID
 
 rm -rf /tmp/bluetooth-scan-pipe
-
-bt-device -l
-
