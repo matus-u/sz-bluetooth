@@ -1,15 +1,15 @@
 #!/bin/bash
 if [ $RUN_FROM_DOCKER == "TRUE" ]; then
 	sleep 1
-	echo "FIRST DEVICE"
-	echo "SECOND DEVICE"
-	echo "THIRD DEVICE"
-	echo "FOURTH DEVICE"
-	echo "FIFTH DEVICE"
-	echo "SIXTH DEVICE"
-	echo "SEVENTH DEVICE"
-	echo "EIGHTH DEVICE"
-	echo "NINE DEVICE"
+	echo "FIRST DEVICE 30:j3:49:ng:34:jk"
+	echo " DEVICE 30:j3:49:ng:34:jk"
+	echo "DEVICE 30:j3:49:ng:34:jk"
+	echo "DEVICE 30:j3:49:ng:34:jk"
+	echo "FIFTH DEVICE 30:j3:49:ng:34:jk"
+	echo "SIXTH DEVICE 30:j3:49:ng:34:jk"
+	echo "SEVENTH DEVICE 30:j3:49:ng:34:jk"
+	echo "EIGHTH DEVICE 30:j3:49:ng:34:jk"
+	echo "NINE DEVICE 30:j3:49:ng:34:jk"
 else
-	bt-device -l | tail +2 | cut -f 1 -d ' '
+	bt-device -l | tail +2 | cut -f 1,2 -d ' '
 fi

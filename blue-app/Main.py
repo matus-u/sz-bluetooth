@@ -12,10 +12,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
+        self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
+
+    def onSelectionChanged(self):
+        if not self.ui.devicesWidget.selectedItems():
+            self.ui.connectButton.setEnabled(False)
+        else:
+            self.ui.connectButton.setEnabled(True)
 
     def setWidgetsEnabled(self):
         self.ui.scanButton.setEnabled(True)
-        self.ui.connectButton.setEnabled(True)
         self.ui.devicesWidget.setEnabled(True)
 
     def setWidgetsDisabled(self):
@@ -24,17 +30,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.setEnabled(False)
 
     def onScanButton(self):
+        self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
         QtCore.QCoreApplication.processEvents()
         returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
         processGetDevices = QtCore.QProcess()
         processGetDevices.start("scripts/bt-list-device.sh")
         if (processGetDevices.waitForFinished()):
-            self.ui.devicesWidget.clear()
             data = processGetDevices.readAllStandardOutput().data().decode('utf-8').splitlines()
             self.ui.devicesWidget.setRowCount(len(data))
             for index, itemStr in enumerate(data):
-                self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(itemStr))
+                self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(" ".join(itemStr.split()[:-1])))
+                self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
 
         self.setWidgetsEnabled()
 
@@ -44,7 +51,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 def main():
     app = QtWidgets.QApplication(sys.argv)
     application = ApplicationWindow()
-    app.setOverrideCursor(QtCore.Qt.BlankCursor)
+    #app.setOverrideCursor(QtCore.Qt.BlankCursor)
     application.show()
     sys.exit(app.exec_())
 

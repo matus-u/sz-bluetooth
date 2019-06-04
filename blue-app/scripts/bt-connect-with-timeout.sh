@@ -28,8 +28,6 @@ mkfifo /tmp/bluetooth-connect-pipe
 tail -f /tmp/bluetooth-connect-pipe | bt-device -c $DEVICE &
 BT_DEVICE_PID=$!
 
-ps | grep bt-device
-
 PID=$(ps | grep tail  | cut -f 2 -d ' ')
 
 sleep 1
