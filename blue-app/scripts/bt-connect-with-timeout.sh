@@ -1,9 +1,21 @@
 #!/bin/bash
 
-if [ "$1" == "" ]; 
-then 
+if [ "$1" == "" ];
+then
 	echo "Provide BT address please!"
 	exit 1
+fi
+
+if [ "$2" == "" ];
+then
+	echo "Provide timeout please!"
+	exit 1
+fi
+
+if [ $RUN_FROM_DOCKER ]; then
+    sleep 5
+    echo "PID"
+    exit $(echo $RANDOM % 2 | bc)
 fi
 
 DEVICE=$1
@@ -38,14 +50,10 @@ wait $BT_DEVICE_PID
 RETVAL=$?
 if [ $RETVAL -ne 0 ]; then
 	echo "Cannot connect to device $DEVICE"
-	cleanup "$PID" ""
+	cleanup "$PID"
 	exit $RETVAL
 else
 	echo "connect $DEVICE" | bluetoothctl
+    echo "$PID"
 fi
-
-sleep 20
-
-cleanup "$PID"
-
 

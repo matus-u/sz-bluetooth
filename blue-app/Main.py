@@ -13,6 +13,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
+        self.connectionTimer = QtCore.QTimer()
+        self.connectionTimer.setSingleShot(True)
+        self.refreshTimer = QtCore.QTimer()
+        self.refreshTimer.timeout.connect(self.onRefreshTimer)
+        self.connectionTimer.timeout.connect(self.onConnectionTimer)
+
+    def onRefreshTimer(self):
+        self.ui.remainingTimeLabel.setText("Time to disconnect: " + str(int(self.connectionTimer.remainingTime()/1000)) + "s")
+
+    def onConnectionTimer(self):
+        self.refreshTimer.stop()
+        self.ui.connectInfoLabel.clear()
+        self.ui.connectDeviceLabel.clear()
+        self.ui.remainingTimeLabel.clear()
+        QtCore.QCoreApplication.processEvents()
+        QtCore.QProcess.execute("scripts/bt-cleanup-device.sh", [self.connectedDevice, self.connectedPid ])
+        self.setWidgetsEnabled()
 
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
@@ -32,6 +49,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onScanButton(self):
         self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
+        self.ui.scanButton.setText("Scanninng...")
         QtCore.QCoreApplication.processEvents()
         returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
         processGetDevices = QtCore.QProcess()
@@ -44,9 +62,36 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
 
         self.setWidgetsEnabled()
+        self.ui.scanButton.setText("Scan bluetooth network")
 
     def onConnectButton(self):
         self.setWidgetsDisabled() 
+        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()
+        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
+        self.process = QtCore.QProcess()
+        self.process.finished.connect(self.onConnect)
+        self.ui.connectInfoLabel.setText("Connecting to the device: ")
+        self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
+        self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
+
+    def onConnect(self, exitCode, exitStatus):
+        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()
+        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
+
+        if exitCode == 1:
+            QtWidgets.QMessageBox.critical(self, 'Connection error', "Connection with " + deviceName + " failed", QtWidgets.QMessageBox.Cancel)
+            self.ui.connectInfoLabel.clear()
+            self.ui.connectDeviceLabel.clear()
+            self.setWidgetsEnabled()
+            self.ui.connectButton.setEnabled(True)
+        else:
+            self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
+            self.connectedDevice = macAddr
+            self.ui.connectInfoLabel.setText("Connected to the device: ")
+            self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
+            self.connectionTimer.start(5000)
+            self.onRefreshTimer()
+            self.refreshTimer.start(1000)
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $RUN_FROM_DOCKER == "TRUE" ]; then
+if [ $RUN_FROM_DOCKER ]; then
 	sleep 1
 	echo "FIRST DEVICE 30:j3:49:ng:34:jk"
 	echo " DEVICE 30:j3:49:ng:34:jk"

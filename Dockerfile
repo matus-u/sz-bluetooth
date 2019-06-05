@@ -6,6 +6,8 @@ RUN apt-get update \
       python3-pyqt5 \
       qtcreator \
       vim \
+      bc \
+      bash \
       pyqt5-dev-tools
 
 WORKDIR /src
