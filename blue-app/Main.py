@@ -66,7 +66,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         self.setWidgetsDisabled() 
-        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()
+        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.process = QtCore.QProcess()
         self.process.finished.connect(self.onConnect)
@@ -75,7 +75,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
 
     def onConnect(self, exitCode, exitStatus):
-        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()
+        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
 
         if exitCode == 1:
