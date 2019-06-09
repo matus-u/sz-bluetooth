@@ -1,5 +1,0 @@
-ACTION=="add|change", SUBSYSTEM=="tty", KERNEL=="ttyUSB[0-9]*", \
-        RUN+="/root/blue-app/scripts/start-touch.sh %k"
-
-ACTION=="remove", SUBSYSTEM=="tty", KERNEL=="ttyUSB[0-9]*", \
-        RUN+="/root/blue-app/scripts/stop-touch.sh"

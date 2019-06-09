@@ -89,7 +89,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.connectedDevice = macAddr
             self.ui.connectInfoLabel.setText("Connected to the device: ")
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-            self.connectionTimer.start(5000)
+            self.connectionTimer.start(30000)
             self.onRefreshTimer()
             self.refreshTimer.start(1000)
 
