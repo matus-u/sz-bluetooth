@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $RUN_FROM_DOCKER == "TRUE" ]; then
+if [ $RUN_FROM_DOCKER ]; then
 	sleep 1
 else
 	rm -rf /tmp/bluetooth-scan-pipe
@@ -11,7 +11,7 @@ else
 
 	echo "scan on" >> /tmp/bluetooth-scan-pipe
 
-	sleep 15
+	sleep 12
 
 	echo "scan off" >> /tmp/bluetooth-scan-pipe
 

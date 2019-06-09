@@ -10,6 +10,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.showFullScreen()
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
@@ -96,7 +97,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 def main():
     app = QtWidgets.QApplication(sys.argv)
     application = ApplicationWindow()
-    #app.setOverrideCursor(QtCore.Qt.BlankCursor)
+    app.setOverrideCursor(QtCore.Qt.BlankCursor)
     application.show()
     sys.exit(app.exec_())
 

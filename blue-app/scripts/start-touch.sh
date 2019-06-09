@@ -7,5 +7,6 @@ then
 fi
 
 modprobe elo
-sleep 1
+sleep 2
 inputattach --elotouch /dev/$1 --daemon
+sleep 2
