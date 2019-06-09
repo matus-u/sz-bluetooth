@@ -28,6 +28,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.connectInfoLabel.clear()
         self.ui.connectDeviceLabel.clear()
         self.ui.remainingTimeLabel.clear()
+        self.ui.devicesWidget.setRowCount(0)
         QtCore.QCoreApplication.processEvents()
         QtCore.QProcess.execute("scripts/bt-cleanup-device.sh", [self.connectedDevice, self.connectedPid ])
         self.setWidgetsEnabled()
