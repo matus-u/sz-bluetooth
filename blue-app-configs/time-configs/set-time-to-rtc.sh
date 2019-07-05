@@ -1,2 +1,5 @@
 #!/bin/bash
-./rtc_manipulate.py set $(date --utc +%y%m%d%H%M%S)
+
+set -e
+
+/opt/rtc-manipulate.py set $(date --utc +%y%m%d%H%M%S)
