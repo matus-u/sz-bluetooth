@@ -5,6 +5,7 @@ RUN apt-get update \
       python3 \
       python3-pyqt5 \
       qtcreator \
+      qt5-default \
       vim \
       bc \
       bash \

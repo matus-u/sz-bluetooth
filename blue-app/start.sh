@@ -1,8 +1,10 @@
 #!/bin/bash
 
+. generate-from-uic.sh
+
 if [ $RUN_FROM_DOCKER ]; then
 
-for i in ui/*; do pyuic5 $i -o generated/$(basename $i |cut -f 1 -d .).py; done;
+generate-from-uic
 python3 Main.py
 
 else
@@ -38,9 +40,11 @@ else
 
     # close blueman applet
     killall -9 blueman-applet
+    
+    #TODO TIMEZONE SET
 
     #while true; do 
-    for i in ui/*; do pyuic5 $i -o generated/$(basename $i |cut -f 1 -d .).py; done;
+    generate-from-uic
     python3 Main.py
     #done
 

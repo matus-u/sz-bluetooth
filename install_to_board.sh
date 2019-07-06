@@ -9,5 +9,6 @@ fi
 #TODO FIRST INSTALL TO UNKNOWN BOARD FROM USB WITH OTHER SCRIPT
 
 sudo rm -rf blue-app/generated/*
+sudo rm -rf blue-app/configs/*
 ssh root@$1 "rm -rf /media/usbstick/blue-app/" 
 scp -r blue-app root@$1:/media/usbstick/
