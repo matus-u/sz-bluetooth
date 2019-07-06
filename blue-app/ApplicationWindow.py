@@ -99,3 +99,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
+
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.ui.retranslateUi(self)
+        super(ApplicationWindow, self).changeEvent(event)

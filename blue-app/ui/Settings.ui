@@ -44,6 +44,26 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <item>
+       <property name="text">
+        <string>UTC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Europe/Budapest</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Europe/Bratislava</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Europe/London</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="2" column="0">
@@ -68,6 +88,21 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <item>
+       <property name="text">
+        <string>English</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Hungarian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Slovak</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="1" column="1">

@@ -27,3 +27,8 @@ class SettingsWindow(QtWidgets.QDialog):
     def onCancelButton(self):
         AppSettings.restoreLanguage()
         self.reject()
+
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.ui.retranslateUi(self)
+        super(SettingsWindow, self).changeEvent(event)

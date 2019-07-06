@@ -10,6 +10,7 @@ class AppSettings:
     LanguageList = ["english","hungarian","slovak"]
     LanguageString = "language"
     TimeZoneString = "timezone"
+    Translator = QtCore.QTranslator()
 
     @staticmethod
     def actualLanguage():
@@ -37,9 +38,12 @@ class AppSettings:
 
     @classmethod
     def _loadLanguage(cls, language):
-        translator = QtCore.QTranslator()
-        translator.load("translation/" + language + ".qm")
-        QtCore.QCoreApplication.installTranslator(translator)
+        app = QtWidgets.QApplication.instance()
+        app.removeTranslator(cls.Translator)
+        cls.Translator = QtCore.QTranslator()
+        cls.Translator.load(language + ".qm", "./translation")
+        app.installTranslator(cls.Translator)
+        QtCore.QCoreApplication.processEvents()
 
     @classmethod
     def storeSettings(cls, languageIndex, timeZoneIndex):
