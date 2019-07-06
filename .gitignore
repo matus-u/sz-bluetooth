@@ -32,3 +32,7 @@
 *.app
 
 blue-app/generated/
+blue-app/configs/
+blue-app/__pycache__/
+blue-app/services/__pycache__/
+blue-app/translation/*qm
