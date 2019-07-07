@@ -6,6 +6,19 @@ from generated.MainWindow import Ui_MainWindow
 import SettingsWindow
 
 class ApplicationWindow(QtWidgets.QMainWindow):
+
+    DISCONNECT_STR = 0
+    SCAN_STR = 1
+    CONNECTED_STR = 2
+    CONNECTING_STR = 3
+    CONNECTION_ERR_STR = 4
+    CONNECTION_FAILED_STR = 5
+    SCANNING_STR = 6
+
+    def createTrTexts(self):
+        return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
+        self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng...") ]
+
     def __init__(self):
         super(ApplicationWindow, self).__init__()
 
@@ -21,9 +34,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.refreshTimer = QtCore.QTimer()
         self.refreshTimer.timeout.connect(self.onRefreshTimer)
         self.connectionTimer.timeout.connect(self.onConnectionTimer)
+        self.texts = self.createTrTexts()
 
     def onRefreshTimer(self):
-        self.ui.remainingTimeLabel.setText(self.tr("Time to disconnect: {}s".format(str(int(self.connectionTimer.remainingTime()/1000)))))
+        self.ui.remainingTimeLabel.setText(self.texts.trTexts[self.DISCONNECT_STR].format(str(int(self.connectionTimer.remainingTime()/1000))))
 
     def onConnectionTimer(self):
         self.refreshTimer.stop()
@@ -53,7 +67,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onScanButton(self):
         self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
-        self.ui.scanButton.setText("Scanninng...")
+        self.ui.scanButton.setText(self.texts.trTexts[self.SCANNING_STR])
         QtCore.QCoreApplication.processEvents()
         returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
         processGetDevices = QtCore.QProcess()
@@ -66,7 +80,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
 
         self.setWidgetsEnabled()
-        self.ui.scanButton.setText(self.tr("Scan bluetooth network"))
+        self.ui.scanButton.setText(self.texts.trTexts[self.SCAN_STR])
 
     def onConnectButton(self):
         self.setWidgetsDisabled() 
@@ -74,7 +88,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.process = QtCore.QProcess()
         self.process.finished.connect(self.onConnect)
-        self.ui.connectInfoLabel.setText(self.tr("Connecting to the device: "))
+        self.ui.connectInfoLabel.setText(self.texts.trTexts[self.CONNECTING_STR])
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
         self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
 
@@ -83,7 +97,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
 
         if exitCode == 1:
-            QtWidgets.QMessageBox.critical(self, self.tr("Connection error"), self.tr("Connection with {} failed").format(deviceName), QtWidgets.QMessageBox.Cancel)
+            QtWidgets.QMessageBox.critical(self, self.texts.trTexts[self.CONNECTION_ERR_STR], self.texts.trTexts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
             self.ui.connectInfoLabel.clear()
             self.ui.connectDeviceLabel.clear()
             self.setWidgetsEnabled()
@@ -91,7 +105,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
             self.connectedDevice = macAddr
-            self.ui.connectInfoLabel.setText(self.tr("Connected to the device: "))
+            self.ui.connectInfoLabel.setText(self.texts.trTexts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
             self.connectionTimer.start(30000)
             self.onRefreshTimer()
@@ -102,5 +116,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
+            newTexts = self.createTrTexts()
+            for i in [self.ui.connectInfoLabel, self.ui.scanButton, self.ui.remainingTimeLabel]:
+                if i.text() != "":
+                    i.setText(newTexts[self.texts.index(i.text())])
+            self.texts = newTexts
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
