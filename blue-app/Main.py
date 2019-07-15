@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 import sys
 
 import ApplicationWindow
+import UpdateStatusThread
 from services.AppSettings import AppSettings
 
 def main():
@@ -11,9 +12,12 @@ def main():
     AppSettings.restoreLanguage()
 
     application = ApplicationWindow.ApplicationWindow()
+    t = UpdateStatusThread.UpdateStatusThread()
+    t.start()
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
     application.show()
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    sys.exit(ret)
 
 if __name__ == "__main__":
     main()
