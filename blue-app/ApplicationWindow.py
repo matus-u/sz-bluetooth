@@ -37,7 +37,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.texts = self.createTrTexts()
 
     def onRefreshTimer(self):
-        self.ui.remainingTimeLabel.setText(self.texts.trTexts[self.DISCONNECT_STR].format(str(int(self.connectionTimer.remainingTime()/1000))))
+        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(int(self.connectionTimer.remainingTime()/1000))))
 
     def onConnectionTimer(self):
         self.refreshTimer.stop()
@@ -67,7 +67,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onScanButton(self):
         self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
-        self.ui.scanButton.setText(self.texts.trTexts[self.SCANNING_STR])
+        self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
         QtCore.QCoreApplication.processEvents()
         returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
         processGetDevices = QtCore.QProcess()
@@ -80,7 +80,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
 
         self.setWidgetsEnabled()
-        self.ui.scanButton.setText(self.texts.trTexts[self.SCAN_STR])
+        self.ui.scanButton.setText(self.texts[self.SCAN_STR])
 
     def onConnectButton(self):
         self.setWidgetsDisabled() 
@@ -88,7 +88,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.process = QtCore.QProcess()
         self.process.finished.connect(self.onConnect)
-        self.ui.connectInfoLabel.setText(self.texts.trTexts[self.CONNECTING_STR])
+        self.ui.connectInfoLabel.setText(self.texts[self.CONNECTING_STR])
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
         self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
 
@@ -97,7 +97,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
 
         if exitCode == 1:
-            QtWidgets.QMessageBox.critical(self, self.texts.trTexts[self.CONNECTION_ERR_STR], self.texts.trTexts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
+            QtWidgets.QMessageBox.critical(self, self.texts[self.CONNECTION_ERR_STR], self.texts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
             self.ui.connectInfoLabel.clear()
             self.ui.connectDeviceLabel.clear()
             self.setWidgetsEnabled()
@@ -105,7 +105,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
             self.connectedDevice = macAddr
-            self.ui.connectInfoLabel.setText(self.texts.trTexts[self.CONNECTED_STR])
+            self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
             self.connectionTimer.start(30000)
             self.onRefreshTimer()

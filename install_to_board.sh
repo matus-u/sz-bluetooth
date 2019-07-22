@@ -10,5 +10,6 @@ fi
 
 sudo rm -rf blue-app/generated/*
 sudo rm -rf blue-app/configs/*
+sudo find blue-app/ -name "__py*" | sudo xargs rm -rf
 ssh root@$1 "rm -rf /media/usbstick/blue-app/" 
 scp -r blue-app root@$1:/media/usbstick/

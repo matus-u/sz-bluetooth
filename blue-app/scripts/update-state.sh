@@ -1,5 +1,10 @@
 #!/bin/bash
 
-MAC=$(ifconfig enp0s25 | grep ether | tr -s ' ' | cut -f 3 -d ' ' | tr : _)
+DEV=eth0
+if [ $RUN_FROM_DOCKER ]; then
+    DEV=enp0s25
+fi
 
-wget --timeout=20 --method=PUT http://localhost:4000/api/devices/$MAC
+MAC=$(ifconfig $DEV | grep ether | tr -s ' ' | cut -f 3 -d ' ' | tr -s ':' '_')
+
+wget --timeout=20 --method=PUT http://192.168.0.105:4000/api/devices/$MAC
