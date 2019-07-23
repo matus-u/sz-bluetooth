@@ -11,5 +11,5 @@ if [ $RUN_FROM_DOCKER ]; then
 	echo "EIGHTH DEVICE (30:j3:49:ng:34:jk)"
 	echo "NINE DEVICE (30:j3:49:ng:34:jk)"
 else
-	bt-device -l | tail +2 | cut -f 1,2 -d ' '
+	bt-device -l | tail +2
 fi
