@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>769</width>
-    <height>277</height>
+    <width>837</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QPushButton" name="shutDownButton">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>30</y>
-     <width>141</width>
+     <x>620</x>
+     <y>130</y>
+     <width>191</width>
      <height>61</height>
     </rect>
    </property>
@@ -31,11 +31,11 @@
     <rect>
      <x>30</x>
      <y>30</y>
-     <width>481</width>
-     <height>141</height>
+     <width>541</width>
+     <height>311</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout" rowstretch="2,1,2" rowminimumheight="0,0,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="2,2,0,2,2,2,0">
     <item row="0" column="1">
      <widget class="QComboBox" name="timeZoneCombobox">
       <property name="sizePolicy">
@@ -66,13 +66,6 @@
       </item>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="languageSelectionLabel">
-      <property name="text">
-       <string>Language selection</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="timeZoneLabel">
       <property name="text">
@@ -80,7 +73,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="QComboBox" name="languageCombobox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -105,7 +98,14 @@
       </item>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="1" column="0">
+     <widget class="QLabel" name="languageSelectionLabel">
+      <property name="text">
+       <string>Language selection</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -118,13 +118,60 @@
       </property>
      </spacer>
     </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="ssidLineEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Wireless SSID</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="scanWifiButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Scan wireless networks</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="wifiPassLineEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Wireless password</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
-     <x>419</x>
-     <y>210</y>
+     <x>560</x>
+     <y>380</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -136,8 +183,8 @@
   <widget class="QPushButton" name="cancelButton">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>210</y>
+     <x>690</x>
+     <y>380</y>
      <width>121</width>
      <height>41</height>
     </rect>

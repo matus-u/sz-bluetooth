@@ -29,27 +29,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.credit = 0
         self.showFullScreen()
         self.bluetoothService = BluetoothService()
         self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
-        self.bluetoothService.refreshTimerSignal.connect(self.onRefreshTimer)
+        self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
         self.bluetoothService.connectSignal.connect(self.onConnectSignal)
         self.setDemoModeVisible(False)
-        self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
+        self.ui.adminSettingsButton.setVisible(False)
+        self.ui.addCreditButton.clicked.connect(lambda: self.updateCreditInfo(self.credit + 1))
         self.ui.adminSettingsButton.clicked.connect(self.onSettingsButton)
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminShortCut)
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, self.onDemoMode)
-        self.updateCreditInfo()
-
-    def onRefreshTimer(self, value):
-        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value)))
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, lambda: self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible()))
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
+        self.updateCreditInfo(0)
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
@@ -57,7 +54,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
-        self.credit = 0
+        self.updateCreditInfo(0)
 
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
@@ -128,23 +125,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
 
-    def onAdminShortCut(self):
-        self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
-
     def setDemoModeVisible(self, value):
         self.ui.cpuTempValueLabel.setVisible(value)
         self.ui.labelCpuTemp.setVisible(value)
         self.ui.addCreditButton.setVisible(value)
         self.ui.disconnectButton.setVisible(value)
 
-    def updateCreditInfo(self):
+    def updateCreditInfo(self, value):
+        self.credit = value
         self.ui.actualCreditValue.setText(str(self.credit) + " " + self.texts[self.MINUTES]);
-
-    def onAddCreditButton(self):
-        self.credit = self.credit + 1
-        self.updateCreditInfo()
-
-    def onDemoMode(self):
-        self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible())
-
 

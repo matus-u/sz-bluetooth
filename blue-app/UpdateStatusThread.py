@@ -2,8 +2,6 @@ from PyQt5 import QtCore
 
 class UpdateStatusThread(QtCore.QThread):
 
-    askToFinish = QtCore.pyqtSignal()
-
     def run(self):
         self.sendDataTimer = QtCore.QTimer()
         self.sendDataTimer.moveToThread(self)
@@ -12,5 +10,4 @@ class UpdateStatusThread(QtCore.QThread):
         self.exec()
 
     def onSendData(self):
-        print ("SEND DATA")
         QtCore.QProcess.startDetached("scripts/update-state.sh")

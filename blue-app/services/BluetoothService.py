@@ -14,9 +14,9 @@ class BluetoothService(QtCore.QObject):
         super().__init__()
         self.connectionTimer = QtCore.QTimer()
         self.connectionTimer.setSingleShot(True)
-        self.connectionTimer.timeout.connect(self.onConnectionTimer)
+        self.connectionTimer.timeout.connect(lambda: self.forceDisconnect())
         self.refreshTimer = QtCore.QTimer()
-        self.refreshTimer.timeout.connect(self.onRefreshTimer)
+        self.refreshTimer.timeout.connect(lambda: self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000)))
         
 
     def scan(self):
@@ -47,13 +47,6 @@ class BluetoothService(QtCore.QObject):
             self.refreshTimer.start(1000)
             self.connectSignal.emit(0)
         
-    def onRefreshTimer(self):
-        self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
-            
-
-    def onConnectionTimer(self):
-        self.forceDisconnect()
-
     def forceDisconnect(self):
         self.connectionTimer.stop()
         self.refreshTimer.stop()
