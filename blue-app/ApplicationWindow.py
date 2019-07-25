@@ -14,17 +14,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     CONNECTION_ERR_STR = 4
     CONNECTION_FAILED_STR = 5
     SCANNING_STR = 6
+    NO_CREDIT_HEAD = 7
+    NO_CREDIT = 8
+    MINUTES = 9
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
-        self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng...") ]
+        self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
+        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("minutes") ]
 
     def __init__(self):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.credit = 0
         self.showFullScreen()
+        self.setDemoModeVisible(False)
+        self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.adminSettingsButton.clicked.connect(self.onSettingsButton)
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
@@ -35,6 +42,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.refreshTimer.timeout.connect(self.onRefreshTimer)
         self.connectionTimer.timeout.connect(self.onConnectionTimer)
         self.texts = self.createTrTexts()
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminShortCut)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, self.onDemoMode)
+        self.updateCreditInfo()
 
     def onRefreshTimer(self):
         self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(int(self.connectionTimer.remainingTime()/1000))))
@@ -83,6 +93,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
 
     def onConnectButton(self):
+        if self.credit == 0:
+            QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
+            return
+
         self.setWidgetsDisabled() 
         macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
@@ -107,12 +121,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.connectedDevice = macAddr
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-            self.connectionTimer.start(120000)
+            self.connectionTimer.start(self.credit * 60 * 1000)
             self.onRefreshTimer()
             self.refreshTimer.start(1000)
 
     def onSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
+        self.ui.adminSettingsButton.setVisible(False)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
@@ -123,3 +138,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.texts = newTexts
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
+
+    def onAdminShortCut(self):
+        self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
+
+    def setDemoModeVisible(self, value):
+        self.ui.cpuTempValueLabel.setVisible(value)
+        self.ui.labelCpuTemp.setVisible(value)
+        self.ui.addCreditButton.setVisible(value)
+        self.ui.disconnectButton.setVisible(value)
+
+    def updateCreditInfo(self):
+        self.ui.actualCreditValue.setText(str(self.credit) + " " + self.texts[self.MINUTES]);
+
+    def onAddCreditButton(self):
+        self.credit = self.credit + 1
+        self.updateCreditInfo()
+
+    def onDemoMode(self):
+        self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible())
+
+
