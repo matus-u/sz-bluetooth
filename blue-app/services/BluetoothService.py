@@ -52,6 +52,10 @@ class BluetoothService(QtCore.QObject):
             
 
     def onConnectionTimer(self):
+        self.forceDisconnect()
+
+    def forceDisconnect(self):
+        self.connectionTimer.stop()
         self.refreshTimer.stop()
         self.disconnectedBeginSignal.emit()
         QtCore.QCoreApplication.processEvents()

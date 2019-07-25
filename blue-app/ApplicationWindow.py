@@ -41,6 +41,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.adminSettingsButton.clicked.connect(self.onSettingsButton)
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
+        self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminShortCut)
@@ -55,6 +56,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.connectDeviceLabel.clear()
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
+        self.ui.disconnectButton.setEnabled(False)
+        self.credit = 0
 
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
@@ -109,6 +112,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
+            self.ui.disconnectButton.setEnabled(True)
 
     def onSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
