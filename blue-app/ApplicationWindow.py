@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from generated.MainWindow import Ui_MainWindow
 
 import SettingsWindow
+from services.BluetoothService import BluetoothService
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -30,34 +31,30 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.credit = 0
         self.showFullScreen()
+        self.bluetoothService = BluetoothService()
+        self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
+        self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
+        self.bluetoothService.refreshTimerSignal.connect(self.onRefreshTimer)
+        self.bluetoothService.connectSignal.connect(self.onConnectSignal)
         self.setDemoModeVisible(False)
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.adminSettingsButton.clicked.connect(self.onSettingsButton)
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
-        self.connectionTimer = QtCore.QTimer()
-        self.connectionTimer.setSingleShot(True)
-        self.refreshTimer = QtCore.QTimer()
-        self.refreshTimer.timeout.connect(self.onRefreshTimer)
-        self.connectionTimer.timeout.connect(self.onConnectionTimer)
         self.texts = self.createTrTexts()
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminShortCut)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, self.onDemoMode)
         self.updateCreditInfo()
 
-    def onRefreshTimer(self):
-        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(int(self.connectionTimer.remainingTime()/1000))))
+    def onRefreshTimer(self, value):
+        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value)))
 
-    def onConnectionTimer(self):
-        self.refreshTimer.stop()
+    def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
         self.ui.connectDeviceLabel.clear()
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
-        QtCore.QCoreApplication.processEvents()
-        QtCore.QProcess.execute("scripts/bt-cleanup-device.sh", [self.connectedDevice, self.connectedPid ])
-        self.setWidgetsEnabled()
 
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
@@ -78,16 +75,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
         self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
-        QtCore.QCoreApplication.processEvents()
-        returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
-        processGetDevices = QtCore.QProcess()
-        processGetDevices.start("scripts/bt-list-device.sh")
-        if (processGetDevices.waitForFinished()):
-            data = processGetDevices.readAllStandardOutput().data().decode('utf-8').splitlines()
-            self.ui.devicesWidget.setRowCount(len(data))
-            for index, itemStr in enumerate(data):
-                self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(" ".join(itemStr.split()[:-1])))
-                self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
+        data = self.bluetoothService.scan()
+        self.ui.devicesWidget.setRowCount(len(data))
+        for index, itemStr in enumerate(data):
+            self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(" ".join(itemStr.split()[:-1])))
+            self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
 
         self.setWidgetsEnabled()
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
@@ -100,30 +92,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setWidgetsDisabled() 
         macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
-        self.process = QtCore.QProcess()
-        self.process.finished.connect(self.onConnect)
         self.ui.connectInfoLabel.setText(self.texts[self.CONNECTING_STR])
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-        self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
+        self.bluetoothService.connect(macAddr, self.credit)
 
-    def onConnect(self, exitCode, exitStatus):
-        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
-        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
-
+    def onConnectSignal(self, exitCode):
         if exitCode == 1:
+            deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
             QtWidgets.QMessageBox.critical(self, self.texts[self.CONNECTION_ERR_STR], self.texts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
             self.ui.connectInfoLabel.clear()
             self.ui.connectDeviceLabel.clear()
             self.setWidgetsEnabled()
             self.ui.connectButton.setEnabled(True)
         else:
-            self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
-            self.connectedDevice = macAddr
+            macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
+            deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-            self.connectionTimer.start(self.credit * 60 * 1000)
-            self.onRefreshTimer()
-            self.refreshTimer.start(1000)
 
     def onSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
