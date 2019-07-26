@@ -2,8 +2,6 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
-        #self.signal.emit(msg)
-
 class BluetoothService(QtCore.QObject):
     disconnectedBeginSignal = QtCore.pyqtSignal()
     disconnectedEndSignal = QtCore.pyqtSignal()

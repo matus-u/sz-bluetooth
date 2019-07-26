@@ -10,9 +10,11 @@ class AppSettings:
     LanguageList = ["english","hungarian","slovak"]
     LanguageString = "language"
     TimeZoneString = "timezone"
+    Translator = QtCore.QTranslator()
+
+    WirelessSettingsPath = "configs/wireless.conf"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"
-    Translator = QtCore.QTranslator()
 
     @staticmethod
     def actualLanguage():
@@ -55,9 +57,19 @@ class AppSettings:
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 
-    def actualWirelessSSID():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.SSIDString, "")
 
+    @classmethod
+    def storeWirelessSettings(cls, SSID, password):
+        settings = QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat)
+        settings.setValue(AppSettings.SSIDString, SSID)
+        settings.setValue(AppSettings.WirelessPassString, password)
+        settings.sync()
+
+    @staticmethod
+    def actualWirelessSSID():
+        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.SSIDString, "")
+
+    @staticmethod
     def actualWirelessPassword():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.WirelessPassString, "")
+        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.WirelessPassString, "")
 

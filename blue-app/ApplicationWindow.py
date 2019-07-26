@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from generated.MainWindow import Ui_MainWindow
 
 import SettingsWindow
+import WifiSettingsWindow
 from services.BluetoothService import BluetoothService
 
 class ApplicationWindow(QtWidgets.QMainWindow):
@@ -37,16 +38,22 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService.connectSignal.connect(self.onConnectSignal)
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
+        self.ui.wifiSettingsButton.setVisible(False)
         self.ui.addCreditButton.clicked.connect(lambda: self.updateCreditInfo(self.credit + 1))
-        self.ui.adminSettingsButton.clicked.connect(self.onSettingsButton)
+        self.ui.adminSettingsButton.clicked.connect(lambda: SettingsWindow.SettingsWindow().exec())
+        self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow().exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, lambda: self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible()))
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
         self.updateCreditInfo(0)
+    
+    def onAdminMode(self):
+        self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
+        self.ui.wifiSettingsButton.setVisible(not self.ui.wifiSettingsButton.isVisible())
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
@@ -110,10 +117,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
             self.ui.disconnectButton.setEnabled(True)
-
-    def onSettingsButton(self):
-        SettingsWindow.SettingsWindow().exec()
-        self.ui.adminSettingsButton.setVisible(False)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
