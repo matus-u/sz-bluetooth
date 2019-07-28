@@ -19,7 +19,7 @@ class BluetoothService(QtCore.QObject):
 
     def scan(self):
         QtCore.QCoreApplication.processEvents()
-        returnCode = QtCore.QProcess.execute("scripts/bt-scan-sh")
+        returnCode = QtCore.QProcess.execute("scripts/bt-scan.sh")
         processGetDevices = QtCore.QProcess()
         processGetDevices.start("scripts/bt-list-device.sh")
         if (processGetDevices.waitForFinished()):
