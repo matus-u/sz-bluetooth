@@ -6,7 +6,8 @@
 
 ##ALSO INSTALL KERNEL WITH elo SUPPORT!
 
-apt-get install -y python3-pyqt5 pyqt5-dev-tools xserver-xorg-input-evdev inputattach xinput ofono python-serial 
+apt-get install -y python3-pyqt5 pyqt5-dev-tools xserver-xorg-input-evdev inputattach xinput ofono python-serial python3-pip
+pip3 install --upgrade OPi.GPIO
 
 cp 40-libinput.conf /usr/share/X11/xorg.conf.d/
 cp start_usbstick.sh /opt/start_usbstick.sh

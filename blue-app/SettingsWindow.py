@@ -15,13 +15,14 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.cancelButton.clicked.connect(self.onCancelButton)
         self.ui.languageCombobox.setCurrentIndex(AppSettings.getCurrentLanguageIndex())
         self.ui.timeZoneCombobox.setCurrentIndex(AppSettings.getCurrentTimeZoneIndex())
+        self.ui.currencyCombobox.setCurrentIndex(AppSettings.getCurrentCurrencyIndex())
         self.ui.languageCombobox.currentIndexChanged.connect(self.onLanguageComboboxChanged)
 
     def onLanguageComboboxChanged(self, index):
         AppSettings.loadLanguageByIndex(index)
 
     def onOkButton(self):
-        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex())
+        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex())
         self.accept()
 
     def onCancelButton(self):

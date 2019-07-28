@@ -6,6 +6,8 @@ from generated.MainWindow import Ui_MainWindow
 import SettingsWindow
 import WifiSettingsWindow
 from services.BluetoothService import BluetoothService
+from services.CreditService import CreditService
+from services.AppSettings import AppSettings
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -18,12 +20,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     SCANNING_STR = 6
     NO_CREDIT_HEAD = 7
     NO_CREDIT = 8
-    MINUTES = 9
+    SECONDS = 9
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
-        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("minutes") ]
+        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds") ]
 
     def __init__(self):
         super(ApplicationWindow, self).__init__()
@@ -39,7 +41,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
-        self.ui.addCreditButton.clicked.connect(lambda: self.updateCreditInfo(self.credit + 1))
+        self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(1))
         self.ui.adminSettingsButton.clicked.connect(lambda: SettingsWindow.SettingsWindow().exec())
         self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow().exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
@@ -49,7 +51,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.texts = self.createTrTexts()
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
-        self.updateCreditInfo(0)
+        self.creditService = CreditService(AppSettings.actualCurrency())
+        self.creditService.creditChanged.connect(lambda credit: self.ui.actualCreditValue.setText(str(int(credit * 10)) + " " + self.texts[self.SECONDS]), QtCore.Qt.QueuedConnection )
+        self.creditService.changeCredit(0)
+
     
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
@@ -61,7 +66,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
-        self.updateCreditInfo(0)
+        self.creditService.clearCredit()
 
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
@@ -92,7 +97,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
 
     def onConnectButton(self):
-        if self.credit == 0:
+        if self.creditService.getCredit() == 0.0:
             QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
             return
 
@@ -101,7 +106,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.ui.connectInfoLabel.setText(self.texts[self.CONNECTING_STR])
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-        self.bluetoothService.connect(macAddr, self.credit)
+        self.bluetoothService.connect(macAddr, self.creditService.getCredit() * 10)
 
     def onConnectSignal(self, exitCode):
         if exitCode == 1:
@@ -134,7 +139,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.addCreditButton.setVisible(value)
         self.ui.disconnectButton.setVisible(value)
 
-    def updateCreditInfo(self, value):
-        self.credit = value
-        self.ui.actualCreditValue.setText(str(self.credit) + " " + self.texts[self.MINUTES]);
+    def cleanup(self):
+        self.creditService.cleanup()
 

@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from generated.WifiSettings import Ui_WifiSettings
 
 from services.AppSettings import AppSettings
-from services.WirelessService import WirelessService
+from services.WirelessService import WirelessService, WirelessScan
 
 class WifiSettingsWindow(QtWidgets.QDialog):
     def __init__(self):
@@ -25,7 +25,7 @@ class WifiSettingsWindow(QtWidgets.QDialog):
         self.accept()
 
     def onScanButton(self):
-        data = WirelessService().scan()
+        data = WirelessScan().scan()
         self.ui.apListWidget.clear()
         self.ui.apListWidget.setRowCount(len(data))
         for index, itemStr in enumerate(data):

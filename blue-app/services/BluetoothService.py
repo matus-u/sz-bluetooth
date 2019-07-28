@@ -27,8 +27,8 @@ class BluetoothService(QtCore.QObject):
         return [] 
 
 
-    def connect(self, macAddr, credit):
-        self.credit = credit
+    def connect(self, macAddr, duration):
+        self.duration = duration
         self.process = QtCore.QProcess()
         self.process.finished.connect(self.onConnect)
         self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
@@ -40,7 +40,7 @@ class BluetoothService(QtCore.QObject):
             self.connectedDevice = ""
         else:
             self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
-            self.connectionTimer.start(self.credit * 60 * 1000)
+            self.connectionTimer.start(self.duration * 1000)
             self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
             self.refreshTimer.start(1000)
             self.connectSignal.emit(0)

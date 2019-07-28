@@ -12,6 +12,9 @@ class AppSettings:
     TimeZoneString = "timezone"
     Translator = QtCore.QTranslator()
 
+    CurrencyList = ["EUR","HUF"]
+    CurrencyString = "currency"
+
     WirelessSettingsPath = "configs/wireless.conf"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"
@@ -40,6 +43,14 @@ class AppSettings:
     def loadLanguageByIndex(cls, index):
         cls._loadLanguage(AppSettings.LanguageList[index])
 
+    @staticmethod
+    def actualCurrency():
+        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.CurrencyString, AppSettings.CurrencyList[0])
+
+    @staticmethod
+    def getCurrentCurrencyIndex():
+        return AppSettings.CurrencyList.index(AppSettings.actualCurrency())
+
     @classmethod
     def _loadLanguage(cls, language):
         app = QtWidgets.QApplication.instance()
@@ -50,10 +61,11 @@ class AppSettings:
         QtCore.QCoreApplication.processEvents()
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex):
+    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
+        settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 

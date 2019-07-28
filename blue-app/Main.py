@@ -17,6 +17,7 @@ def main():
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
     application.show()
     ret = app.exec_()
+    application.cleanup()
     sys.exit(ret)
 
 if __name__ == "__main__":

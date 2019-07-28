@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.AppSettings import AppSettings
+
 class WirelessScan(QtCore.QObject):
     def scan(self):
         QtCore.QCoreApplication.processEvents()
@@ -27,13 +29,13 @@ class WirelessService(QtCore.QThread):
 
     def stop(self):
         self.checkStatusTimer.stop()
-        if self.state == "CONNECTING"
+        if self.state == "CONNECTING":
             self.process.kill()
         self.disconnect()
 
     def connect(self):
         self.checkStatusTimer.stop()
-        if self.state == "CONNECTING"
+        if self.state == "CONNECTING":
             self.process.kill()
         ssid = AppSettings.actualWirelessSSID()
         password = AppSettings.actualWirelessPassword()
@@ -50,7 +52,7 @@ class WirelessService(QtCore.QThread):
             self.disconnectedSignal.emit()
             state = "DISCONNECTED"
             self.disconnect()
-        else
+        else:
             self.connectedSignal.emit()
             state = "CONNECTED"
 
