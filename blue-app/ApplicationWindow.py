@@ -8,6 +8,7 @@ import WifiSettingsWindow
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
 from services.AppSettings import AppSettings
+from services.TemperatureStatus import TemperatureStatus
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -21,23 +22,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     NO_CREDIT_HEAD = 7
     NO_CREDIT = 8
     SECONDS = 9
+    CPU_TEMP = 10
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
-        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds") ]
+        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}") ]
 
-    def __init__(self):
+    def __init__(self, timerService):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
-        self.bluetoothService = BluetoothService()
+        self.bluetoothService = BluetoothService(timerService)
         self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
         self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
         self.bluetoothService.connectSignal.connect(self.onConnectSignal)
+        self.temperatureStatus = TemperatureStatus()
+        self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
@@ -49,11 +53,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
         self.creditService = CreditService(AppSettings.actualCurrency())
         self.creditService.creditChanged.connect(lambda credit: self.ui.actualCreditValue.setText(str(int(credit * 10)) + " " + self.texts[self.SECONDS]), QtCore.Qt.QueuedConnection )
         self.creditService.changeCredit(0)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
+        timerService.addTimerWorker(self.temperatureStatus)
 
     
     def onAdminMode(self):
@@ -138,6 +143,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.labelCpuTemp.setVisible(value)
         self.ui.addCreditButton.setVisible(value)
         self.ui.disconnectButton.setVisible(value)
+        if value:
+            self.temperatureStatus.start()
+        else:
+            self.temperatureStatus.stop()
 
     def cleanup(self):
         self.creditService.cleanup()
