@@ -39,7 +39,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
         self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
-        self.bluetoothService.connectSignal.connect(self.onConnectSignal)
+        self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
+        self.bluetoothService.connectionStrengthSignal.connect(lambda x: self.ui.signalStrengthProgressBar.setValue(x))
         self.temperatureStatus = TemperatureStatus()
         self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
         self.setDemoModeVisible(False)
@@ -71,6 +72,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
+        self.ui.signalStrengthProgressBar.setEnabled(False)
+        self.ui.signalStrengthLabel.setEnabled(False)
+        self.ui.signalStrengthProgressBar.setValue(0)
         self.creditService.clearCredit()
 
     def onSelectionChanged(self):
@@ -113,7 +117,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
         self.bluetoothService.connect(macAddr, self.creditService.getCredit() * 10)
 
-    def onConnectSignal(self, exitCode):
+    def onConnectedSignal(self, exitCode):
         if exitCode == 1:
             deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
             QtWidgets.QMessageBox.critical(self, self.texts[self.CONNECTION_ERR_STR], self.texts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
@@ -127,6 +131,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
             self.ui.disconnectButton.setEnabled(True)
+            self.ui.signalStrengthProgressBar.setEnabled(True)
+            self.ui.signalStrengthLabel.setEnabled(True)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:

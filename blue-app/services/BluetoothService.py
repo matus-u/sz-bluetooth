@@ -8,18 +8,26 @@ class BluetoothStatusObject(TimerService.TimerStatusObject):
 
     actualStatus = QtCore.pyqtSignal(int)
 
-    def __init__(self, duration):
+    def __init__(self, duration, getAddressCallback):
         super().__init__(duration)
+        self.getAddressCallback = getAddressCallback
 
     def onTimeout(self):
-        # TODO IMPLEMENT SPECIAL GET BLUETOOTH STATE
-        self.actualStatus.emit(1)
+        macAddr = self.getAddressCallback()
+        if macAddr != "":
+            processGetSignal = QtCore.QProcess()
+            processGetSignal.start("scripts/bt-get-signal.sh", [ macAddr ])
+            processGetSignal.waitForFinished()
+            data = processGetSignal.readAllStandardOutput().data().decode('utf-8')
+            if data != "NOT CONNECTED":
+                self.actualStatus.emit(int(data))
 
 class BluetoothService(QtCore.QObject):
     disconnectedBeginSignal = QtCore.pyqtSignal()
     disconnectedEndSignal = QtCore.pyqtSignal()
     refreshTimerSignal = QtCore.pyqtSignal(int)
-    connectSignal = QtCore.pyqtSignal(int)
+    connectedSignal = QtCore.pyqtSignal(int)
+    connectionStrengthSignal = QtCore.pyqtSignal(int)
 
     def __init__(self, timerService):
         super().__init__()
@@ -29,8 +37,8 @@ class BluetoothService(QtCore.QObject):
         self.refreshTimer = QtCore.QTimer()
         self.refreshTimer.timeout.connect(lambda: self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000)))
 
-        self.statusObject = BluetoothStatusObject(1000)
-        self.statusObject.actualStatus.connect(self.onSignalPower)
+        self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
+        self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
         timerService.addTimerWorker(self.statusObject)
         
 
@@ -53,14 +61,14 @@ class BluetoothService(QtCore.QObject):
 
     def onConnect(self, exitCode, exitStatus):
         if exitCode == 1:
-            self.connectSignal.emit(1)
+            self.connectedSignal.emit(1)
             self.connectedDevice = ""
         else:
             self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
             self.connectionTimer.start(self.duration * 1000)
             self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
             self.refreshTimer.start(1000)
-            self.connectSignal.emit(0)
+            self.connectedSignal.emit(0)
             self.statusObject.start()
         
     def forceDisconnect(self):
@@ -70,8 +78,8 @@ class BluetoothService(QtCore.QObject):
         self.disconnectedBeginSignal.emit()
         QtCore.QCoreApplication.processEvents()
         QtCore.QProcess.execute("scripts/bt-cleanup-device.sh", [self.connectedDevice, self.connectedPid ])
+        self.connectedDevice = ""
         self.disconnectedEndSignal.emit()
 
-    def onSignalPower(self, value):
-        print ("value " + str(value))
-
+    def getConnectedAddress(self):
+        return str(self.connectedDevice)
