@@ -20,6 +20,6 @@ else
         echo 100
         exit 0
     fi
-    echo "100-(-255/$RESPONSE)" | bc
+    echo "100-(($RESPONSE*100)/-255)" | bc
     exit 0
 fi
