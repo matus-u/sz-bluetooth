@@ -47,7 +47,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
         self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(1))
-        self.ui.adminSettingsButton.clicked.connect(lambda: SettingsWindow.SettingsWindow().exec())
+        self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow().exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
@@ -65,6 +65,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
         self.ui.wifiSettingsButton.setVisible(not self.ui.wifiSettingsButton.isVisible())
+
+    def onAdminSettingsButton(self):
+        SettingsWindow.SettingsWindow().exec()
+        self.creditService.setCurrency(AppSettings.actualCurrency())
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
