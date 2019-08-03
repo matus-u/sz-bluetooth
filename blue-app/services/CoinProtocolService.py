@@ -10,7 +10,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
     actualStatus = QtCore.pyqtSignal(str)
 
     def __init__(self):
-        super().__init__(2000)
+        super().__init__(200)
 
     def onTimeout(self):
         if os.getenv('RUN_FROM_DOCKER', False) == False:

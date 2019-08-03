@@ -14,9 +14,8 @@ class TemperatureStatus(TimerService.TimerStatusObject):
     def onTimeout(self):
         if os.getenv('RUN_FROM_DOCKER', False) == False:
             try:
-                with open("/sys/devices/virtual/thermal/thermal_zone0/temp") as file:  
-                    data = file.read() 
-                    val = float(val) / 1000
+                with open("/sys/devices/virtual/thermal/thermal_zone0/temp") as f:
+                    val = float(f.read()) / 1000
                     self.actualTemperature.emit(int(val))
             except:
                 pass
