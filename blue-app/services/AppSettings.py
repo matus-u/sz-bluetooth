@@ -2,8 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
-class AppSettings:
 
+class AppSettings:
     SettingsPath = "configs/blue-app.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
     TimeZoneList = ["UTC","Europe/Budapest","Europe/Bratislava","Europe/London"]
@@ -18,6 +18,9 @@ class AppSettings:
     WirelessSettingsPath = "configs/wireless.conf"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"
+
+    CoinValuesString = "coin-settings"
+    DefaultCoinValues = { "EUR" : [0,0.5,1,2,0,0,1,0.01], "HUF" : [0,0,0,0,100,200,500,10] }
 
     @staticmethod
     def actualLanguage():
@@ -51,6 +54,18 @@ class AppSettings:
     def getCurrentCurrencyIndex():
         return AppSettings.CurrencyList.index(AppSettings.actualCurrency())
 
+    @staticmethod
+    def actualCoinSettings():
+        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.CoinValuesString, AppSettings.DefaultCoinValues[AppSettings.actualCurrency()], float)
+
+    @staticmethod
+    def defaultCoinSettings(currency):
+        return AppSettings.DefaultCoinValues[currency]
+
+    @staticmethod
+    def currencyStringByIndex(index):
+        return AppSettings.CurrencyList[index]
+
     @classmethod
     def _loadLanguage(cls, language):
         app = QtWidgets.QApplication.instance()
@@ -61,11 +76,12 @@ class AppSettings:
         QtCore.QCoreApplication.processEvents()
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex):
+    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
         settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
+        settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 

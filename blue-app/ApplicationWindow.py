@@ -46,7 +46,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
-        self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(1))
+        self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(10))
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow().exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
@@ -54,8 +54,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
-        self.creditService = CreditService(AppSettings.actualCurrency())
-        self.creditService.creditChanged.connect(lambda credit: self.ui.actualCreditValue.setText(str(int(credit * 10)) + " " + self.texts[self.SECONDS]), QtCore.Qt.QueuedConnection )
+        self.creditService = CreditService(AppSettings.actualCoinSettings())
+        self.creditService.creditChanged.connect(lambda credit: self.ui.actualCreditValue.setText(str(int(credit)) + " " + self.texts[self.SECONDS]), QtCore.Qt.QueuedConnection )
         self.creditService.changeCredit(0)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
@@ -68,7 +68,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onAdminSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
-        self.creditService.setCurrency(AppSettings.actualCurrency())
+        self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
@@ -119,7 +119,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.ui.connectInfoLabel.setText(self.texts[self.CONNECTING_STR])
         self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-        self.bluetoothService.connect(macAddr, self.creditService.getCredit() * 10)
+        self.bluetoothService.connect(macAddr, self.creditService.getCredit())
 
     def onConnectedSignal(self, exitCode):
         if exitCode == 1:
