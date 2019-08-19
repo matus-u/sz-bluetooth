@@ -11,24 +11,16 @@ def getManagedObjects():
     return manager.GetManagedObjects()
 
 def findAdapter():
-    return findAdapterInObjects(getManagedObjects())
-
-def findAdapterInObjects(objects):
     bus = dbus.SystemBus()
-    for path, ifaces in objects.items():
-        adapter = ifaces.get(ADAPTER_INTERFACE)
-        obj = bus.get_object(SERVICE_NAME, path)
-        return dbus.Interface(obj, ADAPTER_INTERFACE)
-    raise Exception("Bluetooth adapter not found")
+    obj = bus.get_object(SERVICE_NAME, '/org/bluez/hci0')
+    return dbus.Interface(obj, ADAPTER_INTERFACE)
 
 def scanDevices():
     return scanDevicesInObjects(getManagedObjects())
 
 def scanDevicesInObjects(objects):
     bus = dbus.SystemBus()
-    pathPrefix = ""
-    adapter = findAdapterInObjects(objects)
-    pathPrefix = adapter.object_path
+    pathPrefix = findAdapter().object_path
     devices = []
     for path, ifaces in objects.items():
         device = ifaces.get(DEVICE_INTERFACE)
@@ -38,13 +30,26 @@ def scanDevicesInObjects(objects):
             devices.append([path, device])
     return devices
 
-def findDevice(device_address):
-    return findDeviceInScannedDevices(scanDevices(), device_address)
+def findDevice(deviceAddress):
+    return findDeviceInScannedDevices(scanDevices(), deviceAddress)
 
 def findDeviceInScannedDevices(objects, deviceAddress):
+    bus = dbus.SystemBus()
     for path, device in objects:
         if (device["Address"] == deviceAddress):
             obj = bus.get_object(SERVICE_NAME, path)
             return dbus.Interface(obj, DEVICE_INTERFACE)
     raise Exception("Bluetooth device not found")
 
+def removeDevice(deviceAddress):
+    findAdapter().RemoveDevice(findDevice(deviceAddress))
+
+def startDiscovery():
+    findAdapter().StartDiscovery()
+
+def cleanupDevices():
+    bus = dbus.SystemBus()
+    adapter = findAdapter()
+    for path, device in scanDevices():
+        obj = bus.get_object(SERVICE_NAME, path)
+        adapter.RemoveDevice(dbus.Interface(obj, DEVICE_INTERFACE))

@@ -6,6 +6,7 @@ from time import sleep
 import os
 from services import TimerService
 from services import BluezUtils
+from services import BluetoothAgent
 
 class BluetoothStatusObject(TimerService.TimerStatusObject):
 
@@ -39,6 +40,9 @@ class BluetoothService(QtCore.QObject):
         self.connectionTimer.timeout.connect(lambda: self.forceDisconnect())
         self.refreshTimer = QtCore.QTimer()
         self.refreshTimer.timeout.connect(lambda: self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000)))
+        self.agent = BluetoothAgent.Agent()
+        BluezUtils.cleanupDevices()
+        BluezUtils.startDiscovery()
 
         #self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
         #self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
@@ -51,39 +55,39 @@ class BluetoothService(QtCore.QObject):
 
         if os.getenv('RUN_FROM_DOCKER', False) == False:
             for path, device in BluezUtils.scanDevices():
-                devices.append ([device["Name"], device["Address"]])
+                print (path, device)
+                devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])
         else:
-            devices.append(["FIRST DEVICE", "30:j3:49:ng:34:jk"])
-            devices.append(["SECOND DEVICE", "30:j3:49:ng:34:jk"])
+            devices.append(["FIRST DEVICE", "(30:j3:49:ng:34:jk)"])
+            devices.append(["SECOND DEVICE", "(30:j3:49:ng:34:jk)"])
         return devices
 
 
     def connect(self, macAddr, duration):
         self.duration = duration
-        self.process = QtCore.QProcess()
-        self.process.finished.connect(self.onConnect)
-        self.process.start("scripts/bt-connect-with-timeout.sh", [ macAddr, "15" ])
+        self.pairRequest = BluetoothAgent.PairRequest()
+        self.pairRequest.connected.connect(self.onConnect)
         self.connectedDevice = macAddr
+        self.pairRequest.pair(macAddr)
 
-    def onConnect(self, exitCode, exitStatus):
+    def onConnect(self, exitCode):
         if exitCode == 1:
-            self.connectedSignal.emit(1)
+            self.connectedSignal.emit(exitCode)
             self.connectedDevice = ""
         else:
-            self.connectedPid = self.process.readAllStandardOutput().data().decode('utf-8').splitlines()[-1]
             self.connectionTimer.start(self.duration * 1000)
             self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
             self.refreshTimer.start(1000)
             self.connectedSignal.emit(0)
-            self.statusObject.start()
+            #self.statusObject.start()
         
     def forceDisconnect(self):
-        self.statusObject.stop()
+        #self.statusObject.stop()
         self.connectionTimer.stop()
         self.refreshTimer.stop()
         self.disconnectedBeginSignal.emit()
         QtCore.QCoreApplication.processEvents()
-        QtCore.QProcess.execute("scripts/bt-cleanup-device.sh", [self.connectedDevice, self.connectedPid ])
+        self.pairRequest.disconnect()
         self.connectedDevice = ""
         self.disconnectedEndSignal.emit()
 
