@@ -2,7 +2,10 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from time import sleep
+import os
 from services import TimerService
+from services import BluezUtils
 
 class BluetoothStatusObject(TimerService.TimerStatusObject):
 
@@ -37,19 +40,22 @@ class BluetoothService(QtCore.QObject):
         self.refreshTimer = QtCore.QTimer()
         self.refreshTimer.timeout.connect(lambda: self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000)))
 
-        self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
-        self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
-        timerService.addTimerWorker(self.statusObject)
+        #self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
+        #self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
+        #timerService.addTimerWorker(self.statusObject)
         
 
     def scan(self):
-        QtCore.QCoreApplication.processEvents()
-        returnCode = QtCore.QProcess.execute("scripts/bt-scan.sh")
-        processGetDevices = QtCore.QProcess()
-        processGetDevices.start("scripts/bt-list-device.sh")
-        if (processGetDevices.waitForFinished()):
-            return processGetDevices.readAllStandardOutput().data().decode('utf-8').splitlines()
-        return [] 
+        sleep(2)
+        devices = []
+
+        if os.getenv('RUN_FROM_DOCKER', False) == False:
+            for path, device in BluezUtils.scanDevices():
+                devices.append ([device["Name"], device["Address"]])
+        else:
+            devices.append(["FIRST DEVICE", "30:j3:49:ng:34:jk"])
+            devices.append(["SECOND DEVICE", "30:j3:49:ng:34:jk"])
+        return devices
 
 
     def connect(self, macAddr, duration):

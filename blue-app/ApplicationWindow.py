@@ -100,11 +100,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.clear()
         self.setWidgetsDisabled()
         self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
+        QtCore.QCoreApplication.processEvents()
         data = self.bluetoothService.scan()
         self.ui.devicesWidget.setRowCount(len(data))
-        for index, itemStr in enumerate(data):
-            self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(" ".join(itemStr.split()[:-1])))
-            self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(itemStr.split()[-1]))
+        for index, item in enumerate(data):
+            self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(str(item[0])))
+            self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(item[1])))
 
         self.setWidgetsEnabled()
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
