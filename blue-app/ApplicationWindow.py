@@ -9,6 +9,8 @@ from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
 from services.AppSettings import AppSettings
 from services.TemperatureStatus import TemperatureStatus
+from services.WirelessService import WirelessService
+
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -48,7 +50,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.wifiSettingsButton.setVisible(False)
         self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(10))
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
-        self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow().exec())
+        self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow(self.wirelessService).exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
@@ -61,6 +63,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
         timerService.addTimerWorker(self.temperatureStatus)
 
+        self.wirelessService = WirelessService()
+        self.wirelessService.connect()
     
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())

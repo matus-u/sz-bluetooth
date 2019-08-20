@@ -25,62 +25,70 @@ class WirelessService(QtCore.QObject):
 
     def __init__(self):
         super().__init__()
-        self.STATE = "IDLE"
-        self.checkStatusTimer = QtCore.QTimer(self)
-        self.checkStatusTimer.setSingleShot(True)
-        self.checkStatusTimer.timeout.connect(self.onTimer)
+        self.state = "IDLE"
 
-        self.connectSignal.connect(self.onStop)
-        self.disconnectSignal.connect(self.onConnect)
+        self.checkStatusTimer = QtCore.QTimer()
 
         self.thread = QtCore.QThread()
         self.moveToThread(self.thread)
+        self.checkStatusTimer.moveToThread(self.thread)
         self.thread.start()
 
-    def stop():
-        self.stop.emit()
 
-    def connect():
-        self.connect.emit()
+        self.connectSignal.connect(self.onConnect, QtCore.Qt.QueuedConnection)
+        self.disconnectSignal.connect(self.onStop, QtCore.Qt.QueuedConnection)
+        self.checkStatusTimer.timeout.connect(self.onTimer)
 
+    def stop(self):
+        self.disconnectSignal.emit()
+
+    def connect(self):
+        self.connectSignal.emit()
 
     #private API!
     def onStop(self):
         self.checkStatusTimer.stop()
-        if self.state == "CONNECTING":
-            self.process.kill()
+        self.stopProcess()
         self.disconnect()
+
+    def stopProcess(self):
+        if self.state == "CONNECTING":
+            self.process.disconnect()
+            self.process.kill()
+            self.process.waitForFinished()
 
     def onConnect(self):
         self.checkStatusTimer.stop()
-        if self.state == "CONNECTING":
-            self.process.kill()
+        self.stopProcess()
         ssid = AppSettings.actualWirelessSSID()
         password = AppSettings.actualWirelessPassword()
         if not ssid is "":
-            state = "CONNECTING"
+            self.state = "CONNECTING"
             self.connectingSignal.emit()
             self.disconnect()
-            self.process = QtCore.QProcess()
+            self.process = QtCore.QProcess(self)
             self.process.finished.connect(self.onConnectFinished)
             self.process.start("scripts/wifi-connect.sh", [ ssid, password ])
 
     def onConnectFinished(self, exitCode, exitStatus):
         if exitCode != 0:
             self.disconnectedSignal.emit()
-            state = "DISCONNECTED"
+            self.state = "DISCONNECTED"
             self.disconnect()
         else:
             self.connectedSignal.emit()
-            state = "CONNECTED"
+            self.state = "CONNECTED"
 
+        self.checkStatusTimer.setSingleShot(True)
         self.checkStatusTimer.start(5000)
-            
 
     def disconnect(self):
-        QtCore.QProcess.execute("scripts/wifi-forget-connection.sh", [self.connectedDevice, self.connectedPid ])
+        QtCore.QProcess.execute("scripts/wifi-forget-connection.sh")
     
     def onTimer(self):
-        #TODO CHECK STATUS AND BASED ON IT RECONNECT/OR NEW TIMER
-        self.checkStatusTimer.start(5000)
+        if QtCore.QProcess.execute("scripts/wifi-state.sh") == 1:
+            return self.onConnect()
+        else:
+            self.checkStatusTimer.setSingleShot(True)
+            self.checkStatusTimer.start(5000)
 

@@ -7,7 +7,7 @@ from services.AppSettings import AppSettings
 from services.WirelessService import WirelessService, WirelessScan
 
 class WifiSettingsWindow(QtWidgets.QDialog):
-    def __init__(self):
+    def __init__(self, wirelessService):
         super(WifiSettingsWindow, self).__init__()
         self.ui = Ui_WifiSettings()
         self.ui.setupUi(self)
@@ -18,10 +18,11 @@ class WifiSettingsWindow(QtWidgets.QDialog):
         self.ui.wifiPassLineEdit.setText(AppSettings.actualWirelessPassword())
         self.ui.scanWifiButton.clicked.connect(self.onScanButton)
         self.ui.apListWidget.itemSelectionChanged.connect(self.onSelectionChanged)
-
+        self.wirelessService = wirelessService
 
     def onOkButton(self):
         AppSettings.storeWirelessSettings(self.ui.ssidLineEdit.text(), self.ui.wifiPassLineEdit.text())
+        self.wirelessService.connect()
         self.accept()
 
     def onScanButton(self):

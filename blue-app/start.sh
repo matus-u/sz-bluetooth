@@ -43,9 +43,6 @@ else
     
     #TODO TIMEZONE SET
 
-    killall -9 bt-scan.sh
-    scripts/./bt-scan.sh &
-
     #while true; do 
     generate-from-uic
     python3 Main.py
