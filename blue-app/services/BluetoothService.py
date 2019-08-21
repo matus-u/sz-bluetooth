@@ -5,8 +5,13 @@ from PyQt5 import QtCore
 from time import sleep
 import os
 from services import TimerService
-from services import BluezUtils
-from services import BluetoothAgent
+
+if os.getenv('RUN_FROM_DOCKER', False) == False:
+    from services import BluezUtils
+    from services import BluetoothAgent
+else:
+    from services.mocks import BluezUtils
+    from services.mocks import BluetoothAgent
 
 class BluetoothStatusObject(TimerService.TimerStatusObject):
 
@@ -44,22 +49,16 @@ class BluetoothService(QtCore.QObject):
         BluezUtils.cleanupDevices()
         BluezUtils.startDiscovery()
 
-        #self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
-        #self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
-        #timerService.addTimerWorker(self.statusObject)
+        self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
+        self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
+        timerService.addTimerWorker(self.statusObject)
         
 
     def scan(self):
         sleep(2)
         devices = []
-
-        if os.getenv('RUN_FROM_DOCKER', False) == False:
-            for path, device in BluezUtils.scanDevices():
-                print (path, device)
-                devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])
-        else:
-            devices.append(["FIRST DEVICE", "(30:j3:49:ng:34:jk)"])
-            devices.append(["SECOND DEVICE", "(30:j3:49:ng:34:jk)"])
+        for path, device in BluezUtils.scanDevices():
+            devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])
         return devices
 
 
@@ -79,10 +78,10 @@ class BluetoothService(QtCore.QObject):
             self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
             self.refreshTimer.start(1000)
             self.connectedSignal.emit(0)
-            #self.statusObject.start()
+            self.statusObject.start()
         
     def forceDisconnect(self):
-        #self.statusObject.stop()
+        self.statusObject.stop()
         self.connectionTimer.stop()
         self.refreshTimer.stop()
         self.disconnectedBeginSignal.emit()

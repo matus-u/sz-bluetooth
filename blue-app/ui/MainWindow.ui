@@ -164,7 +164,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Actual signal strength:</string>
+           <string>Actual bluetooth signal strength:</string>
           </property>
          </widget>
         </item>
@@ -175,6 +175,23 @@
           </property>
           <property name="value">
            <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Wifi state:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="wifiStateLabel">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>

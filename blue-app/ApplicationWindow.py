@@ -64,7 +64,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         timerService.addTimerWorker(self.temperatureStatus)
 
         self.wirelessService = WirelessService()
-        self.wirelessService.connect()
+        self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
+        self.wirelessService.start()
     
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
@@ -165,4 +166,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def cleanup(self):
         self.creditService.cleanup()
+
+    def wirelessServiceStateChanged(self, state, ssid):
+        text = state
+        if ssid != "":
+            text = text + " - " + ssid
+        self.ui.wifiStateLabel.setText(text)
 

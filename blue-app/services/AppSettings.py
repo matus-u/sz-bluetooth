@@ -16,6 +16,7 @@ class AppSettings:
     CurrencyString = "currency"
 
     WirelessSettingsPath = "configs/wireless.conf"
+    WirelessEnabledString = "Enabled"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"
 
@@ -87,11 +88,16 @@ class AppSettings:
 
 
     @classmethod
-    def storeWirelessSettings(cls, SSID, password):
+    def storeWirelessSettings(cls, enabled, SSID, password):
         settings = QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat)
+        settings.setValue(AppSettings.WirelessEnabledString, enabled)
         settings.setValue(AppSettings.SSIDString, SSID)
         settings.setValue(AppSettings.WirelessPassString, password)
         settings.sync()
+
+    @staticmethod
+    def actualWirelessEnabled():
+        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.WirelessEnabledString, False, bool)
 
     @staticmethod
     def actualWirelessSSID():

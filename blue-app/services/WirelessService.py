@@ -15,9 +15,7 @@ class WirelessScan(QtCore.QObject):
 
 class WirelessService(QtCore.QObject):
     #report status signals
-    connectingSignal = QtCore.pyqtSignal()
-    disconnectedSignal = QtCore.pyqtSignal()
-    connectedSignal = QtCore.pyqtSignal()
+    stateChanged = QtCore.pyqtSignal(str, str)
 
     #private signals
     connectSignal = QtCore.pyqtSignal()
@@ -26,6 +24,7 @@ class WirelessService(QtCore.QObject):
     def __init__(self):
         super().__init__()
         self.state = "IDLE"
+        self.ssid = ""
 
         self.checkStatusTimer = QtCore.QTimer()
 
@@ -45,11 +44,19 @@ class WirelessService(QtCore.QObject):
     def connect(self):
         self.connectSignal.emit()
 
+    def start(self):
+        if AppSettings.actualWirelessEnabled():
+            self.connect()
+        else:
+            self.stop()
+
     #private API!
     def onStop(self):
         self.checkStatusTimer.stop()
         self.stopProcess()
         self.disconnect()
+        self.state = "IDLE"
+        self.stateChanged.emit(self.state, "")
 
     def stopProcess(self):
         if self.state == "CONNECTING":
@@ -60,24 +67,24 @@ class WirelessService(QtCore.QObject):
     def onConnect(self):
         self.checkStatusTimer.stop()
         self.stopProcess()
-        ssid = AppSettings.actualWirelessSSID()
+        self.ssid = AppSettings.actualWirelessSSID()
         password = AppSettings.actualWirelessPassword()
-        if not ssid is "":
+        if not self.ssid is "":
             self.state = "CONNECTING"
-            self.connectingSignal.emit()
+            self.stateChanged.emit(self.state, self.ssid)
             self.disconnect()
             self.process = QtCore.QProcess(self)
             self.process.finished.connect(self.onConnectFinished)
-            self.process.start("scripts/wifi-connect.sh", [ ssid, password ])
+            self.process.start("scripts/wifi-connect.sh", [ self.ssid, password ])
 
     def onConnectFinished(self, exitCode, exitStatus):
         if exitCode != 0:
-            self.disconnectedSignal.emit()
             self.state = "DISCONNECTED"
+            self.stateChanged.emit(self.state, "")
             self.disconnect()
         else:
-            self.connectedSignal.emit()
             self.state = "CONNECTED"
+            self.stateChanged.emit(self.state, self.ssid)
 
         self.checkStatusTimer.setSingleShot(True)
         self.checkStatusTimer.start(5000)

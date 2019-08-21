@@ -1,5 +1,6 @@
 #!/bin/bash -
 if [ $RUN_FROM_DOCKER ]; then
+    sleep 5
     exit $(echo $RANDOM % 2 | bc)
 fi
 
