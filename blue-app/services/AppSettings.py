@@ -35,6 +35,10 @@ class AppSettings:
     def restoreLanguage(cls):
         cls._loadLanguage(AppSettings.actualLanguage())
 
+    @classmethod
+    def restoreTimeZone(cls):
+        QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.actualTimeZone()])
+
     @staticmethod
     def actualTimeZone():
         return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.TimeZoneString, AppSettings.TimeZoneList[0])

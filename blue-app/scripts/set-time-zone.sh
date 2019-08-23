@@ -1,8 +1,6 @@
 #!/bin/bash
-
-echo $1
 if [ $RUN_FROM_DOCKER ]; then
-    echo "DONE" ;	
+	exit 0
 else
     timedatectl set-timezone $1
 fi

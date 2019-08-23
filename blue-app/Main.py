@@ -12,6 +12,7 @@ from services.UpdateStatus import UpdateStatus
 def main():
     app = QtWidgets.QApplication(sys.argv)
     AppSettings.restoreLanguage()
+    AppSettings.restoreTimeZone()
 
     timerService = TimerService()
     updateStatus = UpdateStatus()

@@ -40,6 +40,9 @@ else
 
     # close blueman applet
     killall -9 blueman-applet
+
+    killall -9 sound-radio.py
+    scripts/./sound-radio.py &
     
     #TODO TIMEZONE SET
 
