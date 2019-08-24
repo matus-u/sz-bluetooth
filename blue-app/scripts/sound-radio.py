@@ -3,41 +3,20 @@
 import orangepi.pc
 from time import sleep
 import OPi.GPIO as GPIO
+import os
 
 GPIO.setmode(orangepi.pc.BOARD)
-
-class MuteState:
-
-    NOT_MUTED = 0
-    MUTED = 1
-
-    def __init__(self):
-        self.state = MuteState.NOT_MUTED
-
-    def muteAction(self):
-        if self.state == MuteState.NOT_MUTED:
-            print ("MUTE")
-            # TODO MUTE
-            self.state = MuteState.MUTED
-        else:
-            print ("UNMUTE")
-            # TODO UNMUTE
-            self.state = MuteState.NOT_MUTED
-
-muteStateHandler = MuteState()
 def volume_mute(channel):
-    muteStateHandler.muteAction()
+    os.system("amixer sset 'Line Out' toggle")
 
 GPIO.setup(27, GPIO.IN)
 GPIO.add_event_detect(27, GPIO.RISING, callback=volume_mute)
 
 def volume_up():
-    print ("VOLUME UP")
-    #TODO VOLUME UP
+    os.system("amixer sset 'Line Out' 1%+")
 
 def volume_down():
-    print ("VOLUME DOWN")
-    #TODO VOLUME DOWN
+    os.system("amixer sset 'Line Out' 1%-")
 
 GPIO_CONFIG = { 21 : volume_down, 22 : volume_up }
 for num in GPIO_CONFIG:

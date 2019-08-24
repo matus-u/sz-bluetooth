@@ -1,9 +1,8 @@
 #!/bin/bash
 
-
 DIR=$(dirname "$0")
 
-export LD_LIBRARY_PATH=$DIR:$LD_LIBRARY_PATH;
+export LD_LIBRARY_PATH=$DIR:$LD_LIBRARY_PATH
 
 $DIR/./gpio mode 14 out
 $DIR/./gpio write 14 0

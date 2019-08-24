@@ -23,6 +23,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
                 toSend = list(serialString)
                 toSend[0] = 'D'
                 serialString = "".join(toSend)
+                serialString = serialString[:-2]
                 toSend = "U@ff00" + serialString + "SS\r\n"
                 s.write(toSend.encode())
         else:

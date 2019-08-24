@@ -21,7 +21,7 @@ class AppSettings:
     WirelessPassString = "WirelessPass"
 
     CoinValuesString = "coin-settings"
-    DefaultCoinValues = { "EUR" : [0,0.5,1,2,0,0,1,0.01], "HUF" : [0,0,0,0,100,200,500,10] }
+    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.01], "HUF" : [100,200,0,0,0,0,500,10] }
 
     @staticmethod
     def actualLanguage():
