@@ -3,6 +3,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 from generated.MainWindow import Ui_MainWindow
 
+from generated import Resources
+
 import SettingsWindow
 import WifiSettingsWindow
 from services.BluetoothService import BluetoothService
@@ -25,11 +27,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     NO_CREDIT = 8
     SECONDS = 9
     CPU_TEMP = 10
+    INSERT_COIN_STRING = 11
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
-        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}") ]
+        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
+        self.tr("Insert next coint please")
+        ]
 
     def __init__(self, timerService):
         super(ApplicationWindow, self).__init__()
@@ -40,7 +45,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService = BluetoothService(timerService)
         self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
-        self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
+        self.bluetoothService.refreshTimerSignal.connect(self.onRefreshTimer)
         self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
         self.bluetoothService.connectionStrengthSignal.connect(lambda x: self.ui.signalStrengthProgressBar.setValue(x))
         self.temperatureStatus = TemperatureStatus()
@@ -66,7 +71,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wirelessService = WirelessService()
         self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
         self.wirelessService.start()
-    
+
+        coinPixMap = QtGui.QPixmap(':/images/coin180.png')
+        self.ui.coinImageLabel.setPixmap(coinPixMap.scaled(self.ui.coinImageLabel.width(), self.ui.coinImageLabel.height()))
+
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
         self.ui.wifiSettingsButton.setVisible(not self.ui.wifiSettingsButton.isVisible())
@@ -77,6 +85,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()
+        self.ui.insertNewCoinLabel.clear()
         self.ui.connectDeviceLabel.clear()
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
@@ -173,10 +182,22 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             text = text + " - " + ssid
         self.ui.wifiStateLabel.setText(text)
 
+    #def showPngForSec(self):
+
+        self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
+
     def onCreditChange(self, credit):
         self.ui.actualCreditValue.setText(str(int(self.creditService.getCredit())) + " " + self.texts[self.SECONDS])
         if self.bluetoothService.isConnected() and (credit > 0):
             self.bluetoothService.updateDuration(credit)
         else:
+            #TODO PLAY mp3
+            #TODO show PNG
             pass
 
+    def onRefreshTimer(self, value):
+        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value)))
+        if (value > 30):
+            self.ui.insertNewCoinLabel.clear()
+        else:
+            self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
