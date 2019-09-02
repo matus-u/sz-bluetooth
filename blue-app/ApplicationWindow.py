@@ -57,7 +57,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
         self.creditService = CreditService(AppSettings.actualCoinSettings())
-        self.creditService.creditChanged.connect(lambda credit: self.ui.actualCreditValue.setText(str(int(credit)) + " " + self.texts[self.SECONDS]), QtCore.Qt.QueuedConnection )
+        self.creditService.creditChanged.connect(self.onCreditChange, QtCore.Qt.QueuedConnection)
         self.creditService.changeCredit(0)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
@@ -172,4 +172,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if ssid != "":
             text = text + " - " + ssid
         self.ui.wifiStateLabel.setText(text)
+
+    def onCreditChange(self, credit):
+        self.ui.actualCreditValue.setText(str(int(self.creditService.getCredit())) + " " + self.texts[self.SECONDS])
+        if self.bluetoothService.isConnected() and (credit > 0):
+            self.bluetoothService.updateDuration(credit)
+        else:
+            pass
 

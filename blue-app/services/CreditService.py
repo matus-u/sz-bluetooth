@@ -22,7 +22,7 @@ class CreditService(QtCore.QObject):
 
     def changeCredit(self, value):
         self.credit = self.credit + value
-        self.creditChanged.emit(self.credit)
+        self.creditChanged.emit(value)
 
     def setCoinSettings(self, coinSettings):
         self.coinSettings = coinSettings
