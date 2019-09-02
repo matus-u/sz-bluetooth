@@ -46,7 +46,12 @@ class PairRequest(QtCore.QObject):
         self.deviceActionObject = DeviceActionObject(dbus.SystemBus())
 
     def pair(self, deviceAddress):
-        device = BluezUtils.findDevice(deviceAddress)
+        try:
+            device = BluezUtils.findDevice(deviceAddress)
+        except:
+            print ("Cannot find device with id: " + deviceAddress)
+            self.connected.emit(1)
+            return
         self.devPath = device.object_path
         self.address = deviceAddress
         device.Pair(reply_handler=self.pairReply, error_handler=self.pairError,
@@ -66,7 +71,6 @@ class PairRequest(QtCore.QObject):
             self.deviceObj.CancelPairing()
         else:
             print("Creating device failed: %s" % (error))
-        BluezUtils.cleanupDevices()
         self.mainloop.quit()
         self.connected.emit(1)
 

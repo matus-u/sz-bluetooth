@@ -52,7 +52,6 @@ class BluetoothService(QtCore.QObject):
         self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
         self.statusObject.actualStatus.connect(lambda x: self.connectionStrengthSignal.emit(x))
         timerService.addTimerWorker(self.statusObject)
-        
 
     def scan(self):
         sleep(2)
@@ -60,7 +59,6 @@ class BluetoothService(QtCore.QObject):
         for path, device in BluezUtils.scanDevices():
             devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])
         return devices
-
 
     def connect(self, macAddr, duration):
         self.duration = duration
