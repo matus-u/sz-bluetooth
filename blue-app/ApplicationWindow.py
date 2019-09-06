@@ -12,6 +12,7 @@ from services.CreditService import CreditService
 from services.AppSettings import AppSettings
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
+from services.PlaySoundService import PlaySoundService
 
 
 class ApplicationWindow(QtWidgets.QMainWindow):
@@ -71,9 +72,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wirelessService = WirelessService()
         self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
         self.wirelessService.start()
-
-        coinPixMap = QtGui.QPixmap(':/images/coin180.png')
-        self.ui.coinImageLabel.setPixmap(coinPixMap.scaled(self.ui.coinImageLabel.width(), self.ui.coinImageLabel.height()))
+        self.playSoundService = PlaySoundService()
 
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
@@ -182,18 +181,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             text = text + " - " + ssid
         self.ui.wifiStateLabel.setText(text)
 
-    #def showPngForSec(self):
-
         self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
 
     def onCreditChange(self, credit):
         self.ui.actualCreditValue.setText(str(int(self.creditService.getCredit())) + " " + self.texts[self.SECONDS])
-        if self.bluetoothService.isConnected() and (credit > 0):
-            self.bluetoothService.updateDuration(credit)
-        else:
-            #TODO PLAY mp3
-            #TODO show PNG
-            pass
+        if (credit > 0):
+            self.showCoinImage()
+            duration = 500
+            if self.bluetoothService.isConnected():
+                self.bluetoothService.updateDuration(credit)
+                duration = 100
+            else:
+                self.playSoundService.play()
+            QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):
         self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value)))
@@ -201,3 +201,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.insertNewCoinLabel.clear()
         else:
             self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
+
+    def showCoinImage(self):
+        coinPixMap = QtGui.QPixmap(':/images/coin180.png')
+        self.ui.coinImageLabel.setPixmap(coinPixMap.scaled(self.ui.coinImageLabel.width(), self.ui.coinImageLabel.height()))
+
+    def hideCoinImage(self):
+        coinPixMap = QtGui.QPixmap()
+        self.ui.coinImageLabel.setPixmap(coinPixMap)
+
