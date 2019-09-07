@@ -1,6 +1,9 @@
 import dbus
 import dbus.service
 import dbus.mainloop.glib
+
+from services.LoggingService import LoggingService
+
 try:
   from gi.repository import GObject
 except ImportError:
@@ -15,7 +18,7 @@ AGENT_PATH = "/test/agent"
 
 class DeviceActionObject:
     def __init__(self, bus):
-        self.bus = bus
+        self.bus = busAppSettings
 
     def setTrusted(self, path):
         props = dbus.Interface(self.bus.get_object("org.bluez", path),
@@ -31,11 +34,13 @@ class DeviceActionObject:
         dev = dbus.Interface(self.bus.get_object("org.bluez", path),
                                 "org.bluez.Device1")
         dev.Connect()
+        LoggingService.getLogger().info("Dev connect %s" % path)
 
     def devDisconnect(self, path, address):
         dev = dbus.Interface(self.bus.get_object("org.bluez", path),
                                 "org.bluez.Device1")
         dev.Disconnect()
+        LoggingService.getLogger().info("Dev disconnect %s" % path)
         BluezUtils.removeDevice(address)
 
 class PairRequest(QtCore.QObject):
@@ -46,10 +51,11 @@ class PairRequest(QtCore.QObject):
         self.deviceActionObject = DeviceActionObject(dbus.SystemBus())
 
     def pair(self, deviceAddress):
+        LoggingService.getLogger().info("Pair request %s " % deviceAddress)
         try:
             device = BluezUtils.findDevice(deviceAddress)
         except:
-            print ("Cannot find device with id: " + deviceAddress)
+            LoggingService.getLogger().info("Cannot find device with id: " + deviceAddress)
             self.connected.emit(1)
             return
         self.devPath = device.object_path
@@ -60,6 +66,7 @@ class PairRequest(QtCore.QObject):
         self.mainloop.run()
 
     def pairReply(self):
+        LoggingService.getLogger().info("Pair reply: %s" % self.devPath)
         self.deviceActionObject.setTrusted(self.devPath)
         self.deviceActionObject.devConnect(self.devPath)
         self.mainloop.quit()
@@ -70,7 +77,7 @@ class PairRequest(QtCore.QObject):
         if errName == "org.freedesktop.DBus.Error.NoReply" and self.deviceObj:
             self.deviceObj.CancelPairing()
         else:
-            print("Creating device failed: %s" % (error))
+            LoggingService.getLogger().info("Creating device failed: %s" % (error))
         self.mainloop.quit()
         self.connected.emit(1)
 

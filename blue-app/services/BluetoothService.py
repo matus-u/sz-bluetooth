@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from time import sleep
 import os
 from services import TimerService
+from services.LoggingService import LoggingService
 
 if os.getenv('RUN_FROM_DOCKER', False) == False:
     from services import BluezUtils
@@ -61,6 +62,7 @@ class BluetoothService(QtCore.QObject):
         return devices
 
     def connect(self, macAddr, duration):
+        LoggingService.getLogger().info("Connect %s " % macAddr)
         self.duration = duration
         self.pairRequest = BluetoothAgent.PairRequest()
         self.pairRequest.connected.connect(self.onConnect)
@@ -83,8 +85,10 @@ class BluetoothService(QtCore.QObject):
 
     def updateDuration(self, duration):
         self.connectionTimer.start(self.connectionTimer.remainingTime() + duration * 1000)
+        LoggingService.getLogger().info("Update duration %s" %duration)
         
     def forceDisconnect(self):
+        LoggingService.getLogger().info("FORCE DISCONNECT")
         self.statusObject.stop()
         self.connectionTimer.stop()
         self.refreshTimer.stop()

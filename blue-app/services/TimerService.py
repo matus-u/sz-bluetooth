@@ -22,7 +22,7 @@ class TimerStatusObject(QtCore.QObject):
         self.stopCheckStatus.emit()
 
     def onTimeout(self):
-        print ("GENERIC ON TIMEOUT")
+        pass
 
 
 class TimerService:

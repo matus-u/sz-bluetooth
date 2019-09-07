@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.AppSettings import AppSettings
+from services.LoggingService import LoggingService
 
 class WirelessScan(QtCore.QObject):
     def scan(self):
@@ -65,6 +66,7 @@ class WirelessService(QtCore.QObject):
             self.process.waitForFinished()
 
     def onConnect(self):
+        LoggingService.getLogger().info("On Connect")
         self.checkStatusTimer.stop()
         self.stopProcess()
         self.ssid = AppSettings.actualWirelessSSID()
@@ -75,9 +77,11 @@ class WirelessService(QtCore.QObject):
             self.disconnect()
             self.process = QtCore.QProcess(self)
             self.process.finished.connect(self.onConnectFinished)
+            LoggingService.getLogger().info("Connecting %s" % self.ssid)
             self.process.start("scripts/wifi-connect.sh", [ self.ssid, password ])
 
     def onConnectFinished(self, exitCode, exitStatus):
+        LoggingService.getLogger().info("onConnectFinished %s" % str(exitCode))
         if exitCode != 0:
             self.state = "DISCONNECTED"
             self.stateChanged.emit(self.state, "")
@@ -90,6 +94,7 @@ class WirelessService(QtCore.QObject):
         self.checkStatusTimer.start(5000)
 
     def disconnect(self):
+        LoggingService.getLogger().info("Disconnect")
         QtCore.QProcess.execute("scripts/wifi-forget-connection.sh")
     
     def onTimer(self):

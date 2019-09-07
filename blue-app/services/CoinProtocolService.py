@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services import TimerService
+from services.LoggingService import LoggingService
 import os
 
 class CoinProtocolStatusObject(TimerService.TimerStatusObject):
@@ -21,6 +22,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
             self.actualStatus.emit(str(serialString))
             if not serialString.startswith("S=0,0,0,0,0,0,00"):
                 toSend = list(serialString)
+                LoggingService.getLogger().info("SerialString %s" % serialString)
                 toSend[0] = 'D'
                 serialString = "".join(toSend)
                 serialString = serialString[:-2]

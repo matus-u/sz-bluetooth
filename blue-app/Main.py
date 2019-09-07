@@ -8,8 +8,10 @@ import ApplicationWindow
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService
 from services.UpdateStatus import UpdateStatus
+from services.LoggingService import LoggingService
 
 def main():
+    LoggingService.init()
     app = QtWidgets.QApplication(sys.argv)
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
