@@ -13,4 +13,9 @@ RUN apt-get update \
 
 WORKDIR /src
 
+RUN apt-get update \
+    && apt-get install -y \
+    python3-requests \
+    net-tools
+
 ENV RUN_FROM_DOCKER TRUE

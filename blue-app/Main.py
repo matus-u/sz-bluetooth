@@ -17,7 +17,7 @@ def main():
     AppSettings.restoreTimeZone()
 
     timerService = TimerService()
-    updateStatus = UpdateStatus()
+    updateStatus = UpdateStatus(sys.argv[1])
     timerService.addTimerWorker(updateStatus)
 
     application = ApplicationWindow.ApplicationWindow(timerService)

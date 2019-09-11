@@ -23,9 +23,24 @@ class AppSettings:
     CoinValuesString = "coin-settings"
     DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.01], "HUF" : [100,200,0,0,0,0,500,10] }
 
+    AppVersion = "1.0"
+    DeviceNameString = "DeviceName"
+    OwnerString = "Owner"
+
     @staticmethod
-    def actualLanguage():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.LanguageString, AppSettings.LanguageList[0])
+    def checkSettingsParam(settings):
+        if settings is not None:
+            return settings
+        else:
+            return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
+
+    @staticmethod
+    def actualAppVersion():
+        return AppSettings.AppVersion
+
+    @staticmethod
+    def actualLanguage(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.LanguageString, AppSettings.LanguageList[0])
 
     @staticmethod
     def getCurrentLanguageIndex():
@@ -40,8 +55,8 @@ class AppSettings:
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.actualTimeZone()])
 
     @staticmethod
-    def actualTimeZone():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.TimeZoneString, AppSettings.TimeZoneList[0])
+    def actualTimeZone(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.TimeZoneString, AppSettings.TimeZoneList[0])
 
     @staticmethod
     def getCurrentTimeZoneIndex():
@@ -52,16 +67,16 @@ class AppSettings:
         cls._loadLanguage(AppSettings.LanguageList[index])
 
     @staticmethod
-    def actualCurrency():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.CurrencyString, AppSettings.CurrencyList[0])
+    def actualCurrency(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CurrencyString, AppSettings.CurrencyList[0])
 
     @staticmethod
     def getCurrentCurrencyIndex():
         return AppSettings.CurrencyList.index(AppSettings.actualCurrency())
 
     @staticmethod
-    def actualCoinSettings():
-        return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat).value(AppSettings.CoinValuesString, AppSettings.DefaultCoinValues[AppSettings.actualCurrency()], float)
+    def actualCoinSettings(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinValuesString, AppSettings.DefaultCoinValues[AppSettings.actualCurrency()], float)
 
     @staticmethod
     def defaultCoinSettings(currency):
@@ -100,14 +115,21 @@ class AppSettings:
         settings.sync()
 
     @staticmethod
-    def actualWirelessEnabled():
-        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.WirelessEnabledString, False, bool)
+    def actualWirelessEnabled(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.WirelessEnabledString, False, bool)
 
     @staticmethod
-    def actualWirelessSSID():
-        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.SSIDString, "")
+    def actualWirelessSSID(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.SSIDString, "")
 
     @staticmethod
-    def actualWirelessPassword():
-        return QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat).value(AppSettings.WirelessPassString, "")
+    def actualWirelessPassword(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.WirelessPassString, "")
 
+    @staticmethod
+    def actualDeviceName(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.DeviceNameString, "")
+
+    @staticmethod
+    def actualOwner(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.OwnerString, "")
