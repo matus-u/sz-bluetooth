@@ -26,6 +26,8 @@ class AppSettings:
     AppVersion = "1.0"
     DeviceNameString = "DeviceName"
     OwnerString = "Owner"
+    ServicePhoneString = "ServicePhone"
+    DescString = "Description"
 
     @staticmethod
     def checkSettingsParam(settings):
@@ -133,3 +135,25 @@ class AppSettings:
     @staticmethod
     def actualOwner(appSettings = None):
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.OwnerString, "")
+
+    @staticmethod
+    def actualDescription(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.DescString, "")
+
+    @staticmethod
+    def actualServicePhone(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.ServicePhoneString, "")
+
+    @classmethod
+    def storeServerSettings(cls, name, owner, desc, servicePhone):
+        settings = QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat)
+        if name is not None:
+            settings.setValue(AppSettings.DeviceNameString, name)
+        if owner is not None:
+            settings.setValue(AppSettings.OwnerString, owner)
+        if desc is not None:
+            settings.setValue(AppSettings.DescString, desc)
+        if servicePhone is not None:
+            settings.setValue(AppSettings.ServicePhoneString, servicePhone)
+        settings.sync()
+

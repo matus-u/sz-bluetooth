@@ -19,17 +19,12 @@ class UpdateStatus(TimerService.TimerStatusObject):
         logger = LoggingService.getLogger()
         logger.info("Update state to server with id: %s" % self.macAddr)
         try:
-            settings = AppSettings.checkSettingsParam(None)
-            data = json.dumps({ 'dev' : {
-                'language' : AppSettings.actualLanguage(settings),
-                'version'  : AppSettings.actualAppVersion(),
-                'currency' : AppSettings.actualCurrency(settings),
-                'owner'    : AppSettings.actualOwner(settings),
-                'name'     : AppSettings.actualDeviceName(settings)
-            }})
+            data = json.dumps({ 'dev' : {}})
             URL = "http://172.17.0.1:4000/api/devices/" + self.macAddr
-            print ("URL %s" % URL)
-            requests.put(URL, headers = {'Content-type': 'application/json'}, data = data, timeout = 2).raise_for_status()
+            response = requests.put(URL, headers = {'Content-type': 'application/json'}, data = data, timeout = 2)
+            response.raise_for_status()
+            json_data = json.loads(response.text)
+            AppSettings.storeServerSettings(json_data["data"]["name"], json_data["data"]["owner"], json_data["data"]["desc"], json_data["data"]["service_phone"])
             logger.info("Update state finished correctly!")
         except:
             logger.info("Update state finished with error %s" % str(sys.exc_info()[0]))
