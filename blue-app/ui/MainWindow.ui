@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,6,1">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,10,4,1">
+     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,10,7,1">
       <item>
        <spacer name="horizontalSpacer_5">
         <property name="orientation">
@@ -83,6 +83,19 @@
             </property>
             <property name="text">
              <string>Wifi settings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="withdrawMoneyButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Withdraw money</string>
             </property>
            </widget>
           </item>
@@ -437,7 +450,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1,4,1,1,0,1">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1,1,4,1,1,0">
       <item>
        <spacer name="horizontalSpacer_6">
         <property name="orientation">

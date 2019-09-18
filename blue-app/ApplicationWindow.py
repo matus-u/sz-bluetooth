@@ -31,12 +31,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     SECONDS = 9
     CPU_TEMP = 10
     INSERT_COIN_STRING = 11
+    WITHDRAW_MONEY_TEXT_HEADER = 12
+    WITHDRAW_MONEY_TEXT_MAIN = 13
+    WITHDRAW_MONEY_TEXT_INFO_HEADER = 14
+    WITHDRAW_MONEY_TEXT_INFO = 15
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
-        self.tr("Insert next coint please")
+        self.tr("Insert next coint please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
+        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset.")
         ]
 
     def __init__(self, timerService, moneyTracker):
@@ -57,7 +62,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
+        self.ui.withdrawMoneyButton.setVisible(False)
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
+        self.ui.withdrawMoneyButton.clicked.connect(self.onWithdrawMoneyButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow(self.wirelessService).exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
@@ -81,6 +88,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
         self.ui.wifiSettingsButton.setVisible(not self.ui.wifiSettingsButton.isVisible())
+        self.ui.withdrawMoneyButton.setVisible(not self.ui.withdrawMoneyButton.isVisible())
 
     def onAdminSettingsButton(self):
         SettingsWindow.SettingsWindow().exec()
@@ -218,3 +226,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.changeCredit(10)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
             self.moneyTracker.addToCounters(10)
+
+    def onWithdrawMoneyButton(self):
+        shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])
+        if shouldWithdraw == QtWidgets.QMessageBox.Yes:
+            self.moneyTracker.withdraw()
+            QtWidgets.QMessageBox.information(self, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_INFO])
+
