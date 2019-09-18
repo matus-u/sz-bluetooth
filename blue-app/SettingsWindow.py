@@ -18,6 +18,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.currencyCombobox.setCurrentIndex(AppSettings.getCurrentCurrencyIndex())
         self.ui.languageCombobox.currentIndexChanged.connect(self.onLanguageComboboxChanged)
         self.ui.currencyCombobox.currentIndexChanged.connect(lambda index: self.setCoinSettings(AppSettings.defaultCoinSettings(AppSettings.currencyStringByIndex(index))))
+        self.ui.moneyServerAddress.setText(AppSettings.actualMoneyServer())
         self.setCoinSettings(AppSettings.actualCoinSettings())
 
     def setCoinSettings(self,coinSettings):
@@ -46,7 +47,8 @@ class SettingsWindow(QtWidgets.QDialog):
         AppSettings.loadLanguageByIndex(index)
 
     def onOkButton(self):
-        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex(), self.getCoinSettingsFromUi())
+        #TODO check curency! and reset counters!
+        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex(), self.getCoinSettingsFromUi(), self.ui.moneyServerAddress.text())
         self.accept()
 
     def onCancelButton(self):

@@ -28,6 +28,7 @@ class AppSettings:
     OwnerString = "Owner"
     ServicePhoneString = "ServicePhone"
     DescString = "Description"
+    MoneyServerString = "MoneyServer"
 
     @staticmethod
     def checkSettingsParam(settings):
@@ -98,12 +99,13 @@ class AppSettings:
         QtCore.QCoreApplication.processEvents()
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList):
+    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
         settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
         settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
+        settings.setValue(AppSettings.MoneyServerString, moneyServer)
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 
@@ -143,6 +145,10 @@ class AppSettings:
     @staticmethod
     def actualServicePhone(appSettings = None):
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.ServicePhoneString, "")
+
+    @staticmethod
+    def actualMoneyServer(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.MoneyServerString, "")
 
     @classmethod
     def storeServerSettings(cls, name, owner, desc, servicePhone):
