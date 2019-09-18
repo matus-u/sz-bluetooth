@@ -7,12 +7,14 @@ from generated import Resources
 
 import SettingsWindow
 import WifiSettingsWindow
+import os
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
 from services.AppSettings import AppSettings
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
 from services.PlaySoundService import PlaySoundService
+from services.MoneyTracker import MoneyTracker
 
 
 class ApplicationWindow(QtWidgets.QMainWindow):
@@ -37,12 +39,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Insert next coint please")
         ]
 
-    def __init__(self, timerService):
+    def __init__(self, timerService, moneyTracker):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
+        self.moneyTracker = moneyTracker
         self.bluetoothService = BluetoothService(timerService)
         self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
@@ -54,7 +57,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setDemoModeVisible(False)
         self.ui.adminSettingsButton.setVisible(False)
         self.ui.wifiSettingsButton.setVisible(False)
-        self.ui.addCreditButton.clicked.connect(lambda: self.creditService.changeCredit(10))
+        self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow(self.wirelessService).exec())
         self.ui.scanButton.clicked.connect(self.onScanButton)
@@ -64,6 +67,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.texts = self.createTrTexts()
         self.creditService = CreditService(AppSettings.actualCoinSettings())
         self.creditService.creditChanged.connect(self.onCreditChange, QtCore.Qt.QueuedConnection)
+        self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters, QtCore.Qt.QueuedConnection)
         self.creditService.changeCredit(0)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
@@ -210,3 +214,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         coinPixMap = QtGui.QPixmap()
         self.ui.coinImageLabel.setPixmap(coinPixMap)
 
+    def onAddCreditButton(self):
+        self.creditService.changeCredit(10)
+        if not(os.getenv('RUN_FROM_DOCKER', False) == False):
+            self.moneyTracker.addToCounters(10)

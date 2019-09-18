@@ -4,10 +4,11 @@ from PyQt5 import QtCore
 
 import os
 from services.CoinProtocolService import CoinProtocolService
-
+from services.MoneyTracker import MoneyTracker
 
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)
+    moneyInserted = QtCore.pyqtSignal(float)
 
     def __init__(self, coinSettings):
         super().__init__()
@@ -15,10 +16,11 @@ class CreditService(QtCore.QObject):
         self.coinSettings = coinSettings
         self.coinService = CoinProtocolService()
         self.coinService.actualStatus.connect(self.onCoinChannel)
-                
 
     def onCoinChannel(self, channel, count):
-        self.changeCredit((self.coinSettings[channel] * count) / self.coinSettings[7])
+        money = self.coinSettings[channel] * count
+        self.changeCredit(money / self.coinSettings[7])
+        self.moneyInserted.emit(money)
 
     def changeCredit(self, value):
         self.credit = self.credit + value

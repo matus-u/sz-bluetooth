@@ -9,6 +9,7 @@ from services.AppSettings import AppSettings
 from services.TimerService import TimerService
 from services.UpdateStatus import UpdateStatus
 from services.LoggingService import LoggingService
+from services.MoneyTracker import MoneyTracker
 
 def main():
     LoggingService.init()
@@ -17,10 +18,11 @@ def main():
     AppSettings.restoreTimeZone()
 
     timerService = TimerService()
-    updateStatus = UpdateStatus(sys.argv[1])
+    moneyTracker = MoneyTracker()
+    updateStatus = UpdateStatus(sys.argv[1], moneyTracker)
     timerService.addTimerWorker(updateStatus)
 
-    application = ApplicationWindow.ApplicationWindow(timerService)
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker)
     #t.start()
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
     application.show()
