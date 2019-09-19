@@ -18,9 +18,10 @@ def main():
     AppSettings.restoreTimeZone()
 
     timerService = TimerService()
+    updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
     updateStatus = UpdateStatus(sys.argv[1], moneyTracker)
-    timerService.addTimerWorker(updateStatus)
+    updateStatusTimerService.addTimerWorker(updateStatus)
 
     application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker)
     #t.start()
@@ -28,6 +29,7 @@ def main():
     application.show()
     ret = app.exec_()
     application.cleanup()
+    updateStatusTimerService.quit()
     timerService.quit()
     sys.exit(ret)
 

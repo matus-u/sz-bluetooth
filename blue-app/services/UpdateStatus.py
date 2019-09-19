@@ -12,7 +12,7 @@ import json
 class UpdateStatus(TimerService.TimerStatusObject):
 
     def __init__(self, macAddr, moneyTracker):
-        super().__init__(3000)
+        super().__init__(8000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
         self.moneyServer = AppSettings.actualMoneyServer()
@@ -34,7 +34,7 @@ class UpdateStatus(TimerService.TimerStatusObject):
                     "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
                     "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX]
                 }})
-                response = requests.put(URL, headers = {'Content-type': 'application/json'}, data = data, timeout = 2)
+                response = requests.put(URL, headers = {'Content-type': 'application/json'}, data = data, timeout = 5)
                 response.raise_for_status()
                 json_data = json.loads(response.text)
                 AppSettings.storeServerSettings(json_data["data"]["name"], json_data["data"]["owner"], json_data["data"]["desc"], json_data["data"]["service_phone"])
