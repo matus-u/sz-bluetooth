@@ -2,6 +2,16 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+class AppSettingsNotifier(QtCore.QObject):
+
+    moneyServerChanged = QtCore.pyqtSignal(str)
+    deviceNameChanged = QtCore.pyqtSignal(str)
+    servicePhoneChanged = QtCore.pyqtSignal(str)
+    currencyChanged = QtCore.pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+
 
 class AppSettings:
     SettingsPath = "configs/blue-app.conf"
@@ -29,6 +39,8 @@ class AppSettings:
     ServicePhoneString = "ServicePhone"
     DescString = "Description"
     MoneyServerString = "MoneyServer"
+
+    Notifier = AppSettingsNotifier()
 
     @staticmethod
     def checkSettingsParam(settings):
@@ -103,9 +115,17 @@ class AppSettings:
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
-        settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
+
+        if AppSettings.CurrencyList[currencyIndex] != AppSettings.actualCurrency(settings):
+            settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
+            cls.getNotifier().currencyChanged.emit(AppSettings.CurrencyList[currencyIndex])
+
         settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
-        settings.setValue(AppSettings.MoneyServerString, moneyServer)
+
+        if moneyServer != AppSettings.actualMoneyServer(settings):
+            settings.setValue(AppSettings.MoneyServerString, moneyServer)
+            cls.getNotifier().moneyServerChanged.emit(moneyServer)
+
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 
@@ -152,14 +172,22 @@ class AppSettings:
 
     @classmethod
     def storeServerSettings(cls, name, owner, desc, servicePhone):
-        settings = QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat)
+        settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         if name is not None:
-            settings.setValue(AppSettings.DeviceNameString, name)
+            if name != AppSettings.actualDeviceName(settings):
+                settings.setValue(AppSettings.DeviceNameString, name)
+                cls.getNotifier().deviceNameChanged.emit(name)
         if owner is not None:
             settings.setValue(AppSettings.OwnerString, owner)
         if desc is not None:
             settings.setValue(AppSettings.DescString, desc)
         if servicePhone is not None:
-            settings.setValue(AppSettings.ServicePhoneString, servicePhone)
+            if servicePhone != AppSettings.actualServicePhone(settings):
+                settings.setValue(AppSettings.ServicePhoneString, servicePhone)
+                cls.getNotifier().servicePhoneChanged.emit(servicePhone)
         settings.sync()
+
+    @classmethod
+    def getNotifier(cls):
+        return cls.Notifier
 

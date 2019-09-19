@@ -10,7 +10,7 @@ import WifiSettingsWindow
 import os
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
-from services.AppSettings import AppSettings
+from services.AppSettings import AppSettings,AppSettingsNotifier
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
 from services.PlaySoundService import PlaySoundService
@@ -35,13 +35,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     WITHDRAW_MONEY_TEXT_MAIN = 13
     WITHDRAW_MONEY_TEXT_INFO_HEADER = 14
     WITHDRAW_MONEY_TEXT_INFO = 15
+    SERVICE_PHONE = 16
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coint please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
-        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset.")
+        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}")
         ]
 
     def __init__(self, timerService, moneyTracker):
@@ -84,6 +85,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
         self.wirelessService.start()
         self.playSoundService = PlaySoundService()
+
+        AppSettings.getNotifier().deviceNameChanged.connect(lambda val: self.ui.nameLabel.setText(val))
+        AppSettings.getNotifier().servicePhoneChanged.connect(lambda val: self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(val)))
+        self.ui.nameLabel.setText(AppSettings.actualDeviceName())
+        self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
     def onAdminMode(self):
         self.ui.adminSettingsButton.setVisible(not self.ui.adminSettingsButton.isVisible())
