@@ -132,7 +132,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,3,0,0,1,3,0,0,0,1">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,3,0,0,1,3,0,0,0,1,0,0">
       <item>
        <spacer name="verticalSpacer_3">
         <property name="orientation">
@@ -447,10 +447,24 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QLabel" name="nameLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="servicePhoneLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1,1,4,1,1,0">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1,4,1,1,0,0">
       <item>
        <spacer name="horizontalSpacer_6">
         <property name="orientation">

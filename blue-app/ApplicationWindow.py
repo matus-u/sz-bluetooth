@@ -91,7 +91,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.withdrawMoneyButton.setVisible(not self.ui.withdrawMoneyButton.isVisible())
 
     def onAdminSettingsButton(self):
-        SettingsWindow.SettingsWindow().exec()
+        SettingsWindow.SettingsWindow(self.moneyTracker).exec()
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
 
     def onDisconnected(self):
