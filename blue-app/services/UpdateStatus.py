@@ -6,66 +6,37 @@ from services.AppSettings import AppSettings
 from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 
-import requests
 import sys
 import json
-
-class UpdateStatus(TimerService.TimerStatusObject):
-
-    def __init__(self, macAddr, moneyTracker):
-        super().__init__(8000)
-        self.macAddr = macAddr
-        self.moneyTracker = moneyTracker
-        self.moneyServer = AppSettings.actualMoneyServer()
-        #self.start()
-
-        AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
-
-    def setMoneyServer(self, val):
-        self.moneyServer = val
-
-    def onTimeout(self):
-        if self.moneyServer is not "":
-            logger = LoggingService.getLogger()
-            URL = self.moneyServer + "/api/devices/" + self.macAddr
-            logger.info("Update state to server with id: %s" % URL)
-            try:
-                counters = self.moneyTracker.getCounters()
-                data = json.dumps({ 'dev' : {
-                    "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
-                    "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX]
-                }})
-                response = requests.put(URL, headers = {'Content-type': 'application/json'}, data = data, timeout = 50)
-                response.raise_for_status()
-                json_data = json.loads(response.text)
-                AppSettings.storeServerSettings(json_data["data"]["name"], json_data["data"]["owner"], json_data["data"]["desc"], json_data["data"]["service_phone"])
-                logger.info("Update state finished correctly!")
-            except:
-                logger.info("Update state finished with error %s" % str(sys.exc_info()[0]))
 
 class WebSocketStatus(TimerService.TimerStatusObject):
 
     asyncStartSignal = QtCore.pyqtSignal()
+    asyncStopSignal = QtCore.pyqtSignal()
+    adminModeRequested = QtCore.pyqtSignal()
 
     def __init__(self, macAddr, moneyTracker):
-        super().__init__(800)
+        super().__init__(10000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
         self.moneyServer = AppSettings.actualMoneyServer()
         self.websocket = QtWebSockets.QWebSocket(parent=self)
 
-        #self.start()
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
 
-    def asyncStart(self):
+    def asyncConnect(self):
         self.asyncStartSignal.emit()
+
+    def asyncDisconnect(self):
+        self.asyncStopSignal.emit()
 
     def afterMove(self):
         self.asyncStartSignal.connect(self.connect, QtCore.Qt.QueuedConnection)
+        self.asyncStopSignal.connect(self.forceDisconnect, QtCore.Qt.QueuedConnection)
 
     def setMoneyServer(self, val):
         self.moneyServer = val
-        self.asyncStart()
+        self.asyncDisconnect()
 
     def onTimeout(self):
         logger = LoggingService.getLogger()
@@ -75,15 +46,17 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
                 "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX]
                 }}
-        self.websocket.sendTextMessage(self.createPhxMessage("update-status", data))
+        textMsg = self.createPhxMessage("update-status", data)
+        LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+        self.websocket.sendTextMessage(textMsg)
 
-    def connect(self):
-        self.ref = 0
-        self.STATE = "CONNECTING"
+    def forceDisconnect(self):
         if self.websocket:
             self.websocket.abort()
             self.websocket = None
 
+    def connect(self):
+        self.ref = 0
         if self.moneyServer is not "":
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
             self.URL = URL.replace("http://", "ws://")
@@ -95,23 +68,26 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.websocket.open(QtCore.QUrl(self.URL))
 
     def onConnect(self):
-        self.STATE = "CONNECTED"
+        LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
-        self.startSync()
+        self.startTimerSync()
+        self.onTimeout()
 
     def onTextMessageReceived(self, js):
-        print ("ON TextMessage {}".format(js))
+        LoggingService.getLogger().debug("Data from websocket %s" % js)
         text = json.loads(js)
-        if text["event"] == "phx_reply" and text["payload"]["status"] == "ok" and text["ref"] != "1":
-            data = text["payload"]["response"].get("data","")
-            if data != "":
-                AppSettings.storeServerSettings(data["name"], data["owner"], data["desc"], data["service_phone"])
+        if text["event"] == "phx_reply" and text["payload"]["status"] == "ok" and text["ref"] != "1" and text["payload"]["response"]["msg_type"] == "update-status":
+            data = text["payload"]["response"]["data"]
+            AppSettings.storeServerSettings(data["name"], data["owner"], data["desc"], data["service_phone"])
+
+        if text["event"] == "admin-mode-request":
+            LoggingService.getLogger().info("Admin mode requested")
+            self.adminModeRequested.emit()
 
     def onDisconnect(self):
-        self.stopSync()
+        self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
-        if self.STATE != "CONNECTED":
-            self.connect()
+        QtCore.QTimer.singleShot(20000, self.connect)
 
     def createPhxMessage(self, event, payload):
         self.ref = self.ref + 1

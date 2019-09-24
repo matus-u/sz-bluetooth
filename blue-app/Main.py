@@ -7,7 +7,7 @@ import ApplicationWindow
 
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService
-from services.UpdateStatus import UpdateStatus,WebSocketStatus
+from services.UpdateStatus import WebSocketStatus
 from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 
@@ -30,7 +30,9 @@ def main():
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
     application.show()
-    webUpdateStatus.asyncStart()
+
+    webUpdateStatus.adminModeRequested.connect(application.onAdminMode, QtCore.Qt.QueuedConnection)
+    webUpdateStatus.asyncConnect()
 
     ret = app.exec_()
     application.cleanup()

@@ -18,14 +18,11 @@ class TimerStatusObject(QtCore.QObject):
     def stop(self):
         self.stopCheckStatus.emit()
 
-    def startSync(self):
+    def startTimerSync(self):
         self.refreshTimer.start(self.duration)
 
-    def stopSync(self):
+    def stopTimerSync(self):
         self.refreshTimer.stop()
-
-    def onAsyncTimeout(self):
-        self.asyncTimeout.emit()
 
     def onTimeout(self):
         pass
@@ -43,8 +40,8 @@ class TimerService:
         timerStatusObject.moveToThread(self.thread)
         timerStatusObject.afterMove()
         timerStatusObject.refreshTimer.timeout.connect(timerStatusObject.onTimeout)
-        timerStatusObject.startCheckStatus.connect(timerStatusObject.startSync, QtCore.Qt.QueuedConnection)
-        timerStatusObject.stopCheckStatus.connect(timerStatusObject.stopSync, QtCore.Qt.QueuedConnection)
+        timerStatusObject.startCheckStatus.connect(timerStatusObject.startTimerSync, QtCore.Qt.QueuedConnection)
+        timerStatusObject.stopCheckStatus.connect(timerStatusObject.stopTimerSync, QtCore.Qt.QueuedConnection)
 
     def quit(self):
         self.thread.quit()

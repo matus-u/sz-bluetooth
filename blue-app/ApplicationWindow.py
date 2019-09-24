@@ -238,4 +238,3 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if shouldWithdraw == QtWidgets.QMessageBox.Yes:
             self.moneyTracker.withdraw()
             QtWidgets.QMessageBox.information(self, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_INFO])
-
