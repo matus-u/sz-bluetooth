@@ -7,7 +7,7 @@ import ApplicationWindow
 
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService
-from services.UpdateStatus import UpdateStatus
+from services.UpdateStatus import UpdateStatus,WebSocketStatus
 from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 
@@ -20,16 +20,22 @@ def main():
     timerService = TimerService()
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
-    updateStatus = UpdateStatus(sys.argv[1], moneyTracker)
-    updateStatusTimerService.addTimerWorker(updateStatus)
+
+    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker)
+    updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
     application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker)
+
     #t.start()
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
+
     application.show()
+    webUpdateStatus.asyncStart()
+
     ret = app.exec_()
     application.cleanup()
     updateStatusTimerService.quit()
+    webUpdateStatus.disconnect()
     timerService.quit()
     sys.exit(ret)
 
