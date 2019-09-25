@@ -18,7 +18,7 @@ AGENT_PATH = "/test/agent"
 
 class DeviceActionObject:
     def __init__(self, bus):
-        self.bus = busAppSettings
+        self.bus = bus
 
     def setTrusted(self, path):
         props = dbus.Interface(self.bus.get_object("org.bluez", path),
