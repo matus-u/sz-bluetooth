@@ -21,6 +21,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.moneyTracker = moneyTracker
         self.moneyServer = AppSettings.actualMoneyServer()
         self.websocket = QtWebSockets.QWebSocket(parent=self)
+        self.connectScheduled = True
 
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
 
@@ -54,9 +55,11 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         if self.websocket:
             self.websocket.abort()
             self.websocket = None
+        self.scheduleConnect()
 
     def connect(self):
         self.ref = 0
+        self.connectScheduled = False
         if self.moneyServer is not "":
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
             self.URL = URL.replace("http://", "ws://")
@@ -66,6 +69,8 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.websocket.disconnected.connect(self.onDisconnect)
             self.websocket.textMessageReceived.connect(self.onTextMessageReceived)
             self.websocket.open(QtCore.QUrl(self.URL))
+        else:
+            LoggingService.getLogger().info("Stop connecting to empty websocket!")
 
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
@@ -87,7 +92,12 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     def onDisconnect(self):
         self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
-        QtCore.QTimer.singleShot(20000, self.connect)
+        self.scheduleConnect()
+
+    def scheduleConnect(self):
+        if not self.connectScheduled:
+            self.connectScheduled = True
+            QtCore.QTimer.singleShot(10000, self.connect)
 
     def createPhxMessage(self, event, payload):
         self.ref = self.ref + 1
