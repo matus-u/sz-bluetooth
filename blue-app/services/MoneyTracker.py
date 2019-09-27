@@ -22,7 +22,7 @@ class MoneyTracker(QtCore.QObject):
         totalCounter = self.settings.value(MoneyTracker.TotalCounter, 0.0, float)
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, fromLastWithdrawCounter + money)
         self.settings.setValue(MoneyTracker.TotalCounter, totalCounter + money)
-        self.settings.sync()
+        #self.settings.sync()
 
     def withdraw(self):
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)

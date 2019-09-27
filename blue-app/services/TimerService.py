@@ -9,8 +9,8 @@ class TimerStatusObject(QtCore.QObject):
 
     def __init__(self, duration):
         super().__init__()
-        self.refreshTimer = QtCore.QTimer(parent=self)
         self.duration = duration
+        self.id = -1
 
     def start(self):
         self.startCheckStatus.emit()
@@ -19,16 +19,26 @@ class TimerStatusObject(QtCore.QObject):
         self.stopCheckStatus.emit()
 
     def startTimerSync(self):
-        self.refreshTimer.start(self.duration)
+        if id != -1:
+            self.id = self.startTimer(self.duration, QtCore.Qt.PreciseTimer)
+
+    def timerEvent(self, event):
+        self.onTimeout()
 
     def stopTimerSync(self):
-        self.refreshTimer.stop()
+        self.killTimer(self.id)
 
     def onTimeout(self):
         pass
 
     def afterMove(self):
         pass
+
+def addTimerWorker(timerStatusObject, thread):
+        timerStatusObject.moveToThread(thread)
+        timerStatusObject.afterMove()
+        timerStatusObject.startCheckStatus.connect(timerStatusObject.startTimerSync, QtCore.Qt.QueuedConnection)
+        timerStatusObject.stopCheckStatus.connect(timerStatusObject.stopTimerSync, QtCore.Qt.QueuedConnection)
 
 
 class TimerService:
@@ -37,11 +47,7 @@ class TimerService:
         self.thread.start()
     
     def addTimerWorker(self, timerStatusObject):
-        timerStatusObject.moveToThread(self.thread)
-        timerStatusObject.afterMove()
-        timerStatusObject.refreshTimer.timeout.connect(timerStatusObject.onTimeout)
-        timerStatusObject.startCheckStatus.connect(timerStatusObject.startTimerSync, QtCore.Qt.QueuedConnection)
-        timerStatusObject.stopCheckStatus.connect(timerStatusObject.stopTimerSync, QtCore.Qt.QueuedConnection)
+        addTimerWorker(timerStatusObject, self.thread)
 
     def quit(self):
         self.thread.quit()

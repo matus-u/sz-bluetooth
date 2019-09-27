@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from services import TimerService
 from services.LoggingService import LoggingService
 import os
+import time
 
 class CoinProtocolStatusObject(TimerService.TimerStatusObject):
 
@@ -15,7 +16,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
 
     def onTimeout(self):
         if os.getenv('RUN_FROM_DOCKER', False) == False:
-            import sys, serial, time
+            import sys, serial
             s = serial.Serial('/dev/ttyS3', baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
             s.write(b"U@ff00S?bfSS\r\n")
             serialString = str(s.readline().rstrip())[8:26]
@@ -38,8 +39,8 @@ class CoinProtocolService(QtCore.QObject):
         self.thread = QtCore.QThread()
         self.thread.start()
         self.statusObject = CoinProtocolStatusObject()
-        self.statusObject.actualStatus.connect(lambda x: self.onCoinStatus(x))
-        self.statusObject.moveToThread(self.thread)
+        self.statusObject.actualStatus.connect(lambda x: self.onCoinStatus(x), QtCore.Qt.QueuedConnection)
+        TimerService.addTimerWorker(self.statusObject, self.thread)
         self.statusObject.start()
 
     def onCoinStatus(self, stringValues):

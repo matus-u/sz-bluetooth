@@ -43,11 +43,19 @@ class AppSettings:
     Notifier = AppSettingsNotifier()
 
     @staticmethod
-    def checkSettingsParam(settings):
+    def checkSettingsMap(settings, path):
         if settings is not None:
             return settings
         else:
-            return QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
+            return QtCore.QSettings(path, AppSettings.SettingsFormat)
+
+    @staticmethod
+    def checkSettingsParam(settings):
+        return AppSettings.checkSettingsMap(settings, AppSettings.SettingsPath)
+
+    @staticmethod
+    def checkWifiSettingsParam(settings):
+        return AppSettings.checkSettingsMap(settings, AppSettings.WirelessSettingsPath)
 
     @staticmethod
     def actualAppVersion():
@@ -140,15 +148,15 @@ class AppSettings:
 
     @staticmethod
     def actualWirelessEnabled(appSettings = None):
-        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.WirelessEnabledString, False, bool)
+        return AppSettings.checkWifiSettingsParam(appSettings).value(AppSettings.WirelessEnabledString, False, bool)
 
     @staticmethod
     def actualWirelessSSID(appSettings = None):
-        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.SSIDString, "")
+        return AppSettings.checkWifiSettingsParam(appSettings).value(AppSettings.SSIDString, "")
 
     @staticmethod
     def actualWirelessPassword(appSettings = None):
-        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.WirelessPassString, "")
+        return AppSettings.checkWifiSettingsParam(appSettings).value(AppSettings.WirelessPassString, "")
 
     @staticmethod
     def actualDeviceName(appSettings = None):
