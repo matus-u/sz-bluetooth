@@ -70,7 +70,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.withdrawMoneyButton.clicked.connect(self.onWithdrawMoneyButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
-        self.ui.wifiSettingsButton.clicked.connect(lambda: WifiSettingsWindow.WifiSettingsWindow(self.wirelessService).exec())
+        self.ui.wifiSettingsButton.clicked.connect(lambda: self.openSubWindow(WifiSettingsWindow.WifiSettingsWindow(self, self.wirelessService)))
         self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
@@ -107,9 +107,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if enable:
             QtCore.QTimer.singleShot(5000, self.onAdminMode)
 
+    def openSubWindow(self, window):
+        window.show()
+        window.raise_()
+        window.activateWindow()
+
     def onAdminSettingsButton(self):
-        SettingsWindow.SettingsWindow(self.moneyTracker).exec()
-        self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
+        w = SettingsWindow.SettingsWindow(self, self.moneyTracker)
+        w.finished.connect(lambda x: self.creditService.setCoinSettings(AppSettings.actualCoinSettings()))
+        self.openSubWindow(w)
 
     def onDisconnected(self):
         self.ui.connectInfoLabel.clear()

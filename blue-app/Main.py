@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
-import sys
+import sys, os
 
 import ApplicationWindow
 
@@ -12,6 +12,8 @@ from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 
 def main():
+    os.environ["QT_IM_MODULE"]="qtvirtualkeyboard"
+    #os.environ["QT_LOGGING_RULES"]="qt.virtualkeyboard=true"
     LoggingService.init()
     app = QtWidgets.QApplication(sys.argv)
     AppSettings.restoreLanguage()

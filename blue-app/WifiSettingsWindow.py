@@ -7,11 +7,10 @@ from services.AppSettings import AppSettings
 from services.WirelessService import WirelessService, WirelessScan
 
 class WifiSettingsWindow(QtWidgets.QDialog):
-    def __init__(self, wirelessService):
-        super(WifiSettingsWindow, self).__init__()
+    def __init__(self, parent, wirelessService):
+        super(WifiSettingsWindow, self).__init__(parent)
         self.ui = Ui_WifiSettings()
         self.ui.setupUi(self)
-
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.reject)
