@@ -20,6 +20,7 @@ from services.MoneyTracker import MoneyTracker
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     adminModeStateChanged = QtCore.pyqtSignal(bool)
+    adminModeStateRequest = QtCore.pyqtSignal()
 
     DISCONNECT_STR = 0
     SCAN_STR = 1
@@ -92,7 +93,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         AppSettings.getNotifier().servicePhoneChanged.connect(lambda val: self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(val)))
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
-
+        self.adminModeStateRequest.connect(lambda: self.adminModeStateChanged.emit(self.adminModeEnabled()))
 
     def adminModeEnabled(self):
         return self.ui.adminSettingsButton.isVisible()
@@ -103,6 +104,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.wifiSettingsButton.setVisible(enable)
         self.ui.withdrawMoneyButton.setVisible(enable)
         self.adminModeStateChanged.emit(enable)
+        if enable:
+            QtCore.QTimer.singleShot(5000, self.onAdminMode)
 
     def onAdminSettingsButton(self):
         SettingsWindow.SettingsWindow(self.moneyTracker).exec()

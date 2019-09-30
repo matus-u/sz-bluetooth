@@ -30,6 +30,7 @@ def main():
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
     application.adminModeStateChanged.connect(webUpdateStatus.onAdminModeUIChange, QtCore.Qt.QueuedConnection)
+    webUpdateStatus.adminModeUIStateRequested.connect(application.adminModeStateRequest, QtCore.Qt.QueuedConnection)
     application.show()
 
     webUpdateStatus.adminModeRequested.connect(application.onAdminMode, QtCore.Qt.QueuedConnection)

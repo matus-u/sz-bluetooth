@@ -19,14 +19,16 @@ class TimerStatusObject(QtCore.QObject):
         self.stopCheckStatus.emit()
 
     def startTimerSync(self):
-        if id != -1:
+        if self.id == -1:
             self.id = self.startTimer(self.duration, QtCore.Qt.PreciseTimer)
 
     def timerEvent(self, event):
         self.onTimeout()
 
     def stopTimerSync(self):
-        self.killTimer(self.id)
+        if self.id != -1:
+            self.killTimer(self.id)
+        self.id = -1
 
     def onTimeout(self):
         pass

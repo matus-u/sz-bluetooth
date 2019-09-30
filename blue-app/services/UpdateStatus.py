@@ -15,6 +15,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     asyncStartSignal = QtCore.pyqtSignal()
     asyncStopSignal = QtCore.pyqtSignal()
     adminModeRequested = QtCore.pyqtSignal()
+    adminModeUIStateRequested = QtCore.pyqtSignal()
 
     def __init__(self, macAddr, moneyTracker):
         super().__init__(10000)
@@ -76,6 +77,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
+        self.adminModeUIStateRequested.emit()
         self.startTimerSync()
         self.onTimeout()
 
