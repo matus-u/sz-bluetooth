@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5 import QtWebSockets
+from PyQt5 import QtNetwork
 
 from services import TimerService
 from services.AppSettings import AppSettings
@@ -77,6 +78,16 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
         self.startTimerSync()
         self.onTimeout()
+
+    def onAdminModeUIChange(self, enabled):
+        if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+            event = "admin-mode-disabled"
+            if enabled:
+                event = "admin-mode-enabled"
+            data = { 'id' : self.macAddr }
+            textMsg = self.createPhxMessage(event, data)
+            LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+            self.websocket.sendTextMessage(textMsg)
 
     def onTextMessageReceived(self, js):
         LoggingService.getLogger().debug("Data from websocket %s" % js)

@@ -29,6 +29,7 @@ def main():
     #t.start()
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
+    application.adminModeStateChanged.connect(webUpdateStatus.onAdminModeUIChange, QtCore.Qt.QueuedConnection)
     application.show()
 
     webUpdateStatus.adminModeRequested.connect(application.onAdminMode, QtCore.Qt.QueuedConnection)
@@ -36,8 +37,8 @@ def main():
 
     ret = app.exec_()
     application.cleanup()
+    webUpdateStatus.asyncDisconnect()
     updateStatusTimerService.quit()
-    webUpdateStatus.disconnect()
     timerService.quit()
     sys.exit(ret)
 
