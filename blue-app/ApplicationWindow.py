@@ -19,8 +19,7 @@ from services.MoneyTracker import MoneyTracker
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
-    adminModeStateChanged = QtCore.pyqtSignal(bool)
-    adminModeStateRequest = QtCore.pyqtSignal()
+    adminModeLeaveButton = QtCore.pyqtSignal()
 
     DISCONNECT_STR = 0
     SCAN_STR = 1
@@ -63,10 +62,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService.connectionStrengthSignal.connect(lambda x: self.ui.signalStrengthProgressBar.setValue(x))
         self.temperatureStatus = TemperatureStatus()
         self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
-        self.setDemoModeVisible(False)
-        self.ui.adminSettingsButton.setVisible(False)
-        self.ui.wifiSettingsButton.setVisible(False)
-        self.ui.withdrawMoneyButton.setVisible(False)
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.withdrawMoneyButton.clicked.connect(self.onWithdrawMoneyButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
@@ -76,12 +71,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.texts = self.createTrTexts()
+        self.onAdminMode(False)
+
         self.creditService = CreditService(AppSettings.actualCoinSettings())
         self.creditService.creditChanged.connect(self.onCreditChange, QtCore.Qt.QueuedConnection)
         self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters, QtCore.Qt.QueuedConnection)
         self.creditService.changeCredit(0)
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), self, self.onAdminMode)
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+d"), self, lambda: self.setDemoModeVisible(not self.ui.cpuTempValueLabel.isVisible()))
         timerService.addTimerWorker(self.temperatureStatus)
 
         self.wirelessService = WirelessService()
@@ -93,19 +88,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         AppSettings.getNotifier().servicePhoneChanged.connect(lambda val: self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(val)))
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
-        self.adminModeStateRequest.connect(lambda: self.adminModeStateChanged.emit(self.adminModeEnabled()))
 
-    def adminModeEnabled(self):
-        return self.ui.adminSettingsButton.isVisible()
-
-    def onAdminMode(self):
-        enable = not self.ui.adminSettingsButton.isVisible()
-        self.ui.adminSettingsButton.setVisible(enable)
-        self.ui.wifiSettingsButton.setVisible(enable)
-        self.ui.withdrawMoneyButton.setVisible(enable)
-        self.adminModeStateChanged.emit(enable)
-        if enable:
-            QtCore.QTimer.singleShot(5000, self.onAdminMode)
+    def onAdminMode(self, enable):
+        if enable != self.ui.adminSettingsButton.isVisible():
+            self.ui.adminSettingsButton.setVisible(enable)
+            self.ui.wifiSettingsButton.setVisible(enable)
+            self.ui.withdrawMoneyButton.setVisible(enable)
+            self.ui.cpuTempValueLabel.setVisible(enable)
+            self.ui.labelCpuTemp.setVisible(enable)
+            self.ui.addCreditButton.setVisible(enable)
+            self.ui.disconnectButton.setVisible(enable)
+            if enable:
+                self.temperatureStatus.start()
+            else:
+                self.temperatureStatus.stop()
 
     def openSubWindow(self, window):
         window.show()
@@ -196,16 +192,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.texts = newTexts
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
-
-    def setDemoModeVisible(self, value):
-        self.ui.cpuTempValueLabel.setVisible(value)
-        self.ui.labelCpuTemp.setVisible(value)
-        self.ui.addCreditButton.setVisible(value)
-        self.ui.disconnectButton.setVisible(value)
-        if value:
-            self.temperatureStatus.start()
-        else:
-            self.temperatureStatus.stop()
 
     def cleanup(self):
         self.creditService.cleanup()

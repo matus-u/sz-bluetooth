@@ -14,8 +14,8 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
     asyncStartSignal = QtCore.pyqtSignal()
     asyncStopSignal = QtCore.pyqtSignal()
-    adminModeRequested = QtCore.pyqtSignal()
-    adminModeUIStateRequested = QtCore.pyqtSignal()
+    adminModeServerRequest = QtCore.pyqtSignal()
+    adminModeStateRequested = QtCore.pyqtSignal()
 
     def __init__(self, macAddr, moneyTracker):
         super().__init__(10000)
@@ -77,19 +77,20 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
-        self.adminModeUIStateRequested.emit()
+        self.adminModeStateRequested.emit()
         self.startTimerSync()
         self.onTimeout()
 
-    def onAdminModeUIChange(self, enabled):
-        if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
-            event = "admin-mode-disabled"
-            if enabled:
-                event = "admin-mode-enabled"
-            data = { 'id' : self.macAddr }
-            textMsg = self.createPhxMessage(event, data)
-            LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
-            self.websocket.sendTextMessage(textMsg)
+    def onAdminModeLocalChange(self, enabled):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                event = "admin-mode-disabled"
+                if enabled:
+                    event = "admin-mode-enabled"
+                data = { 'id' : self.macAddr }
+                textMsg = self.createPhxMessage(event, data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
 
     def onTextMessageReceived(self, js):
         LoggingService.getLogger().debug("Data from websocket %s" % js)
@@ -100,7 +101,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
         if text["event"] == "admin-mode-request":
             LoggingService.getLogger().info("Admin mode requested")
-            self.adminModeRequested.emit()
+            self.adminModeServerRequest.emit()
 
     def onDisconnect(self):
         self.stopTimerSync()
