@@ -38,13 +38,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     WITHDRAW_MONEY_TEXT_INFO_HEADER = 14
     WITHDRAW_MONEY_TEXT_INFO = 15
     SERVICE_PHONE = 16
+    ADMIN_LEAVE_TXT = 17
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coint please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
-        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}")
+        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s")
         ]
 
     def __init__(self, timerService, moneyTracker):
@@ -70,6 +71,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.connectButton.clicked.connect(self.onConnectButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
+        self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
         self.onAdminMode(False)
 
@@ -89,6 +91,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
+    def onAdminRemaining(self, remainingTime):
+        self.ui.adminLeaveLabel.setText(self.texts[self.ADMIN_LEAVE_TXT].format(str(remainingTime)))
+
     def onAdminMode(self, enable):
         if enable != self.ui.adminSettingsButton.isVisible():
             self.ui.adminSettingsButton.setVisible(enable)
@@ -98,6 +103,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.labelCpuTemp.setVisible(enable)
             self.ui.addCreditButton.setVisible(enable)
             self.ui.disconnectButton.setVisible(enable)
+            self.ui.adminLeaveLabel.setVisible(enable)
+            self.ui.leaveAdminButton.setVisible(enable)
             if enable:
                 self.temperatureStatus.start()
             else:

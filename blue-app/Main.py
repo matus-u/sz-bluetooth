@@ -18,9 +18,10 @@ def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus
     webUpdateStatus.adminModeStateRequested.connect(adminModeTracker.informAboutActualState, QtCore.Qt.QueuedConnection)
     webUpdateStatus.adminModeServerRequest.connect(adminModeTracker.triggerAdminModeChange, QtCore.Qt.QueuedConnection)
 
-
     QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+a"), applicationWindow, adminModeTracker.triggerAdminModeChange)
-    adminModeTracker.adminModeInfoState.connect(applicationWindow.onAdminMode, QtCore.Qt.QueuedConnection)
+    adminModeTracker.adminModeInfoState.connect(applicationWindow.onAdminMode)
+    adminModeTracker.adminModeLeaveTime.connect(applicationWindow.onAdminRemaining)
+    applicationWindow.adminModeLeaveButton.connect(adminModeTracker.disableAdminMode)
 
 
 def main():
