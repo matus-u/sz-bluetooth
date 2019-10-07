@@ -18,5 +18,10 @@ RUN apt-get update \
     python3-requests \
     python3-pyqt5.qtwebsockets \
     net-tools
+RUN apt-get update \
+    && apt-get install -y \
+    qtvirtualkeyboard-plugin \
+    qml-module-qtquick-virtualkeyboard \
+    qml-module-qt-labs-folderlistmodel
 
 ENV RUN_FROM_DOCKER TRUE

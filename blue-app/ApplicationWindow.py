@@ -114,6 +114,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         window.show()
         window.raise_()
         window.activateWindow()
+        window.move(window.pos().x(), self.pos().y() + 60)
 
     def onAdminSettingsButton(self):
         w = SettingsWindow.SettingsWindow(self, self.moneyTracker)

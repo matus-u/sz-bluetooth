@@ -30,7 +30,9 @@ def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus
 
 
 def main():
+    os.environ["QML2_IMPORT_PATH"]="resources/kbstyle"
     os.environ["QT_IM_MODULE"]="qtvirtualkeyboard"
+    os.environ["QT_VIRTUALKEYBOARD_STYLE"]="blue_app_kb"
     #os.environ["QT_LOGGING_RULES"]="qt.virtualkeyboard=true"
 
     LoggingService.init()
