@@ -4,14 +4,31 @@ class AdminModeTracker(QtCore.QObject):
 
     adminModeInfoState = QtCore.pyqtSignal(bool)
     adminModeLeaveTime = QtCore.pyqtSignal(int)
-    
-    def __init__(self):
+
+    risingGpio = QtCore.pyqtSignal()
+    fallingGpio = QtCore.pyqtSignal()
+
+    def __init__(self, gpioService):
         super().__init__()
         self.state = False
         self.timer = QtCore.QTimer(self)
         self.refreshTimer = QtCore.QTimer(self)
+        self.gpioTimer = QtCore.QTimer(self)
         self.timer.timeout.connect(lambda: self.disableAdminMode())
         self.refreshTimer.timeout.connect(lambda: self.adminModeLeaveTime.emit(self.timer.remainingTime()/1000))
+        self.gpioTimer.timeout.connect(lambda: self.enableAdminMode())
+
+        self.risingGpio.connect(lambda: self.gpioTimer.stop(), QtCore.Qt.QueuedConnection)
+        self.fallingGpio.connect(lambda: self.gpioTimer.start(3000), QtCore.Qt.QueuedConnection)
+
+        GPIO_NUM = 37
+        gpioService.registerBothCallbacks(GPIO_NUM, self.onLowLevelGpioInterrupt)
+
+    def onLowLevelGpioInterrupt(self, isRising):
+        if isRising:
+            self.risingGpio.emit()
+        else:
+            self.fallingGpio.emit()
 
     def informAboutActualState(self):
         self.adminModeInfoState.emit(self.state)
@@ -35,5 +52,4 @@ class AdminModeTracker(QtCore.QObject):
 
     def disableAdminMode(self):
         self.changeAdminMode(False)
-
 

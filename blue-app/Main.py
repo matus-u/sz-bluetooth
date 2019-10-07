@@ -12,6 +12,11 @@ from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
 
+if os.getenv('RUN_FROM_DOCKER', False) == False:
+    from services.GpioService import GpioService
+else:
+    from services.mocks.GpioService import GpioService
+
 def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus):
 
     adminModeTracker.adminModeInfoState.connect(webUpdateStatus.onAdminModeLocalChange, QtCore.Qt.QueuedConnection)
@@ -36,7 +41,9 @@ def main():
     timerService = TimerService()
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
-    adminModeTracker = AdminModeTracker()
+
+    gpioService = GpioService()
+    adminModeTracker = AdminModeTracker(gpioService)
 
     webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
@@ -50,6 +57,7 @@ def main():
     webUpdateStatus.asyncConnect()
 
     ret = app.exec_()
+    gpioService.cleanup()
     application.cleanup()
     webUpdateStatus.asyncDisconnect()
     updateStatusTimerService.quit()

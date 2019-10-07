@@ -37,14 +37,3 @@ class CreditService(QtCore.QObject):
 
     def cleanup(self):
         pass
-
-#        if os.getenv('RUN_FROM_DOCKER', False) == False:
-#            from services.GpioService import GpioService
-#            self.gpio = GpioService()
-#            for pin, data in self.currencyMap.items():
-#                self.gpio.registerCallback(pin, self.onGpio)
-
-#        if os.getenv('RUN_FROM_DOCKER', False) == False:
-#            for pin, data in self.currencyMap.items():
-#                self.gpio.deregisterCallback(pin)
-#            self.gpio.cleanup()
