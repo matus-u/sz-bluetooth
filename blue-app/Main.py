@@ -59,6 +59,8 @@ def main():
     application.show()
     webUpdateStatus.asyncConnect()
 
+    app.installEventFilter(adminModeTracker)
+
     ret = app.exec_()
     gpioService.cleanup()
     application.cleanup()

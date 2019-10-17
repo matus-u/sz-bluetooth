@@ -6,7 +6,7 @@
 
 ##ALSO INSTALL KERNEL WITH elo SUPPORT!
 
-apt-get install -y python3-pyqt5 pyqt5-dev-tools xserver-xorg-input-evdev inputattach xinput ofono python3-serial python3-pip
+apt-get install -y python3-pyqt5 pyqt5-dev-tools xserver-xorg-input-evdev inputattach xinput ofono python3-serial python3-pip qtvirtualkeyboard-plugin qml-module-qtquick-virtualkeyboard qml-module-qt-labs-folderlistmodel qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-window2
 apt-get purge pulseaudio
 pip3 install --upgrade OPi.GPIO
 

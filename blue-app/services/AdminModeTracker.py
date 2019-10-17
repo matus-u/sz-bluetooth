@@ -10,6 +10,7 @@ class AdminModeTracker(QtCore.QObject):
 
     def __init__(self, gpioService):
         super().__init__()
+        self.ADMIN_TIMEOUT = 120000
         self.state = False
         self.timer = QtCore.QTimer(self)
         self.refreshTimer = QtCore.QTimer(self)
@@ -39,7 +40,7 @@ class AdminModeTracker(QtCore.QObject):
             self.adminModeInfoState.emit(self.state)
             if self.state:
                 self.refreshTimer.start(1000)
-                self.timer.start(12000)
+                self.timer.start(self.ADMIN_TIMEOUT)
             else:
                 self.timer.stop()
                 self.refreshTimer.stop()
@@ -52,4 +53,10 @@ class AdminModeTracker(QtCore.QObject):
 
     def disableAdminMode(self):
         self.changeAdminMode(False)
+
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.MouseButtonRelease:
+            if self.timer.isActive():
+                self.timer.start(self.ADMIN_TIMEOUT)
+        return False
 
