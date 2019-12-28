@@ -16,6 +16,9 @@ from services.WirelessService import WirelessService
 from services.PlaySoundService import PlaySoundService
 from services.MoneyTracker import MoneyTracker
 
+import MusicController
+import FocusHandler
+
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -60,7 +63,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
         self.bluetoothService.refreshTimerSignal.connect(self.onRefreshTimer)
         self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
-        self.bluetoothService.connectionStrengthSignal.connect(lambda x: self.ui.signalStrengthProgressBar.setValue(x))
         self.temperatureStatus = TemperatureStatus()
         self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
@@ -90,6 +92,41 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         AppSettings.getNotifier().servicePhoneChanged.connect(lambda val: self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(val)))
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
+
+        self.musicController = MusicController.MusicController(self.ui.genreWidget, self.ui.songsWidget)
+        self.mainFocusHandler = FocusHandler.InputHandler(
+            (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton),
+             FocusHandler.GenreTableWidgetFocusProxy(self.ui.genreWidget, self.musicController),
+             FocusHandler.SongTableWidgetFocusProxy(self.ui.songsWidget, self.musicController)))
+
+        self.bluetoothFocusHandler = FocusHandler.InputHandler(
+            (FocusHandler.ButtonFocusProxy(self.ui.scanButton),
+             FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget),
+             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton),
+             FocusHandler.ButtonFocusProxy(self.ui.connectButton)))
+
+        self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
+        self.ui.bluetoothButton.clicked.connect(self.onBluetoothButton)
+
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.getActualFocusHandler().onLeft())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), self, lambda: self.getActualFocusHandler().onRight())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+b"), self, lambda: self.getActualFocusHandler().onDown())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), self, lambda: self.getActualFocusHandler().onUp())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
+        
+    def getActualFocusHandler(self):
+        if self.ui.stackedWidget.currentIndex() == 0:
+            return self.mainFocusHandler
+        else:
+            return self.bluetoothFocusHandler
+
+    def onBluetoothButton(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+        self.getActualFocusHandler().setFocus()
+
+    def onBackFromBlueButton(self):
+        self.ui.stackedWidget.setCurrentIndex(0)
+        self.getActualFocusHandler().setFocus()
 
     def onAdminRemaining(self, remainingTime):
         self.ui.adminLeaveLabel.setText(self.texts[self.ADMIN_LEAVE_TXT].format(str(remainingTime)))
@@ -128,9 +165,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.remainingTimeLabel.clear()
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
-        self.ui.signalStrengthProgressBar.setEnabled(False)
-        self.ui.signalStrengthLabel.setEnabled(False)
-        self.ui.signalStrengthProgressBar.setValue(0)
         self.creditService.clearCredit()
 
     def onSelectionChanged(self):
@@ -164,7 +198,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
-            QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
+            #QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
             return
 
         self.setWidgetsDisabled() 
@@ -188,8 +222,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
             self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
             self.ui.disconnectButton.setEnabled(True)
-            self.ui.signalStrengthProgressBar.setEnabled(True)
-            self.ui.signalStrengthLabel.setEnabled(True)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
@@ -209,8 +241,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if ssid != "":
             text = text + " - " + ssid
         self.ui.wifiStateLabel.setText(text)
-
-        self.bluetoothService.refreshTimerSignal.connect(lambda value: self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value))))
 
     def onCreditChange(self, credit):
         self.ui.actualCreditValue.setText(str(int(self.creditService.getCredit())) + " " + self.texts[self.SECONDS])
