@@ -340,7 +340,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageMain">
          <widget class="QTableWidget" name="genreWidget">
@@ -425,16 +425,6 @@
           </attribute>
           <column/>
          </widget>
-         <widget class="QTableWidget" name="newPlayQueueWidget">
-          <property name="geometry">
-           <rect>
-            <x>480</x>
-            <y>20</y>
-            <width>221</width>
-            <height>511</height>
-           </rect>
-          </property>
-         </widget>
          <widget class="QPushButton" name="bluetoothButton">
           <property name="geometry">
            <rect>
@@ -451,9 +441,32 @@
            <string>Bluetooth music</string>
           </property>
          </widget>
+         <widget class="QTableView" name="playQueueWidget">
+          <property name="geometry">
+           <rect>
+            <x>390</x>
+            <y>120</y>
+            <width>256</width>
+            <height>291</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="playLabel">
+          <property name="geometry">
+           <rect>
+            <x>410</x>
+            <y>40</y>
+            <width>291</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>PlayLabel</string>
+          </property>
+         </widget>
         </widget>
         <widget class="QWidget" name="pageBluetooth">
-         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,2,1,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,2,1">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,3,1">
             <item>
@@ -597,37 +610,6 @@
              </spacer>
             </item>
            </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="connectInfoLabel">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="connectDeviceLabel">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="remainingTimeLabel">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>

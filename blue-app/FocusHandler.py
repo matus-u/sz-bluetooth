@@ -26,18 +26,38 @@ class InputHandler(QtCore.QObject):
         self.rotate(1)
         self.setFocus()
 
+    def findFocusedWidget(self):
+        focusedWidget = QtWidgets.QApplication.focusWidget()
+        for w in self.listOfProxies:
+            if w.getManangedWidget() == focusedWidget:
+                return w
+        return FocusNullObject()
+
     def onUp(self):
-        self.listOfProxies[0].onUp()
+        self.findFocusedWidget().onUp()
 
     def onDown(self):
-        self.listOfProxies[0].onDown()
+        self.findFocusedWidget().onDown()
 
     def onConfirm(self):
-        self.listOfProxies[0].onConfirm()
+        proxy = self.findFocusedWidget().onConfirm()
 
     def changeFocusList(self, listOfProxies):
         self.listOfProxies = listOfProxies
         self.setFocus()
+
+class FocusNullObject:
+    def setFocus(self):
+        pass
+
+    def onUp(self):
+        pass
+
+    def onDown(self):
+        pass
+
+    def onConfirm(self):
+        pass
 
 class ButtonFocusProxy:
     def __init__(self, button):
@@ -55,10 +75,16 @@ class ButtonFocusProxy:
     def onConfirm(self):
         self.button.animateClick()
 
+    def getManangedWidget(self):
+        return self.button
+
 class TableWidgetFocusProxy(QtCore.QObject):
     def __init__(self, widget):
         super().__init__()
         self.widget = widget
+
+    def getManangedWidget(self):
+        return self.widget
 
     def setFocus(self):
         self.widget.setFocus()
@@ -98,11 +124,13 @@ class GenreTableWidgetFocusProxy(TableWidgetFocusProxy):
         self.musicController.reloadSongsWidget()
 
 class SongTableWidgetFocusProxy(TableWidgetFocusProxy):
-    def __init__(self, songWidget, musicController):
+    def __init__(self, songWidget, musicController, playLogicService):
         super().__init__(songWidget)
         self.songWidget = songWidget
         self.musicController = musicController
+        self.playLogicService = playLogicService
 
     def onConfirm(self):
-        self.musicController.addToPlayQueue()
-    
+        info = self.musicController.getFullSelectedMp3Info()
+        if info != "":
+            self.playLogicService.playFromLocal(info)

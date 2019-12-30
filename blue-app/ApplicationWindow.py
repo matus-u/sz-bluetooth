@@ -13,12 +13,14 @@ from services.CreditService import CreditService
 from services.AppSettings import AppSettings,AppSettingsNotifier
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
-from services.PlaySoundService import PlaySoundService
+from services.PlayFileService import PlayFileService
+from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
+
+from model.PlayQueue import PlayQueue
 
 import MusicController
 import FocusHandler
-
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -58,11 +60,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.showFullScreen()
         self.moneyTracker = moneyTracker
+        self.playQueue = PlayQueue()
+        self.ui.playQueueWidget.setModel(self.playQueue)
+
         self.bluetoothService = BluetoothService(timerService)
-        self.bluetoothService.disconnectedBeginSignal.connect(self.onDisconnected)
-        self.bluetoothService.disconnectedEndSignal.connect(self.setWidgetsEnabled)
-        self.bluetoothService.refreshTimerSignal.connect(self.onRefreshTimer)
-        self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
+        self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue)
+        self.playLogicService.refreshTimerSignal.connect(self.onRefreshTimer)
+        self.playLogicService.playingStarted.connect(self.onPlayingStarted)
+        self.playLogicService.playingStopped.connect(self.onPlayingStopped)
+        self.playLogicService.playingFailed.connect(self.onPlayingFailed)
+
         self.temperatureStatus = TemperatureStatus()
         self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
@@ -86,7 +93,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wirelessService = WirelessService()
         self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
         self.wirelessService.start()
-        self.playSoundService = PlaySoundService()
 
         AppSettings.getNotifier().deviceNameChanged.connect(lambda val: self.ui.nameLabel.setText(val))
         AppSettings.getNotifier().servicePhoneChanged.connect(lambda val: self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(val)))
@@ -97,7 +103,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.mainFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton),
              FocusHandler.GenreTableWidgetFocusProxy(self.ui.genreWidget, self.musicController),
-             FocusHandler.SongTableWidgetFocusProxy(self.ui.songsWidget, self.musicController)))
+             FocusHandler.SongTableWidgetFocusProxy(self.ui.songsWidget, self.musicController, self.playLogicService)))
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.scanButton),
@@ -113,6 +119,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+b"), self, lambda: self.getActualFocusHandler().onDown())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), self, lambda: self.getActualFocusHandler().onUp())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
+
+        self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
+        self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
+        #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
         
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -158,15 +168,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         w.finished.connect(lambda x: self.creditService.setCoinSettings(AppSettings.actualCoinSettings()))
         self.openSubWindow(w)
 
-    def onDisconnected(self):
-        self.ui.connectInfoLabel.clear()
-        self.ui.insertNewCoinLabel.clear()
-        self.ui.connectDeviceLabel.clear()
-        self.ui.remainingTimeLabel.clear()
-        self.ui.devicesWidget.setRowCount(0)
-        self.ui.disconnectButton.setEnabled(False)
-        self.creditService.clearCredit()
-
     def onSelectionChanged(self):
         if not self.ui.devicesWidget.selectedItems():
             self.ui.connectButton.setEnabled(False)
@@ -198,37 +199,44 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
-            #QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
+            QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
             return
 
         self.setWidgetsDisabled() 
         macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
-        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
-        self.ui.connectInfoLabel.setText(self.texts[self.CONNECTING_STR])
-        self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
-        self.bluetoothService.connect(macAddr, self.creditService.getCredit())
+        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getCredit())
 
-    def onConnectedSignal(self, exitCode):
-        if exitCode == 1:
-            deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
-            QtWidgets.QMessageBox.critical(self, self.texts[self.CONNECTION_ERR_STR], self.texts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
-            self.ui.connectInfoLabel.clear()
-            self.ui.connectDeviceLabel.clear()
-            self.setWidgetsEnabled()
-            self.ui.connectButton.setEnabled(True)
-        else:
-            macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
-            deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
-            self.ui.connectInfoLabel.setText(self.texts[self.CONNECTED_STR])
-            self.ui.connectDeviceLabel.setText(deviceName + " (" + macAddr + ")")
+    def onPlayingStarted(self):
+        if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
+        else:
+            self.ui.disconnectButton.setEnabled(False)
+        self.onBackFromBlueButton()
+        self.ui.bluetoothButton.setEnabled(False)
+
+        #TODO // INFO TO ACTUAL PLAY LABELS! //
+        self.ui.playLabel.setText("PLAYING")
+
+    def onPlayingStopped(self):
+        #TODO CLEAR PLAY STATUS
+        self.ui.playLabel.setText("NOT PLAYING")
+
+        self.ui.devicesWidget.setRowCount(0)
+        self.ui.disconnectButton.setEnabled(False)
+        self.creditService.clearCredit()
+        self.ui.bluetoothButton.setEnabled(True)
+
+    def onPlayingFailed(self):
+        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
+        QtWidgets.QMessageBox.critical(self, self.texts[self.CONNECTION_ERR_STR], self.texts[self.CONNECTION_FAILED_STR].format(deviceName), QtWidgets.QMessageBox.Cancel)
+        self.setWidgetsEnabled()
+        self.ui.connectButton.setEnabled(True)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
             newTexts = self.createTrTexts()
-            for i in [self.ui.connectInfoLabel, self.ui.scanButton, self.ui.remainingTimeLabel]:
-                if i.text() != "":
-                    i.setText(newTexts[self.texts.index(i.text())])
+            if self.ui.scanButton.text() != "":
+                self.ui.scanButton.setText(newTexts[self.texts.index(self.ui.scanButton.text())])
             self.texts = newTexts
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
@@ -247,19 +255,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if (credit > 0):
             self.showCoinImage()
             duration = 500
-            if self.bluetoothService.isConnected():
-                self.bluetoothService.updateDuration(credit)
+            if self.playLogicService.isPlaying():
                 duration = 100
             else:
-                self.playSoundService.play()
+                PlayFileService(self).play()
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):
-        self.ui.remainingTimeLabel.setText(self.texts[self.DISCONNECT_STR].format(str(value)))
-        if (value > 30):
-            self.ui.insertNewCoinLabel.clear()
-        else:
-            self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
+        self.ui.playLabel.setText("ON REFRESH TIMER " + str(value))
 
     def showCoinImage(self):
         coinPixMap = QtGui.QPixmap(':/images/coin180.png')
