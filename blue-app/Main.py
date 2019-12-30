@@ -3,7 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 import sys, os
 
-import ApplicationWindow
+from ui import ApplicationWindow
 
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService

@@ -5,8 +5,6 @@ from generated.MainWindow import Ui_MainWindow
 
 from generated import Resources
 
-import SettingsWindow
-import WifiSettingsWindow
 import os
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
@@ -19,8 +17,10 @@ from services.MoneyTracker import MoneyTracker
 
 from model.PlayQueue import PlayQueue
 
-import MusicController
-import FocusHandler
+from ui import SettingsWindow
+from ui import WifiSettingsWindow
+from ui import MusicController
+from ui import FocusHandler
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -122,7 +122,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
-        #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
         
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
