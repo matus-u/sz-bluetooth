@@ -36,4 +36,5 @@ blue-app/configs/
 blue-app/__pycache__/
 blue-app/services/__pycache__/
 blue-app/services/mocks/__pycache__/
+blue-app/model/__pycache__/
 blue-app/translation/*qm
