@@ -6,6 +6,14 @@ import os
 from services.CoinProtocolService import CoinProtocolService
 from services.MoneyTracker import MoneyTracker
 
+class CreditBluetoothRepresentation:
+    def getCreditValueRepresentation(self, credit, coinSettings):
+        return int(credit/coinSettings[7])
+
+class CreditSongRepresentation:
+    def getCreditValueRepresentation(self, credit, coinSettings):
+        return int(credit/coinSettings[8])
+
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)
     moneyInserted = QtCore.pyqtSignal(float)
@@ -19,8 +27,9 @@ class CreditService(QtCore.QObject):
 
     def onCoinChannel(self, channel, count):
         money = self.coinSettings[channel] * count
-        self.changeCredit(money / self.coinSettings[7])
-        self.moneyInserted.emit(money)
+        if money != 0:
+            self.changeCredit(money)
+            self.moneyInserted.emit(money)
 
     def changeCredit(self, value):
         self.credit = self.credit + value
@@ -34,6 +43,12 @@ class CreditService(QtCore.QObject):
 
     def getCredit(self):
         return self.credit
+
+    def getBluetoothRepresentation(self):
+        return CreditBluetoothRepresentation().getCreditValueRepresentation(self.credit, self.coinSettings)
+
+    def getSongsRepresentation(self):
+        return CreditSongRepresentation().getCreditValueRepresentation(self.credit, self.coinSettings)
 
     def cleanup(self):
         pass

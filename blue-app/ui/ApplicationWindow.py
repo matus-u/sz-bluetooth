@@ -44,13 +44,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     WITHDRAW_MONEY_TEXT_INFO = 15
     SERVICE_PHONE = 16
     ADMIN_LEAVE_TXT = 17
+    SONGS = 18
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coint please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
-        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s")
+        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
+        self.tr("songs")
         ]
 
     def __init__(self, timerService, moneyTracker):
@@ -132,10 +134,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onBluetoothButton(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.getActualFocusHandler().setFocus()
+        self.updateCreditLabel()
 
     def onBackFromBlueButton(self):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.getActualFocusHandler().setFocus()
+        self.updateCreditLabel()
 
     def onAdminRemaining(self, remainingTime):
         self.ui.adminLeaveLabel.setText(self.texts[self.ADMIN_LEAVE_TXT].format(str(remainingTime)))
@@ -249,8 +253,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             text = text + " - " + ssid
         self.ui.wifiStateLabel.setText(text)
 
+    def updateCreditLabel(self):
+        if self.ui.stackedWidget.currentIndex() == 0:
+            self.ui.actualCreditValue.setText(str(self.creditService.getSongsRepresentation())   + " " + self.texts[self.SONGS])
+        else:
+            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation())   + " " + self.texts[self.SECONDS])
+
     def onCreditChange(self, credit):
-        self.ui.actualCreditValue.setText(str(int(self.creditService.getCredit())) + " " + self.texts[self.SECONDS])
+        self.updateCreditLabel()
         if (credit > 0):
             self.showCoinImage()
             duration = 500
@@ -272,9 +282,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.coinImageLabel.setPixmap(coinPixMap)
 
     def onAddCreditButton(self):
-        self.creditService.changeCredit(10)
+        self.creditService.changeCredit(1)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
-            self.moneyTracker.addToCounters(10)
+            self.moneyTracker.addToCounters(1)
 
     def onWithdrawMoneyButton(self):
         shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])

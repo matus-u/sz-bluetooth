@@ -31,6 +31,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.coin6value.setValue(coinSettings[5])
         self.ui.cppValue.setValue(coinSettings[6])
         self.ui.secondCostsValue.setValue(coinSettings[7])
+        self.ui.songCostsValue.setValue(coinSettings[8])
 
     def getCoinSettingsFromUi(self):
         return [
@@ -41,7 +42,8 @@ class SettingsWindow(QtWidgets.QDialog):
             self.ui.coin5value.value(),
             self.ui.coin6value.value(),
             self.ui.cppValue.value(),
-            self.ui.secondCostsValue.value()
+            self.ui.secondCostsValue.value(),
+            self.ui.songCostsValue.value()
         ]
 
     def onLanguageComboboxChanged(self, index):
