@@ -124,6 +124,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
+        self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
         
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -202,16 +203,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
-            QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
+            #QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
             return
 
         self.setWidgetsDisabled() 
         macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
-        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getCredit())
+        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation())
 
     def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
+            self.creditService.clearCredit()
         else:
             self.ui.disconnectButton.setEnabled(False)
         self.onBackFromBlueButton()
@@ -223,11 +225,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onPlayingStopped(self):
         #TODO CLEAR PLAY STATUS
         self.ui.playLabel.setText("NOT PLAYING")
-
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
-        self.creditService.clearCredit()
         self.ui.bluetoothButton.setEnabled(True)
+        self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
+        self.setWidgetsEnabled()
 
     def onPlayingFailed(self):
         deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
@@ -255,12 +257,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def updateCreditLabel(self):
         if self.ui.stackedWidget.currentIndex() == 0:
-            self.ui.actualCreditValue.setText(str(self.creditService.getSongsRepresentation())   + " " + self.texts[self.SONGS])
+            self.ui.actualCreditValue.setText(str(self.creditService.getSongsRepresentation()) + " " + self.texts[self.SONGS])
         else:
-            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation())   + " " + self.texts[self.SECONDS])
+            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation()) + " " + self.texts[self.SECONDS])
 
     def onCreditChange(self, credit):
         self.updateCreditLabel()
+        if self.creditService.getCredit() > 0:
+            self.ui.insertNewCoinLabel.setText("")
+
         if (credit > 0):
             self.showCoinImage()
             duration = 500
@@ -282,9 +287,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.coinImageLabel.setPixmap(coinPixMap)
 
     def onAddCreditButton(self):
-        self.creditService.changeCredit(1)
+        self.creditService.changeCredit(0.1)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
-            self.moneyTracker.addToCounters(1)
+            self.moneyTracker.addToCounters(0.1)
 
     def onWithdrawMoneyButton(self):
         shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])

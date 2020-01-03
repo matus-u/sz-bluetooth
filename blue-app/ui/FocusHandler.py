@@ -134,3 +134,5 @@ class SongTableWidgetFocusProxy(TableWidgetFocusProxy):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
             self.playLogicService.playFromLocal(info)
+
+        ## TODO CHECK FROM MONEY

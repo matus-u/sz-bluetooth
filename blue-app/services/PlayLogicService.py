@@ -21,9 +21,8 @@ class PlayLogicService(QtCore.QObject):
 
     def playFromBluetooth(self, macAddr, duration):
         if self.state == "IDLE":
-            print ("PLAY FROM BLUETOOTH")
-            self.bluetoothService.connect(macAddr, duration)
             self.state = "BLUETOOTH"
+            self.bluetoothService.connect(macAddr, duration)
         else:
             print("ERROR")
 
@@ -39,7 +38,6 @@ class PlayLogicService(QtCore.QObject):
             self.playQueue.addToPlayQueue(mp3info)
 
     def onConnectedSignal(self, exitCode):
-        print ("ON CONNECTED SIGNAL ")
         if exitCode == 1:
             self.playingFailed.emit()
             self.state = "IDLE"
@@ -47,7 +45,6 @@ class PlayLogicService(QtCore.QObject):
             self.playingStarted.emit()
 
     def onPlayingFinished(self):
-        print ("ON PLAYING FINISHED ")
         if (self.playQueue.isEmpty()):
             self.playingStopped.emit()
             self.state = "IDLE"
