@@ -7,12 +7,30 @@ from services.CoinProtocolService import CoinProtocolService
 from services.MoneyTracker import MoneyTracker
 
 class CreditBluetoothRepresentation:
-    def getCreditValueRepresentation(self, credit, coinSettings):
-        return int(credit/coinSettings[7])
+    def __init__(self, creditService):
+        self.creditService = creditService
+
+    def getCreditValueRepresentation(self):
+        return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[7]))
+
+    def enoughMoney(self):
+        return self.creditService.getCredit() > 0
+
+    def overTakeMoney(self):
+        pass
 
 class CreditSongRepresentation:
-    def getCreditValueRepresentation(self, credit, coinSettings):
-        return int(credit/coinSettings[8])
+    def __init__(self, creditService):
+        self.creditService = creditService
+
+    def getCreditValueRepresentation(self):
+        return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[8]))
+
+    def enoughMoney(self):
+        return self.creditService.getCredit() > self.creditService.getCoinSettings()[8]
+
+    def overTakeMoney(self):
+        return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[8])
 
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)
@@ -38,6 +56,9 @@ class CreditService(QtCore.QObject):
     def setCoinSettings(self, coinSettings):
         self.coinSettings = coinSettings
 
+    def getCoinSettings(self):
+        return self.coinSettings
+
     def clearCredit(self):
         self.changeCredit(-1 * self.credit)
 
@@ -45,10 +66,10 @@ class CreditService(QtCore.QObject):
         return self.credit
 
     def getBluetoothRepresentation(self):
-        return CreditBluetoothRepresentation().getCreditValueRepresentation(self.credit, self.coinSettings)
+        return CreditBluetoothRepresentation(self)
 
     def getSongsRepresentation(self):
-        return CreditSongRepresentation().getCreditValueRepresentation(self.credit, self.coinSettings)
+        return CreditSongRepresentation(self)
 
     def cleanup(self):
         pass

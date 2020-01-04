@@ -124,15 +124,17 @@ class GenreTableWidgetFocusProxy(TableWidgetFocusProxy):
         self.musicController.reloadSongsWidget()
 
 class SongTableWidgetFocusProxy(TableWidgetFocusProxy):
-    def __init__(self, songWidget, musicController, playLogicService):
+    def __init__(self, songWidget, musicController, playLogicService, creditService):
         super().__init__(songWidget)
         self.songWidget = songWidget
         self.musicController = musicController
         self.playLogicService = playLogicService
+        self.creditService = creditService
 
     def onConfirm(self):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
-            self.playLogicService.playFromLocal(info)
+            if self.creditService.getSongsRepresentation().enoughMoney():
+                self.playLogicService.playFromLocal(info)
+                self.creditService.getSongsRepresentation().overTakeMoney()
 
-        ## TODO CHECK FROM MONEY

@@ -105,7 +105,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.mainFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton),
              FocusHandler.GenreTableWidgetFocusProxy(self.ui.genreWidget, self.musicController),
-             FocusHandler.SongTableWidgetFocusProxy(self.ui.songsWidget, self.musicController, self.playLogicService)))
+             FocusHandler.SongTableWidgetFocusProxy(self.ui.songsWidget, self.musicController, self.playLogicService, self.creditService)))
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.scanButton),
@@ -208,19 +208,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.setWidgetsDisabled() 
         macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
-        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation())
+        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
 
     def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
             self.creditService.clearCredit()
+            self.ui.playLabel.setText("PLAYING BLUETOOTH")
         else:
             self.ui.disconnectButton.setEnabled(False)
+            self.ui.playLabel.setText("PLAYING " + self.playLogicService.getActualPlayingMp3()[0])
         self.onBackFromBlueButton()
         self.ui.bluetoothButton.setEnabled(False)
 
         #TODO // INFO TO ACTUAL PLAY LABELS! //
-        self.ui.playLabel.setText("PLAYING")
 
     def onPlayingStopped(self):
         #TODO CLEAR PLAY STATUS
@@ -257,9 +258,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def updateCreditLabel(self):
         if self.ui.stackedWidget.currentIndex() == 0:
-            self.ui.actualCreditValue.setText(str(self.creditService.getSongsRepresentation()) + " " + self.texts[self.SONGS])
+            self.ui.actualCreditValue.setText(str(self.creditService.getSongsRepresentation().getCreditValueRepresentation()) + " " + self.texts[self.SONGS])
         else:
-            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation()) + " " + self.texts[self.SECONDS])
+            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()) + " " + self.texts[self.SECONDS])
+        self.ui.actualMoneyValue.setText(str(self.creditService.getCredit()))
 
     def onCreditChange(self, credit):
         self.updateCreditLabel()
@@ -272,7 +274,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.playLogicService.isPlaying():
                 duration = 100
             else:
-                PlayFileService(self).play()
+                PlayFileService(self).playWav()
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):
