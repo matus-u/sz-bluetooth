@@ -24,4 +24,8 @@ RUN apt-get update \
     qml-module-qtquick-virtualkeyboard \
     qml-module-qt-labs-folderlistmodel
 
+RUN apt-get update \
+    && apt-get install -y \
+    python3-mutagen
+
 ENV RUN_FROM_DOCKER TRUE

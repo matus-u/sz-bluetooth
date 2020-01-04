@@ -25,6 +25,5 @@ class PlayFileService(QtCore.QObject):
         self.finished.emit()
 
     def playMp3(self, mp3info):
-        QtCore.QTimer.singleShot(5000, self.emitFinished)
+        QtCore.QTimer.singleShot(int(mp3info[2]*1000), self.emitFinished)
         self.refreshTimer.start(1000)
-        #TODO PLAY MP3

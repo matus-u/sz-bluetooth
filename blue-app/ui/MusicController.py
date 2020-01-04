@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from mutagen.mp3 import MP3
 import os
 
 class MusicController(QtCore.QObject):
@@ -20,7 +21,8 @@ class MusicController(QtCore.QObject):
         self.reloadSongsWidget()
 
     def getMp3Info(self, fileName, fullFileName):
-        return [fileName[:len(fileName)-4], fullFileName, 25]
+        mp3 = MP3(fullFileName)
+        return [fileName[:len(fileName)-4], fullFileName, mp3.info.length]
 
     def parseMusicStorage(self):
         path = "/src/music"
@@ -43,7 +45,7 @@ class MusicController(QtCore.QObject):
         self.songsWidget.setRowCount(len(self.music[genreKey]))
         for index, item in enumerate(self.music[genreKey]):
             self.songsWidget.setItem(index,0, QtWidgets.QTableWidgetItem(item[0]))
-            self.songsWidget.setItem(index,1, QtWidgets.QTableWidgetItem(item[2]))
+            self.songsWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(int(item[2]))))
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
         

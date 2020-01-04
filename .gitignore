@@ -39,3 +39,4 @@ blue-app/services/mocks/__pycache__/
 blue-app/model/__pycache__/
 blue-app/ui/__pycache__/
 blue-app/translation/*qm
+music/

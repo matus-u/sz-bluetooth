@@ -426,7 +426,7 @@
            <bool>false</bool>
           </property>
           <property name="columnCount">
-           <number>1</number>
+           <number>2</number>
           </property>
           <attribute name="horizontalHeaderVisible">
            <bool>false</bool>
@@ -440,6 +440,7 @@
           <attribute name="verticalHeaderMinimumSectionSize">
            <number>35</number>
           </attribute>
+          <column/>
           <column/>
          </widget>
          <widget class="QPushButton" name="bluetoothButton">
