@@ -17,6 +17,7 @@ RUN apt-get update \
     && apt-get install -y \
     python3-requests \
     python3-pyqt5.qtwebsockets \
+    python3-pyqt5.qtmultimedia \
     net-tools
 RUN apt-get update \
     && apt-get install -y \

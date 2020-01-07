@@ -22,6 +22,10 @@ class PlayLogicService(QtCore.QObject):
         self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
         self.mp3info = []
 
+        self.playService = PlayFileService(self)
+        self.playService.refreshTimerSignal.connect(lambda val: self.refreshTimerSignal.emit(val))
+        self.playService.finished.connect(self.onPlayingFinished)
+
     def playFromBluetooth(self, macAddr, duration):
         if self.state == "IDLE":
             self.state = "BLUETOOTH"
@@ -31,11 +35,8 @@ class PlayLogicService(QtCore.QObject):
 
     def startPlaying(self, mp3info):
         self.state = "PLAYING"
-        playService = PlayFileService(self)
-        playService.refreshTimerSignal.connect(lambda val: self.refreshTimerSignal.emit(val))
-        playService.finished.connect(self.onPlayingFinished)
         self.mp3info = mp3info
-        playService.playMp3(mp3info)
+        self.playService.playMp3(mp3info)
         self.playingStarted.emit()
             
     def playFromLocal(self, mp3info):
