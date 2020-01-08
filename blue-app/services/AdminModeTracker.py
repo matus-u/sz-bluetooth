@@ -22,8 +22,8 @@ class AdminModeTracker(QtCore.QObject):
         self.risingGpio.connect(lambda: self.gpioTimer.stop(), QtCore.Qt.QueuedConnection)
         self.fallingGpio.connect(lambda: self.gpioTimer.start(3000), QtCore.Qt.QueuedConnection)
 
-        GPIO_NUM = 37
-        gpioService.registerBothCallbacks(GPIO_NUM, self.onLowLevelGpioInterrupt)
+        #GPIO_NUM = 37
+        #gpioService.registerBothCallbacks(GPIO_NUM, self.onLowLevelGpioInterrupt)
 
     def onLowLevelGpioInterrupt(self, isRising):
         if isRising:

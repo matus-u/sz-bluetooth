@@ -14,6 +14,7 @@ from services.WirelessService import WirelessService
 from services.PlayFileService import PlayFileService
 from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
+from services.GpioCallback import GpioCallback
 
 from model.PlayQueue import PlayQueue
 
@@ -55,7 +56,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("songs")
         ]
 
-    def __init__(self, timerService, moneyTracker):
+    def __init__(self, timerService, moneyTracker, gpioService):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -122,10 +123,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), self, lambda: self.getActualFocusHandler().onUp())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
 
+        self.connectGpio(gpioService, 29, lambda: self.getActualFocusHandler().onLeft())
+        self.connectGpio(gpioService, 31, lambda: self.getActualFocusHandler().onRight())
+        self.connectGpio(gpioService, 33, lambda: self.getActualFocusHandler().onDown())
+        self.connectGpio(gpioService, 35, lambda: self.getActualFocusHandler().onUp())
+        self.connectGpio(gpioService, 37, lambda: self.getActualFocusHandler().onConfirm())
+
         self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
-        
+
+    def connectGpio(self, gpioService, num, callback):
+        gpioCall = GpioCallback(self)
+        gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
+        gpioService.registerCallback(gpioService.FALLING, num, gpioCall.onLowLevelCallback)
+
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             return self.mainFocusHandler

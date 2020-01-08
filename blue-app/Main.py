@@ -51,7 +51,7 @@ def main():
     webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker)
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
