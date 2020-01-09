@@ -12,10 +12,19 @@ from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
 
+from generated import themes
+
 if os.getenv('RUN_FROM_DOCKER', False) == False:
     from services.GpioService import GpioService
 else:
     from services.mocks.GpioService import GpioService
+
+def setStyle(app):
+    QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("motif"))
+    styleFile = QtCore.QFile(":/dark-orange.qss")
+    styleFile.open(QtCore.QIODevice.ReadOnly)
+    data = styleFile.readAll()
+    app.setStyleSheet(str(data, encoding="utf-8"))
 
 def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus):
 
@@ -38,6 +47,7 @@ def main():
 
     LoggingService.init()
     app = QtWidgets.QApplication(sys.argv)
+    setStyle(app)
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
 
