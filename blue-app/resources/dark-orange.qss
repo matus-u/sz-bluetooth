@@ -23,7 +23,8 @@ QAbstractItemView
 }
 
 QTableWidget,
-QTableView
+QTableView,
+QFrame#livePlayFrame
 {  
    border : 2px solid cyan; 
    margin: 10px; border-radius: 25px;
