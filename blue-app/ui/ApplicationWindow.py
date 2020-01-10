@@ -222,13 +222,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
 
     def onPlayingStarted(self):
+        self.ui.playSlider.setValue(0)
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
+            self.ui.playSlider.setMaximum(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
             self.creditService.clearCredit()
-            self.ui.playLabel.setText("PLAYING BLUETOOTH")
+            self.ui.playLabel.setText("PLAYING FROM BLUETOOTH")
         else:
             self.ui.disconnectButton.setEnabled(False)
-            self.ui.playLabel.setText("PLAYING " + self.playLogicService.getActualPlayingMp3()[0])
+            self.ui.playLabel.setText(self.playLogicService.getActualPlayingMp3()[0])
+            self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingMp3()[2])
         self.onBackFromBlueButton()
         self.ui.bluetoothButton.setEnabled(False)
 
@@ -289,7 +292,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):
-        self.ui.playLabel.setText("ON REFRESH TIMER " + str(value))
+        self.ui.playSlider.setValue(value)
+        self.ui.timeLabel.setText(str(int(int(value)/60)) + ":" + str(value%60))
 
     def showCoinImage(self):
         coinPixMap = QtGui.QPixmap(':/images/coin180.png')

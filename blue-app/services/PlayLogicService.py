@@ -18,13 +18,19 @@ class PlayLogicService(QtCore.QObject):
         self.state = "IDLE"
 
         self.bluetoothService.disconnectedEndSignal.connect(self.onPlayingFinished)
-        self.bluetoothService.refreshTimerSignal.connect(lambda val: self.refreshTimerSignal.emit(val))
         self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
         self.mp3info = []
 
         self.playService = PlayFileService(self)
-        self.playService.refreshTimerSignal.connect(lambda val: self.refreshTimerSignal.emit(val))
         self.playService.finished.connect(self.onPlayingFinished)
+
+        self.refreshTimer = QtCore.QTimer()
+        self.refreshTimer.timeout.connect(self.onRefreshTimer)
+        self.counter = 0
+
+    def onRefreshTimer(self):
+        self.counter = self.counter + 1
+        self.refreshTimerSignal.emit(self.counter)
 
     def playFromBluetooth(self, macAddr, duration):
         if self.state == "IDLE":
@@ -38,6 +44,7 @@ class PlayLogicService(QtCore.QObject):
         self.mp3info = mp3info
         self.playService.playMp3(mp3info)
         self.playingStarted.emit()
+        self.refreshTimer.start(1000)
             
     def playFromLocal(self, mp3info):
         if self.state == "IDLE":
@@ -51,11 +58,14 @@ class PlayLogicService(QtCore.QObject):
             self.state = "IDLE"
         else:
             self.playingStarted.emit()
+            self.refreshTimer.start(1000)
 
     def onPlayingFinished(self):
         if (self.playQueue.isEmpty()):
             self.playingStopped.emit()
             self.state = "IDLE"
+            self.counter = 0
+            self.refreshTimer.stop()
         else:
             self.startPlaying(self.playQueue.popFromPlayQueue())
 

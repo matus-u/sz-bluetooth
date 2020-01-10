@@ -288,3 +288,41 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
     border: 1px solid #444;
 }
 
+QSlider {
+    padding-top: 5px;
+    padding-left: 20;
+    padding-right: 20;
+    padding-bottom: 20;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+QSlider::groove:horizontal {
+    border: 1px solid #999999;
+    height: 2px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+    background: gray;
+    margin: 1px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    background: yellow;
+    border: 1px solid #5c5c5c;
+    width: 5px;
+    height: 25px;
+    margin: -10px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+    border-radius: 3px;
+}
+
+QSlider::sub-page:horizontal {
+    background: cyan;
+    border-radius: 3px;
+    border: 1px solid #999999;
+}
+
+QLabel#playLabel {
+    font-size: 24px;
+}
+

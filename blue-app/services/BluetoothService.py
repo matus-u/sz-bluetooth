@@ -35,7 +35,6 @@ class BluetoothStatusObject(TimerService.TimerStatusObject):
 class BluetoothService(QtCore.QObject):
     disconnectedBeginSignal = QtCore.pyqtSignal()
     disconnectedEndSignal = QtCore.pyqtSignal()
-    refreshTimerSignal = QtCore.pyqtSignal(int)
     connectedSignal = QtCore.pyqtSignal(int)
     connectionStrengthSignal = QtCore.pyqtSignal(int)
 
@@ -44,8 +43,6 @@ class BluetoothService(QtCore.QObject):
         self.connectionTimer = QtCore.QTimer()
         self.connectionTimer.setSingleShot(True)
         self.connectionTimer.timeout.connect(lambda: self.forceDisconnect())
-        self.refreshTimer = QtCore.QTimer()
-        self.refreshTimer.timeout.connect(lambda: self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000)))
         self.agent = BluetoothAgent.Agent()
         BluezUtils.cleanupDevices()
         BluezUtils.startDiscovery()
@@ -75,8 +72,6 @@ class BluetoothService(QtCore.QObject):
             self.connectedDevice = ""
         else:
             self.connectionTimer.start(self.duration * 1000)
-            self.refreshTimerSignal.emit(int(self.connectionTimer.remainingTime()/1000))
-            self.refreshTimer.start(1000)
             self.connectedSignal.emit(0)
             self.statusObject.start()
 
@@ -91,7 +86,6 @@ class BluetoothService(QtCore.QObject):
         LoggingService.getLogger().info("FORCE DISCONNECT")
         self.statusObject.stop()
         self.connectionTimer.stop()
-        self.refreshTimer.stop()
         self.disconnectedBeginSignal.emit()
         QtCore.QCoreApplication.processEvents()
         self.pairRequest.disconnect()
