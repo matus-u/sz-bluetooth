@@ -61,7 +61,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.showFullScreen()
+        #self.showFullScreen()
         self.moneyTracker = moneyTracker
         self.playQueue = PlayQueue()
         self.ui.playQueueWidget.setModel(self.playQueue)
@@ -85,7 +85,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.itemSelectionChanged.connect(self.onSelectionChanged)
         self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
-        self.onAdminMode(False)
 
         self.creditService = CreditService(AppSettings.actualCoinSettings())
         self.creditService.creditChanged.connect(self.onCreditChange, QtCore.Qt.QueuedConnection)

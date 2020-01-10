@@ -45,7 +45,7 @@ class MusicController(QtCore.QObject):
         self.songsWidget.setRowCount(len(self.music[genreKey]))
         for index, item in enumerate(self.music[genreKey]):
             self.songsWidget.setItem(index,0, QtWidgets.QTableWidgetItem(item[0]))
-            self.songsWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(int(item[2]))))
+            #self.songsWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(int(item[2]))))
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
         

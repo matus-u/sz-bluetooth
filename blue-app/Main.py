@@ -67,6 +67,7 @@ def main():
 
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
     application.show()
+    application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
 
     app.installEventFilter(adminModeTracker)
