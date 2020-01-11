@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/images">
         <file>coin180.png</file>
+        <file>bluetooth.png</file>
+        <file>back.png</file>
     </qresource>
 </RCC>
