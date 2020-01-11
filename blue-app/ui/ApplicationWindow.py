@@ -63,6 +63,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         #self.showFullScreen()
         self.moneyTracker = moneyTracker
+        self.scanData = []
         self.playQueue = PlayQueue()
         self.ui.playQueueWidget.setModel(self.playQueue)
 
@@ -203,11 +204,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setWidgetsDisabled()
         self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
         QtCore.QCoreApplication.processEvents()
-        data = self.bluetoothService.scan()
-        self.ui.devicesWidget.setRowCount(len(data))
-        for index, item in enumerate(data):
+        self.scanData = self.bluetoothService.scan()
+        self.ui.devicesWidget.setRowCount(len(self.scanData))
+        for index, item in enumerate(self.scanData):
             self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(str(item[0])))
-            self.ui.devicesWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(item[1])))
 
         self.setWidgetsEnabled()
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
@@ -219,7 +219,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
 
         self.setWidgetsDisabled() 
-        macAddr = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 1).text()[1:-1]
+        macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][1][1:-1]
         self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
 
     def onPlayingStarted(self):

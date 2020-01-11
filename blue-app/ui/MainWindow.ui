@@ -402,8 +402,11 @@
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
+              <property name="showGrid">
+               <bool>false</bool>
+              </property>
               <property name="columnCount">
-               <number>2</number>
+               <number>1</number>
               </property>
               <attribute name="horizontalHeaderVisible">
                <bool>false</bool>
@@ -420,7 +423,6 @@
               <attribute name="verticalHeaderMinimumSectionSize">
                <number>35</number>
               </attribute>
-              <column/>
               <column/>
              </widget>
             </item>
