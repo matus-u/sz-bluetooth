@@ -214,6 +214,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
+            self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
             #QtWidgets.QMessageBox.critical(self, self.texts[self.NO_CREDIT_HEAD], self.texts[self.NO_CREDIT], QtWidgets.QMessageBox.Cancel)
             return
 

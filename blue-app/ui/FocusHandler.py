@@ -17,6 +17,9 @@ class InputHandler(QtCore.QObject):
         l = deque(self.listOfProxies)
         l.rotate(value)
         self.listOfProxies = list(l)
+        rotateAgain = (not self.listOfProxies[0].getManangedWidget().isEnabled()) or (not self.listOfProxies[0].getManangedWidget().isVisible())
+        if rotateAgain:
+            self.rotate(value)
 
     def onLeft(self):
         self.rotate(-1)
