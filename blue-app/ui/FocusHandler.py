@@ -82,9 +82,10 @@ class ButtonFocusProxy:
         return self.button
 
 class TableWidgetFocusProxy(QtCore.QObject):
-    def __init__(self, widget):
+    def __init__(self, widget, confirmHandler):
         super().__init__()
         self.widget = widget
+        self.confirmHandler = confirmHandler
 
     def getManangedWidget(self):
         return self.widget
@@ -115,29 +116,4 @@ class TableWidgetFocusProxy(QtCore.QObject):
                 self.widget.selectRow(0)
 
     def onConfirm(self):
-        pass
-
-class GenreTableWidgetFocusProxy(TableWidgetFocusProxy):
-    def __init__(self, genreWidget, musicController):
-        super().__init__(genreWidget)
-        self.genreWidget = genreWidget
-        self.musicController = musicController
-
-    def onConfirm(self):
-        self.musicController.reloadSongsWidget()
-
-class SongTableWidgetFocusProxy(TableWidgetFocusProxy):
-    def __init__(self, songWidget, musicController, playLogicService, creditService):
-        super().__init__(songWidget)
-        self.songWidget = songWidget
-        self.musicController = musicController
-        self.playLogicService = playLogicService
-        self.creditService = creditService
-
-    def onConfirm(self):
-        info = self.musicController.getFullSelectedMp3Info()
-        if info != "":
-            if self.creditService.getSongsRepresentation().enoughMoney():
-                self.playLogicService.playFromLocal(info)
-                self.creditService.getSongsRepresentation().overTakeMoney()
-
+        self.confirmHandler()

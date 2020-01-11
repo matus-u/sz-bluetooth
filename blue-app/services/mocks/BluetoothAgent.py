@@ -13,7 +13,7 @@ class PairRequest(QtCore.QObject):
         super().__init__()
 
     def pair(self, deviceAddress):
-        self.connected.emit(0)
+        self.connected.emit(1)
         pass
 
     def disconnect(self):

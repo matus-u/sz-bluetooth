@@ -26,7 +26,8 @@ class PlayQueue(QtCore.QAbstractTableModel):
         return len(self.queue)
 
     def columnCount(self, parent=QtCore.QModelIndex()):
-        return 2
+        #return 2
+        return 1
 
     def data(self, index, role=QtCore.Qt.DisplayRole):
         if role == QtCore.Qt.DisplayRole:

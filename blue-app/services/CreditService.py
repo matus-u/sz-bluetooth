@@ -27,7 +27,7 @@ class CreditSongRepresentation:
         return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[8]))
 
     def enoughMoney(self):
-        return self.creditService.getCredit() > self.creditService.getCoinSettings()[8]
+        return self.creditService.getCredit() >= self.creditService.getCoinSettings()[8]
 
     def overTakeMoney(self):
         return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[8])
@@ -50,7 +50,7 @@ class CreditService(QtCore.QObject):
             self.moneyInserted.emit(money)
 
     def changeCredit(self, value):
-        self.credit = self.credit + value
+        self.credit = round (self.credit + round(value, 2), 2)
         self.creditChanged.emit(value)
 
     def setCoinSettings(self, coinSettings):
