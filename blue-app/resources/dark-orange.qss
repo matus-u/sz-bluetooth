@@ -21,7 +21,8 @@ QAbstractItemView
 
 QTableWidget,
 QTableView,
-QFrame#livePlayFrame
+QFrame#livePlayFrame,
+QLabel#emptyLabel
 {  
    border : 3px solid cyan; 
    margin: 10px; border-radius: 25px;
@@ -45,7 +46,8 @@ QTableWidget::item:selected
 }
 
 QTableView#playQueueWidget,
-QFrame#livePlayFrame
+QFrame#livePlayFrame,
+QLabel#emptyLabel
 {
    border : 3px solid #99006e; 
 }
@@ -328,12 +330,14 @@ QSlider::sub-page:horizontal {
 }
 
 QLabel#playLabel,
-QLabel#insertNewCoinLabel
+QLabel#insertNewCoinLabel,
+QLabel#emptyLabel
 {
-    font-size: 28px;
+    font-size: 26px;
 }
 
-QLabel#playLabel
+QLabel#playLabel,
+QLabel#emptyLabel
 {
     font-family: "Airstream NF";
     color: #FFFFFF
@@ -347,37 +351,56 @@ QLabel#selectGenreLabel
 {
     padding-left: 30px;
 }
+
+
 /*
+QWidget#scanButton,
+QWidget#bluetoothButton,
+QWidget#backFromBlueButton,
+*/
 
 QWidget#centralwidget,
 QWidget#nameLabel,
 QWidget#servicePhoneLabel,
 QWidget#stackedWidget,
+QWidget#stackedWidget_2,
+QWidget#playQueuePage,
+QWidget#emptyPlayQueuePage,
 QWidget#pageMain,
 QWidget#pageBluetooth,
 QWidget#livePlayFrame,
 QWidget#playLabel,
 QWidget#playSlider,
 QWidget#timeLabel,
-QWidget#playQueueWidget,
-QWidget#genreWidget,
-QWidget#songsWidget,
 QWidget#playListLabel,
 QWidget#actualSongLabel,
 QWidget#selectSongLabel,
 QWidget#selectGenreLabel,
-QWidget#bluetoothButton,
 QWidget#insertNewCoinLabel,
 QWidget#coinImageLabel,
 QWidget#actualCreditValue,
 QWidget#actualMoneyValue,
 QWidget#wifiStateLabel,
-QWidget#backFromBlueButton,
-QWidget#bluetoothDeviceLabel,
-QWidget#scanButton,
-QWidget#devicesWidget,
-QWidget#devicesWidget
+QWidget#bluetoothDeviceLabel
 {
     background-color: transparent;
 }
-*/
+
+QTableView#playQueueWidget,
+QTableWidget#genreWidget,
+QTableWidget#songsWidget,
+QTableWidget#devicesWidget
+{
+   background-color: rgba(50, 50, 50, 90%);
+   selection-background-color: rgba(50, 50, 50, 0%);
+}
+
+QWidget#emptyLabel,
+QTableView#playQueueWidget::item,
+QTableWidget#genreWidget::item,
+QTableWidget#songsWidget::item,
+QTableWidget#devicesWidget::item
+{
+    padding: 1px;
+    background-color: rgba(50, 50, 50, 0%);
+}
