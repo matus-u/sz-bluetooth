@@ -44,6 +44,7 @@ class PlayLogicService(QtCore.QObject):
         self.mp3info = mp3info
         self.playService.playMp3(mp3info)
         self.playingStarted.emit()
+        self.counter = 0
         self.refreshTimer.start(1000)
             
     def playFromLocal(self, mp3info):
@@ -58,6 +59,7 @@ class PlayLogicService(QtCore.QObject):
             self.state = "IDLE"
         else:
             self.playingStarted.emit()
+            self.counter = 0
             self.refreshTimer.start(1000)
 
     def onPlayingFinished(self):

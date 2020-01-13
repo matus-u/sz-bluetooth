@@ -3,6 +3,10 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 class PlayQueue(QtCore.QAbstractTableModel):
+
+    playQueueEmpty = QtCore.pyqtSignal()
+    playQueueNotEmpty = QtCore.pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.queue = []
@@ -10,10 +14,12 @@ class PlayQueue(QtCore.QAbstractTableModel):
         return len(self.queue) == 0
 
     def popFromPlayQueue(self):
-        self.beginInsertRows(QtCore.QModelIndex(), 0, 0)
+        self.beginRemoveRows(QtCore.QModelIndex(), 0, 0)
         val = self.queue[0]
         del self.queue[0]
-        self.endInsertRows()
+        self.endRemoveRows()
+        if self.isEmpty():
+            self.playQueueEmpty.emit()
         return val 
 
     def addToPlayQueue(self, mp3info):
@@ -21,6 +27,8 @@ class PlayQueue(QtCore.QAbstractTableModel):
         self.beginInsertRows(QtCore.QModelIndex(), position, position)
         self.queue.append(mp3info)
         self.endInsertRows()
+        if self.rowCount() == 1:
+            self.playQueueNotEmpty.emit()
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.queue)

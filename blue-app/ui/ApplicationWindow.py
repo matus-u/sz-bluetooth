@@ -67,6 +67,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.moneyTracker = moneyTracker
         self.scanData = []
         self.playQueue = PlayQueue()
+        self.playQueue.playQueueEmpty.connect(lambda: self.ui.stackedWidget_2.setCurrentIndex(1))
+        self.playQueue.playQueueNotEmpty.connect(lambda: self.ui.stackedWidget_2.setCurrentIndex(0))
         self.ui.playQueueWidget.setModel(self.playQueue)
 
         self.bluetoothService = BluetoothService(timerService)

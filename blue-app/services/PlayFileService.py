@@ -1,6 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5 import QtMultimedia
 
+import os
+
 class PlayFileService(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     refreshTimerSignal = QtCore.pyqtSignal(int)
@@ -21,7 +23,6 @@ class PlayFileService(QtCore.QObject):
             self.process.start("aplay resources/coin-ringtone.wav")
 
     def emitFinished(self):
-        self.counter = 0
         self.finished.emit()
 
     def playMp3(self, mp3info):
@@ -29,4 +30,7 @@ class PlayFileService(QtCore.QObject):
         content = QtMultimedia.QMediaContent(url)
         self.player.setMedia(content)
         self.player.play()
+
+        if not (os.getenv('RUN_FROM_DOCKER', False) == False):
+            QtCore.QTimer.singleShot(5000, lambda: self.emitFinished())
 
