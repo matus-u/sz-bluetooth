@@ -116,4 +116,5 @@ class TableWidgetFocusProxy(QtCore.QObject):
                 self.widget.selectRow(0)
 
     def onConfirm(self):
-        self.confirmHandler()
+        if self.confirmHandler:
+            self.confirmHandler()

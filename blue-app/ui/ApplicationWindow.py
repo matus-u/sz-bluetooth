@@ -103,9 +103,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
         self.musicController = MusicController.MusicController(self.ui.genreWidget, self.ui.songsWidget)
+        self.ui.genreWidget.itemSelectionChanged.connect(self.onGenreConfirm)
         self.mainFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton),
-             FocusHandler.TableWidgetFocusProxy(self.ui.genreWidget, self.onGenreConfirm),
+             FocusHandler.TableWidgetFocusProxy(self.ui.genreWidget, None),
              FocusHandler.TableWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong)))
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
@@ -218,7 +219,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
 
     def onGenreConfirm(self):
-        self.musicController.reloadSongsWidget()
+        if self.ui.genreWidget.rowCount() > 0:
+            if len(self.ui.genreWidget.selectionModel().selectedRows()) > 0:
+                self.musicController.reloadSongsWidget()
 
     def onPlaySong(self):
         if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
