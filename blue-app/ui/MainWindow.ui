@@ -107,13 +107,39 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="pageMain">
          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="6,1">
           <item>
-           <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,2" columnstretch="0,0">
-            <item row="1" column="1">
+           <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1,0,2" columnstretch="0,0">
+            <item row="0" column="0">
+             <widget class="QLabel" name="actualSongLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Actual song:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="playListLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Playlist:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
              <widget class="QTableWidget" name="songsWidget">
               <property name="styleSheet">
                <string notr="true"/>
@@ -175,7 +201,7 @@
               <column/>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="3" column="0">
              <widget class="QTableWidget" name="genreWidget">
               <property name="styleSheet">
                <string notr="true"/>
@@ -216,7 +242,7 @@
               <column/>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="1" column="1">
              <widget class="QTableView" name="playQueueWidget">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -241,7 +267,7 @@
               </attribute>
              </widget>
             </item>
-            <item row="0" column="0">
+            <item row="1" column="0">
              <widget class="QFrame" name="livePlayFrame">
               <property name="frameShape">
                <enum>QFrame::StyledPanel</enum>
@@ -304,6 +330,32 @@
                 </widget>
                </item>
               </layout>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="selectGenreLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Select genre:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="selectSongLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Select song:</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -370,7 +422,7 @@
          </layout>
         </widget>
         <widget class="QWidget" name="pageBluetooth">
-         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,4,1">
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,5,1">
           <property name="spacing">
            <number>25</number>
           </property>
@@ -443,13 +495,32 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout" stretch="5">
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="spacing">
+             <number>6</number>
+            </property>
             <property name="leftMargin">
              <number>30</number>
             </property>
             <property name="rightMargin">
              <number>30</number>
             </property>
+            <item>
+             <widget class="QLabel" name="bluetoothDeviceLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Select bluetooth device:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QTableWidget" name="devicesWidget">
               <property name="styleSheet">
@@ -700,17 +771,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1024</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
   <include location="../resources/Resources.qrc"/>
