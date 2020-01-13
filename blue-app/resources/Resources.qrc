@@ -6,6 +6,7 @@
         <file>bluetooth1_fialova.png</file>
         <file>checkbox.png</file>
         <file>back.png</file>
+        <file>down_arrow.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>airstream/AirstreamNF.ttf</file>

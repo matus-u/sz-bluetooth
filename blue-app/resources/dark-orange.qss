@@ -14,8 +14,10 @@ QMainWindow
 
 QWidget
 {
-    color: #FFFFFF;
-    background-color: rgba(50, 50, 50, 0%);
+    color: #b1b1b1;
+    background-color: #323232;
+/*    color: #FFFFFF; */
+/*    background-color: rgba(50, 50, 50, 0%); */
     font-size: 14px;
 }
 
@@ -137,7 +139,7 @@ QComboBox::drop-down
 
 QComboBox::down-arrow
 {
-     image: url(:/images/down_arrow.png);
+      image: url(:/images/down_arrow.png);
 }
 
 QGroupBox:focus
@@ -344,5 +346,6 @@ QLabel#insertNewCoinLabel
 QLabel#playLabel
 {
     font-family: "Airstream NF";
+    color: #FFFFFF
 }
 
