@@ -7,14 +7,19 @@ QToolTip
      opacity: 100;
 }
 
+QMainWindow
+{
+    background-image: url(":/images/back.png")
+}
+
 QWidget
 {
-    color: #b1b1b1;
-    background-color: #323232;
+    color: #FFFFFF;
+    background-color: rgba(50, 50, 50, 0%);
     font-size: 14px;
 }
 
-QWidget:focus {  border : 5px solid #FF5733; }
+QWidget:focus {  border : 5px solid #FF7800; }
 
 QAbstractItemView
 {
@@ -26,9 +31,10 @@ QTableWidget,
 QTableView,
 QFrame#livePlayFrame
 {  
-   border : 2px solid cyan; 
+   border : 3px solid cyan; 
    margin: 10px; border-radius: 25px;
-   padding: 20px
+   padding: 20px;
+   selection-background-color: #4d4d4d;
 }
 
 QTableView::item,
@@ -44,6 +50,12 @@ QTableWidget::item:selected
     border-radius: 10px;
     border : 3px solid cyan; 
     background-color: #4d4d4d;
+}
+
+QTableView#playQueueWidget,
+QFrame#livePlayFrame
+{
+   border : 3px solid #99006e; 
 }
 
 QWidget:disabled
@@ -63,10 +75,10 @@ QLineEdit
 
 QPushButton
 {
-    color: #b1b1b1;
+    color: #FFFFFF;
     background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #707070, stop: 0.3 #525252, stop: 0.5 #4e4e4e, stop: 0.7 #4a4a4a, stop: 1 #666666);
-    border-width: 1px;
-    border-color: #1e1e1e;
+    border-width: 2px;
+    border-color: #99006e;
     border-style: solid;
     border-radius: 25px;
     padding: 3px;
@@ -74,7 +86,7 @@ QPushButton
     padding-right: 5px;
 }
 
-QPushButton:focus {  border : 3px solid #FF5733; }
+QPushButton:focus {  border : 3px solid #FF7800; }
 
 QPushButton:pressed
 {
@@ -326,6 +338,11 @@ QSlider::sub-page:horizontal {
 QLabel#playLabel,
 QLabel#insertNewCoinLabel
 {
-    font-size: 24px;
+    font-size: 28px;
+}
+
+QLabel#playLabel
+{
+    font-family: "Airstream NF";
 }
 

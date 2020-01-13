@@ -55,7 +55,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("PLAYING FROM BLUETOOTH"), self.tr("NOT PLAYING")
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing")
         ]
 
     def __init__(self, timerService, moneyTracker, gpioService):
@@ -130,6 +130,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
+        self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)

@@ -1,7 +1,13 @@
 <RCC>
     <qresource prefix="/images">
         <file>coin180.png</file>
-        <file>bluetooth.png</file>
+        <file>search1_fialova.png</file>
+        <file>back3_fialova.png</file>
+        <file>bluetooth1_fialova.png</file>
+        <file>checkbox.png</file>
         <file>back.png</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>airstream/AirstreamNF.ttf</file>
     </qresource>
 </RCC>

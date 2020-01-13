@@ -47,6 +47,8 @@ def main():
 
     LoggingService.init()
     app = QtWidgets.QApplication(sys.argv)
+    QtGui.QFontDatabase.addApplicationFont(":/fonts/airstream/AirstreamNF.ttf")
+
     setStyle(app)
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()

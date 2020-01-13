@@ -342,12 +342,12 @@
               </property>
               <property name="icon">
                <iconset resource="../resources/Resources.qrc">
-                <normaloff>:/images/bluetooth.png</normaloff>:/images/bluetooth.png</iconset>
+                <normaloff>:/images/bluetooth1_fialova.png</normaloff>:/images/bluetooth1_fialova.png</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>48</width>
-                <height>48</height>
+                <width>32</width>
+                <height>32</height>
                </size>
               </property>
              </widget>
@@ -414,6 +414,16 @@
               </property>
               <property name="text">
                <string>Scan bluetooth network</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../resources/Resources.qrc">
+                <normaloff>:/images/search1_fialova.png</normaloff>:/images/search1_fialova.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -508,12 +518,12 @@
               </property>
               <property name="icon">
                <iconset resource="../resources/Resources.qrc">
-                <normaloff>:/images/back.png</normaloff>:/images/back.png</iconset>
+                <normaloff>:/images/back3_fialova.png</normaloff>:/images/back3_fialova.png</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>48</width>
-                <height>48</height>
+                <width>32</width>
+                <height>32</height>
                </size>
               </property>
              </widget>
