@@ -63,7 +63,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        #self.showFullScreen()
+        self.showFullScreen()
         self.moneyTracker = moneyTracker
         self.scanData = []
         self.playQueue = PlayQueue()

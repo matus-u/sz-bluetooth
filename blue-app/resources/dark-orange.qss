@@ -368,7 +368,6 @@ QWidget#playQueuePage,
 QWidget#emptyPlayQueuePage,
 QWidget#pageMain,
 QWidget#pageBluetooth,
-QWidget#livePlayFrame,
 QWidget#playLabel,
 QWidget#playSlider,
 QWidget#timeLabel,
@@ -386,6 +385,8 @@ QWidget#bluetoothDeviceLabel
     background-color: transparent;
 }
 
+QWidget#livePlayFrame,
+QWidget#emptyLabel,
 QTableView#playQueueWidget,
 QTableWidget#genreWidget,
 QTableWidget#songsWidget,
@@ -395,7 +396,6 @@ QTableWidget#devicesWidget
    selection-background-color: rgba(50, 50, 50, 0%);
 }
 
-QWidget#emptyLabel,
 QTableView#playQueueWidget::item,
 QTableWidget#genreWidget::item,
 QTableWidget#songsWidget::item,
@@ -403,4 +403,12 @@ QTableWidget#devicesWidget::item
 {
     padding: 1px;
     background-color: rgba(50, 50, 50, 0%);
+}
+
+QTableView#playQueueWidget,
+QTableWidget#genreWidget,
+QTableWidget#songsWidget
+{
+    font-family: "Airstream NF";
+    font-size: 16px;
 }
