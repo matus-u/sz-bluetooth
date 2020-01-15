@@ -4,6 +4,7 @@ class GpioService:
 
     RISING = "RISING"
     FALLING = "FALLING"
+    BOTH = "BOTH"
 
     def __init__(self):
         LoggingService.getLogger().info("GPIO - INIT")
@@ -12,7 +13,7 @@ class GpioService:
         LoggingService.getLogger().info("GPIO - REGISTER " + str(pin) + " " + trigger_type)
 
     def registerBothCallbacks(self, pin, callback):
-        self.registeCallback("BOTH", pin, None)
+        self.registerCallback("BOTH", pin, None)
 
     def deregisterCallback(self, pin):
         LoggingService.getLogger().info("GPIO - DEREGISTER " + str(pin))

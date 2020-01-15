@@ -11,12 +11,14 @@ class GpioService:
 
     RISING = "RISING"
     FALLING = "FALLING"
+    BOTH = "BOTH"
 
     def __init__(self):
         LoggingService.getLogger().info("GPIO - INIT")
         GPIO.setmode(orangepi.pc.BOARD)
         GPIO.setup(29, GPIO.IN)
         GPIO.setup(31, GPIO.IN)
+        GPIO.setup(32, GPIO.IN)
         GPIO.setup(33, GPIO.IN)
         GPIO.setup(35, GPIO.IN)
         GPIO.setup(37, GPIO.IN)
@@ -37,7 +39,7 @@ class GpioService:
         GPIO.add_event_detect(pin, trig_type, callback=callback)
 
     def registerBothCallbacks(self, pin, callback):
-        self.registerCallback(GPIO.BOTH, pin, self.onGpio)
+        self.registerCallback(GpioService.BOTH, pin, self.onGpio)
         self.callbacks[pin] = callback
 
     def deregisterCallback(self, pin):

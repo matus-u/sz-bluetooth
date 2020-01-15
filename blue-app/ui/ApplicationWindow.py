@@ -285,7 +285,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.actualCreditValue.setText(str(int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) + " " + self.texts[self.SONGS])
         else:
             self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()) + " " + self.texts[self.SECONDS])
-        self.ui.actualMoneyValue.setText(str(self.creditService.getCredit()))
+        self.ui.actualMoneyValue.setText(str(self.creditService.getCredit()) + " " + AppSettings.actualCurrency())
 
     def onCreditChange(self, credit):
         self.updateCreditLabel()
