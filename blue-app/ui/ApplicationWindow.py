@@ -181,9 +181,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         window.activateWindow()
         window.move(window.pos().x(), self.pos().y() + 60)
 
+    def onSettingsFinished(self, x):
+        self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
+        self.updateCreditLabel()
+
     def onAdminSettingsButton(self):
         w = SettingsWindow.SettingsWindow(self, self.moneyTracker)
-        w.finished.connect(lambda x: self.creditService.setCoinSettings(AppSettings.actualCoinSettings()))
+        w.finished.connect(self.onSettingsFinished)
         self.openSubWindow(w)
 
     def setWidgetsEnabled(self):
