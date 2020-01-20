@@ -35,12 +35,12 @@ fi
 
 if [ -e "$FILE_SDA1" ]; then
   echo "mounting /dev/sda1 ..."
-  sudo mount -o rw,exec,sync /dev/sda1 /media/usbstick
+  sudo mount -o rw,exec,sync,iocharset=utf8 /dev/sda1 /media/usbstick
 fi
 
 if [ ! -e "$FILE_SDA1" ]; then
   echo "mounting /dev/sda ..."
-  sudo mount -o rw,exec,sync /dev/sda /media/usbstick
+  sudo mount -o rw,exec,sync,iocharset=utf8 /dev/sda /media/usbstick
 fi
 
 cd /media/usbstick
