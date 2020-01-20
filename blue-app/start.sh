@@ -20,17 +20,19 @@ amixer set 'ADC Gain' 0
 amixer set 'DAC' 100
 amixer set 'DAC Reversed' off
 
-# configure touchscreen
-DONE="1"
-while [ "$DONE" != "0" ] ; do
-scripts/./stop-touch.sh
-sleep 1
-#scripts/./start-touch.sh $(dmesg | grep pl2303 | grep usb |tail -1 |  rev | cut -f 1 -d ' ' | rev)
-scripts/./start-touch.sh ttyUSB0
-DONE="$?"
-sleep 1
-scripts/./calib-touch.sh
-done
+if [ -e /dev/ttyUSB0 ]; then
+    # configure touchscreen
+    DONE="1"
+    while [ "$DONE" != "0" ] ; do
+    scripts/./stop-touch.sh
+    sleep 1
+    #scripts/./start-touch.sh $(dmesg | grep pl2303 | grep usb |tail -1 |  rev | cut -f 1 -d ' ' | rev)
+    scripts/./start-touch.sh ttyUSB0
+    DONE="$?"
+    sleep 1
+    scripts/./calib-touch.sh
+    done
+fi
 
 # close blueman applet
 killall -9 blueman-applet
