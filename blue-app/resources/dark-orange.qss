@@ -12,7 +12,7 @@ QMainWindow
     background-image: url(":/images/back.png")
 }
 
-QWidget:focus {  border : 5px solid #FF7800; }
+/*QWidget:focus {  border : 5px solid #FF7800; }*/
 
 QAbstractItemView
 {
@@ -80,7 +80,7 @@ QPushButton
     padding-right: 5px;
 }
 
-QPushButton:focus {  border : 3px solid #FF7800; }
+/*QPushButton:focus {  border : 3px solid #FF7800; }*/
 
 QPushButton:pressed
 {
@@ -421,4 +421,14 @@ SongTableWidgetImpl * {
 SongTableWidgetImpl[selected=true] * {
     color: #FFFFFF;
     padding-left: 1px;
+}
+
+QWidget#scanButton:focus,
+QWidget#bluetoothButton:focus,
+QWidget#backFromBlueButton:focus,
+QWidget#songsWidget:focus,
+QWidget#genreWidget:focus,
+QWidget#devicesWidget:focus
+{
+    border : 5px solid #FF7800;
 }

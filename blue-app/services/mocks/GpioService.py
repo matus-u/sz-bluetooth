@@ -18,5 +18,8 @@ class GpioService:
     def deregisterCallback(self, pin):
         LoggingService.getLogger().info("GPIO - DEREGISTER " + str(pin))
 
+    def setGpio(self, pin, enable):
+        LoggingService.getLogger().info("SET GPIO - " + str(pin) + " " + str(enable))
+
     def cleanup(self):
         LoggingService.getLogger().info("GPIO - PRINT GPIO CLEANUP ")

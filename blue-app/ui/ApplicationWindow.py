@@ -15,6 +15,7 @@ from services.PlayFileService import PlayFileService
 from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
 from services.GpioCallback import GpioCallback
+from services.LedButtonService import LedButtonService
 
 from model.PlayQueue import PlayQueue
 from ui import SongTableWidgetImpl
@@ -102,6 +103,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.changeCredit(0)
         timerService.addTimerWorker(self.temperatureStatus)
 
+        self.ledButtonService = LedButtonService(gpioService)
+        timerService.addTimerWorker(self.ledButtonService)
+        self.ledButtonService.start()
+
         self.wirelessService = WirelessService()
         self.wirelessService.stateChanged.connect(self.wirelessServiceStateChanged)
         self.wirelessService.start()
@@ -114,14 +119,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController = MusicController.MusicController(self.ui.genreWidget, self.ui.songsWidget)
         self.ui.genreWidget.itemSelectionChanged.connect(self.onGenreConfirm)
         self.mainFocusHandler = FocusHandler.InputHandler(
-            (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton),
-             FocusHandler.TableWidgetFocusProxy(self.ui.genreWidget, None),
-             FocusHandler.TableWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong)))
+            (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton, self.ledButtonService),
+             FocusHandler.TableWidgetFocusProxy(self.ui.genreWidget, None, self.ledButtonService),
+             FocusHandler.TableWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService)))
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
-            (FocusHandler.ButtonFocusProxy(self.ui.scanButton),
-             FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton),
-             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton)))
+            (FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
+             FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
+             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)))
 
         self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
         self.ui.bluetoothButton.clicked.connect(self.onBluetoothButton)
@@ -143,6 +148,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
         self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+        self.getActualFocusHandler().setFocus()
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)

@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.LedButtonService import LedButtonService
+
 from collections import deque 
 
 class InputHandler(QtCore.QObject):
@@ -63,11 +65,17 @@ class FocusNullObject:
         pass
 
 class ButtonFocusProxy:
-    def __init__(self, button):
+    def __init__(self, button, ledButtonService):
         self.button = button
+        self.ledButtonService = ledButtonService
 
     def setFocus(self):
         self.button.setFocus()
+        self.ledButtonService.setButtonState(LedButtonService.LEFT, True)
+        self.ledButtonService.setButtonState(LedButtonService.RIGHT, True)
+        self.ledButtonService.setButtonState(LedButtonService.UP, False)
+        self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
+        self.ledButtonService.setButtonState(LedButtonService.CONFIRM, True)
 
     def onUp(self):
         pass
@@ -82,16 +90,22 @@ class ButtonFocusProxy:
         return self.button
 
 class TableWidgetFocusProxy(QtCore.QObject):
-    def __init__(self, widget, confirmHandler):
+    def __init__(self, widget, confirmHandler, ledButtonService):
         super().__init__()
         self.widget = widget
         self.confirmHandler = confirmHandler
+        self.ledButtonService = ledButtonService
 
     def getManangedWidget(self):
         return self.widget
 
     def setFocus(self):
         self.widget.setFocus()
+        self.ledButtonService.setButtonState(LedButtonService.LEFT, True)
+        self.ledButtonService.setButtonState(LedButtonService.RIGHT, True)
+        self.ledButtonService.setButtonState(LedButtonService.UP, True)
+        self.ledButtonService.setButtonState(LedButtonService.DOWN, True)
+        self.ledButtonService.setButtonState(LedButtonService.CONFIRM, True)
 
     def onUp(self):
         if self.widget.rowCount() > 0:

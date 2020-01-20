@@ -22,6 +22,13 @@ class GpioService:
         GPIO.setup(33, GPIO.IN)
         GPIO.setup(35, GPIO.IN)
         GPIO.setup(37, GPIO.IN)
+
+        GPIO.setup( 7, GPIO.OUT)
+        GPIO.setup(12, GPIO.OUT)
+        GPIO.setup(16, GPIO.OUT)
+        GPIO.setup(18, GPIO.OUT)
+        GPIO.setup(26, GPIO.OUT)
+
         self.callbacks = {}
 
     def onGpio(self, channel):
@@ -45,6 +52,9 @@ class GpioService:
     def deregisterCallback(self, pin):
         LoggingService.getLogger().info("GPIO - DEREGISTER " + str(pin))
         GPIO.remove_event_detect(pin)
+
+    def setGpio(self, pin, enable):
+        GPIO.output(pin,enable)
 
     def cleanup(self):
         LoggingService.getLogger().info("GPIO - PRINT GPIO CLEANUP ")
