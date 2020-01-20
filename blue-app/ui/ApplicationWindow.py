@@ -48,6 +48,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     SONGS = 18
     PLAYING_FROM_BLUETOOTH = 19
     NOT_PLAYING = 20
+    EMPTY_SCAN = 21
+    WAIT_WITH_START = 22
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -55,7 +57,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing")
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous")
         ]
 
     def __init__(self, timerService, moneyTracker, gpioService):
@@ -135,6 +137,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
+        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)
         gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
@@ -208,8 +212,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for index, item in enumerate(self.scanData):
             self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(str(item[0])))
 
-        self.setWidgetsEnabled()
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
+        self.setWidgetsEnabled()
+
+        if len(self.scanData) == 0:
+            self.showStatusInfo(2000, self.texts[self.EMPTY_SCAN])
+            self.getActualFocusHandler().setFocus()
+        else:
+            self.getActualFocusHandler().onLeft()
 
     def showStatusInfo(self, duration, message):
         self.ui.insertNewCoinLabel.setText(message)
@@ -236,8 +246,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                self.playLogicService.playFromLocal(info)
-                self.creditService.getSongsRepresentation().overTakeMoney()
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+                    self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START])
+                else:
+                    self.playLogicService.playFromLocal(info)
+                    self.creditService.getSongsRepresentation().overTakeMoney()
+                self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+
 
     def onPlayingStarted(self):
         self.ui.playSlider.setValue(0)
@@ -255,6 +270,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onPlayingStopped(self):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
+        self.ui.timeLabel.setText("")
+        self.ui.playSlider.setValue(0)
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
         self.ui.bluetoothButton.setEnabled(True)
@@ -305,9 +322,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 PlayFileService(self).playWav()
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
+    def formatNumber(self, value):
+        if value < 10:
+            return "0" + str(value)
+        else:
+            return str(value)
+
     def onRefreshTimer(self, value):
         self.ui.playSlider.setValue(value)
-        self.ui.timeLabel.setText(str(int(int(value)/60)) + ":" + str(value%60))
+        self.ui.timeLabel.setText(self.formatNumber(int(int(value)/60)) + ":" + self.formatNumber(value%60))
 
     def showCoinImage(self):
         coinPixMap = QtGui.QPixmap(':/images/coin180.png')

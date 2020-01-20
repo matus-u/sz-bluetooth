@@ -16,9 +16,9 @@ class GpioService:
     def __init__(self):
         LoggingService.getLogger().info("GPIO - INIT")
         GPIO.setmode(orangepi.pc.BOARD)
+        GPIO.setup(28, GPIO.IN)
         GPIO.setup(29, GPIO.IN)
         GPIO.setup(31, GPIO.IN)
-        GPIO.setup(32, GPIO.IN)
         GPIO.setup(33, GPIO.IN)
         GPIO.setup(35, GPIO.IN)
         GPIO.setup(37, GPIO.IN)

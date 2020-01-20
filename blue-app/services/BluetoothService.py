@@ -52,7 +52,7 @@ class BluetoothService(QtCore.QObject):
         timerService.addTimerWorker(self.statusObject)
 
     def scan(self):
-        sleep(2)
+        sleep(4)
         devices = []
         for path, device in BluezUtils.scanDevices():
             devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])

@@ -339,7 +339,7 @@ QLabel#emptyLabel
 QLabel#playLabel,
 QLabel#emptyLabel
 {
-    font-family: "Airstream NF";
+    /*font-family: "Airstream NF";*/
     color: #FFFFFF
 }
 
@@ -409,6 +409,6 @@ QTableView#playQueueWidget,
 QTableWidget#genreWidget,
 QTableWidget#songsWidget
 {
-    font-family: "Airstream NF";
+/*    font-family: "Airstream NF";*/
     font-size: 16px;
 }
