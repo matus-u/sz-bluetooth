@@ -1,4 +1,7 @@
 <RCC>
+    <qresource prefix="/">
+        <file>dark-orange.qss</file>
+    </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>
         <file>search1_fialova.png</file>

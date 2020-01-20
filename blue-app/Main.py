@@ -12,7 +12,7 @@ from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
 
-from generated import themes
+from generated import Resources
 
 if os.getenv('RUN_FROM_DOCKER', False) == False:
     from services.GpioService import GpioService
