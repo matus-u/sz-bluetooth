@@ -32,5 +32,5 @@ class PlayFileService(QtCore.QObject):
         self.player.play()
 
         if not (os.getenv('RUN_FROM_DOCKER', False) == False):
-            QtCore.QTimer.singleShot(5000, lambda: self.emitFinished())
+            QtCore.QTimer.singleShot(10000, lambda: self.emitFinished())
 

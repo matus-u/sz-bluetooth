@@ -1,3 +1,4 @@
 RESOURCES += resources/*.qrc
-FORMS += ui/*.ui
+FORMS += ui/*.ui \
+    ui/SongTableWidget.ui
 

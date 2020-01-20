@@ -17,11 +17,13 @@ from services.MoneyTracker import MoneyTracker
 from services.GpioCallback import GpioCallback
 
 from model.PlayQueue import PlayQueue
+from ui import SongTableWidgetImpl
 
 from ui import SettingsWindow
 from ui import WifiSettingsWindow
 from ui import MusicController
 from ui import FocusHandler
+from ui import Helpers
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -68,10 +70,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.showFullScreen()
         self.moneyTracker = moneyTracker
         self.scanData = []
+
         self.playQueue = PlayQueue()
         self.playQueue.playQueueEmpty.connect(lambda: self.ui.stackedWidget_2.setCurrentIndex(1))
         self.playQueue.playQueueNotEmpty.connect(lambda: self.ui.stackedWidget_2.setCurrentIndex(0))
-        self.ui.playQueueWidget.setModel(self.playQueue)
+        self.playQueue.playQueueAdded.connect(self.onAddToPlayQueue)
+        self.playQueue.playQueueRemoved.connect(self.onRemoveFromPlayQueue)
+        self.ui.songsWidget.itemSelectionChanged.connect(self.onSongSelectionChanged)
 
         self.bluetoothService = BluetoothService(timerService)
         self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue)
@@ -246,7 +251,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START])
                 else:
                     self.playLogicService.playFromLocal(info)
@@ -322,15 +327,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 PlayFileService(self).playWav()
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
-    def formatNumber(self, value):
-        if value < 10:
-            return "0" + str(value)
-        else:
-            return str(value)
-
     def onRefreshTimer(self, value):
         self.ui.playSlider.setValue(value)
-        self.ui.timeLabel.setText(self.formatNumber(int(int(value)/60)) + ":" + self.formatNumber(value%60))
+        self.ui.timeLabel.setText(Helpers.formatDuration(value))
 
     def showCoinImage(self):
         coinPixMap = QtGui.QPixmap(':/images/coin180.png')
@@ -350,3 +349,31 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if shouldWithdraw == QtWidgets.QMessageBox.Yes:
             self.moneyTracker.withdraw()
             QtWidgets.QMessageBox.information(self, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_INFO])
+
+    def onAddToPlayQueue(self):
+        count = self.playQueue.rowCount()
+        self.ui.playQueueWidget.setRowCount(count)
+        data = self.playQueue.data(count - 1)
+        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl(data[0], data[2]))
+
+    def onRemoveFromPlayQueue(self):
+        self.ui.playQueueWidget.clear()
+        count = self.playQueue.rowCount()
+        self.ui.playQueueWidget.setRowCount(count)
+        for i in range(0, count):
+            data = self.playQueue.data(i)
+            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl(data[0], data[2]))
+
+    def onSongSelectionChanged(self):
+        if self.ui.songsWidget.rowCount() > 0:
+            for i in range(0, self.ui.songsWidget.rowCount()):
+                widget = self.ui.songsWidget.cellWidget(i, 0)
+                if widget:
+                    widget.deselect()
+
+            if len(self.ui.songsWidget.selectionModel().selectedRows()) > 0:
+                row = self.ui.songsWidget.selectionModel().selectedRows()[0].row()
+                widget = self.ui.songsWidget.cellWidget(row, 0)
+                if widget:
+                    widget.select()
+        

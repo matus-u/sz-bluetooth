@@ -45,7 +45,7 @@ QTableWidget::item:selected
     border : 3px solid cyan; 
 }
 
-QTableView#playQueueWidget,
+QTableWidget#playQueueWidget,
 QFrame#livePlayFrame,
 QLabel#emptyLabel
 {
@@ -387,7 +387,7 @@ QWidget#bluetoothDeviceLabel
 
 QWidget#livePlayFrame,
 QWidget#emptyLabel,
-QTableView#playQueueWidget,
+QTableWidget#playQueueWidget,
 QTableWidget#genreWidget,
 QTableWidget#songsWidget,
 QTableWidget#devicesWidget
@@ -396,7 +396,7 @@ QTableWidget#devicesWidget
    selection-background-color: rgba(50, 50, 50, 0%);
 }
 
-QTableView#playQueueWidget::item,
+QTableWidget#playQueueWidget::item,
 QTableWidget#genreWidget::item,
 QTableWidget#songsWidget::item,
 QTableWidget#devicesWidget::item
@@ -405,10 +405,20 @@ QTableWidget#devicesWidget::item
     background-color: rgba(50, 50, 50, 0%);
 }
 
-QTableView#playQueueWidget,
+QTableWidget#playQueueWidget,
 QTableWidget#genreWidget,
 QTableWidget#songsWidget
 {
 /*    font-family: "Airstream NF";*/
     font-size: 16px;
+}
+
+SongTableWidgetImpl * {
+    background-color: transparent;
+    font-size: 16px;
+}
+
+SongTableWidgetImpl[selected=true] * {
+    color: #FFFFFF;
+    padding-left: 1px;
 }

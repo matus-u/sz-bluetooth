@@ -4,6 +4,8 @@ from PyQt5 import QtCore
 from mutagen.mp3 import MP3
 import os
 
+from ui import SongTableWidgetImpl
+
 class MusicController(QtCore.QObject):
     def __init__(self, genreWidget, songsWidget):
         super().__init__()
@@ -44,8 +46,9 @@ class MusicController(QtCore.QObject):
         genreKey = self.genreWidget.item(self.genreWidget.selectionModel().selectedRows()[0].row(), 0).text()
         self.songsWidget.setRowCount(len(self.music[genreKey]))
         for index, item in enumerate(self.music[genreKey]):
-            self.songsWidget.setItem(index,0, QtWidgets.QTableWidgetItem(item[0]))
+            #self.songsWidget.setItem(index,0, QtWidgets.QTableWidgetItem(item[0]))
             #self.songsWidget.setItem(index,1, QtWidgets.QTableWidgetItem(str(int(item[2]))))
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item[0], str(int(item[2]))))
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
         
