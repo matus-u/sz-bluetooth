@@ -223,6 +223,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for index, item in enumerate(self.scanData):
             self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(str(item[0])))
 
+        if len(self.scanData) > 0:
+            self.ui.devicesWidget.selectRow(0)
+
         self.ui.scanButton.setText(self.texts[self.SCAN_STR])
         self.setWidgetsEnabled()
 
@@ -241,9 +244,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING])
             return
 
-        self.setWidgetsDisabled() 
-        macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][1][1:-1]
-        self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
+        if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
+            self.setWidgetsDisabled()
+            macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][1][1:-1]
+            self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
 
     def onGenreConfirm(self):
         if self.ui.genreWidget.rowCount() > 0:
@@ -257,7 +261,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START])
                 else:
                     self.playLogicService.playFromLocal(info)
