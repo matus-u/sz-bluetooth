@@ -25,8 +25,8 @@ class PlayFileService(QtCore.QObject):
     def emitFinished(self):
         self.finished.emit()
 
-    def playMp3(self, mp3info):
-        url = QtCore.QUrl.fromLocalFile(mp3info[1])
+    def playMp3(self, path):
+        url = QtCore.QUrl.fromLocalFile(path[1])
         content = QtMultimedia.QMediaContent(url)
         self.player.setMedia(content)
         self.player.play()

@@ -2,6 +2,34 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+class Mp3PlayQueueObject:
+    def __init__(self, mp3Info):
+        self.mp3info = mp3Info
+
+    def duration(self):
+        return self.mp3info[2]
+
+    def name(self):
+        return self.mp3info[0]
+
+    def path(self):
+        return self.mp3info[1]
+
+class BluetoothPlayQueueObject:
+    def __init__(self,  name, macAddr, duration):
+        self._name = name
+        self._macAddr = macAddr
+        self._duration = duration
+
+    def duration(self):
+        return self._duration
+
+    def name(self):
+        return self._name
+
+    def macAddr(self):
+        return self._macAddr
+
 class PlayQueue(QtCore.QAbstractTableModel):
 
     playQueueEmpty = QtCore.pyqtSignal()
@@ -24,9 +52,9 @@ class PlayQueue(QtCore.QAbstractTableModel):
         self.playQueueRemoved.emit()
         return val 
 
-    def addToPlayQueue(self, mp3info):
+    def addToPlayQueue(self, playQueueObject):
         position = len(self.queue)
-        self.queue.append(mp3info)
+        self.queue.append(playQueueObject)
         if self.rowCount() == 1:
             self.playQueueNotEmpty.emit()
         self.playQueueAdded.emit()

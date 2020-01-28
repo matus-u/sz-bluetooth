@@ -17,7 +17,7 @@ from services.MoneyTracker import MoneyTracker
 from services.GpioCallback import GpioCallback
 from services.LedButtonService import LedButtonService
 
-from model.PlayQueue import PlayQueue
+from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
 from ui import SongTableWidgetImpl
 
 from ui import SettingsWindow
@@ -215,6 +215,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onScanButton(self):
         self.ui.devicesWidget.clear()
+        self.ui.devicesWidget.clearContents()
         self.setWidgetsDisabled()
         self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
         QtCore.QCoreApplication.processEvents()
@@ -245,9 +246,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
 
         if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
-            self.setWidgetsDisabled()
+            self.onBackFromBlueButton()
             macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][1][1:-1]
-            self.playLogicService.playFromBluetooth(macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
+            name = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][0]
+            self.ui.devicesWidget.clear()
+            self.ui.devicesWidget.clearContents()
+            self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))
+            self.creditService.clearCredit()
 
     def onGenreConfirm(self):
         if self.ui.genreWidget.rowCount() > 0:
@@ -261,11 +266,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         info = self.musicController.getFullSelectedMp3Info()
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
 
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START])
                 else:
-                    self.playLogicService.playFromLocal(info)
+                    self.playLogicService.play(Mp3PlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
 
@@ -274,15 +280,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playSlider.setValue(0)
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
-            self.ui.playSlider.setMaximum(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation())
-            self.creditService.clearCredit()
             self.ui.playLabel.setText(self.texts[self.PLAYING_FROM_BLUETOOTH])
         else:
             self.ui.disconnectButton.setEnabled(False)
-            self.ui.playLabel.setText(self.playLogicService.getActualPlayingMp3()[0])
-            self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingMp3()[2])
-        self.onBackFromBlueButton()
-        self.ui.bluetoothButton.setEnabled(False)
+            self.ui.playLabel.setText(self.playLogicService.getActualPlayingInfo().name())
+
+        self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
 
     def onPlayingStopped(self):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
@@ -291,13 +294,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
         self.ui.bluetoothButton.setEnabled(True)
-        self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
-        self.setWidgetsEnabled()
+        #self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
 
-    def onPlayingFailed(self):
-        deviceName = self.ui.devicesWidget.item(self.ui.devicesWidget.selectionModel().selectedRows()[0].row(), 0).text()
+    def onPlayingFailed(self, deviceName):
         self.showStatusInfo(2000, self.texts[self.CONNECTION_FAILED_STR].format(deviceName))
-        self.setWidgetsEnabled()
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
@@ -365,7 +365,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
         data = self.playQueue.data(count - 1)
-        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl(data[0], data[2]))
+        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl(data.name(), data.duration()))
 
     def onRemoveFromPlayQueue(self):
         self.ui.playQueueWidget.clear()
@@ -373,7 +373,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playQueueWidget.setRowCount(count)
         for i in range(0, count):
             data = self.playQueue.data(i)
-            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl(data[0], data[2]))
+            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl(data.name(), data.duration()))
 
     def onSongSelectionChanged(self):
         if self.ui.songsWidget.rowCount() > 0:
