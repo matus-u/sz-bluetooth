@@ -14,7 +14,7 @@ class AppSettingsNotifier(QtCore.QObject):
 
 
 class AppSettings:
-    SettingsPath = "configs/blue-app.conf"
+    SettingsPath = "../blue-app-configs/blue-app.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
     TimeZoneList = ["UTC","Europe/Budapest","Europe/Bratislava","Europe/London"]
     LanguageList = ["english","hungarian","slovak"]
@@ -25,7 +25,7 @@ class AppSettings:
     CurrencyList = ["EUR","HUF"]
     CurrencyString = "currency"
 
-    WirelessSettingsPath = "configs/wireless.conf"
+    WirelessSettingsPath = "../blue-app-configs/wireless.conf"
     WirelessEnabledString = "Enabled"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"

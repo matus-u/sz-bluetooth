@@ -3,7 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 class MoneyTracker(QtCore.QObject):
-    SettingsPath = "configs/money-tracking.conf"
+    SettingsPath = "../blue-app-configs/money-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     FromLastWithdrawCounter = "FromLastWithdrawCounter"
