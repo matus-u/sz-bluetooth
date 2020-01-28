@@ -16,6 +16,7 @@ from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
 from services.GpioCallback import GpioCallback
 from services.LedButtonService import LedButtonService
+from services.WheelFortuneService import WheelFortuneService
 
 from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
 from ui import SongTableWidgetImpl
@@ -25,6 +26,7 @@ from ui import WifiSettingsWindow
 from ui import MusicController
 from ui import FocusHandler
 from ui import Helpers
+from ui import WheelSettingsWindow
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -152,6 +154,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
         self.getActualFocusHandler().setFocus()
 
+        self.wheelFortuneService = WheelFortuneService()
+        self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
+
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)
         gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
@@ -187,6 +192,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.disconnectButton.setVisible(enable)
             self.ui.adminLeaveLabel.setVisible(enable)
             self.ui.leaveAdminButton.setVisible(enable)
+            self.ui.wheelFortuneButton.setVisible(enable)
             if enable:
                 self.temperatureStatus.start()
             else:

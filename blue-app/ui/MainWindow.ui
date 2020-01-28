@@ -786,6 +786,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="wheelFortuneButton">
+            <property name="text">
+             <string>Wheel settings</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
