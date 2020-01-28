@@ -53,6 +53,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     NOT_PLAYING = 20
     EMPTY_SCAN = 21
     WAIT_WITH_START = 22
+    ADDED_TO_QUEUE = 23
+    CONNECTION_INITIALIZED = 24
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -60,7 +62,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous")
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}")
         ]
 
     def __init__(self, timerService, moneyTracker, gpioService):
@@ -251,9 +253,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             name = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][0]
             self.ui.devicesWidget.clear()
             self.ui.devicesWidget.clearContents()
-            self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))
+            code = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))
             self.creditService.clearCredit()
 
+
+            if code == PlayLogicService.PLAY_RETURN_QUEUE:
+                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(23))
+            else:
+                self.showStatusInfo(2000, self.texts[self.CONNECTION_INITIALIZED].format(name))
+        
     def onGenreConfirm(self):
         if self.ui.genreWidget.rowCount() > 0:
             if len(self.ui.genreWidget.selectionModel().selectedRows()) > 0:

@@ -12,6 +12,9 @@ class PlayLogicService(QtCore.QObject):
     refreshTimerSignal = QtCore.pyqtSignal(int)
     playingStopped = QtCore.pyqtSignal()
 
+    PLAY_RETURN_QUEUE = 0
+    PLAY_RETURN_IMMEDIATELLY = 1
+
     def __init__(self, bluetoothService, playQueue):
         super().__init__()
         self.playQueue = playQueue
@@ -46,8 +49,10 @@ class PlayLogicService(QtCore.QObject):
                 self.playingStarted.emit()
                 self.counter = 0
                 self.refreshTimer.start(1000)
+            return PlayLogicService.PLAY_RETURN_IMMEDIATELLY
         else:
             self.playQueue.addToPlayQueue(playQueueObject)
+            return PlayLogicService.PLAY_RETURN_QUEUE
 
     def onConnectedSignal(self, exitCode):
         if exitCode == 1:
