@@ -35,6 +35,7 @@ class CreditSongRepresentation:
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)
     moneyInserted = QtCore.pyqtSignal(float)
+    creditCleared = QtCore.pyqtSignal()
 
     def __init__(self, coinSettings):
         super().__init__()
@@ -42,6 +43,9 @@ class CreditService(QtCore.QObject):
         self.coinSettings = coinSettings
         self.coinService = CoinProtocolService()
         self.coinService.actualStatus.connect(self.onCoinChannel)
+
+        self.moneyLevelCounter = 0
+        self.moneyLevelValue = 0
 
     def onCoinChannel(self, channel, count):
         money = self.coinSettings[channel] * count
@@ -61,6 +65,7 @@ class CreditService(QtCore.QObject):
 
     def clearCredit(self):
         self.changeCredit(-1 * self.credit)
+        self.creditCleared.emit()
 
     def getCredit(self):
         return self.credit

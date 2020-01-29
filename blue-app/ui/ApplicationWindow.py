@@ -103,8 +103,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.texts = self.createTrTexts()
 
         self.creditService = CreditService(AppSettings.actualCoinSettings())
-        self.creditService.creditChanged.connect(self.onCreditChange, QtCore.Qt.QueuedConnection)
-        self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters, QtCore.Qt.QueuedConnection)
+        self.creditService.creditChanged.connect(self.onCreditChange)
+        self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters)
         self.creditService.changeCredit(0)
         timerService.addTimerWorker(self.temperatureStatus)
 
@@ -157,6 +157,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.wheelFortuneService = WheelFortuneService()
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
+        self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)
@@ -372,6 +373,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.changeCredit(0.1)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
             self.moneyTracker.addToCounters(0.1)
+            self.wheelFortuneService.moneyInserted(0.1)
 
     def onWithdrawMoneyButton(self):
         shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])

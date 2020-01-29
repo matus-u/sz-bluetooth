@@ -12,9 +12,12 @@ class WheelFortuneService(QtCore.QObject):
     def __init__(self):
         super().__init__()
 
+        self.counter = 0.0
         self.settings = QtCore.QSettings(WheelFortuneService.SettingsPath, WheelFortuneService.SettingsFormat)
 
     def setSettings(self, enabled, moneyLevel):
+        if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
+            self.counter = 0.0
         self.settings.setValue(WheelFortuneService.Enabled, enabled)
         self.settings.setValue(WheelFortuneService.MoneyLevel, moneyLevel)
 
@@ -23,4 +26,16 @@ class WheelFortuneService(QtCore.QObject):
 
     def moneyLevel(self):
         return self.settings.value(WheelFortuneService.MoneyLevel, 0.0, float)
+
+    def moneyInserted(self, money):
+        if self.isEnabled():
+            mLevel = self.moneyLevel()
+            self.counter = round (self.counter + round(money, 2), 2)
+
+            while (self.counter >= mLevel):
+                self.counter = self.counter - self.moneyLevel()
+                self.tryWin()
+
+    def tryWin(self):
+        print ("TRY WIN")
 
