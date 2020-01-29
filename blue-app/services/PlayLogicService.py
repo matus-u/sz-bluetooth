@@ -7,6 +7,7 @@ from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
 class PlayLogicService(QtCore.QObject):
 
+    playingInitialized = QtCore.pyqtSignal()
     playingStarted = QtCore.pyqtSignal()
     playingFailed = QtCore.pyqtSignal(str)
     refreshTimerSignal = QtCore.pyqtSignal(int)
@@ -31,6 +32,9 @@ class PlayLogicService(QtCore.QObject):
         self.refreshTimer.timeout.connect(self.onRefreshTimer)
         self.counter = 0
 
+        self.bluetoothConnectionTimer = QtCore.QTimer()
+        self.bluetoothConnectionTimer.timeout.connect(lambda: self.onConnectedSignal(1))
+
     def onRefreshTimer(self):
         self.counter = self.counter + 1
         self.refreshTimerSignal.emit(self.counter)
@@ -41,6 +45,8 @@ class PlayLogicService(QtCore.QObject):
                 self.state = "BLUETOOTH"
                 self.actualPlayInfo = playQueueObject
                 self.bluetoothService.connect(playQueueObject.macAddr(), playQueueObject.duration())
+                self.bluetoothConnectionTimer.setSingleShot(True)
+                self.bluetoothConnectionTimer.start(playQueueObject.duration()*1000)
 
             if isinstance(playQueueObject, Mp3PlayQueueObject):
                 self.state = "PLAYING"
@@ -49,6 +55,9 @@ class PlayLogicService(QtCore.QObject):
                 self.playingStarted.emit()
                 self.counter = 0
                 self.refreshTimer.start(1000)
+
+            self.playingInitialized.emit()
+
             return PlayLogicService.PLAY_RETURN_IMMEDIATELLY
         else:
             self.playQueue.addToPlayQueue(playQueueObject)
@@ -57,9 +66,14 @@ class PlayLogicService(QtCore.QObject):
     def onConnectedSignal(self, exitCode):
         if exitCode == 1:
             self.playingFailed.emit(self.actualPlayInfo.name())
-            self.state = "IDLE"
-            self.onPlayingFinished()
+            if (self.bluetoothConnectionTimer.isActive()):
+                self.bluetoothService.connect(self.actualPlayInfo.macAddr(), self.actualPlayInfo.duration())
+            else:
+                self.state = "IDLE"
+                self.onPlayingFinished()
+
         else:
+            self.bluetoothConnectionTimer.stop()
             self.playingStarted.emit()
             self.counter = 0
             self.refreshTimer.start(1000)

@@ -9,12 +9,16 @@ class Agent():
 class PairRequest(QtCore.QObject):
     connected = QtCore.pyqtSignal(int)
 
+
     def __init__(self):
         super().__init__()
 
     def pair(self, deviceAddress):
-        self.connected.emit(0)
+        QtCore.QTimer.singleShot(5000, self.end)
         pass
+
+    def end(self):
+        self.connected.emit(0)
 
     def disconnect(self):
         pass

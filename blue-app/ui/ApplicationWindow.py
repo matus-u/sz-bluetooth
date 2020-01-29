@@ -86,6 +86,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService = BluetoothService(timerService)
         self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue)
         self.playLogicService.refreshTimerSignal.connect(self.onRefreshTimer)
+        self.playLogicService.playingInitialized.connect(self.onPlayingInitialized)
         self.playLogicService.playingStarted.connect(self.onPlayingStarted)
         self.playLogicService.playingStopped.connect(self.onPlayingStopped)
         self.playLogicService.playingFailed.connect(self.onPlayingFailed)
@@ -265,8 +266,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
                 self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(23))
-            else:
-                self.showStatusInfo(2000, self.texts[self.CONNECTION_INITIALIZED].format(name))
         
     def onGenreConfirm(self):
         if self.ui.genreWidget.rowCount() > 0:
@@ -290,8 +289,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
 
 
-    def onPlayingStarted(self):
+    def onPlayingInitialized(self):
         self.ui.playSlider.setValue(0)
+        self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
+        if self.playLogicService.isPlayingFromBluetooth():
+            self.ui.playLabel.setText(self.texts[self.CONNECTION_INITIALIZED].format(self.playLogicService.getActualPlayingInfo().name()))
+            
+
+    def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.disconnectButton.setEnabled(True)
             self.ui.playLabel.setText(self.texts[self.PLAYING_FROM_BLUETOOTH])
@@ -299,7 +304,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.disconnectButton.setEnabled(False)
             self.ui.playLabel.setText(self.playLogicService.getActualPlayingInfo().name())
 
-        self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
 
     def onPlayingStopped(self):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
