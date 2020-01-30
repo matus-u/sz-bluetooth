@@ -15,6 +15,8 @@ class WheelFortuneService(QtCore.QObject):
         self.counter = 0.0
         self.settings = QtCore.QSettings(WheelFortuneService.SettingsPath, WheelFortuneService.SettingsFormat)
 
+        self.probabilityValues = {}
+
     def setSettings(self, enabled, moneyLevel):
         if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
             self.counter = 0.0
@@ -35,6 +37,10 @@ class WheelFortuneService(QtCore.QObject):
             while (self.counter >= mLevel):
                 self.counter = self.counter - self.moneyLevel()
                 self.tryWin()
+
+    def setNewProbabilityValues(self, values):
+        self.probabilityValues = values
+        print (values)
 
     def tryWin(self):
         print ("TRY WIN")

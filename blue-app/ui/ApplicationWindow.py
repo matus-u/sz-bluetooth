@@ -16,7 +16,6 @@ from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
 from services.GpioCallback import GpioCallback
 from services.LedButtonService import LedButtonService
-from services.WheelFortuneService import WheelFortuneService
 
 from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
 from ui import SongTableWidgetImpl
@@ -67,7 +66,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}")
         ]
 
-    def __init__(self, timerService, moneyTracker, gpioService):
+    def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -155,7 +154,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
         self.getActualFocusHandler().setFocus()
 
-        self.wheelFortuneService = WheelFortuneService()
+        self.wheelFortuneService = wheelFortuneService
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 

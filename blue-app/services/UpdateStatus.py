@@ -17,6 +17,8 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     adminModeServerRequest = QtCore.pyqtSignal()
     adminModeStateRequested = QtCore.pyqtSignal()
 
+    newWinProbabilityValues = QtCore.pyqtSignal(object)
+
     def __init__(self, macAddr, moneyTracker):
         super().__init__(10000)
         self.macAddr = macAddr
@@ -102,6 +104,10 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         if text["event"] == "admin-mode-request":
             LoggingService.getLogger().info("Admin mode requested")
             self.adminModeServerRequest.emit()
+
+        if text["event"] == "win-probability-settings":
+            LoggingService.getLogger().info("Win probality settings: {}".format(text["payload"]))
+            self.newWinProbabilityValues.emit(text["payload"])
 
     def onDisconnect(self):
         self.stopTimerSync()

@@ -11,6 +11,7 @@ from services.UpdateStatus import WebSocketStatus
 from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
+from services.WheelFortuneService import WheelFortuneService
 
 from generated import Resources
 
@@ -63,7 +64,10 @@ def main():
     webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService)
+    wheelFortuneService = WheelFortuneService()
+    webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
+
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
