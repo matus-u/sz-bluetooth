@@ -61,11 +61,12 @@ def main():
     gpioService = GpioService()
     adminModeTracker = AdminModeTracker(gpioService)
 
-    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker)
+    wheelFortuneService = WheelFortuneService()
+    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
-    wheelFortuneService = WheelFortuneService()
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
+    wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
     application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService)
 

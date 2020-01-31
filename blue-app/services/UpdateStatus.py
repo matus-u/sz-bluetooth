@@ -19,10 +19,11 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
     newWinProbabilityValues = QtCore.pyqtSignal(object)
 
-    def __init__(self, macAddr, moneyTracker):
+    def __init__(self, macAddr, moneyTracker, wheelFortuneService):
         super().__init__(10000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
+        self.wheelFortuneService = wheelFortuneService
         self.moneyServer = AppSettings.actualMoneyServer()
         self.websocket = QtWebSockets.QWebSocket(parent=self)
         self.connectScheduled = True
@@ -76,12 +77,31 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         else:
             LoggingService.getLogger().info("Stop connecting to empty websocket!")
 
+
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
         self.adminModeStateRequested.emit()
         self.startTimerSync()
         self.onTimeout()
+        self.sendWinProbsStatus()
+
+    def sendWinProbsStatus(self):
+        logger = LoggingService.getLogger()
+        logger.info("Send win probs status:")
+        data = { 'id' : self.macAddr, 'probability-data' : self.wheelFortuneService.actualProbs() }
+        textMsg = self.createPhxMessage("win-probability-status", data)
+        LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+        self.websocket.sendTextMessage(textMsg)
+
+    def sendReducePrizeCount(self, prizeCountIndex):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                event = "win-probability-change"
+                data = { 'id' : self.macAddr, 'index' : prizeCountIndex }
+                textMsg = self.createPhxMessage(event, data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
 
     def onAdminModeLocalChange(self, enabled):
         if self.websocket is not None:
