@@ -129,6 +129,18 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             LoggingService.getLogger().info("Win probality settings: {}".format(text["payload"]))
             self.newWinProbabilityValues.emit(text["payload"])
 
+        if text["event"] == "get-actual-admin-mode":
+            LoggingService.getLogger().info("get-actual-admin-mode")
+            self.adminModeStateRequested.emit()
+
+        if text["event"] == "get-actual-money-value":
+            LoggingService.getLogger().info("get-actual-money-value")
+            self.onTimeout()
+
+        if text["event"] == "get-actual-prob-values":
+            LoggingService.getLogger().info("get-actual-prob-values")
+            self.sendWinProbsStatus()
+
     def onDisconnect(self):
         self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
