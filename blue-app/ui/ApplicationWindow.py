@@ -56,6 +56,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     WAIT_WITH_START = 22
     ADDED_TO_QUEUE = 23
     CONNECTION_INITIALIZED = 24
+    WIN_PROB_UPDATED = 25
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -63,7 +64,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}")
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated")
         ]
 
     def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService):
@@ -157,6 +158,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelFortuneService = wheelFortuneService
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
+
+        self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED]))
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)

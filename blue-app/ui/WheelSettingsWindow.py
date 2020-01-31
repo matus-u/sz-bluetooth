@@ -19,6 +19,18 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.ui.fortuneCheckBox.setChecked(self.service.isEnabled())
         self.ui.moneySpinBox.setValue(self.service.moneyLevel())
 
+        self.wheelFortuneService = wheelFortuneService
+        self.wheelFortuneService.probabilitiesUpdated.connect(self.updateTable)
+        self.updateTable()
+
     def onOkButton(self):
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())
         self.accept()
+
+    def updateTable(self):
+        self.ui.probTableWidget.setRowCount(10)
+        for prob, count, name, index in zip(self.wheelFortuneService.getAllProbs(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames(), range(0,10)):
+            self.ui.probTableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(str(index)))
+            self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(prob)))
+            self.ui.probTableWidget.setItem(index, 2, QtWidgets.QTableWidgetItem(str(count)))
+            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem(str(name)))
