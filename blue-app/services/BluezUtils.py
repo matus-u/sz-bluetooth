@@ -45,7 +45,13 @@ def removeDevice(deviceAddress):
     findAdapter().RemoveDevice(findDevice(deviceAddress))
 
 def startDiscovery():
-    findAdapter().StartDiscovery()
+    properties_manager = dbus.Interface(BluezUtils.findAdapter(), 'org.freedesktop.DBus.Properties')
+    try:
+        if properties_manager.Get(ADAPTER_INTERFACE, "Discovering") == 0:
+            cleanupDevices()
+            findAdapter().StartDiscovery()
+    except:
+        pass
 
 def cleanupDevices():
     bus = dbus.SystemBus()

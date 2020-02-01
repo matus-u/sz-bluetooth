@@ -44,7 +44,6 @@ class BluetoothService(QtCore.QObject):
         self.connectionTimer.setSingleShot(True)
         self.connectionTimer.timeout.connect(lambda: self.forceDisconnect())
         self.agent = BluetoothAgent.Agent()
-        BluezUtils.cleanupDevices()
         BluezUtils.startDiscovery()
 
         self.statusObject = BluetoothStatusObject(1000, self.getConnectedAddress)
@@ -52,6 +51,7 @@ class BluetoothService(QtCore.QObject):
         timerService.addTimerWorker(self.statusObject)
 
     def scan(self):
+        BluezUtils.startDiscovery()
         sleep(4)
         devices = []
         for path, device in BluezUtils.scanDevices():
