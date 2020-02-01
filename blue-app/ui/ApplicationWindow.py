@@ -67,7 +67,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated")
         ]
 
-    def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService):
+    def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService, printingService):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()

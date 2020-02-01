@@ -17,8 +17,10 @@ from generated import Resources
 
 if os.getenv('RUN_FROM_DOCKER', False) == False:
     from services.GpioService import GpioService
+    from services.PrinterService import PrintingService
 else:
     from services.mocks.GpioService import GpioService
+    from services.mocks.PrinterService import PrintingService
 
 def setStyle(app):
     QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("motif"))
@@ -68,7 +70,10 @@ def main():
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService)
+    printingService = PrintingService()
+    wheelFortuneService.win.connect(lambda number: printingService.printTicket(AppSettings.actualDeviceName(), "None", number))
+
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService, printingService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
