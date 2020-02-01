@@ -57,6 +57,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     ADDED_TO_QUEUE = 23
     CONNECTION_INITIALIZED = 24
     WIN_PROB_UPDATED = 25
+    PRINT_ERROR = 26
+    LOW_PAPER = 27
+    NO_PAPER = 28
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -64,7 +67,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated")
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
+        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."), 
         ]
 
     def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService, printingService):
@@ -160,6 +164,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED]))
+
+        printingService.printError.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.PRINT_ERROR]).format(printingService.getErrorStatus()))
+        printingService.lowPaper.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.LOW_PAPER]))
+        printingService.noPaper.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.NO_PAPER]))
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)

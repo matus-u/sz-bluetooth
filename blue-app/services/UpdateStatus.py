@@ -19,14 +19,16 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
     newWinProbabilityValues = QtCore.pyqtSignal(object)
 
-    def __init__(self, macAddr, moneyTracker, wheelFortuneService):
+    def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService):
         super().__init__(10000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
         self.wheelFortuneService = wheelFortuneService
         self.moneyServer = AppSettings.actualMoneyServer()
         self.websocket = QtWebSockets.QWebSocket(parent=self)
+        self.printService = printService
         self.connectScheduled = True
+        self.ref = 0
 
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
 
@@ -85,12 +87,21 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.startTimerSync()
         self.onTimeout()
         self.sendWinProbsStatus()
+        self.sendPrintStatus()
 
     def sendWinProbsStatus(self):
         logger = LoggingService.getLogger()
         logger.info("Send win probs status:")
         data = { 'id' : self.macAddr, 'probability-data' : self.wheelFortuneService.actualProbs() }
         textMsg = self.createPhxMessage("win-probability-status", data)
+        LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+        self.websocket.sendTextMessage(textMsg)
+
+    def sendPrintStatus(self):
+        logger = LoggingService.getLogger()
+        logger.info("Send print status:")
+        data = { 'id' : self.macAddr, 'print-status-data' : self.printService.getErrorDesc() }
+        textMsg = self.createPhxMessage("print-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
         self.websocket.sendTextMessage(textMsg)
 
@@ -140,6 +151,10 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         if text["event"] == "get-actual-prob-values":
             LoggingService.getLogger().info("get-actual-prob-values")
             self.sendWinProbsStatus()
+
+        if text["event"] == "get-print-status":
+            LoggingService.getLogger().info("get-print-status")
+            self.sendPrintStatus()
 
     def onDisconnect(self):
         self.stopTimerSync()

@@ -21,6 +21,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def __init__(self):
         super().__init__()
+        self.printerActive = 1
 
         self.counter = 0.0
         self.settings = QtCore.QSettings(WheelFortuneService.SettingsPath, WheelFortuneService.SettingsFormat)
@@ -71,21 +72,25 @@ class WheelFortuneService(QtCore.QObject):
         return counts
 
     def tryWin(self):
-        probs = self.getAllProbs()
-        probs =  [(float(x) / 100) for x in probs]
-        values = [x for x in range (0,10)]
-        win = random.choices(values, probs)
-        if win[0] > 0:
-            key = "count_" + str(win[0])
-            if self.probabilityValues[key] > 0:
-                self.probabilityValues[key] = self.probabilityValues[key] - 1
-                self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
-                self.reducePrizeCount.emit(win[0])
-                self.win.emit(win[0])
-                return
+        if self.printerActive == 1:
+            probs = self.getAllProbs()
+            probs =  [(float(x) / 100) for x in probs]
+            values = [x for x in range (0,10)]
+            win = random.choices(values, probs)
+            if win[0] > 0:
+                key = "count_" + str(win[0])
+                if self.probabilityValues[key] > 0:
+                    self.probabilityValues[key] = self.probabilityValues[key] - 1
+                    self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
+                    self.reducePrizeCount.emit(win[0])
+                    self.win.emit(win[0])
+                    return
     
         self.noWin.emit(win[0])
 
     def actualProbs(self):
         return self.probabilityValues
+
+    def lockWheel(self):
+        self.printerActive = 0
 

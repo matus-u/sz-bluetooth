@@ -64,20 +64,27 @@ def main():
     adminModeTracker = AdminModeTracker(gpioService)
 
     wheelFortuneService = WheelFortuneService()
-    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService)
+    printingService = PrintingService()
+
+    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService, printingService)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
-    printingService = PrintingService()
     wheelFortuneService.win.connect(lambda number: printingService.printTicket(AppSettings.actualDeviceName(), "None", number))
+    printingService.printFinished.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
+
+    printingService.printError.connect(lambda: wheelFortuneService.lockWheel())
+    printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel())
 
     application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService, printingService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
+    printingService.initialize()
+
     application.show()
     application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
