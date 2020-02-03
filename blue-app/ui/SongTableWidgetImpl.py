@@ -28,4 +28,3 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         if self.property(SongTableWidgetImpl.SELECT_STRING):
             self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
             self.setStyleSheet("/*  */")
-        

@@ -50,7 +50,7 @@ class PlayQueue(QtCore.QAbstractTableModel):
         if self.isEmpty():
             self.playQueueEmpty.emit()
         self.playQueueRemoved.emit()
-        return val 
+        return val
 
     def addToPlayQueue(self, playQueueObject):
         position = len(self.queue)
@@ -61,7 +61,9 @@ class PlayQueue(QtCore.QAbstractTableModel):
 
     def rowCount(self):
         return len(self.queue)
-    
+
     def data(self, index):
         return self.queue[index]
 
+    def totalPlayQueueTime(self):
+        return sum([x.duration() for x in self.queue])

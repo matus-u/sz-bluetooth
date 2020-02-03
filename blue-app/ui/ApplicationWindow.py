@@ -385,12 +385,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.information(self, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_INFO])
 
     def onAddToPlayQueue(self):
+        self.updateTotalPlayQueueLabel()
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
         data = self.playQueue.data(count - 1)
         self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl(data.name(), data.duration()))
 
     def onRemoveFromPlayQueue(self):
+        self.updateTotalPlayQueueLabel()
         self.ui.playQueueWidget.clear()
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
@@ -410,4 +412,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 widget = self.ui.songsWidget.cellWidget(row, 0)
                 if widget:
                     widget.select()
-        
+
+    def updateTotalPlayQueueLabel(self):
+        self.ui.timeOfPlayQueueLabel.setText(Helpers.formatDuration(self.playQueue.totalPlayQueueTime()))
