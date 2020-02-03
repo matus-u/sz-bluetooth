@@ -18,14 +18,15 @@ from services.GpioCallback import GpioCallback
 from services.LedButtonService import LedButtonService
 
 from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
-from ui import SongTableWidgetImpl
 
+from ui import SongTableWidgetImpl
 from ui import SettingsWindow
 from ui import WifiSettingsWindow
 from ui import MusicController
 from ui import FocusHandler
 from ui import Helpers
 from ui import WheelSettingsWindow
+from ui import FortuneWheelWindow
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -179,6 +180,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
+
+        w = FortuneWheelWindow.FortuneWheelWindow(self)
+        self.openSubWindow(w)
+
 
     def onBackFromBlueButton(self):
         self.ui.stackedWidget.setCurrentIndex(0)
