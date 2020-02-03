@@ -27,6 +27,7 @@ QLabel#emptyLabel
    border : 3px solid cyan; 
    margin: 10px; border-radius: 25px;
    margin-top: 0px;
+   margin-bottom: 0px;
    padding: 20px;
    selection-background-color: #4d4d4d;
 }
@@ -302,7 +303,7 @@ QSlider {
     padding-top: 5px;
     padding-left: 20;
     padding-right: 20;
-    padding-bottom: 20;
+    padding-bottom: 0px;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 0px;

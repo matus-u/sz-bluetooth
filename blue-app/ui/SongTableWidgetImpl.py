@@ -13,7 +13,10 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.ui = Ui_SongTableWidget()
         self.ui.setupUi(self)
         self.ui.songNameLabel.setText(name)
-        self.ui.songDurationLabel.setText(Helpers.formatDuration(duration))
+        if duration != -1:
+            self.ui.songDurationLabel.setText(Helpers.formatDuration(duration))
+        else:
+            self.ui.songDurationLabel.setText("--:--")
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
 
     def select(self):

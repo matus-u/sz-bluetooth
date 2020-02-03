@@ -125,12 +125,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
-        self.musicController = MusicController.MusicController(self.ui.genreWidget, self.ui.songsWidget)
-        self.ui.genreWidget.itemSelectionChanged.connect(self.onGenreConfirm)
-        self.mainFocusHandler = FocusHandler.InputHandler(
-            (FocusHandler.ButtonFocusProxy(self.ui.bluetoothButton, self.ledButtonService),
-             FocusHandler.TableWidgetFocusProxy(self.ui.genreWidget, None, self.ledButtonService),
-             FocusHandler.TableWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService)))
+        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel)
+        self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
+        self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             (FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
@@ -138,7 +135,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
              FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)))
 
         self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
-        self.ui.bluetoothButton.clicked.connect(self.onBluetoothButton)
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.getActualFocusHandler().onLeft())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), self, lambda: self.getActualFocusHandler().onRight())
@@ -152,7 +148,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.connectGpio(gpioService, 35, lambda: self.getActualFocusHandler().onUp())
         self.connectGpio(gpioService, 37, lambda: self.getActualFocusHandler().onConfirm())
 
-        self.ui.genreWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
@@ -163,11 +158,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 
-        self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED]))
+        self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
 
-        printingService.printError.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.PRINT_ERROR]).format(printingService.getErrorStatus()))
-        printingService.lowPaper.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.LOW_PAPER]))
-        printingService.noPaper.connect(lambda: self.ui.insertNewCoinLabel.setText(self.texts[self.NO_PAPER]))
+        printingService.printError.connect(lambda: self.ui.errorLabel.setText(self.texts[self.PRINT_ERROR]).format(printingService.getErrorStatus()))
+        printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
+        printingService.noPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.NO_PAPER]))
 
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)
@@ -180,7 +175,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             return self.bluetoothFocusHandler
 
-    def onBluetoothButton(self):
+    def onBluetoothGenre(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
@@ -251,18 +246,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.setWidgetsEnabled()
 
         if len(self.scanData) == 0:
-            self.showStatusInfo(2000, self.texts[self.EMPTY_SCAN])
+            self.showStatusInfo(2000, self.texts[self.EMPTY_SCAN], self.ui.infoLabel)
             self.getActualFocusHandler().setFocus()
         else:
             self.getActualFocusHandler().onLeft()
 
-    def showStatusInfo(self, duration, message):
-        self.ui.insertNewCoinLabel.setText(message)
-        QtCore.QTimer.singleShot(duration, lambda: self.ui.insertNewCoinLabel.setText(""))
+    def showStatusInfo(self, duration, message, label):
+        label.setText(message)
+        QtCore.QTimer.singleShot(duration, lambda: label.setText(""))
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
-            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING])
+            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.insertNewCoinLabel)
             return
 
         if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
@@ -274,26 +269,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             code = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))
             self.creditService.clearCredit()
 
-
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
-                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(23))
-        
-    def onGenreConfirm(self):
-        if self.ui.genreWidget.rowCount() > 0:
-            if len(self.ui.genreWidget.selectionModel().selectedRows()) > 0:
-                self.musicController.reloadSongsWidget()
+                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(23), self.ui.infoLabel)
 
     def onPlaySong(self):
-        if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
-            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING])
-            return
         info = self.musicController.getFullSelectedMp3Info()
+
+        #SPECIAL HANDLING OF BLUETOOTH
+        if info != "" and info[3] == True:
+            info[4]()
+            return
+
+        if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
+            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.insertNewCoinLabel)
+            return
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
                 #if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
                 if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
 
-                    self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START])
+                    self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()
@@ -305,7 +300,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.playLabel.setText(self.texts[self.CONNECTION_INITIALIZED].format(self.playLogicService.getActualPlayingInfo().name()))
-            
 
     def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():
@@ -322,11 +316,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playSlider.setValue(0)
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
-        self.ui.bluetoothButton.setEnabled(True)
         #self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
 
     def onPlayingFailed(self, deviceName):
-        self.showStatusInfo(2000, self.texts[self.CONNECTION_FAILED_STR].format(deviceName))
+        self.showStatusInfo(2000, self.texts[self.CONNECTION_FAILED_STR].format(deviceName), self.ui.infoLabel)
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:

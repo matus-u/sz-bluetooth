@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 
 from services.LedButtonService import LedButtonService
 
-from collections import deque 
+from collections import deque
 
 class InputHandler(QtCore.QObject):
     def __init__(self, listOfProxies):
@@ -26,10 +26,12 @@ class InputHandler(QtCore.QObject):
     def onLeft(self):
         self.rotate(-1)
         self.setFocus()
+        self.findFocusedWidget().onLeft()
 
     def onRight(self):
         self.rotate(1)
         self.setFocus()
+        self.findFocusedWidget().onRight()
 
     def findFocusedWidget(self):
         focusedWidget = QtWidgets.QApplication.focusWidget()
@@ -61,6 +63,12 @@ class FocusNullObject:
     def onDown(self):
         pass
 
+    def onLeft(self):
+        pass
+
+    def onRight(self):
+        pass
+
     def onConfirm(self):
         pass
 
@@ -81,6 +89,12 @@ class ButtonFocusProxy:
         pass
 
     def onDown(self):
+        pass
+
+    def onLeft(self):
+        pass
+
+    def onRight(self):
         pass
 
     def onConfirm(self):
@@ -132,3 +146,22 @@ class TableWidgetFocusProxy(QtCore.QObject):
     def onConfirm(self):
         if self.confirmHandler:
             self.confirmHandler()
+
+    def onLeft(self):
+        pass
+
+    def onRight(self):
+        pass
+
+class MusicWidgetFocusProxy(TableWidgetFocusProxy):
+    def __init__(self, widget, confirmHandler, ledButtonService, musicControl):
+        super().__init__(widget, confirmHandler, ledButtonService)
+        self.musicControl = musicControl
+
+    def onLeft(self):
+        self.musicControl.previousGenre()
+
+    def onRight(self):
+        self.musicControl.nextGenre()
+
+
