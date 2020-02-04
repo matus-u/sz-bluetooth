@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 import sys, os
 
 from ui import ApplicationWindow
+from ui import FocusHandler
 
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService
@@ -12,6 +13,7 @@ from services.LoggingService import LoggingService
 from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
 from services.WheelFortuneService import WheelFortuneService
+from services.LedButtonService import LedButtonService
 
 from generated import Resources
 
@@ -56,7 +58,6 @@ def main():
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
 
-    timerService = TimerService()
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
@@ -72,13 +73,17 @@ def main():
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
-    wheelFortuneService.win.connect(lambda number: printingService.printTicket(AppSettings.actualDeviceName(), "None", number))
     printingService.printFinished.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
-
     printingService.printError.connect(lambda: wheelFortuneService.lockWheel())
     printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel())
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, gpioService, wheelFortuneService, printingService)
+    timerService = TimerService()
+    ledButtonService = LedButtonService(gpioService)
+    timerService.addTimerWorker(ledButtonService)
+
+    arrowHandler = FocusHandler.ArrowHandler(gpioService)
+
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 

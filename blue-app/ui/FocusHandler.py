@@ -3,8 +3,30 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.LedButtonService import LedButtonService
+from services.GpioCallback import GpioCallback
 
 from collections import deque
+
+class ArrowHandler(QtCore.QObject):
+
+    def connectGpio(self, gpioService, num, callback):
+        gpioCall = GpioCallback(self)
+        gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
+        gpioService.registerCallback(gpioService.FALLING, num, gpioCall.onLowLevelCallback)
+
+    def __init__(self, gpioService):
+        super().__init__()
+        self.connectGpio(gpioService, 29, lambda: self.leftClicked.emit().onLeft())
+        self.connectGpio(gpioService, 31, lambda: self.rightClicked().onRight())
+        self.connectGpio(gpioService, 33, lambda: self.downClicked().onDown())
+        self.connectGpio(gpioService, 35, lambda: self.upClicked().onUp())
+        self.connectGpio(gpioService, 37, lambda: self.confirmClicked().onConfirm())
+
+    leftClicked = QtCore.pyqtSignal()
+    rightClicked = QtCore.pyqtSignal()
+    downClicked = QtCore.pyqtSignal()
+    upClicked = QtCore.pyqtSignal()
+    confirmClicked = QtCore.pyqtSignal()
 
 class InputHandler(QtCore.QObject):
     def __init__(self, listOfProxies):
@@ -55,7 +77,11 @@ class InputHandler(QtCore.QObject):
 
 class FocusNullObject:
     def setFocus(self):
-        pass
+        self.ledButtonService.setButtonState(LedButtonService.LEFT, False)
+        self.ledButtonService.setButtonState(LedButtonService.RIGHT, False)
+        self.ledButtonService.setButtonState(LedButtonService.UP, False)
+        self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
+        self.ledButtonService.setButtonState(LedButtonService.CONFIRM, False)
 
     def onUp(self):
         pass
@@ -73,14 +99,15 @@ class FocusNullObject:
         pass
 
 class ButtonFocusProxy:
-    def __init__(self, button, ledButtonService):
+    def __init__(self, button, ledButtonService, arrowsEnabled=True):
         self.button = button
         self.ledButtonService = ledButtonService
+        self.arrowsEnabled = arrowsEnabled
 
     def setFocus(self):
         self.button.setFocus()
-        self.ledButtonService.setButtonState(LedButtonService.LEFT, True)
-        self.ledButtonService.setButtonState(LedButtonService.RIGHT, True)
+        self.ledButtonService.setButtonState(LedButtonService.LEFT, self.arrowsEnabled)
+        self.ledButtonService.setButtonState(LedButtonService.RIGHT, self.arrowsEnabled)
         self.ledButtonService.setButtonState(LedButtonService.UP, False)
         self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
         self.ledButtonService.setButtonState(LedButtonService.CONFIRM, True)

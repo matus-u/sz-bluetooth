@@ -14,8 +14,7 @@ class WheelFortuneService(QtCore.QObject):
     Probabilities = "Probabilities"
 
     reducePrizeCount = QtCore.pyqtSignal(int)
-    win = QtCore.pyqtSignal(int)
-    noWin = QtCore.pyqtSignal(int)
+    win = QtCore.pyqtSignal(int, object)
 
     probabilitiesUpdated = QtCore.pyqtSignal()
 
@@ -77,16 +76,14 @@ class WheelFortuneService(QtCore.QObject):
             probs =  [(float(x) / 100) for x in probs]
             values = [x for x in range (0,10)]
             win = random.choices(values, probs)
+            counts = self.getAllCounts()
             if win[0] > 0:
                 key = "count_" + str(win[0])
                 if self.probabilityValues[key] > 0:
                     self.probabilityValues[key] = self.probabilityValues[key] - 1
                     self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
                     self.reducePrizeCount.emit(win[0])
-                    self.win.emit(win[0])
-                    return
-    
-        self.noWin.emit(win[0])
+            self.win.emit(win[0], counts)
 
     def actualProbs(self):
         return self.probabilityValues

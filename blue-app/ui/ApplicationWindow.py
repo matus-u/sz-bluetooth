@@ -14,8 +14,6 @@ from services.WirelessService import WirelessService
 from services.PlayFileService import PlayFileService
 from services.PlayLogicService import PlayLogicService
 from services.MoneyTracker import MoneyTracker
-from services.GpioCallback import GpioCallback
-from services.LedButtonService import LedButtonService
 
 from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
 
@@ -61,6 +59,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     PRINT_ERROR = 26
     LOW_PAPER = 27
     NO_PAPER = 28
+    CONTINUE_WITH_MUSIC = 29
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -70,9 +69,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."), 
+        self.tr("Continue with music selection.")
         ]
 
-    def __init__(self, timerService, moneyTracker, gpioService, wheelFortuneService, printingService):
+    def __init__(self, timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -113,8 +113,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.changeCredit(0)
         timerService.addTimerWorker(self.temperatureStatus)
 
-        self.ledButtonService = LedButtonService(gpioService)
-        timerService.addTimerWorker(self.ledButtonService)
+        self.ledButtonService = ledButtonService
         self.ledButtonService.start()
 
         self.wirelessService = WirelessService()
@@ -131,9 +130,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
 
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
-            (FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
+            [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
              FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
-             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)))
+             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)])
 
         self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
 
@@ -143,11 +142,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), self, lambda: self.getActualFocusHandler().onUp())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
 
-        self.connectGpio(gpioService, 29, lambda: self.getActualFocusHandler().onLeft())
-        self.connectGpio(gpioService, 31, lambda: self.getActualFocusHandler().onRight())
-        self.connectGpio(gpioService, 33, lambda: self.getActualFocusHandler().onDown())
-        self.connectGpio(gpioService, 35, lambda: self.getActualFocusHandler().onUp())
-        self.connectGpio(gpioService, 37, lambda: self.getActualFocusHandler().onConfirm())
+        self.arrowHandler = arrowHandler
+        self.arrowHandler.leftClicked.connect(lambda: self.getActualFocusHandler().onLeft())
+        self.arrowHandler.rightClicked.connect(lambda: self.getActualFocusHandler().onRight())
+        self.arrowHandler.downClicked.connect(lambda: self.getActualFocusHandler().onDown())
+        self.arrowHandler.upClicked.connect(lambda: self.getActualFocusHandler().onUp())
+        self.arrowHandler.confirmClicked.connect(lambda: self.getActualFocusHandler().onConfirm())
 
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
@@ -159,16 +159,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 
+        self.wheelFortuneService.win.connect(self.onFortuneServiceTry)
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
 
+        self.printingService = printingService
         printingService.printError.connect(lambda: self.ui.errorLabel.setText(self.texts[self.PRINT_ERROR]).format(printingService.getErrorStatus()))
         printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
         printingService.noPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.NO_PAPER]))
 
-    def connectGpio(self, gpioService, num, callback):
-        gpioCall = GpioCallback(self)
-        gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
-        gpioService.registerCallback(gpioService.FALLING, num, gpioCall.onLowLevelCallback)
+        self.wheelWindows = []
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -176,14 +175,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             return self.bluetoothFocusHandler
 
+    def onFortuneServiceTry(self, indexOfPrize, prizes):
+        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizes, self.printingService, self.ledButtonService, self.arrowHandler)
+        self.openSubWindow(w)
+        self.wheelWindows.append(w)
+        w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+
+    def onWheelFortuneFinished(self, w, ):
+        self.wheelWindows.remove(w)
+        if len(self.wheelWindows) > 0:
+            self.wheelWindows[-1].activateWindow()
+            self.wheelWindows[-1].resetFocus()
+        else:
+            self.showStatusInfo(2000, self.texts[self.CONTINUE_WITH_MUSIC], self.ui.infoLabel)
+
     def onBluetoothGenre(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
-
-        w = FortuneWheelWindow.FortuneWheelWindow(self)
-        self.openSubWindow(w)
-
 
     def onBackFromBlueButton(self):
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -376,6 +385,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def hideCoinImage(self):
         coinPixMap = QtGui.QPixmap()
         self.ui.coinImageLabel.setPixmap(coinPixMap)
+
+    #def onAddCreditFinished(self):
+    #    QtCore.QTimer.singleShot(1000, self.onAddCreditFinished)
 
     def onAddCreditButton(self):
         self.creditService.changeCredit(0.1)
