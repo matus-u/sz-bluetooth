@@ -180,7 +180,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.openSubWindow(w)
         self.wheelWindows.append(w)
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))
-        self.getActualFocusHandler().findFocusedWidget().setFocus()
 
     def onWheelFortuneFinished(self, w, ):
         self.wheelWindows.remove(w)
