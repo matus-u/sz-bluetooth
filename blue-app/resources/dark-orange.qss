@@ -437,7 +437,8 @@ QWidget#bluetoothButton:focus,
 QWidget#backFromBlueButton:focus,
 QWidget#songsWidget:focus,
 QWidget#genreWidget:focus,
-QWidget#devicesWidget:focus
+QWidget#devicesWidget:focus,
+QWidget#backButton:focus
 {
     border : 5px solid #FF7800;
 }

@@ -338,7 +338,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageMain">
          <layout class="QHBoxLayout" name="horizontalLayout_7">

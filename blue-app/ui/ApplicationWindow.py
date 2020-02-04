@@ -180,6 +180,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.openSubWindow(w)
         self.wheelWindows.append(w)
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+        self.getActualFocusHandler().findFocusedWidget().setFocus()
 
     def onWheelFortuneFinished(self, w, ):
         self.wheelWindows.remove(w)
@@ -187,6 +188,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.wheelWindows[-1].activateWindow()
             self.wheelWindows[-1].resetFocus()
         else:
+            self.getActualFocusHandler().setFocus()
             self.showStatusInfo(2000, self.texts[self.CONTINUE_WITH_MUSIC], self.ui.infoLabel)
 
     def onBluetoothGenre(self):

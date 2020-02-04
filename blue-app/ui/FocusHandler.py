@@ -77,11 +77,7 @@ class InputHandler(QtCore.QObject):
 
 class FocusNullObject:
     def setFocus(self):
-        self.ledButtonService.setButtonState(LedButtonService.LEFT, False)
-        self.ledButtonService.setButtonState(LedButtonService.RIGHT, False)
-        self.ledButtonService.setButtonState(LedButtonService.UP, False)
-        self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
-        self.ledButtonService.setButtonState(LedButtonService.CONFIRM, False)
+        pass
 
     def onUp(self):
         pass

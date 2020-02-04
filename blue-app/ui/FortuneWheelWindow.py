@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from generated.FortuneWheel import Ui_FortuneWheel
 from services.AppSettings import AppSettings
+from services.LedButtonService import LedButtonService
 
 from ui import FocusHandler
 
@@ -87,6 +88,13 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.generateAnimations()
 
         QtCore.QTimer.singleShot(1000, lambda: self.onAnimationFinished())
+        scene.setFocus()
+
+        self.ledButtonService.setButtonState(LedButtonService.LEFT, False)
+        self.ledButtonService.setButtonState(LedButtonService.RIGHT, False)
+        self.ledButtonService.setButtonState(LedButtonService.UP, False)
+        self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
+        self.ledButtonService.setButtonState(LedButtonService.CONFIRM, False)
 
     def onAnimationFinished(self):
         if (self.animationIndex < len(self.animations)):
