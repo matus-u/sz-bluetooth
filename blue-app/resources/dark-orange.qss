@@ -21,14 +21,23 @@ QAbstractItemView
 
 QTableWidget,
 QTableView,
-QFrame#livePlayFrame,
 QLabel#emptyLabel
 {  
    border : 3px solid cyan; 
-   margin: 10px; border-radius: 25px;
+   margin: 1px; border-radius: 15px;
    margin-top: 0px;
    margin-bottom: 0px;
-   padding: 20px;
+   padding: 10px;
+   selection-background-color: #4d4d4d;
+}
+
+QFrame#livePlayFrame
+{
+   border : 3px solid cyan; 
+   margin: 1px; border-radius: 15px;
+   margin-top: 0px;
+   margin-bottom: 0px;
+   padding: 3px;
    selection-background-color: #4d4d4d;
 }
 

@@ -32,12 +32,12 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
         x1 = 0
         y1 = 0
-        x2 = -96
-        y2 = -300
-        x3 =  96
-        y3 = -300
+        x2 = -64
+        y2 = -200
+        x3 =  64
+        y3 = -200
         x4 = 0
-        y4 = -300
+        y4 = -200
 
         startTriangle = scene.addPolygon(QtGui.QPolygonF([QtCore.QPoint(x1,y1), QtCore.QPoint(x2,y2), QtCore.QPoint(x3,y3)]), QtGui.QPen(QtCore.Qt.black), QtGui.QBrush(QtCore.Qt.green))
         startTriangle.setTransformOriginPoint(0,0);
@@ -62,11 +62,11 @@ class FortuneWheelWindow(QtWidgets.QDialog):
             self.triangles.append(scene.addPolygon(QtGui.QPolygonF(points), QtGui.QPen(QtCore.Qt.black), brush))
 
             font = QtGui.QFont()
-            font.setPointSize(45)
+            font.setPointSize(35)
             textItem = scene.addText(str(i), font)
             textItem.setTransformOriginPoint(0,0)
             textItem.setRotation(i*angle)
-            point = startTriangle.mapToScene(-(textItem.boundingRect().width()/2),-280)
+            point = startTriangle.mapToScene(-(textItem.boundingRect().width()/2),-180)
             textItem.moveBy(point.x(), point.y())
 
         scene.removeItem(startTriangle)
@@ -75,10 +75,10 @@ class FortuneWheelWindow(QtWidgets.QDialog):
             i.setTransformOriginPoint(0,0)
 
         self.arrow = scene.addPolygon(QtGui.QPolygonF([QtCore.QPoint(10, 0),
-                                                       QtCore.QPoint(-10, 0),
-                                                       QtCore.QPoint(-10, -180),
-                                                       QtCore.QPoint(0, -200),
-                                                       QtCore.QPoint(10, -180),
+                                                       QtCore.QPoint(-7, 0),
+                                                       QtCore.QPoint(-7, -80),
+                                                       QtCore.QPoint(0, -100),
+                                                       QtCore.QPoint(7, -80),
                                                        ]), QtGui.QPen(QtCore.Qt.black), QtGui.QBrush(QtCore.Qt.green))
 
         self.arrow.setTransformOriginPoint(0,0);

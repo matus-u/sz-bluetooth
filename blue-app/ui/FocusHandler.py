@@ -9,6 +9,12 @@ from collections import deque
 
 class ArrowHandler(QtCore.QObject):
 
+    leftClicked = QtCore.pyqtSignal()
+    rightClicked = QtCore.pyqtSignal()
+    downClicked = QtCore.pyqtSignal()
+    upClicked = QtCore.pyqtSignal()
+    confirmClicked = QtCore.pyqtSignal()
+
     def connectGpio(self, gpioService, num, callback):
         gpioCall = GpioCallback(self)
         gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
@@ -16,17 +22,11 @@ class ArrowHandler(QtCore.QObject):
 
     def __init__(self, gpioService):
         super().__init__()
-        self.connectGpio(gpioService, 29, lambda: self.leftClicked.emit().onLeft())
-        self.connectGpio(gpioService, 31, lambda: self.rightClicked().onRight())
-        self.connectGpio(gpioService, 33, lambda: self.downClicked().onDown())
-        self.connectGpio(gpioService, 35, lambda: self.upClicked().onUp())
-        self.connectGpio(gpioService, 37, lambda: self.confirmClicked().onConfirm())
-
-    leftClicked = QtCore.pyqtSignal()
-    rightClicked = QtCore.pyqtSignal()
-    downClicked = QtCore.pyqtSignal()
-    upClicked = QtCore.pyqtSignal()
-    confirmClicked = QtCore.pyqtSignal()
+        self.connectGpio(gpioService, 29, lambda: self.leftClicked.emit())
+        self.connectGpio(gpioService, 31, lambda: self.rightClicked.emit())
+        self.connectGpio(gpioService, 33, lambda: self.downClicked.emit())
+        self.connectGpio(gpioService, 35, lambda: self.upClicked.emit())
+        self.connectGpio(gpioService, 37, lambda: self.confirmClicked.emit())
 
 class InputHandler(QtCore.QObject):
     def __init__(self, listOfProxies):
