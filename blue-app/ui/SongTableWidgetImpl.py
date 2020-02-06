@@ -13,10 +13,10 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.ui = Ui_SongTableWidget()
         self.ui.setupUi(self)
         self.ui.songNameLabel.setText(name)
-        if duration != -1:
-            self.ui.songDurationLabel.setText(Helpers.formatDuration(duration))
-        else:
+        if name == "Bluetooth":
             self.ui.songDurationLabel.setText("--:--")
+        else:
+            self.ui.songDurationLabel.setText(Helpers.formatDuration(duration))
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
 
     def select(self):

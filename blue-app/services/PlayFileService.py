@@ -3,6 +3,8 @@ from PyQt5 import QtMultimedia
 
 import os
 
+from services.LoggingService import LoggingService
+
 class PlayFileService(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     refreshTimerSignal = QtCore.pyqtSignal(int)
@@ -12,10 +14,15 @@ class PlayFileService(QtCore.QObject):
         self.process = QtCore.QProcess(self)
         self.player = QtMultimedia.QMediaPlayer()
         self.player.stateChanged.connect(self.onPlayerChanged)
+        self.player.error.connect(self.onError)
 
     def onPlayerChanged(self, state):
         if state == QtMultimedia.QMediaPlayer.StoppedState:
             self.emitFinished()
+
+    def onError(self, error):
+        LoggingService.getLogger().info("Mp3 Error:".format(self.player.errorString()))
+        self.emitFinished()
 
     def playWav(self):
         if self.process.state() == QtCore.QProcess.NotRunning:
@@ -26,8 +33,9 @@ class PlayFileService(QtCore.QObject):
         self.finished.emit()
 
     def playMp3(self, path):
-        url = QtCore.QUrl.fromLocalFile(path[1])
+        url = QtCore.QUrl.fromLocalFile(path)
         content = QtMultimedia.QMediaContent(url)
+        LoggingService.getLogger().info("Mp3 play:".format(path))
         self.player.setMedia(content)
         self.player.play()
 

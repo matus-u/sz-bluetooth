@@ -67,7 +67,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), 
+        self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."), 
         self.tr("Continue with music selection.")
         ]
@@ -89,6 +90,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.itemSelectionChanged.connect(self.onSongSelectionChanged)
 
         self.bluetoothService = BluetoothService(timerService)
+        self.blueThread = QtCore.QThread(self)
+        self.blueThread.start()
+        self.bluetoothService.moveToThread(self.blueThread)
+        self.bluetoothService.afterMove()
+
         self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue)
         self.playLogicService.refreshTimerSignal.connect(self.onRefreshTimer)
         self.playLogicService.playingInitialized.connect(self.onPlayingInitialized)
@@ -103,7 +109,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: self.openSubWindow(WifiSettingsWindow.WifiSettingsWindow(self, self.wirelessService)))
         self.ui.scanButton.clicked.connect(self.onScanButton)
-        self.ui.disconnectButton.clicked.connect(self.bluetoothService.forceDisconnect)
+        self.ui.disconnectButton.clicked.connect(self.bluetoothService.asyncDisconnect)
         self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
 
@@ -285,7 +291,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.creditService.clearCredit()
 
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
-                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(23), self.ui.infoLabel)
+                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(""), self.ui.infoLabel)
 
     def onPlaySong(self):
         info = self.musicController.getFullSelectedMp3Info()

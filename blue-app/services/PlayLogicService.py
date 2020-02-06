@@ -22,8 +22,8 @@ class PlayLogicService(QtCore.QObject):
         self.bluetoothService = bluetoothService
         self.state = "IDLE"
 
-        self.bluetoothService.disconnectedEndSignal.connect(self.onPlayingFinished)
-        self.bluetoothService.connectedSignal.connect(self.onConnectedSignal)
+        self.bluetoothService.disconnectedEndSignal.connect(self.onPlayingFinished, QtCore.Qt.QueuedConnection)
+        self.bluetoothService.connectedSignal.connect(self.onConnectedSignal, QtCore.Qt.QueuedConnection)
         self.actualPlayInfo = None
         self.playService = PlayFileService(self)
         self.playService.finished.connect(self.onPlayingFinished)
@@ -33,7 +33,7 @@ class PlayLogicService(QtCore.QObject):
         self.counter = 0
 
         self.bluetoothConnectionTimer = QtCore.QTimer()
-        self.bluetoothConnectionTimer.timeout.connect(lambda: self.onConnectedSignal(1))
+        self.bluetoothConnectionTimer.timeout.connect(lambda: self.bluetoothService.asyncDisconnect())
 
     def onRefreshTimer(self):
         self.counter = self.counter + 1
@@ -44,19 +44,20 @@ class PlayLogicService(QtCore.QObject):
             if isinstance(playQueueObject, BluetoothPlayQueueObject):
                 self.state = "BLUETOOTH"
                 self.actualPlayInfo = playQueueObject
-                self.bluetoothService.connect(playQueueObject.macAddr(), playQueueObject.duration())
+                self.bluetoothService.asyncConnect(playQueueObject.macAddr(), playQueueObject.duration())
                 self.bluetoothConnectionTimer.setSingleShot(True)
                 self.bluetoothConnectionTimer.start(playQueueObject.duration()*1000)
+                self.playingInitialized.emit()
 
             if isinstance(playQueueObject, Mp3PlayQueueObject):
                 self.state = "PLAYING"
                 self.actualPlayInfo = playQueueObject
                 self.playService.playMp3(playQueueObject.path())
+                self.playingInitialized.emit()
                 self.playingStarted.emit()
                 self.counter = 0
                 self.refreshTimer.start(1000)
 
-            self.playingInitialized.emit()
 
             return PlayLogicService.PLAY_RETURN_IMMEDIATELLY
         else:
@@ -67,10 +68,9 @@ class PlayLogicService(QtCore.QObject):
         if exitCode == 1:
             self.playingFailed.emit(self.actualPlayInfo.name())
             if (self.bluetoothConnectionTimer.isActive()):
-                self.bluetoothService.connect(self.actualPlayInfo.macAddr(), self.actualPlayInfo.duration())
+                self.bluetoothService.asyncConnect(self.actualPlayInfo.macAddr(), self.actualPlayInfo.duration())
             else:
-                self.state = "IDLE"
-                self.onPlayingFinished()
+                pass
 
         else:
             self.bluetoothConnectionTimer.stop()
