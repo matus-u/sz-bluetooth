@@ -200,6 +200,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
+        self.cleanScannedData()
 
     def onBackFromBlueButton(self):
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -244,17 +245,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def setWidgetsEnabled(self):
         self.ui.scanButton.setEnabled(True)
         self.ui.devicesWidget.setEnabled(True)
+        #self.ui.backFromBlueButton.setEnabled(True)
 
     def setWidgetsDisabled(self):
         self.ui.scanButton.setEnabled(False)
         self.ui.devicesWidget.setEnabled(False)
+        #self.ui.backFromBlueButton.setEnabled(False)
 
-    def onScanButton(self):
+    def cleanScannedData(self):
         self.ui.devicesWidget.clear()
+        self.ui.devicesWidget.clearSelection()
         self.ui.devicesWidget.clearContents()
-        self.setWidgetsDisabled()
-        self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
-        QtCore.QCoreApplication.processEvents()
+        self.ui.devicesWidget.setRowCount(0)
+
+    def onScanFinished(self):
         self.scanData = self.bluetoothService.scan()
         self.ui.devicesWidget.setRowCount(len(self.scanData))
         for index, item in enumerate(self.scanData):
@@ -271,6 +275,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.getActualFocusHandler().setFocus()
         else:
             self.getActualFocusHandler().onLeft()
+
+    def onScanButton(self):
+        self.cleanScannedData()
+        self.setWidgetsDisabled()
+        self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
+        QtCore.QCoreApplication.processEvents()
+        QtCore.QTimer.singleShot(3000, self.onScanFinished)
 
     def showStatusInfo(self, duration, message, label):
         label.setText(message)

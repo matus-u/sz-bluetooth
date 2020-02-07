@@ -50,7 +50,6 @@ class BluetoothService(QtCore.QObject):
 
     def scan(self):
         BluezUtils.startDiscovery()
-        sleep(4)
         devices = []
         for path, device in BluezUtils.scanDevices():
             devices.append ([device.get("Name", device["Address"]), "(" + str(device["Address"]) + ")"])

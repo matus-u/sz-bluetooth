@@ -22,6 +22,9 @@ class PlayFileService(QtCore.QObject):
 
     def onError(self, error):
         LoggingService.getLogger().info("Mp3 Error:".format(self.player.errorString()))
+        if not (os.getenv('RUN_FROM_DOCKER', False) == False):
+            return
+
         self.emitFinished()
 
     def playWav(self):
