@@ -192,6 +192,19 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_10">
                  <item>
+                  <widget class="QLabel" name="totalTimeLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QSlider" name="playSlider">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -209,6 +222,12 @@
                  </item>
                  <item>
                   <widget class="QLabel" name="timeLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>

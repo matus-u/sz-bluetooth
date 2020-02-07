@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from services.PlayFileService import PlayFileService
 from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from datetime import datetime
 
 class PlayLogicService(QtCore.QObject):
 
@@ -41,9 +42,9 @@ class PlayLogicService(QtCore.QObject):
 
     def play(self, playQueueObject):
         if self.state == "IDLE":
+            self.actualPlayInfo = playQueueObject
             if isinstance(playQueueObject, BluetoothPlayQueueObject):
                 self.state = "BLUETOOTH"
-                self.actualPlayInfo = playQueueObject
                 self.bluetoothService.asyncConnect(playQueueObject.macAddr(), playQueueObject.duration())
                 self.bluetoothConnectionTimer.setSingleShot(True)
                 self.bluetoothConnectionTimer.start(playQueueObject.duration()*1000)
@@ -51,17 +52,22 @@ class PlayLogicService(QtCore.QObject):
 
             if isinstance(playQueueObject, Mp3PlayQueueObject):
                 self.state = "PLAYING"
-                self.actualPlayInfo = playQueueObject
                 self.playService.playMp3(playQueueObject.path())
                 self.playingInitialized.emit()
                 self.playingStarted.emit()
                 self.counter = 0
                 self.refreshTimer.start(1000)
 
-
+            self.actualPlayInfo.setStartTime(datetime.now())
             return PlayLogicService.PLAY_RETURN_IMMEDIATELLY
         else:
+            if (self.playQueue.isEmpty()):
+                playQueueObject.setStartTime(self.actualPlayInfo.endTime())
+            else:
+                playQueueObject.setStartTime(self.playQueue.getNextStartTime())
+
             self.playQueue.addToPlayQueue(playQueueObject)
+
             return PlayLogicService.PLAY_RETURN_QUEUE
 
     def onConnectedSignal(self, exitCode):

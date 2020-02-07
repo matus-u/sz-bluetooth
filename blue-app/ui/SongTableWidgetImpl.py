@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from generated.SongTableWidget import Ui_SongTableWidget
 
+from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
+
 from ui import Helpers
 
 class SongTableWidgetImpl(QtWidgets.QWidget):
@@ -13,11 +15,17 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.ui = Ui_SongTableWidget()
         self.ui.setupUi(self)
         self.ui.songNameLabel.setText(name)
-        if name == "Bluetooth":
-            self.ui.songDurationLabel.setText("--:--")
-        else:
-            self.ui.songDurationLabel.setText(Helpers.formatDuration(duration))
+        self.ui.songDurationLabel.setText(Helpers.formatDuration(duration, name))
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
+
+    @classmethod
+    def fromPlayQueueObject(cls, playQueueObject):
+        if isinstance(playQueueObject, BluetoothPlayQueueObject):
+            return cls(Helpers.formatNameWithStartTime(playQueueObject.name(), playQueueObject.startTime()), playQueueObject.duration())
+
+        if isinstance(playQueueObject, Mp3PlayQueueObject):
+            return cls(playQueueObject.name(), playQueueObject.duration())
+
 
     def select(self):
         if not self.property(SongTableWidgetImpl.SELECT_STRING):

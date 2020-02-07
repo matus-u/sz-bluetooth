@@ -67,9 +67,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"), 
+        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"),
         self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
-        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."), 
+        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."),
         self.tr("Continue with music selection.")
         ]
 
@@ -330,6 +330,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onPlayingInitialized(self):
         self.ui.playSlider.setValue(0)
         self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
+        self.ui.totalTimeLabel.setText(Helpers.formatDuration(self.playLogicService.getActualPlayingInfo().duration()))
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.playLabel.setText(self.texts[self.CONNECTION_INITIALIZED].format(self.playLogicService.getActualPlayingInfo().name()))
 
@@ -345,9 +346,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onPlayingStopped(self):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
         self.ui.timeLabel.setText("")
+        self.ui.totalTimeLabel.setText("")
         self.ui.playSlider.setValue(0)
         self.ui.devicesWidget.setRowCount(0)
         self.ui.disconnectButton.setEnabled(False)
+        self.ui.playSlider.setValue(0)
+        self.ui.playSlider.setMaximum(1.0)
+
         #self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
 
     def onPlayingFailed(self, deviceName):
@@ -423,8 +428,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.updateTotalPlayQueueLabel()
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
-        data = self.playQueue.data(count - 1)
-        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl(data.name(), data.duration()))
+        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(count - 1)))
 
     def onRemoveFromPlayQueue(self):
         self.updateTotalPlayQueueLabel()
@@ -432,8 +436,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
         for i in range(0, count):
-            data = self.playQueue.data(i)
-            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl(data.name(), data.duration()))
+            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(i)))
 
     def onSongSelectionChanged(self):
         if self.ui.songsWidget.rowCount() > 0:
