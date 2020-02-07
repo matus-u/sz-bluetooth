@@ -317,8 +317,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
+                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
 
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
