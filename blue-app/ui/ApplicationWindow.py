@@ -236,6 +236,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onSettingsFinished(self, x):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
         self.updateCreditLabel()
+        self.musicController.reloadSongsWidgetTimeInfo()
 
     def onAdminSettingsButton(self):
         w = SettingsWindow.SettingsWindow(self, self.moneyTracker)

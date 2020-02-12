@@ -7,6 +7,7 @@ from mutagen.mp3 import MP3
 import os
 
 from ui import SongTableWidgetImpl
+from services.AppSettings import AppSettings
 
 class MusicController(QtCore.QObject):
 
@@ -61,10 +62,18 @@ class MusicController(QtCore.QObject):
         self.songsWidget.clear()
         genreKey = self.actualGenreList[0]
         self.songsWidget.setRowCount(len(self.music[genreKey]))
+        durationVisible = AppSettings.actualSongTimeVisible()
         for index, item in enumerate(self.music[genreKey]):
-            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item[0], str(int(item[2]))))
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item[0], str(int(item[2])), durationVisible))
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
+
+    def reloadSongsWidgetTimeInfo(self):
+        durationVisible = AppSettings.actualSongTimeVisible()
+        for i in range(0, self.songsWidget.rowCount()):
+            widget = self.songsWidget.cellWidget(i, 0)
+            if widget:
+                widget.setDurationVisible(durationVisible)
 
     def getFullSelectedMp3Info(self):
         genreKey = self.actualGenreList[0]

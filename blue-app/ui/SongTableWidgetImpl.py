@@ -10,13 +10,20 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
 
     SELECT_STRING = 'selected'
 
-    def __init__(self, name, duration):
+    def __init__(self, name, duration, durationVisible=True):
         super(SongTableWidgetImpl, self).__init__()
         self.ui = Ui_SongTableWidget()
         self.ui.setupUi(self)
         self.ui.songNameLabel.setText(name)
-        self.ui.songDurationLabel.setText(Helpers.formatDuration(duration, name))
+        self.duration = duration
+        self.setDurationVisible(durationVisible)
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
+
+    def setDurationVisible(self, visible):
+        if visible:
+            self.ui.songDurationLabel.setText(Helpers.formatDuration(self.duration, self.ui.songNameLabel.text()))
+        else:
+            self.ui.songDurationLabel.setText("")
 
     @classmethod
     def fromPlayQueueObject(cls, playQueueObject):
