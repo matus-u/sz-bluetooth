@@ -54,7 +54,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
             grad.setColorAt(0.8, colors[i%2]);
             grad.setColorAt(1.0, QtCore.Qt.red);
 
-            if (prizes[i] > 0):
+            if i != 0:
                 brush = grad
             else:
                 brush = QtGui.QBrush(QtCore.Qt.gray)
