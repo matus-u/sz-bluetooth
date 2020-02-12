@@ -40,6 +40,12 @@ class AppSettings:
     DescString = "Description"
     MoneyServerString = "MoneyServer"
 
+    ViewTypeString = "ViewType"
+    ViewTypeList = ["Genre based","Alphabetical"]
+
+    BluetoothEnabledString = "BluetoothEnabled"
+    SongTimeVisString = "SongTimesVisible"
+
     Notifier = AppSettingsNotifier()
 
     @staticmethod
@@ -98,6 +104,22 @@ class AppSettings:
         return AppSettings.CurrencyList.index(AppSettings.actualCurrency())
 
     @staticmethod
+    def actualViewType(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.ViewTypeString, AppSettings.ViewTypeList[0])
+
+    @staticmethod
+    def getCurrentViewTypeIndex():
+        return AppSettings.ViewTypeList.index(AppSettings.actualViewType())
+
+    @staticmethod
+    def actualSongTimeVisible(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.SongTimeVisString, True, bool)
+
+    @staticmethod
+    def actualBluetoothEnabled(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.BluetoothEnabledString, True, bool)
+
+    @staticmethod
     def actualCoinSettings(appSettings = None):
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinValuesString, AppSettings.DefaultCoinValues[AppSettings.actualCurrency()], float)
 
@@ -119,13 +141,13 @@ class AppSettings:
         QtCore.QCoreApplication.processEvents()
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer):
+    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
 
         if AppSettings.CurrencyList[currencyIndex] != AppSettings.actualCurrency(settings):
-            settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
+            settings.setValue(AppSettings.CurencyString, AppSettings.CurrencyList[currencyIndex])
             cls.getNotifier().currencyChanged.emit(AppSettings.CurrencyList[currencyIndex])
 
         settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
@@ -133,6 +155,10 @@ class AppSettings:
         if moneyServer != AppSettings.actualMoneyServer(settings):
             settings.setValue(AppSettings.MoneyServerString, moneyServer)
             cls.getNotifier().moneyServerChanged.emit(moneyServer)
+
+        settings.setValue(AppSettings.ViewTypeString, AppSettings.ViewTypeList[viewTypeIndex])
+        settings.setValue(AppSettings.SongTimeVisString, songTimeVisEnabled)
+        settings.setValue(AppSettings.BluetoothEnabledString, bluetoothEnabled)
 
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])

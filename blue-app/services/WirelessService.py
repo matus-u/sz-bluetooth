@@ -12,7 +12,7 @@ class WirelessScan(QtCore.QObject):
         processGetDevices.start("scripts/wifi-list-ap.sh")
         if (processGetDevices.waitForFinished()):
             return processGetDevices.readAllStandardOutput().data().decode('utf-8').splitlines()
-        return [] 
+        return []
 
 class WirelessService(QtCore.QObject):
     #report status signals

@@ -4,9 +4,10 @@ from PyQt5 import QtCore
 
 from generated.WheelSettings import Ui_WheelSettings
 from services.WheelFortuneService import WheelFortuneService
+from services.AppSettings import AppSettings
 
 class WheelSettingsWindow(QtWidgets.QDialog):
-    def __init__(self, parent, wheelFortuneService):
+    def __init__(self, parent, wheelFortuneService, printerService):
         super(WheelSettingsWindow, self).__init__(parent)
         self.ui = Ui_WheelSettings()
         self.ui.setupUi(self)
@@ -22,6 +23,8 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.wheelFortuneService = wheelFortuneService
         self.wheelFortuneService.probabilitiesUpdated.connect(self.updateTable)
         self.updateTable()
+
+        self.ui.descriptionTicket.clicked.connect(lambda: printerService.printDescTicket(AppSettings.actualDeviceName(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames()))
 
     def onOkButton(self):
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())

@@ -142,6 +142,19 @@
     </property>
    </column>
   </widget>
+  <widget class="QPushButton" name="descriptionTicket">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>330</y>
+     <width>271</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Print description ticket</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

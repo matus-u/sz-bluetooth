@@ -20,6 +20,9 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.languageCombobox.currentIndexChanged.connect(self.onLanguageComboboxChanged)
         self.ui.currencyCombobox.currentIndexChanged.connect(lambda index: self.setCoinSettings(AppSettings.defaultCoinSettings(AppSettings.currencyStringByIndex(index))))
         self.ui.moneyServerAddress.setText(AppSettings.actualMoneyServer())
+        self.ui.viewTypeComboBox.setCurrentIndex(AppSettings.getCurrentViewTypeIndex())
+        self.ui.songTimeCheckBox.setChecked(AppSettings.actualSongTimeVisible())
+        self.ui.bluetoothEnabledCheckBox.setChecked(AppSettings.actualBluetoothEnabled())
         self.setCoinSettings(AppSettings.actualCoinSettings())
 
     def setCoinSettings(self,coinSettings):
@@ -56,7 +59,7 @@ class SettingsWindow(QtWidgets.QDialog):
                 self.moneyTracker.resetAllCounters()
             else:
                 return
-        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex(), self.getCoinSettingsFromUi(), self.ui.moneyServerAddress.text())
+        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex(), self.getCoinSettingsFromUi(), self.ui.moneyServerAddress.text(), self.ui.bluetoothEnabledCheckBox.isChecked(), self.ui.songTimeCheckBox.isChecked(), self.ui.viewTypeComboBox.currentIndex())
         self.accept()
 
     def onCancelButton(self):

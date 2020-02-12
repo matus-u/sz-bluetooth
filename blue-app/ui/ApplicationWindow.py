@@ -162,7 +162,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.getActualFocusHandler().setFocus()
 
         self.wheelFortuneService = wheelFortuneService
-        self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService)))
+        self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
 
         self.wheelFortuneService.win.connect(self.onFortuneServiceTry)

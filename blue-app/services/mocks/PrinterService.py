@@ -22,3 +22,8 @@ class PrintingService(QtCore.QObject):
 
     def getErrorDesc(self):
         return { "errorStatus" : "OK", "errorStatusValue" : 25, "paperStatus" : "LOW_PAPER", "paperStatusValue" : 15 }
+
+    def printDescTicket(self, name, prizeCounts, prizeNames):
+        print (name)
+        print (prizeCounts)
+        print (prizeNames)

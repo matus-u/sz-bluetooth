@@ -95,3 +95,22 @@ class PrintingService(QtCore.QObject):
     def getErrorStatus(self):
         return self.errorStatus
 
+    def printDescTicket(self, name, prizeCounts, prizeNames):
+
+        s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+        s.write([0x1b, 0x40])
+        s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+        s.write(("DEVICE: " + name + "\n").encode())
+
+        for i in range(1,10):
+            s.write((str(i) + " - " + prizeNames[i] + " - " + str(prizeCounts[i]) + "\n").encode())
+
+        s.write(b"\n")
+        s.write(b"\n")
+
+        #CUT PAPER#
+        s.write([0x1d, 0x56, 0])
+        #s.write(b"\n")
+        self.checkError(s)
+        s.close()
+
