@@ -5,7 +5,7 @@ from services import TimerService
 import os
 
 class TemperatureStatus(TimerService.TimerStatusObject):
-    
+
     actualTemperature = QtCore.pyqtSignal(int)
 
     def __init__(self):
