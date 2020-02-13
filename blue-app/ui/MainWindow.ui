@@ -462,6 +462,21 @@
               <column/>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="alphaLabel">
+              <property name="font">
+               <font>
+                <pointsize>15</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>

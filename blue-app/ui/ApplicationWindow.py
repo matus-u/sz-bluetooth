@@ -131,7 +131,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
-        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel)
+        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel, self.ui.alphaLabel)
         self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
 
@@ -240,7 +240,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onSettingsFinished(self, x):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
         self.updateCreditLabel()
-        self.musicController.reloadSongsWidgetTimeInfo()
+        if x == 1:
+            self.musicController.selectModel()
 
     def onAdminSettingsButton(self):
         w = SettingsWindow.SettingsWindow(self, self.moneyTracker)
@@ -316,8 +317,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         info = self.musicController.getFullSelectedMp3Info()
 
         #SPECIAL HANDLING OF BLUETOOTH
-        if info != "" and info[3] == True:
-            info[4]()
+        if info != "" and info[3][0] == True:
+            info[3][1]()
             return
 
         if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
