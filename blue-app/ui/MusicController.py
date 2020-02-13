@@ -64,7 +64,8 @@ class SongModel:
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
         if not AppSettings.actualBluetoothEnabled():
-            self.actualGenreList.remove("Bluetooth")
+            if "Bluetooth" in self.actualGenreList:
+                self.actualGenreList.remove("Bluetooth")
         if self.actualGenre in self.actualGenreList:
             self.rotate(-1 * self.actualGenreList.index(self.actualGenre))
 
