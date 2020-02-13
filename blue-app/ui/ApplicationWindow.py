@@ -175,6 +175,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.wheelWindows = []
 
+        self.actualTimeStampTimer = QtCore.QTimer(self)
+        self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
+        self.actualTimeStampTimer.start(1000)
+
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             return self.mainFocusHandler

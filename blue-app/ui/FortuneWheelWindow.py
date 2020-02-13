@@ -148,11 +148,10 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         if (self.realWin):
             self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {}").format(self.winningIndex))
             self.printingService.printTicket(AppSettings.actualDeviceName(), "None", self.winningIndex)
+            self.ui.backButton.setEnabled(True)
+            self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
+            self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
+            QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
         else:
             self.ui.wheelLabel.setText(self.tr("Sorry, no win"))
-
-        self.ui.backButton.setEnabled(True)
-        self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
-        self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
-
+            QtCore.QTimer.singleShot(2500, self.accept)
