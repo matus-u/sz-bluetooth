@@ -26,6 +26,8 @@ class WheelFortuneService(QtCore.QObject):
         self.settings = QtCore.QSettings(WheelFortuneService.SettingsPath, WheelFortuneService.SettingsFormat)
         self.probabilityValues = json.loads(self.settings.value(WheelFortuneService.Probabilities, json.dumps(self.defaultProbs())))
 
+        self.winTries = 0
+
     def defaultProbs(self):
         return {'count_1': 0, 'count_2': 0, 'count_3': 0, 'count_4': 0, 'count_5': 0, 'count_6': 0, 'count_7': 0, 'count_8': 0, 'count_9': 0, 'id': None, 'name_1': '', 'name_2': '', 'name_3': '', 'name_4': '', 'name_5': '', 'name_6': '', 'name_7': '', 'name_8': '', 'name_9': '', 'prob_1': 0, 'prob_2': 0, 'prob_3': 0, 'prob_4': 0, 'prob_5': 0, 'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
 
@@ -48,6 +50,13 @@ class WheelFortuneService(QtCore.QObject):
 
             while (self.counter >= mLevel):
                 self.counter = self.counter - self.moneyLevel()
+                self.winTries = self.winTries + 1
+
+    def overtakeWinTries(self):
+        if self.winTries > 0:
+            count = self.winTries
+            self.winTries = 0
+            for i in range(0, count):
                 self.tryWin()
 
     def setNewProbabilityValues(self, values):

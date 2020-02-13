@@ -304,6 +304,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
                 self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(""), self.ui.infoLabel)
+                self.wheelFortuneService.overtakeWinTries()
+            else:
+                QtCore.QTimer.singleShot(2000, lambda: self.wheelFortuneService.overtakeWinTries())
 
     def onPlaySong(self):
         info = self.musicController.getFullSelectedMp3Info()
@@ -318,14 +321,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
         if info != "":
             if self.creditService.getSongsRepresentation().enoughMoney():
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 4000:
-                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) < 0:
+                prevLastStarted = self.lastStarted
+                self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
+                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
 
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()
-                self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+                    self.wheelFortuneService.overtakeWinTries()
 
 
     def onPlayingInitialized(self):
