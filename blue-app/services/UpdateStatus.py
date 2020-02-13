@@ -16,7 +16,6 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     asyncStopSignal = QtCore.pyqtSignal()
     adminModeServerRequest = QtCore.pyqtSignal()
     adminModeStateRequested = QtCore.pyqtSignal()
-
     newWinProbabilityValues = QtCore.pyqtSignal(object)
 
     def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService):
@@ -29,8 +28,14 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.printService = printService
         self.connectScheduled = True
         self.ref = 0
+        self.swVersion = AppSettings.actualAppVersion()
+        self.currencyString = AppSettings.actualCurrency()
 
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
+        AppSettings.getNotifier().currencyChanged.connect(self.setCurrency)
+
+    def setCurrency(self, val):
+        self.currencyString = val
 
     def asyncConnect(self):
         self.asyncStartSignal.emit()
@@ -52,7 +57,9 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         counters = self.moneyTracker.getCounters()
         data = { 'id' : self.macAddr, 'dev' : {
                 "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
-                "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX]
+                "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX],
+                "currency" : self.currencyString,
+                "version" : self.swVersion
                 }}
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)

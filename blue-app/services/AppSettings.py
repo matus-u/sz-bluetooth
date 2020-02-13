@@ -33,7 +33,7 @@ class AppSettings:
     CoinValuesString = "coin-settings"
     DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.01, 0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
 
-    AppVersion = "1.0"
+    AppVersion = "UNKNOWN"
     DeviceNameString = "DeviceName"
     OwnerString = "Owner"
     ServicePhoneString = "ServicePhone"
@@ -65,7 +65,11 @@ class AppSettings:
 
     @staticmethod
     def actualAppVersion():
-        return AppSettings.AppVersion
+        try:
+            f = open("scripts/version", "r")
+            return f.read()
+        except:
+            return AppVersion.AppVersion
 
     @staticmethod
     def actualLanguage(appSettings = None):
@@ -147,7 +151,7 @@ class AppSettings:
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
 
         if AppSettings.CurrencyList[currencyIndex] != AppSettings.actualCurrency(settings):
-            settings.setValue(AppSettings.CurencyString, AppSettings.CurrencyList[currencyIndex])
+            settings.setValue(AppSettings.CurrencyString, AppSettings.CurrencyList[currencyIndex])
             cls.getNotifier().currencyChanged.emit(AppSettings.CurrencyList[currencyIndex])
 
         settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
