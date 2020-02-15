@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from datetime import timedelta
+
 class Mp3PlayQueueObject:
     def __init__(self, mp3Info):
         self.mp3info = mp3Info

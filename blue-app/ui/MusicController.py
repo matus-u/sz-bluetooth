@@ -20,6 +20,7 @@ class SongModel:
         self.songsWidget = songsWidget
         self.actualGenre = None
         self.playTrackCounter = playTrackCounter
+        self.musicByPath = {}
 
     def rotate(self, value):
         l = deque(self.actualGenreList)
@@ -39,9 +40,10 @@ class SongModel:
         self.songsWidget.clear()
         genreKey = self.actualGenreList[0]
         self.actualGenre = genreKey
-        self.songsWidget.setRowCount(len(self.music[genreKey]))
+        songs = self.music[genreKey]()
+        self.songsWidget.setRowCount(len(songs))
         durationVisible = AppSettings.actualSongTimeVisible()
-        for index, item in enumerate(self.music[genreKey]):
+        for index, item in enumerate(songs):
             self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(item, False, durationVisible, True, self.playTrackCounter))
 
         if (self.songsWidget.rowCount() > 0):
@@ -51,19 +53,33 @@ class SongModel:
         genreKey = self.actualGenreList[0]
         if self.songsWidget.rowCount() > 0:
             if len(self.songsWidget.selectionModel().selectedRows()) > 0:
-                return self.music[genreKey][self.songsWidget.selectionModel().selectedRows()[0].row()]
+                return self.music[genreKey]()[self.songsWidget.selectionModel().selectedRows()[0].row()]
         return None
 
     def addSongs(self, songs):
+        helpDict = {}
         for song in songs:
             selector = self.getSelector(song)
-            l = self.music.get(selector, list())
+            l = helpDict.get(selector, list())
             l.append(song)
-            self.music[selector] = l
+            helpDict[selector] = l
+            self.musicByPath[song.path()] = song
+
+        for key, value in helpDict.items():
+            self.music[key] = lambda val=value: val
+
         self.generateGenreList()
 
-    def addBluetooth(self):
-        self.music["Bluetooth"] = [BluetoothPlayQueueObject("Bluetooth", "", 0)]
+    def addSpecials(self):
+        self.music["Bluetooth"] = lambda : [BluetoothPlayQueueObject("Bluetooth", "", 0)]
+        self.music["Top 50"] = self.generateTopTracks
+
+    def generateTopTracks(self):
+        l = list()
+        for i in self.playTrackCounter.topTrackNames():
+            l.append(self.musicByPath[i[0]])
+        return l
+
 
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
@@ -131,8 +147,8 @@ class MusicController(QtCore.QObject):
         files.sort(key=lambda x:x.path())
         self.genreBasedModel.addSongs(files)
         self.alphaBasedModel.addSongs(files)
-        self.genreBasedModel.addBluetooth()
-        self.alphaBasedModel.addBluetooth()
+        self.genreBasedModel.addSpecials()
+        self.alphaBasedModel.addSpecials()
 
     def reloadSongsWidget(self):
         self.actualModel.reloadSongsWidget()

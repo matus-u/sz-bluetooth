@@ -28,3 +28,8 @@ class PlayTrackCounter(QtCore.QObject):
     def getCount(self, path):
         return self.musicCounters.get(path, 0)
 
+    def topTrackNames(self):
+        l = list(self.musicCounters.items())
+        l.sort(key=lambda x:(-1*x[1], x[0]))
+        return l[:30]
+
