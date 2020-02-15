@@ -13,9 +13,10 @@ from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
 from services.PlayFileService import PlayFileService
 from services.PlayLogicService import PlayLogicService
-from services.MoneyTracker import MoneyTracker
+from services.PlayTrackCounter import PlayTrackCounter
 
-from model.PlayQueue import PlayQueue, Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueue import PlayQueue
+from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
 from ui import SongTableWidgetImpl
 from ui import SettingsWindow
@@ -131,10 +132,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.nameLabel.setText(AppSettings.actualDeviceName())
         self.ui.servicePhoneLabel.setText(self.texts[self.SERVICE_PHONE].format(AppSettings.actualServicePhone()))
 
-        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel, self.ui.alphaLabel)
-        self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
-        self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
+        self.playTrackCounter = PlayTrackCounter()
 
+        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel, self.ui.alphaLabel, self.playTrackCounter)
+        self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
              FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
@@ -314,17 +315,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 QtCore.QTimer.singleShot(2000, lambda: self.wheelFortuneService.overtakeWinTries())
 
     def onPlaySong(self):
-        info = self.musicController.getFullSelectedMp3Info()
+        playQueueObject = self.musicController.getSelectedPlayObject()
 
         #SPECIAL HANDLING OF BLUETOOTH
-        if info != "" and info[3][0] == True:
-            info[3][1]()
+        if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject): 
+            self.onBluetoothGenre()
             return
 
         if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
             self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.insertNewCoinLabel)
             return
-        if info != "":
+
+        if playQueueObject != None:
             if self.creditService.getSongsRepresentation().enoughMoney():
                 prevLastStarted = self.lastStarted
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
@@ -333,7 +335,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
-                    self.playLogicService.play(Mp3PlayQueueObject(info))
+                    self.playLogicService.play(Mp3PlayQueueObject(playQueueObject.mp3Info()))
                     self.creditService.getSongsRepresentation().overTakeMoney()
                     self.wheelFortuneService.overtakeWinTries()
 
@@ -344,6 +346,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.totalTimeLabel.setText(Helpers.formatDuration(self.playLogicService.getActualPlayingInfo().duration()))
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.playLabel.setText(self.texts[self.CONNECTION_INITIALIZED].format(self.playLogicService.getActualPlayingInfo().name()))
+        else:
+            # TODO UPDATE COUNT
+            pass
 
     def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():

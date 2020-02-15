@@ -9,6 +9,8 @@ import os
 from ui import SongTableWidgetImpl
 from services.AppSettings import AppSettings
 
+from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
+
 class SongModel:
     def __init__(self, songsWidget, selectedGenreWidget):
         self.music = {}
@@ -39,16 +41,16 @@ class SongModel:
         self.songsWidget.setRowCount(len(self.music[genreKey]))
         durationVisible = AppSettings.actualSongTimeVisible()
         for index, item in enumerate(self.music[genreKey]):
-            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item[0], str(int(item[2])), durationVisible))
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item.name(), str(int(item.duration())), durationVisible))
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
 
-    def getFullSelectedMp3Info(self):
+    def getSelectedPlayObject(self):
         genreKey = self.actualGenreList[0]
         if self.songsWidget.rowCount() > 0:
             if len(self.songsWidget.selectionModel().selectedRows()) > 0:
                 return self.music[genreKey][self.songsWidget.selectionModel().selectedRows()[0].row()]
-        return ""
+        return None
 
     def addSongs(self, songs):
         for song in songs:
@@ -58,8 +60,8 @@ class SongModel:
             self.music[selector] = l
         self.generateGenreList()
 
-    def addBluetooth(self, func):
-        self.music["Bluetooth"] = [[ "Bluetooth", "bluetooth", -1, [True, lambda: func() ],  "Bluetooth"]]
+    def addBluetooth(self):
+        self.music["Bluetooth"] = [BluetoothPlayQueueObject("Bluetooth", "", 0)]
 
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
@@ -77,20 +79,20 @@ class GenreBasedModel(SongModel):
         super().__init__(songsWidget, selectedGenreWidget)
 
     def getSelector(self, song):
-        return song[4]
+        return song.genre()
 
 class AlphaBasedModel(SongModel):
     def __init__(self, songsWidget, selectedGenreWidget):
         super().__init__(songsWidget, selectedGenreWidget)
 
     def getSelector(self, song):
-        return song[0].lower()[0]
+        return song.name().lower()[0]
 
 class MusicController(QtCore.QObject):
 
     bluetoothSelected = QtCore.pyqtSignal()
 
-    def __init__(self, songsWidget, genreLabel, alphaLabel):
+    def __init__(self, songsWidget, genreLabel, alphaLabel, playTrackCounter):
         super().__init__()
 
         self.genreBasedModel = GenreBasedModel(songsWidget, genreLabel)
@@ -98,6 +100,7 @@ class MusicController(QtCore.QObject):
         self.actualModel = None
         self.parseMusicStorage()
         self.selectModel()
+        playTrackCounter.countUpdated.connect(self.onTrackCountUpdate)
 
     def nextGenre(self):
         self.actualModel.nextGenre()
@@ -107,7 +110,7 @@ class MusicController(QtCore.QObject):
 
     def getMp3Info(self, fileName, fullFileName, genre):
         mp3 = MP3(fullFileName)
-        return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, [False], genre]
+        return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, genre]
 
     def parseMusicStorage(self):
         songs = []
@@ -122,19 +125,19 @@ class MusicController(QtCore.QObject):
                 for fileItem in os.listdir(subPath):
                     fileSubPath = os.path.join(subPath, fileItem)
                     if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp3"):
-                        files.append(self.getMp3Info(fileItem, fileSubPath, item))
+                        files.append(Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item)))
 
-        files.sort(key=lambda x:x[1])
+        files.sort(key=lambda x:x.path())
         self.genreBasedModel.addSongs(files)
         self.alphaBasedModel.addSongs(files)
-        self.genreBasedModel.addBluetooth(lambda: self.bluetoothSelected.emit())
-        self.alphaBasedModel.addBluetooth(lambda: self.bluetoothSelected.emit())
+        self.genreBasedModel.addBluetooth()
+        self.alphaBasedModel.addBluetooth()
 
     def reloadSongsWidget(self):
         self.actualModel.reloadSongsWidget()
 
-    def getFullSelectedMp3Info(self):
-        return self.actualModel.getFullSelectedMp3Info()
+    def getSelectedPlayObject(self):
+        return self.actualModel.getSelectedPlayObject()
 
     def getActualModel(self):
         if AppSettings.actualViewType() == "Alphabetical":
@@ -150,4 +153,6 @@ class MusicController(QtCore.QObject):
         self.actualModel.reloadSongsWidget()
         self.actualModel.label().show()
 
+    def onTrackCountUpdate(self, path):
+        self.actualModel.updateCountWidget(path)
 

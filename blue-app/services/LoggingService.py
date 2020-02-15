@@ -8,7 +8,7 @@ class LoggingService():
     def init():
         LoggingService.logger = logging.getLogger("RotatingLogger")
         LoggingService.logger.setLevel(logging.INFO)
-     
+
         # add a rotating handler
         handler = RotatingFileHandler("/tmp/blue-app.log", maxBytes=5000000,
                                       backupCount=2)

@@ -3,7 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.PlayFileService import PlayFileService
-from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 from datetime import datetime
 
 class PlayLogicService(QtCore.QObject):

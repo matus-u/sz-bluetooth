@@ -47,7 +47,7 @@ class TimerService:
     def __init__(self):
         self.thread = QtCore.QThread()
         self.thread.start()
-    
+
     def addTimerWorker(self, timerStatusObject):
         addTimerWorker(timerStatusObject, self.thread)
 
