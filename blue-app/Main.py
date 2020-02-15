@@ -14,6 +14,7 @@ from services.MoneyTracker import MoneyTracker
 from services.AdminModeTracker import AdminModeTracker
 from services.WheelFortuneService import WheelFortuneService
 from services.LedButtonService import LedButtonService
+from services.HwErrorHandling import HwErrorHandling
 
 from generated import Resources
 
@@ -58,6 +59,8 @@ def main():
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
 
+    errorHandler = HwErrorHandling()
+
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
@@ -65,7 +68,7 @@ def main():
     adminModeTracker = AdminModeTracker(gpioService)
 
     wheelFortuneService = WheelFortuneService()
-    printingService = PrintingService()
+    printingService = PrintingService(errorHandler)
 
     webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService, printingService)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
@@ -83,14 +86,15 @@ def main():
 
     arrowHandler = FocusHandler.ArrowHandler(gpioService)
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler)
+    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler, errorHandler)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
-    printingService.initialize()
 
     application.show()
+    printingService.initialize()
+
     application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
 

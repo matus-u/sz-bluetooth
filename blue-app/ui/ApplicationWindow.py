@@ -74,12 +74,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Continue with music selection.")
         ]
 
-    def __init__(self, timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler):
+    def __init__(self, timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler, errorHandler):
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
+        errorHandler.hwError.connect(lambda error, info: QtWidgets.QMessageBox.critical(self, error, info))
         self.moneyTracker = moneyTracker
         self.scanData = []
 
@@ -114,7 +115,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
 
-        self.creditService = CreditService(AppSettings.actualCoinSettings())
+        self.creditService = CreditService(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel(), errorHandler)
         self.creditService.creditChanged.connect(self.onCreditChange)
         self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters)
         self.creditService.changeCredit(0)
@@ -239,7 +240,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         window.move(window.pos().x(), self.pos().y() + 60)
 
     def onSettingsFinished(self, x):
-        self.creditService.setCoinSettings(AppSettings.actualCoinSettings())
+        self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
         if x == 1:
             self.musicController.selectModel()

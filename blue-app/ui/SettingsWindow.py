@@ -24,6 +24,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.songTimeCheckBox.setChecked(AppSettings.actualSongTimeVisible())
         self.ui.bluetoothEnabledCheckBox.setChecked(AppSettings.actualBluetoothEnabled())
         self.setCoinSettings(AppSettings.actualCoinSettings())
+        self.ui.coinLockLevel.setValue(AppSettings.actualCoinLockLevel())
 
     def setCoinSettings(self,coinSettings):
         self.ui.coin1value.setValue(coinSettings[0])
@@ -59,7 +60,16 @@ class SettingsWindow(QtWidgets.QDialog):
                 self.moneyTracker.resetAllCounters()
             else:
                 return
-        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(), self.ui.timeZoneCombobox.currentIndex(), self.ui.currencyCombobox.currentIndex(), self.getCoinSettingsFromUi(), self.ui.moneyServerAddress.text(), self.ui.bluetoothEnabledCheckBox.isChecked(), self.ui.songTimeCheckBox.isChecked(), self.ui.viewTypeComboBox.currentIndex())
+        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(),
+                                  self.ui.timeZoneCombobox.currentIndex(),
+                                  self.ui.currencyCombobox.currentIndex(),
+                                  self.getCoinSettingsFromUi(),
+                                  self.ui.moneyServerAddress.text(),
+                                  self.ui.bluetoothEnabledCheckBox.isChecked(),
+                                  self.ui.songTimeCheckBox.isChecked(),
+                                  self.ui.viewTypeComboBox.currentIndex(),
+                                  self.ui.coinLockLevel.value()
+                                  )
         self.accept()
 
     def onCancelButton(self):

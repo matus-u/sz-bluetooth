@@ -10,11 +10,13 @@ class PrintingService(QtCore.QObject):
     noPaper = QtCore.pyqtSignal()
     printFinished = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, hwErrorHandler):
         super().__init__()
+        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
 
     def initialize(self):
         self.printFinished.emit()
+        #self.errorFunc()
 
     def printTicket(self, name, ID, winNumber):
         print ("NAME {} ID {} winNumber {}".format(name,ID,winNumber))

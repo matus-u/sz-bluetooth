@@ -45,6 +45,7 @@ class AppSettings:
 
     BluetoothEnabledString = "BluetoothEnabled"
     SongTimeVisString = "SongTimesVisible"
+    CoinLockLevel = "CoinLockLevel"
 
     Notifier = AppSettingsNotifier()
 
@@ -132,6 +133,16 @@ class AppSettings:
         return AppSettings.DefaultCoinValues[currency]
 
     @staticmethod
+    def actualCoinLockLevel(appSettings = None):
+        defaultCoinLevel = 0.0
+        if AppSettings.actualCurrency(appSettings) == "EUR":
+            defaultCoinLevel = 4.0
+
+        if AppSettings.actualCurrency(appSettings) == "HUF":
+            defaultCoinLevel = 1000
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinLockLevel, defaultCoinLevel, float)
+
+    @staticmethod
     def currencyStringByIndex(index):
         return AppSettings.CurrencyList[index]
 
@@ -145,7 +156,7 @@ class AppSettings:
         QtCore.QCoreApplication.processEvents()
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex):
+    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, coinLockLevel):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
@@ -155,6 +166,7 @@ class AppSettings:
             cls.getNotifier().currencyChanged.emit(AppSettings.CurrencyList[currencyIndex])
 
         settings.setValue(AppSettings.CoinValuesString, coinSettingsList)
+        settings.setValue(AppSettings.CoinLockLevel, coinLockLevel)
 
         if moneyServer != AppSettings.actualMoneyServer(settings):
             settings.setValue(AppSettings.MoneyServerString, moneyServer)

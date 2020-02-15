@@ -37,11 +37,12 @@ class CreditService(QtCore.QObject):
     moneyInserted = QtCore.pyqtSignal(float)
     creditCleared = QtCore.pyqtSignal()
 
-    def __init__(self, coinSettings):
+    def __init__(self, coinSettings, coinLockLevel, errorHandler):
         super().__init__()
         self.credit = 0.0
         self.coinSettings = coinSettings
-        self.coinService = CoinProtocolService()
+        self.coinLockLevel = coinLockLevel
+        self.coinService = CoinProtocolService(errorHandler)
         self.coinService.actualStatus.connect(self.onCoinChannel)
 
         self.moneyLevelCounter = 0
@@ -57,8 +58,17 @@ class CreditService(QtCore.QObject):
         self.credit = round (self.credit + round(value, 2), 2)
         self.creditChanged.emit(value)
 
-    def setCoinSettings(self, coinSettings):
+        self.checkCoinLockLevel()
+
+    def setCoinSettings(self, coinSettings, coinLockLevel):
         self.coinSettings = coinSettings
+        self.coinLockLevel = coinLockLevel
+
+    def checkCoinLockLevel(self):
+        if self.credit >= self.coinLockLevel:
+            self.coinService.lockCoinMachine(True)
+        else:
+            self.coinService.lockCoinMachine(False)
 
     def getCoinSettings(self):
         return self.coinSettings
