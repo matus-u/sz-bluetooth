@@ -347,8 +347,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if self.playLogicService.isPlayingFromBluetooth():
             self.ui.playLabel.setText(self.texts[self.CONNECTION_INITIALIZED].format(self.playLogicService.getActualPlayingInfo().name()))
         else:
-            # TODO UPDATE COUNT
-            pass
+            self.playTrackCounter.addToCounter(self.playLogicService.getActualPlayingInfo().path())
 
     def onPlayingStarted(self):
         if self.playLogicService.isPlayingFromBluetooth():
@@ -444,7 +443,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.updateTotalPlayQueueLabel()
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
-        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(count - 1)))
+        self.ui.playQueueWidget.setCellWidget(count-1, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(count - 1), True, True, False))
 
     def onRemoveFromPlayQueue(self):
         self.updateTotalPlayQueueLabel()
@@ -452,7 +451,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         count = self.playQueue.rowCount()
         self.ui.playQueueWidget.setRowCount(count)
         for i in range(0, count):
-            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(i)))
+            self.ui.playQueueWidget.setCellWidget(i, 0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(self.playQueue.data(i), True, True, False))
 
     def onSongSelectionChanged(self):
         if self.ui.songsWidget.rowCount() > 0:

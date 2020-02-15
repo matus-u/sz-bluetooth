@@ -12,13 +12,14 @@ from services.AppSettings import AppSettings
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
 class SongModel:
-    def __init__(self, songsWidget, selectedGenreWidget):
+    def __init__(self, songsWidget, selectedGenreWidget, playTrackCounter):
         self.music = {}
         self.actualGenreList = []
         self.nonRotatedGenreList = []
         self.genreLabel = selectedGenreWidget
         self.songsWidget = songsWidget
         self.actualGenre = None
+        self.playTrackCounter = playTrackCounter
 
     def rotate(self, value):
         l = deque(self.actualGenreList)
@@ -41,7 +42,8 @@ class SongModel:
         self.songsWidget.setRowCount(len(self.music[genreKey]))
         durationVisible = AppSettings.actualSongTimeVisible()
         for index, item in enumerate(self.music[genreKey]):
-            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl(item.name(), str(int(item.duration())), durationVisible))
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(item, False, durationVisible, True, self.playTrackCounter))
+
         if (self.songsWidget.rowCount() > 0):
             self.songsWidget.selectRow(0)
 
@@ -75,15 +77,15 @@ class SongModel:
         return self.genreLabel
 
 class GenreBasedModel(SongModel):
-    def __init__(self, songsWidget, selectedGenreWidget):
-        super().__init__(songsWidget, selectedGenreWidget)
+    def __init__(self, songsWidget, selectedGenreWidget, playTrackCounter):
+        super().__init__(songsWidget, selectedGenreWidget, playTrackCounter)
 
     def getSelector(self, song):
         return song.genre()
 
 class AlphaBasedModel(SongModel):
-    def __init__(self, songsWidget, selectedGenreWidget):
-        super().__init__(songsWidget, selectedGenreWidget)
+    def __init__(self, songsWidget, selectedGenreWidget, playTrackCounter):
+        super().__init__(songsWidget, selectedGenreWidget, playTrackCounter)
 
     def getSelector(self, song):
         return song.name().lower()[0]
@@ -95,12 +97,11 @@ class MusicController(QtCore.QObject):
     def __init__(self, songsWidget, genreLabel, alphaLabel, playTrackCounter):
         super().__init__()
 
-        self.genreBasedModel = GenreBasedModel(songsWidget, genreLabel)
-        self.alphaBasedModel = AlphaBasedModel(songsWidget, alphaLabel)
+        self.genreBasedModel = GenreBasedModel(songsWidget, genreLabel, playTrackCounter)
+        self.alphaBasedModel = AlphaBasedModel(songsWidget, alphaLabel, playTrackCounter)
         self.actualModel = None
         self.parseMusicStorage()
         self.selectModel()
-        playTrackCounter.countUpdated.connect(self.onTrackCountUpdate)
 
     def nextGenre(self):
         self.actualModel.nextGenre()
@@ -152,7 +153,3 @@ class MusicController(QtCore.QObject):
         self.actualModel.generateGenreList()
         self.actualModel.reloadSongsWidget()
         self.actualModel.label().show()
-
-    def onTrackCountUpdate(self, path):
-        self.actualModel.updateCountWidget(path)
-

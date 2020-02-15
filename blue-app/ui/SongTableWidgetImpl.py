@@ -10,14 +10,26 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
 
     SELECT_STRING = 'selected'
 
-    def __init__(self, name, duration, durationVisible=True):
+    def __init__(self, name, playQueueObject, durationVisible, countVisible, playTrackCounter):
         super(SongTableWidgetImpl, self).__init__()
         self.ui = Ui_SongTableWidget()
         self.ui.setupUi(self)
         self.ui.songNameLabel.setText(name)
-        self.duration = duration
+        self.duration = playQueueObject.duration()
         self.setDurationVisible(durationVisible)
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
+        self.playQueueObject = playQueueObject
+
+        if (countVisible):
+            self.ui.playCountLabel.setText(self.formatCountValue(playTrackCounter.getCount(playQueueObject.path())))
+            playTrackCounter.countUpdated.connect(self.onPlayCountChange)
+
+    def formatCountValue(self, value):
+        return '{0:04d}'.format(value)
+
+    def onPlayCountChange(self, itemPath, value):
+        if itemPath == self.playQueueObject.path():
+            self.ui.playCountLabel.setText(self.formatCountValue(value))
 
     def setDurationVisible(self, visible):
         if visible:
@@ -26,12 +38,15 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
             self.ui.songDurationLabel.setText("")
 
     @classmethod
-    def fromPlayQueueObject(cls, playQueueObject):
+    def fromPlayQueueObject(cls, playQueueObject, useStartTime, durationVisible, countVisible, playTrackCounter=None):
         if isinstance(playQueueObject, BluetoothPlayQueueObject):
-            return cls(Helpers.formatNameWithStartTime(playQueueObject.name(), playQueueObject.startTime()), playQueueObject.duration())
+            nameToShow = playQueueObject.name()
+            if useStartTime:
+                nameToShow = Helpers.formatNameWithStartTime(playQueueObject.name(), playQueueObject.startTime())
+            return cls(nameToShow, playQueueObject, durationVisible, False, None)
 
         if isinstance(playQueueObject, Mp3PlayQueueObject):
-            return cls(playQueueObject.name(), playQueueObject.duration())
+            return cls(playQueueObject.name(), playQueueObject, durationVisible, countVisible, playTrackCounter)
 
 
     def select(self):

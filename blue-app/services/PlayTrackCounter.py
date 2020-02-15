@@ -9,7 +9,7 @@ class PlayTrackCounter(QtCore.QObject):
 
     Counts = "Counts"
 
-    countUpdated = QtCore.pyqtSignal(str)
+    countUpdated = QtCore.pyqtSignal(str, int)
 
     def __init__(self):
         super().__init__()
@@ -19,9 +19,12 @@ class PlayTrackCounter(QtCore.QObject):
         self.musicCounters = self.settings.value(PlayTrackCounter.Counts, {})
 
     def addToCounter(self, path):
-        count = self.musicCounters.get(name, 0)
+        count = self.musicCounters.get(path, 0)
         count = count + 1
-        self.musicCounters[name] = c
+        self.musicCounters[path] = count
         self.settings.setValue(PlayTrackCounter.Counts, self.musicCounters)
-        self.countUpdated.emit(path)
+        self.countUpdated.emit(path, count)
+
+    def getCount(self, path):
+        return self.musicCounters.get(path, 0)
 

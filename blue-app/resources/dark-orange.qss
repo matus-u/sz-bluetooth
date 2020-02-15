@@ -436,9 +436,16 @@ SongTableWidgetImpl * {
 */
 }
 
+SongTableWidgetImpl QLabel#songDurationLabel {
+   margin-left: 20px;
+}
+
 SongTableWidgetImpl[selected=true] * {
     color: #FFFFFF;
-    padding-left: 1px;
+}
+
+SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
+    padding-left: 2px;
 }
 
 QWidget#scanButton:focus,

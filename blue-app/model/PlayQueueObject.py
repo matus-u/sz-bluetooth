@@ -55,3 +55,9 @@ class BluetoothPlayQueueObject:
 
     def endTime(self):
         return self._startTime + timedelta(seconds=self.duration())
+
+    def getCount(self):
+        return 0
+
+    def path(self):
+        return ""
