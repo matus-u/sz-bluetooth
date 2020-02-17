@@ -107,7 +107,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     def sendPrintStatus(self):
         logger = LoggingService.getLogger()
         logger.info("Send print status:")
-        data = { 'id' : self.macAddr, 'print-status-data' : self.printService.getErrorDesc() }
+        data = { 'id' : self.macAddr, 'print-status-data' : self.printService.getPrintStatus() }
         textMsg = self.createPhxMessage("print-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
         self.websocket.sendTextMessage(textMsg)

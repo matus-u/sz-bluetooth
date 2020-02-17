@@ -12,6 +12,7 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.ui = Ui_WheelSettings()
         self.ui.setupUi(self)
         self.service = wheelFortuneService
+        self.printerService = printerService
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.reject)
@@ -19,15 +20,17 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.ui.fortuneCheckBox.toggled.connect(lambda state: self.ui.moneySpinBox.setEnabled(state))
         self.ui.fortuneCheckBox.setChecked(self.service.isEnabled())
         self.ui.moneySpinBox.setValue(self.service.moneyLevel())
+        self.ui.ticketIdBox.setValue(self.printerService.getTicketId())
 
         self.wheelFortuneService = wheelFortuneService
         self.wheelFortuneService.probabilitiesUpdated.connect(self.updateTable)
         self.updateTable()
 
-        self.ui.descriptionTicket.clicked.connect(lambda: printerService.printDescTicket(AppSettings.actualDeviceName(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames()))
+        self.ui.descriptionTicket.clicked.connect(lambda: self.printerService.printDescTicket(AppSettings.actualDeviceName(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames()))
 
     def onOkButton(self):
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())
+        self.printerService.setNewTicketId(self.ui.ticketIdBox.value())
         self.accept()
 
     def updateTable(self):
