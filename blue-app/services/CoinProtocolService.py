@@ -22,8 +22,10 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
             import sys, serial
             s = serial.Serial('/dev/ttyS3', baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
             if toLock:
+                s.write(b"@ff00I=0SS\r\n")
                 self.coinMachineLockStatus.emit(True)
             else:
+                s.write(b"@ff00I=1SS\r\n")
                 self.coinMachineLockStatus.emit(False)
             s.close()
         else:
