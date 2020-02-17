@@ -27,6 +27,8 @@ from ui import Helpers
 from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
 
+from ui.FortuneWheelWindow import PixmapService
+
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     adminModeLeaveButton = QtCore.pyqtSignal()
@@ -181,6 +183,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
         self.actualTimeStampTimer.start(1000)
 
+        PixmapService.reloadPixMaps()
+
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             return self.mainFocusHandler
@@ -319,7 +323,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         playQueueObject = self.musicController.getSelectedPlayObject()
 
         #SPECIAL HANDLING OF BLUETOOTH
-        if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject): 
+        if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject):
             self.onBluetoothGenre()
             return
 
@@ -331,8 +335,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.creditService.getSongsRepresentation().enoughMoney():
                 prevLastStarted = self.lastStarted
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
-                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
+                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
 
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:

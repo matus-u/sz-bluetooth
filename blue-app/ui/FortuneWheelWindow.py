@@ -7,6 +7,20 @@ from services.AppSettings import AppSettings
 from services.LedButtonService import LedButtonService
 
 from ui import FocusHandler
+from collections import deque
+
+class PixmapService():
+    pixMaps = []
+
+    @staticmethod
+    def reloadPixMaps():
+        PixmapService.pixMaps = []
+        for i in range (0,10):
+            path = "../blue-app-configs/images/{}.jpeg".format(str(i))
+            pix = QtGui.QPixmap(path)
+            if pix.isNull():
+                pix.load("./pes.jpg")
+            PixmapService.pixMaps.append(pix)
 
 class FortuneWheelWindow(QtWidgets.QDialog):
     def __init__(self, parent, winningIndex, prizes, printingService, ledButtonService, arrowHandler):
@@ -27,68 +41,8 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.ledButtonService = ledButtonService
         self.focusHandler = None
 
-        scene = QtWidgets.QGraphicsScene()
-        self.ui.graphicsView.setScene(scene)
-
-        x1 = 0
-        y1 = 0
-        x2 = -64
-        y2 = -200
-        x3 =  64
-        y3 = -200
-        x4 = 0
-        y4 = -200
-
-        startTriangle = scene.addPolygon(QtGui.QPolygonF([QtCore.QPoint(x1,y1), QtCore.QPoint(x2,y2), QtCore.QPoint(x3,y3)]), QtGui.QPen(QtCore.Qt.black), QtGui.QBrush(QtCore.Qt.green))
-        startTriangle.setTransformOriginPoint(0,0);
-        self.triangles = []
-
-        colors = [ QtCore.Qt.cyan, QtCore.Qt.magenta, QtCore.Qt.yellow ]
-        angle = 36
-        for i in range (0,10):
-            startTriangle.setRotation(i*angle)
-            points = [startTriangle.mapToScene(x1,y1), startTriangle.mapToScene(x2,y2), startTriangle.mapToScene(x3,y3)]
-
-            grad = QtGui.QLinearGradient(QtCore.QPointF(0, 0), startTriangle.mapToScene(x4,y4));
-            grad.setColorAt(0.3, QtCore.Qt.yellow);
-            grad.setColorAt(0.8, colors[i%2]);
-            grad.setColorAt(1.0, QtCore.Qt.red);
-
-            if i != 0:
-                brush = grad
-            else:
-                brush = QtGui.QBrush(QtCore.Qt.gray)
-
-            self.triangles.append(scene.addPolygon(QtGui.QPolygonF(points), QtGui.QPen(QtCore.Qt.black), brush))
-
-            font = QtGui.QFont()
-            font.setPointSize(35)
-            textItem = scene.addText(str(i), font)
-            textItem.setTransformOriginPoint(0,0)
-            textItem.setRotation(i*angle)
-            point = startTriangle.mapToScene(-(textItem.boundingRect().width()/2),-180)
-            textItem.moveBy(point.x(), point.y())
-
-        scene.removeItem(startTriangle)
-
-        for i in self.triangles:
-            i.setTransformOriginPoint(0,0)
-
-        self.arrow = scene.addPolygon(QtGui.QPolygonF([QtCore.QPoint(10, 0),
-                                                       QtCore.QPoint(-7, 0),
-                                                       QtCore.QPoint(-7, -80),
-                                                       QtCore.QPoint(0, -100),
-                                                       QtCore.QPoint(7, -80),
-                                                       ]), QtGui.QPen(QtCore.Qt.black), QtGui.QBrush(QtCore.Qt.green))
-
-        self.arrow.setTransformOriginPoint(0,0);
-
-        self.animations = []
-        self.animationIndex = 0
-        self.generateAnimations()
-
-        QtCore.QTimer.singleShot(1000, lambda: self.onAnimationFinished())
-        scene.setFocus()
+        #QtCore.QTimer.singleShot(1000, lambda: self.onAnimationFinished())
+        self.ui.widget.setFocus()
 
         self.ledButtonService.setButtonState(LedButtonService.LEFT, False)
         self.ledButtonService.setButtonState(LedButtonService.RIGHT, False)
@@ -96,48 +50,47 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
         self.ledButtonService.setButtonState(LedButtonService.CONFIRM, False)
 
-    def onAnimationFinished(self):
-        if (self.animationIndex < len(self.animations)):
-            self.animations[self.animationIndex].start()
-        self.animationIndex = self.animationIndex + 1
+        self.ui.centerLabel.raise_()
 
-    def onRotationChange(self, x):
-            self.arrow.setRotation(x)
+        self.rotateTimer = QtCore.QTimer()
+        self.rotateTimer.timeout.connect(self.onRotateTimer)
 
-    def generateAnimations(self):
-        animation = QtCore.QVariantAnimation(self)
-        animation.valueChanged.connect(self.onRotationChange)
-        animation.setStartValue(0);
-        animation.setEndValue(360);
-        animation.setDuration(4000);
-        animation.setLoopCount(1);
-        animation.finished.connect(self.onAnimationFinished)
-        self.animations.append(animation)
+        self.maxRotation = 50
+        self.maxRotation = self.maxRotation + self.winningIndex
+        if self.winningIndex == 0:
+           self.maxRotation = self.maxRotation + 10
+        self.counter = 0
+        self.rotateTimer.start(100)
 
-        animation2 = QtCore.QVariantAnimation(self)
-        animation2.valueChanged.connect(self.onRotationChange)
-        animation2.setStartValue(0);
-        animation2.setEndValue(360);
-        animation2.setDuration(6000);
-        animation2.setLoopCount(1);
-        animation2.finished.connect(self.onAnimationFinished)
-        self.animations.append(animation2)
+    def rotateImages(self, index):
+        indexes = deque(range(0,10))
+        indexes.rotate(-1* index)
+        self.setPixForLabel(self.ui.leftLabel, PixmapService.pixMaps     [indexes[-2]])
+        self.setPixForLabel(self.ui.midLeftLabel, PixmapService.pixMaps  [indexes[-1 ]])
+        self.setPixForLabel(self.ui.centerLabel, PixmapService.pixMaps   [indexes[0 ]])
+        self.setPixForLabel(self.ui.midRigthLabel, PixmapService.pixMaps [indexes[1 ]])
+        self.setPixForLabel(self.ui.rigthLabel, PixmapService.pixMaps    [indexes[2 ]])
 
-        indexOfLastElement = self.winningIndex
-        if indexOfLastElement == 0:
-            indexOfLastElement = 10
-        lastDur = 800 * indexOfLastElement
-        lastEndValue = indexOfLastElement*36
+    def onRotateTimer(self):
+        self.counter = self.counter + 1
+        if self.counter == 30:
+            self.rotateTimer.stop()
+            self.rotateTimer.start(300)
 
-        animation3 = QtCore.QVariantAnimation(self)
-        animation3.valueChanged.connect(self.onRotationChange)
-        animation3.setStartValue(0);
-        animation3.setEndValue(lastEndValue);
-        animation3.setDuration(lastDur);
-        animation3.setLoopCount(1);
-        animation3.finished.connect(self.lastAnimationFinished)
-        self.animations.append(animation3)
+        if self.counter == 50:
+            self.rotateTimer.stop()
+            self.rotateTimer.start(500)
 
+        self.rotateImages(self.counter%10)
+
+        if self.counter == self.maxRotation:
+            self.rotateTimer.stop()
+            self.lastAnimationFinished()
+
+    def setPixForLabel(self, label, pixmap):
+        w = label.width()
+        h = label.height()
+        label.setPixmap(pixmap.scaled(w, h))
 
     def resetFocus(self):
         if self.focusHandler:

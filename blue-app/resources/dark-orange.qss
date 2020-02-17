@@ -458,3 +458,8 @@ QWidget#backButton:focus
 {
     border : 5px solid #FF7800;
 }
+
+QWidget#centerLabel
+{
+    border : 2px solid red;
+}
