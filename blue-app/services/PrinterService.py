@@ -4,6 +4,13 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+import random
+import string
+
+def randomString(stringLength):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
 class PrintingService(QtCore.QObject):
 
     printError = QtCore.pyqtSignal()
@@ -14,16 +21,12 @@ class PrintingService(QtCore.QObject):
     SettingsPath = "../blue-app-configs/print-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
-    PrintID = "PrintID"
-
     def __init__(self, hwErrorHandler):
         super().__init__()
 
         self.errorStatus = 0
         self.paperError = 0
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
-        self.settings = QtCore.QSettings(PrintService.SettingsPath, PrintService.SettingsFormat)
-        self.printId = self.settings.value(PrintingService.PrintID, 0, int)
 
     def initialize(self):
         try:
@@ -43,7 +46,6 @@ class PrintingService(QtCore.QObject):
 
     def printTicket(self, name, winNumber, prizeName):
         try:
-            self.printId = self.printId + 1
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
 
             s.write([0x1b, 0x40])
@@ -59,7 +61,7 @@ class PrintingService(QtCore.QObject):
             s.write([0x1d, 0x21, 0x00])
             s.write([0x1d, 0x21, 0x71])
             s.write(("DEVICE: " + name + "\n").encode())
-            s.write(("ID: "+ str(self.printId) +"\n").encode())
+            s.write(("ID: "+ randomString(8) +"\n").encode())
             s.write(self.tr("Thank you for playing!\n").encode())
             s.write(b"\n")
             s.write(b"\n")
@@ -72,7 +74,6 @@ class PrintingService(QtCore.QObject):
             s.close()
 
             self.printFinished.emit()
-            self.settings.setValue(PrintingService.PrintID, self.printId)
         except:
             self.errorFunc()
 
@@ -107,17 +108,10 @@ class PrintingService(QtCore.QObject):
         if (self.paperError & 0x40) > 0:
             paperStatus = "NO_PAPER"
 
-        return { "printId" : self.printId, "errorStatus" : errorString, "errorStatusValue" : self.errorStatus, "paperStatus" : paperStatus, "paperStatusValue" : self.paperError }
+        return { "errorStatus" : errorString, "errorStatusValue" : self.errorStatus, "paperStatus" : paperStatus, "paperStatusValue" : self.paperError }
 
     def getErrorStatus(self):
         return self.errorStatus
-
-    def getTicketId(self):
-        return self.printId
-
-    def setNewTicketId(self, ID):
-        self.printId = ID
-        self.settings.setValue(PrintingService.PrintID, self.printId)
 
     def printDescTicket(self, name, prizeCounts, prizeNames):
         try:

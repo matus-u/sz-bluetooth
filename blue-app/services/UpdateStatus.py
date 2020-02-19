@@ -89,7 +89,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
-        self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", ""));
+        self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr));
         self.adminModeStateRequested.emit()
         self.startTimerSync()
         self.onTimeout()
