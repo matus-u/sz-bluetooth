@@ -155,7 +155,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             LoggingService.getLogger().info("get-actual-money-value")
             self.onTimeout()
 
-        if text["event"] == "get-actual-prob-values":
+        if text["event"] == "get-win-probability-status":
             LoggingService.getLogger().info("get-actual-prob-values")
             self.sendWinProbsStatus()
 
