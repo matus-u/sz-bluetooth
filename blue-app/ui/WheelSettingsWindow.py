@@ -23,7 +23,9 @@ class WheelSettingsWindow(QtWidgets.QDialog):
 
         self.wheelFortuneService = wheelFortuneService
         self.wheelFortuneService.probabilitiesUpdated.connect(self.updateTable)
+        self.wheelFortuneService.probabilitiesUpdated.connect(self.updateLabels)
         self.updateTable()
+        self.updateLabels()
 
         self.ui.descriptionTicket.clicked.connect(lambda: self.printerService.printDescTicket(AppSettings.actualDeviceName(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames()))
 
@@ -33,8 +35,18 @@ class WheelSettingsWindow(QtWidgets.QDialog):
 
     def updateTable(self):
         self.ui.probTableWidget.setRowCount(10)
-        for prob, count, name, index in zip(self.wheelFortuneService.getAllProbs(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames(), range(0,10)):
+        for prob, count, name, cost, index in zip(self.wheelFortuneService.getAllProbs(),
+                                                  self.wheelFortuneService.getAllCounts(),
+                                                  self.wheelFortuneService.getAllNames(),
+                                                  self.wheelFortuneService.getAllCosts(),
+                                                  range(0,10)):
             self.ui.probTableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(str(index)))
-            self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(prob)))
+            self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(cost)))
             self.ui.probTableWidget.setItem(index, 2, QtWidgets.QTableWidgetItem(str(count)))
-            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem(str(name)))
+            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem(str(prob)))
+            self.ui.probTableWidget.setItem(index, 4, QtWidgets.QTableWidgetItem(str(name)))
+
+    def updateLabels(self):
+        data = self.wheelFortuneService.getTotalInfo()
+        self.ui.totalCostLabel.setText(str(data[0]))
+        self.ui.expectedEarningLabel.setText(str(data[1]))

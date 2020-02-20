@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>976</width>
-    <height>428</height>
+    <height>403</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>360</y>
+     <y>330</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>360</y>
+     <y>330</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -109,7 +109,7 @@
      <x>350</x>
      <y>10</y>
      <width>611</width>
-     <height>391</height>
+     <height>361</height>
     </rect>
    </property>
    <property name="showGrid">
@@ -128,12 +128,17 @@
    </column>
    <column>
     <property name="text">
-     <string>Probability</string>
+     <string>Cost</string>
     </property>
    </column>
    <column>
     <property name="text">
      <string>Count</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Probability</string>
     </property>
    </column>
    <column>
@@ -146,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>170</y>
+     <y>220</y>
      <width>271</width>
      <height>51</height>
     </rect>
@@ -154,6 +159,52 @@
    <property name="text">
     <string>Print descriptin ticket (table)</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>160</y>
+     <width>271</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Expected earnings:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="expectedEarningLabel">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Total cost:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLabel" name="totalCostLabel">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

@@ -29,7 +29,19 @@ class WheelFortuneService(QtCore.QObject):
         self.winTries = 0
 
     def defaultProbs(self):
-        return {'count_1': 0, 'count_2': 0, 'count_3': 0, 'count_4': 0, 'count_5': 0, 'count_6': 0, 'count_7': 0, 'count_8': 0, 'count_9': 0, 'id': None, 'name_1': '', 'name_2': '', 'name_3': '', 'name_4': '', 'name_5': '', 'name_6': '', 'name_7': '', 'name_8': '', 'name_9': '', 'prob_1': 0, 'prob_2': 0, 'prob_3': 0, 'prob_4': 0, 'prob_5': 0, 'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
+        return { 'expected_earnings': 0, 'total_costs': 0,
+                'cost_1': 0, 'cost_2': 0, 'cost_3': 0,
+                'cost_4': 0, 'cost_5': 0, 'cost_6': 0,
+                'cost_7': 0, 'cost_8': 0, 'cost_9': 0,
+                'count_1': 0, 'count_2': 0, 'count_3': 0,
+                'count_4': 0, 'count_5': 0, 'count_6': 0,
+                'count_7': 0, 'count_8': 0, 'count_9': 0,
+                'id': None, 'name_1': '', 'name_2': '',
+                'name_3': '', 'name_4': '', 'name_5': '',
+                'name_6': '', 'name_7': '', 'name_8': '',
+                'name_9': '', 'prob_1': 0, 'prob_2': 0,
+                'prob_3': 0, 'prob_4': 0, 'prob_5': 0,
+                'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
 
     def setSettings(self, enabled, moneyLevel):
         if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
@@ -65,8 +77,8 @@ class WheelFortuneService(QtCore.QObject):
         self.probabilitiesUpdated.emit()
 
     def getAllProbs(self):
-        probs = [(self.probabilityValues["prob_" + str(x)]) for x in range(1,10)]
-        probs =  [(100 - sum(probs))] + probs
+        probs = [float((self.probabilityValues["prob_" + str(x)])) for x in range(1,10)]
+        probs =  [(float(100) - sum(probs))] + probs
         return probs
 
     def getAllNames(self):
@@ -78,6 +90,14 @@ class WheelFortuneService(QtCore.QObject):
         counts = [(self.probabilityValues["count_" + str(x)]) for x in range(1,10)]
         counts =  [-1] + counts
         return counts
+
+    def getAllCosts(self):
+        costs = [(self.probabilityValues["cost_" + str(x)]) for x in range(1,10)]
+        costs =  [-1] + costs
+        return costs
+
+    def getTotalInfo(self):
+        return (self.probabilityValues["total_costs"], self.probabilityValues["expected_earnings"])
 
     def tryWin(self):
         if self.printerActive == 1:
