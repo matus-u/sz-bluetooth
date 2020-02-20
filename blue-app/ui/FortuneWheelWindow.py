@@ -23,7 +23,7 @@ class PixmapService():
             PixmapService.pixMaps.append(pix)
 
 class FortuneWheelWindow(QtWidgets.QDialog):
-    def __init__(self, parent, winningIndex, prizes, printingService, ledButtonService, arrowHandler):
+    def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, arrowHandler):
         super(FortuneWheelWindow, self).__init__(parent)
         self.ui = Ui_FortuneWheel()
         self.ui.setupUi(self)
@@ -36,7 +36,8 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.ui.backButton.setEnabled(False)
 
         self.winningIndex = winningIndex
-        self.realWin = (prizes[winningIndex] > 0)
+        self.realWin = (prizeCount > 0)
+        self.realWinName = prizeName
         self.printingService = printingService
         self.ledButtonService = ledButtonService
         self.focusHandler = None
@@ -100,7 +101,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.ui.backButton.setEnabled(True)
         if (self.realWin):
             self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {}").format(self.winningIndex))
-            self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex)
+            self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
             self.ui.backButton.setEnabled(True)
             self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
             self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())

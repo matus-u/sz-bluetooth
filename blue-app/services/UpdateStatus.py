@@ -97,20 +97,24 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.sendPrintStatus()
 
     def sendWinProbsStatus(self):
-        logger = LoggingService.getLogger()
-        logger.info("Send win probs status:")
-        data = { 'id' : self.macAddr, 'probability-data' : self.wheelFortuneService.actualProbs() }
-        textMsg = self.createPhxMessage("win-probability-status", data)
-        LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
-        self.websocket.sendTextMessage(textMsg)
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                logger = LoggingService.getLogger()
+                logger.info("Send win probs status:")
+                data = { 'id' : self.macAddr, 'probability-data' : self.wheelFortuneService.actualProbs() }
+                textMsg = self.createPhxMessage("win-probability-status", data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
 
     def sendPrintStatus(self):
-        logger = LoggingService.getLogger()
-        logger.info("Send print status:")
-        data = { 'id' : self.macAddr, 'print-status-data' : self.printService.getPrintStatus() }
-        textMsg = self.createPhxMessage("print-status", data)
-        LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
-        self.websocket.sendTextMessage(textMsg)
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                logger = LoggingService.getLogger()
+                logger.info("Send print status:")
+                data = { 'id' : self.macAddr, 'print-status-data' : self.printService.getPrintStatus() }
+                textMsg = self.createPhxMessage("print-status", data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
 
     def sendReducePrizeCount(self, prizeCountIndex):
         if self.websocket is not None:

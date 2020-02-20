@@ -191,8 +191,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             return self.bluetoothFocusHandler
 
-    def onFortuneServiceTry(self, indexOfPrize, prizes):
-        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizes, self.printingService, self.ledButtonService, self.arrowHandler)
+    def onFortuneServiceTry(self, indexOfPrize, prizeCount, prizeName):
+        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeCount, prizeName, self.printingService, self.ledButtonService, self.arrowHandler)
         self.openSubWindow(w)
         self.wheelWindows.append(w)
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))

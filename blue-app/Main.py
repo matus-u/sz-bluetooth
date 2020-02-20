@@ -75,6 +75,7 @@ def main():
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
+    wheelFortuneService.probabilitiesUpdated.connect(webUpdateStatus.sendWinProbsStatus, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
     printingService.printFinished.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
