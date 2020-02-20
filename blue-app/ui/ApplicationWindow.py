@@ -27,8 +27,6 @@ from ui import Helpers
 from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
 
-from ui.FortuneWheelWindow import PixmapService
-
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     adminModeLeaveButton = QtCore.pyqtSignal()
@@ -182,8 +180,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.actualTimeStampTimer = QtCore.QTimer(self)
         self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
         self.actualTimeStampTimer.start(1000)
-
-        PixmapService.reloadPixMaps()
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:

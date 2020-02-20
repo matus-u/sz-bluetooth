@@ -16,6 +16,7 @@ from services.WheelFortuneService import WheelFortuneService
 from services.LedButtonService import LedButtonService
 from services.HwErrorHandling import HwErrorHandling
 from services.HwErrorHandling import HwErrorHandling
+from services.PixmapService import PixmapService
 
 from generated import Resources
 
@@ -71,9 +72,12 @@ def main():
     wheelFortuneService = WheelFortuneService()
     printingService = PrintingService(errorHandler)
 
+    pixmapService = PixmapService()
+
     webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService, printingService)
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
+    webUpdateStatus.newWinImage.connect(pixmapService.onNewImageData, QtCore.Qt.QueuedConnection)
     webUpdateStatus.newWinProbabilityValues.connect(wheelFortuneService.setNewProbabilityValues, QtCore.Qt.QueuedConnection)
     wheelFortuneService.probabilitiesUpdated.connect(webUpdateStatus.sendWinProbsStatus, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)

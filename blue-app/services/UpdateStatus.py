@@ -17,6 +17,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     adminModeServerRequest = QtCore.pyqtSignal()
     adminModeStateRequested = QtCore.pyqtSignal()
     newWinProbabilityValues = QtCore.pyqtSignal(object)
+    newWinImage = QtCore.pyqtSignal(object)
 
     def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService):
         super().__init__(10000)
@@ -89,6 +90,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
     def onConnect(self):
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
+        self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr + "_priv", "_priv"));
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr));
         self.adminModeStateRequested.emit()
         self.startTimerSync()
@@ -136,10 +138,19 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
                 self.websocket.sendTextMessage(textMsg)
 
+    def sendWinImageRequestResponse(self, image_id):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                event = "win-image-response"
+                data = { 'id' : self.macAddr, 'image_id' : image_id }
+                textMsg = self.createPhxMessage(event, data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
+
     def onTextMessageReceived(self, js):
         LoggingService.getLogger().debug("Data from websocket %s" % js)
         text = json.loads(js)
-        if text["event"] == "phx_reply" and text["payload"]["status"] == "ok" and text["ref"] != "1" and text["payload"]["response"]["msg_type"] == "update-status":
+        if text["event"] == "phx_reply" and text["payload"]["status"] == "ok" and ("msg_type" in text["payload"]["response"].keys()) and text["payload"]["response"]["msg_type"] == "update-status":
             data = text["payload"]["response"]["data"]
             AppSettings.storeServerSettings(data["name"], data["owner"], data["desc"], data["service_phone"])
 
@@ -167,6 +178,11 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             LoggingService.getLogger().info("get-print-status")
             self.sendPrintStatus()
 
+        if text["event"] == "win-image-request":
+            LoggingService.getLogger().info("win-image-request")
+            self.sendWinImageRequestResponse(text["payload"]["image_id"])
+            self.newWinImage.emit(text["payload"])
+
     def onDisconnect(self):
         self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
@@ -177,9 +193,9 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.connectScheduled = True
             QtCore.QTimer.singleShot(10000, self.connect)
 
-    def createPhxMessage(self, event, payload):
+    def createPhxMessage(self, event, payload, topicPriv=""):
         self.ref = self.ref + 1
-        return json.dumps({ "topic" : "device_room:" + self.macAddr,
+        return json.dumps({ "topic" : "device_room:" + self.macAddr + topicPriv,
                             "event" : event,
                             "payload" : payload,
                             "ref" : str(self.ref)

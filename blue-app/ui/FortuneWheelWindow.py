@@ -5,22 +5,10 @@ from PyQt5 import QtCore
 from generated.FortuneWheel import Ui_FortuneWheel
 from services.AppSettings import AppSettings
 from services.LedButtonService import LedButtonService
+from services.PixmapService import PixmapService
 
 from ui import FocusHandler
 from collections import deque
-
-class PixmapService():
-    pixMaps = []
-
-    @staticmethod
-    def reloadPixMaps():
-        PixmapService.pixMaps = []
-        for i in range (0,10):
-            path = "../blue-app-configs/images/{}.jpeg".format(str(i))
-            pix = QtGui.QPixmap(path)
-            if pix.isNull():
-                pix.load("./pes.jpg")
-            PixmapService.pixMaps.append(pix)
 
 class FortuneWheelWindow(QtWidgets.QDialog):
     def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, arrowHandler):
