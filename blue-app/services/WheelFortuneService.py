@@ -14,7 +14,7 @@ class WheelFortuneService(QtCore.QObject):
     Probabilities = "Probabilities"
 
     reducePrizeCount = QtCore.pyqtSignal(int)
-    win = QtCore.pyqtSignal(int, int, int)
+    win = QtCore.pyqtSignal(int, int, str)
 
     probabilitiesUpdated = QtCore.pyqtSignal()
 

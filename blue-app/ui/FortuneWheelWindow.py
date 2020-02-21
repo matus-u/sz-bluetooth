@@ -88,7 +88,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
     def lastAnimationFinished(self):
         self.ui.backButton.setEnabled(True)
         if (self.realWin):
-            self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {}").format(self.winningIndex))
+            self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {} Prize: {}").format(self.winningIndex, self.realWinName))
             self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
             self.ui.backButton.setEnabled(True)
             self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])

@@ -193,9 +193,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelWindows.append(w)
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))
 
-    def onWheelFortuneFinished(self, w, ):
+    def onWheelFortuneFinished(self, w):
         self.wheelWindows.remove(w)
         if len(self.wheelWindows) > 0:
+            self.wheelWindows[-1].show()
+            self.wheelWindows[-1].raise_()
             self.wheelWindows[-1].activateWindow()
             self.wheelWindows[-1].resetFocus()
         else:

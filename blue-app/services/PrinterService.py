@@ -125,6 +125,8 @@ class PrintingService(QtCore.QObject):
 
             s.write(b"\n")
             s.write(b"\n")
+            s.write(b"\n")
+            s.write(b"\n")
 
             #CUT PAPER#
             s.write([0x1d, 0x56, 0])
