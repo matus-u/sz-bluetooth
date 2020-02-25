@@ -83,6 +83,16 @@ class SongModel:
 
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
+
+        if "Top 50" in self.actualGenreList:
+            self.actualGenreList.remove("Top 50")
+        if "Bluetooth" in self.actualGenreList:
+            self.actualGenreList.remove("Bluetooth")
+
+        self.actualGenreList.sort()
+        self.actualGenreList.append("Top 50")
+        self.actualGenreList.append("Bluetooth")
+
         if not AppSettings.actualBluetoothEnabled():
             if "Bluetooth" in self.actualGenreList:
                 self.actualGenreList.remove("Bluetooth")
