@@ -21,7 +21,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         self.arrowHandler = arrowHandler
 
         self.ui.backButton.clicked.connect(self.accept)
-        self.ui.backButton.setEnabled(False)
+        #self.ui.backButton.setEnabled(False)
 
         self.winningIndex = winningIndex
         self.realWin = (prizeCount > 0)
@@ -86,14 +86,15 @@ class FortuneWheelWindow(QtWidgets.QDialog):
             self.focusHandler.setFocus()
 
     def lastAnimationFinished(self):
-        self.ui.backButton.setEnabled(True)
+        #self.ui.backButton.setEnabled(True)
         if (self.realWin):
             self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {} Prize: {}").format(self.winningIndex, self.realWinName))
             self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
-            self.ui.backButton.setEnabled(True)
-            self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
-            self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
-            QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
+            #self.ui.backButton.setEnabled(True)
+            #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
+            #self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
+            #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
+            QtCore.QTimer.singleShot(2500, self.accept)
         else:
             self.ui.wheelLabel.setText(self.tr("Sorry, no win"))
             QtCore.QTimer.singleShot(2500, self.accept)

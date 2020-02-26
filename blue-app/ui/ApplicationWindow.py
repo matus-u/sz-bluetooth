@@ -175,7 +175,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
         printingService.noPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.NO_PAPER]))
 
-        self.wheelWindows = []
+        self.wheelPrizes = []
+        self.wheelWindow = None
 
         self.actualTimeStampTimer = QtCore.QTimer(self)
         self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
@@ -188,18 +189,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return self.bluetoothFocusHandler
 
     def onFortuneServiceTry(self, indexOfPrize, prizeCount, prizeName):
-        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeCount, prizeName, self.printingService, self.ledButtonService, self.arrowHandler)
-        self.openSubWindow(w)
-        self.wheelWindows.append(w)
-        w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+        self.wheelPrizes.append([indexOfPrize, prizeCount, prizeName])
+        self.openFortuneWindow()
+
+    def openFortuneWindow(self):
+        if (len(self.wheelPrizes) > 0) and (self.wheelWindow is None):
+            data = self.wheelPrizes.pop(0)
+            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.arrowHandler)
+            self.wheelWindow = w
+            w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+            self.openSubWindow(w)
 
     def onWheelFortuneFinished(self, w):
-        self.wheelWindows.remove(w)
-        if len(self.wheelWindows) > 0:
-            self.wheelWindows[-1].show()
-            self.wheelWindows[-1].raise_()
-            self.wheelWindows[-1].activateWindow()
-            self.wheelWindows[-1].resetFocus()
+        self.wheelWindow = None
+        if len(self.wheelPrizes):
+            self.openFortuneWindow()
         else:
             self.getActualFocusHandler().setFocus()
             self.showStatusInfo(2000, self.texts[self.CONTINUE_WITH_MUSIC], self.ui.infoLabel)
