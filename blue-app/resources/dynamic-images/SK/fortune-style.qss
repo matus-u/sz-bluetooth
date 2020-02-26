@@ -1,21 +1,21 @@
 QWidget#timeCounterWidget
 {
-    border-image: url(':/dynamic-images/SK/get_ready.jpg') 0 0 0 0 stretch stretch; 
+    border-image: url('./resources/dynamic-images/SK/get_ready.jpg') 0 0 0 0 stretch stretch; 
 }
 
 QWidget#fortuneTryWidget
 {
-    border-image: url(':/dynamic-images/SK/ures.jpg') 0 0 0 0 stretch stretch; 
+    border-image: url('./resources/dynamic-images/SK/ures.jpg') 0 0 0 0 stretch stretch; 
 }
 
 QWidget#noWinWidget
 {
-    border-image: url(':/dynamic-images/SK/prehral_si.jpg') 0 0 0 0 stretch stretch; 
+    border-image: url('./resources/dynamic-images/SK/prehral_si.jpg') 0 0 0 0 stretch stretch; 
 }
 
 QWidget#winWidget
 {
-    border-image: url(':/dynamic-images/SK/vyhral_si.jpg') 0 0 0 0 stretch stretch; 
+    border-image: url('./resources/dynamic-images/SK/vyhral_si.jpg') 0 0 0 0 stretch stretch; 
 }
 
 QWidget#timeCounterLabel 
