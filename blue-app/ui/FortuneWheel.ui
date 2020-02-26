@@ -29,11 +29,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">  QWidget#fortuneTryWidget   
-  {
-     border-image: url(':/dynamic-images/SK/ures.jpg') 0 0 0 0 stretch stretch; 
-}
-</string>
+    <string notr="true"/>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -63,11 +59,7 @@
    </widget>
    <widget class="QWidget" name="fortuneTryWidget">
     <property name="styleSheet">
-     <string notr="true">QWidget#fortuneTryWidget   
-{
-    border-image: url(':/dynamic-images/SK/ures.jpg') 0 0 0 0 stretch stretch; 
-}
-</string>
+     <string notr="true"/>
     </property>
     <widget class="QLabel" name="rigthLabel">
      <property name="geometry">
