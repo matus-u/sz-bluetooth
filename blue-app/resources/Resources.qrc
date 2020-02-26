@@ -1,6 +1,20 @@
 <RCC>
     <qresource prefix="/">
         <file>dark-orange.qss</file>
+        <file>dynamic-images/HU/forint1.jpg</file>
+        <file>dynamic-images/HU/get_ready.jpg</file>
+        <file>dynamic-images/HU/prazdny - bude modry.jpg</file>
+        <file>dynamic-images/HU/prehral_si.jpg</file>
+        <file>dynamic-images/HU/vyhral_si.jpg</file>
+        <file>dynamic-images/SK/eu1.png</file>
+        <file>dynamic-images/SK/get_ready.jpg</file>
+        <file>dynamic-images/SK/prehral_si.jpg</file>
+        <file>dynamic-images/SK/ures.jpg</file>
+        <file>dynamic-images/SK/vyhral_si.jpg</file>
+        <file>dynamic-images/SK/bg.jpg</file>
+        <file>dynamic-images/HU/bg.jpg</file>
+        <file>dynamic-images/HU/fortune-style.qss</file>
+        <file>dynamic-images/SK/fortune-style.qss</file>
     </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>

@@ -2,8 +2,6 @@ QWidget
 {
     color: #b1b1b1;
     background-color: #323232;
-/*    color: #FFFFFF; */
-/*    background-color: rgba(50, 50, 50, 0%); */
     font-size: 14px;
 }
 
@@ -12,7 +10,6 @@ QMainWindow
     background-image: url(":/images/back.png")
 }
 
-/*QWidget:focus {  border : 5px solid #FF7800; }*/
 
 QAbstractItemView
 {
@@ -463,3 +460,4 @@ QWidget#centerLabel
 {
     border : 2px solid red;
 }
+

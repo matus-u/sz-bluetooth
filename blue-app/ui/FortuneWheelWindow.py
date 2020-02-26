@@ -10,28 +10,44 @@ from services.PixmapService import PixmapService
 from ui import FocusHandler
 from collections import deque
 
+
+def getLangBasedQssString():
+
+    lang = AppSettings.actualLanguage()
+
+    if (lang) == AppSettings.LanguageList[1]:
+        return QtCore.QFile(":/dynamic-images/HU/fortune-style.qss")
+
+    return QtCore.QFile(":/dynamic-images/SK/fortune-style.qss")
+
+
 class FortuneWheelWindow(QtWidgets.QDialog):
     def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, arrowHandler):
         super(FortuneWheelWindow, self).__init__(parent)
         self.ui = Ui_FortuneWheel()
         self.ui.setupUi(self)
 
+        styleFile = getLangBasedQssString()
+        styleFile.open(QtCore.QIODevice.ReadOnly)
+        data = styleFile.readAll()
+        self.setStyleSheet(str(data, encoding="utf-8"))
+
         self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
 
         self.arrowHandler = arrowHandler
 
-        self.ui.backButton.clicked.connect(self.accept)
-        #self.ui.backButton.setEnabled(False)
+        if (prizeCount > 0):
+            self.winningIndex = winningIndex
+        else:
+            self.winningIndex = 0
 
-        self.winningIndex = winningIndex
-        self.realWin = (prizeCount > 0)
         self.realWinName = prizeName
         self.printingService = printingService
         self.ledButtonService = ledButtonService
         self.focusHandler = None
 
         #QtCore.QTimer.singleShot(1000, lambda: self.onAnimationFinished())
-        self.ui.widget.setFocus()
+        #self.ui.widget.setFocus()
 
         self.ledButtonService.setButtonState(LedButtonService.LEFT, False)
         self.ledButtonService.setButtonState(LedButtonService.RIGHT, False)
@@ -41,6 +57,13 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
         self.ui.centerLabel.raise_()
 
+        self.initCounter = 6
+        self.initTimer = QtCore.QTimer()
+        self.initTimer.timeout.connect(self.onInitTimeout)
+        self.initTimer.start(1000)
+        self.onInitTimeout()
+
+
         self.rotateTimer = QtCore.QTimer()
         self.rotateTimer.timeout.connect(self.onRotateTimer)
 
@@ -49,7 +72,6 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         if self.winningIndex == 0:
            self.maxRotation = self.maxRotation + 10
         self.counter = 0
-        self.rotateTimer.start(100)
 
     def rotateImages(self, index):
         indexes = deque(range(0,10))
@@ -74,7 +96,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
         if self.counter == self.maxRotation:
             self.rotateTimer.stop()
-            self.lastAnimationFinished()
+            QtCore.QTimer.singleShot(2000, self.lastAnimationFinished)
 
     def setPixForLabel(self, label, pixmap):
         w = label.width()
@@ -85,16 +107,31 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         if self.focusHandler:
             self.focusHandler.setFocus()
 
+    def openNoWinWindow(self):
+        self.ui.stackedWidget.setCurrentIndex(2)
+
+    def openWinWindow(self):
+        self.setPixForLabel(self.ui.winLabelPicture, PixmapService.pixMaps[self.winningIndex])
+        self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
+        #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
+        #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
+        #self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
+        #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
+        self.ui.stackedWidget.setCurrentIndex(3)
+
     def lastAnimationFinished(self):
-        #self.ui.backButton.setEnabled(True)
-        if (self.realWin):
-            self.ui.wheelLabel.setText(self.tr("Congratulation. Take your ticket! Number: {} Prize: {}").format(self.winningIndex, self.realWinName))
-            self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
-            #self.ui.backButton.setEnabled(True)
-            #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
-            #self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
-            #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
-            QtCore.QTimer.singleShot(2500, self.accept)
+        if (self.winningIndex > 0):
+            self.openWinWindow()
         else:
-            self.ui.wheelLabel.setText(self.tr("Sorry, no win"))
-            QtCore.QTimer.singleShot(2500, self.accept)
+            self.openNoWinWindow()
+
+        QtCore.QTimer.singleShot(4000, self.accept)
+
+    def onInitTimeout(self):
+        self.initCounter = self.initCounter - 1
+        if (self.initCounter == -1):
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.rotateTimer.start(100)
+            self.initTimer.stop()
+        self.ui.timeCounterLabel.setText(str(self.initCounter))
+

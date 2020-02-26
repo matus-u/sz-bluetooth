@@ -113,6 +113,7 @@ class WheelFortuneService(QtCore.QObject):
                     self.probabilityValues[key] = self.probabilityValues[key] - 1
                     self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
                     self.reducePrizeCount.emit(win[0])
+
             self.win.emit(win[0], counts[win[0]], names[win[0]])
 
     def actualProbs(self):
