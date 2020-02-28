@@ -337,9 +337,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.creditService.getSongsRepresentation().enoughMoney():
                 prevLastStarted = self.lastStarted
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-                #if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
-
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(playQueueObject.mp3Info()))

@@ -9,10 +9,12 @@ class PrintingService(QtCore.QObject):
     lowPaper = QtCore.pyqtSignal()
     noPaper = QtCore.pyqtSignal()
     printFinished = QtCore.pyqtSignal()
+    ticketCounterChanged = QtCore.pyqtSignal()
 
     def __init__(self, hwErrorHandler):
         super().__init__()
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
+        self.ticketCounter = 0
 
     def initialize(self):
         self.printFinished.emit()
@@ -23,9 +25,17 @@ class PrintingService(QtCore.QObject):
         self.printFinished.emit()
 
     def getPrintStatus(self):
-        return { "errorStatus" : "OK", "errorStatusValue" : 25, "paperStatus" : "LOW_PAPER", "paperStatusValue" : 15 }
+        return { "ticketCounter" : self.ticketCounter, "errorStatus" : "OK", "errorStatusValue" : 25, "paperStatus" : "LOW_PAPER", "paperStatusValue" : 15 }
 
     def printDescTicket(self, name, prizeCounts, prizeNames):
         print (name)
         print (prizeCounts)
         print (prizeNames)
+
+    def setNewTicketCounter(self, value):
+        if value != self.ticketCounter:
+            self.ticketCounter = value
+            self.ticketCounterChanged.emit()
+
+    def getTicketCounter(self):
+        return self.ticketCounter

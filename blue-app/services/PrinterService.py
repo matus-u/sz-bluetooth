@@ -17,9 +17,12 @@ class PrintingService(QtCore.QObject):
     lowPaper = QtCore.pyqtSignal()
     noPaper = QtCore.pyqtSignal()
     printFinished = QtCore.pyqtSignal()
+    ticketCounterChanged = QtCore.pyqtSignal()
 
     SettingsPath = "../blue-app-configs/print-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
+
+    TicketCounter = "TicketCounter"
 
     def __init__(self, hwErrorHandler):
         super().__init__()
@@ -27,6 +30,8 @@ class PrintingService(QtCore.QObject):
         self.errorStatus = 0
         self.paperError = 0
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
+        self.settings = QtCore.QSettings(PrintService.SettingsPath, PrintService.SettingsFormat)
+        self.ticketCounter = self.settings.value(PrintingService.TicketCounter, 0, int)
 
     def initialize(self):
         try:
@@ -73,7 +78,9 @@ class PrintingService(QtCore.QObject):
             self.checkError(s)
             s.close()
 
+            self.ticketCounter = self.ticketCounter + 1
             self.printFinished.emit()
+            self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
         except:
             self.errorFunc()
 
@@ -108,7 +115,7 @@ class PrintingService(QtCore.QObject):
         if (self.paperError & 0x40) > 0:
             paperStatus = "NO_PAPER"
 
-        return { "errorStatus" : errorString, "errorStatusValue" : self.errorStatus, "paperStatus" : paperStatus, "paperStatusValue" : self.paperError }
+        return { "ticketCounter" : self.ticketCounter,  "errorStatus" : errorString, "errorStatusValue" : self.errorStatus, "paperStatus" : paperStatus, "paperStatusValue" : self.paperError }
 
     def getErrorStatus(self):
         return self.errorStatus
@@ -137,3 +144,14 @@ class PrintingService(QtCore.QObject):
             self.printFinished.emit()
         except:
             self.errorFunc()
+
+
+    def getTicketCounter(self):
+        return self.ticketCounter
+
+    def setNewTicketCounter(self, value):
+        if value != self.ticketCounter:
+            self.ticketCounter = value
+            self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
+            self.ticketCounterChanged.emit()
+

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>976</width>
-    <height>403</height>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
      <x>40</x>
      <y>30</y>
      <width>271</width>
-     <height>101</height>
+     <height>71</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" columnstretch="3,1">
@@ -95,6 +95,9 @@
       </property>
       <property name="decimals">
        <number>1</number>
+      </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
       </property>
       <property name="maximum">
        <double>10000.000000000000000</double>
@@ -151,7 +154,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>220</y>
+     <y>250</y>
      <width>271</width>
      <height>51</height>
     </rect>
@@ -164,7 +167,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>160</y>
+     <y>120</y>
      <width>271</width>
      <height>38</height>
     </rect>
@@ -205,6 +208,35 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QLabel" name="ticketCounterLabel">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>180</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ticket counter:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="ticketCounterBox">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>180</y>
+     <width>80</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>999999</number>
+   </property>
   </widget>
  </widget>
  <resources/>

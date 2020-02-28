@@ -16,6 +16,7 @@ class WheelSettingsWindow(QtWidgets.QDialog):
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.reject)
+        self.ui.ticketCounterBox.setValue(printerService.getTicketCounter())
 
         self.ui.fortuneCheckBox.toggled.connect(lambda state: self.ui.moneySpinBox.setEnabled(state))
         self.ui.fortuneCheckBox.setChecked(self.service.isEnabled())
@@ -31,6 +32,7 @@ class WheelSettingsWindow(QtWidgets.QDialog):
 
     def onOkButton(self):
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())
+        self.printerService.setNewTicketCounter(self.ui.ticketCounterBox.value())
         self.accept()
 
     def updateTable(self):
@@ -43,7 +45,7 @@ class WheelSettingsWindow(QtWidgets.QDialog):
             self.ui.probTableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(str(index)))
             self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(cost)))
             self.ui.probTableWidget.setItem(index, 2, QtWidgets.QTableWidgetItem(str(count)))
-            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem(str(prob)))
+            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem("{0:.2f}".format(prob)))
             self.ui.probTableWidget.setItem(index, 4, QtWidgets.QTableWidgetItem(str(name)))
 
     def updateLabels(self):
