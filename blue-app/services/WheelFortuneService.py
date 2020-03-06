@@ -22,11 +22,17 @@ class WheelFortuneService(QtCore.QObject):
         super().__init__()
         self.printerActive = 1
 
+        self.tossTimer = QtCore.QTimer()
+        self.tossTimer.timeout.connect(self.onTossTimeout)
+
         self.counter = 0.0
         self.settings = QtCore.QSettings(WheelFortuneService.SettingsPath, WheelFortuneService.SettingsFormat)
         self.probabilityValues = json.loads(self.settings.value(WheelFortuneService.Probabilities, json.dumps(self.defaultProbs())))
 
         self.winTries = 0
+
+    def onTossTimeout(self):
+        self.counter = 0
 
     def defaultProbs(self):
         return { 'expected_earnings': 0, 'total_costs': 0,
@@ -57,6 +63,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def moneyInserted(self, money):
         if self.isEnabled():
+            self.tossTimer.start(5000)
             mLevel = self.moneyLevel()
             self.counter = round (self.counter + round(money, 2), 2)
 
@@ -99,6 +106,10 @@ class WheelFortuneService(QtCore.QObject):
     def getTotalInfo(self):
         return (self.probabilityValues["total_costs"], self.probabilityValues["expected_earnings"])
 
+    def getLeftCost(self):
+        a = sum ([(int(self.probabilityValues["count_" + str(x)]) * int(self.probabilityValues["cost_" + str(x)])) for x in range(1,10)])
+        return a
+
     def tryWin(self):
         if self.printerActive == 1:
             probs = self.getAllProbs()
@@ -121,4 +132,3 @@ class WheelFortuneService(QtCore.QObject):
 
     def lockWheel(self):
         self.printerActive = 0
-

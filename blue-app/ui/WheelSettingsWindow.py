@@ -52,3 +52,4 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         data = self.wheelFortuneService.getTotalInfo()
         self.ui.totalCostLabel.setText(str(data[0]))
         self.ui.expectedEarningLabel.setText(str(data[1]))
+        self.ui.leftCost.setText(str(self.wheelFortuneService.getLeftCost()))
