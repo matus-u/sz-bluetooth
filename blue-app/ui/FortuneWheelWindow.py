@@ -79,7 +79,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         indexes = deque(range(0,10))
         indexes.rotate(-1* index)
         self.setPixForLabel(self.ui.leftLabel, PixmapService.pixMaps     [indexes[-2]])
-        self.setPixForLabel(self.ui.midLeftLabel, PixmapService.pixMaps  [indexes[-1 ]])
+        self.setPixForLabel(self.ui.midLeftLabel, PixmapService.pixMaps  [indexes[-1]])
         self.setPixForLabel(self.ui.centerLabel, PixmapService.pixMaps   [indexes[0 ]])
         self.setPixForLabel(self.ui.midRigthLabel, PixmapService.pixMaps [indexes[1 ]])
         self.setPixForLabel(self.ui.rigthLabel, PixmapService.pixMaps    [indexes[2 ]])

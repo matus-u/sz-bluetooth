@@ -135,7 +135,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.playTrackCounter = PlayTrackCounter()
 
-        self.musicController = MusicController.MusicController(self.ui.songsWidget, self.ui.genreLabel, self.ui.alphaLabel, self.playTrackCounter)
+        self.musicController = MusicController.MusicController(self.ui.songsWidget,
+                                                               [self.ui.genreLabel, self.ui.leftLeftGenre, self.ui.leftGenre, self.ui.rightGenre, self.ui.rightRightGenre],
+                                                               self.playTrackCounter)
         self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
@@ -323,6 +325,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onPlaySong(self):
         playQueueObject = self.musicController.getSelectedPlayObject()
+        print (playQueueObject)
 
         #SPECIAL HANDLING OF BLUETOOTH
         if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject):
@@ -337,7 +340,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.creditService.getSongsRepresentation().enoughMoney():
                 prevLastStarted = self.lastStarted
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(playQueueObject.mp3Info()))
