@@ -6,6 +6,7 @@ from generated.FortuneWheel import Ui_FortuneWheel
 from services.AppSettings import AppSettings
 from services.LedButtonService import LedButtonService
 from services.PixmapService import PixmapService
+from services.PlayFileService import PlayWavFile
 
 from ui import FocusHandler
 from collections import deque
@@ -57,12 +58,11 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
         self.ui.centerLabel.raise_()
 
-        self.initCounter = 6
+        self.initCounter = 3
         self.initTimer = QtCore.QTimer()
         self.initTimer.timeout.connect(self.onInitTimeout)
         self.initTimer.start(1000)
         self.onInitTimeout()
-
 
         self.rotateTimer = QtCore.QTimer()
         self.rotateTimer.timeout.connect(self.onRotateTimer)
@@ -72,6 +72,8 @@ class FortuneWheelWindow(QtWidgets.QDialog):
         if self.winningIndex == 0:
            self.maxRotation = self.maxRotation + 10
         self.counter = 0
+
+        PlayWavFile(self).playWav("aplay resources/coin-ringtone.wav")
 
     def rotateImages(self, index):
         indexes = deque(range(0,10))
@@ -84,19 +86,20 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
     def onRotateTimer(self):
         self.counter = self.counter + 1
-        if self.counter == 30:
-            self.rotateTimer.stop()
-            self.rotateTimer.start(300)
+        if (self.counter > 20 and self.counter < 35):
+            self.rotateTimer.start(self.rotateTimer.interval() + 5)
 
-        if self.counter == 50:
-            self.rotateTimer.stop()
-            self.rotateTimer.start(500)
+        if (self.counter >= 35 and self.counter < 50):
+            self.rotateTimer.start(self.rotateTimer.interval() + 10)
+
+        if (self.counter >= 50):
+            self.rotateTimer.start(self.rotateTimer.interval() + 25)
 
         self.rotateImages(self.counter%10)
 
         if self.counter == self.maxRotation:
             self.rotateTimer.stop()
-            QtCore.QTimer.singleShot(2000, self.lastAnimationFinished)
+            QtCore.QTimer.singleShot(1000, self.lastAnimationFinished)
 
     def setPixForLabel(self, label, pixmap):
         w = label.width()

@@ -11,7 +11,7 @@ from services.CreditService import CreditService
 from services.AppSettings import AppSettings,AppSettingsNotifier
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
-from services.PlayFileService import PlayFileService
+from services.PlayFileService import PlayWavFile
 from services.PlayLogicService import PlayLogicService
 from services.PlayTrackCounter import PlayTrackCounter
 
@@ -414,7 +414,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.playLogicService.isPlaying():
                 duration = 100
             else:
-                PlayFileService(self).playWav()
+                PlayWavFile(self).playWav("aplay resources/coin-ringtone.wav")
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):

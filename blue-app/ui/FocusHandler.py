@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from services.LedButtonService import LedButtonService
 from services.GpioCallback import GpioCallback
+from services.GpioCallback import GpioCallbackContinous
 
 from collections import deque
 
@@ -15,18 +16,21 @@ class ArrowHandler(QtCore.QObject):
     upClicked = QtCore.pyqtSignal()
     confirmClicked = QtCore.pyqtSignal()
 
-    def connectGpio(self, gpioService, num, callback):
-        gpioCall = GpioCallback(self)
+    def connectGpioContinous(self, gpioService, num, callback):
+        gpioCall = GpioCallbackContinous(self, num, gpioService)
+        gpioCall.callbackGpio.connect(callback)
+
+    def connectGpioOnce(self, gpioService, num, callback):
+        gpioCall = GpioCallback(self, num, gpioService)
         gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
-        gpioService.registerCallback(gpioService.FALLING, num, gpioCall.onLowLevelCallback)
 
     def __init__(self, gpioService):
         super().__init__()
-        self.connectGpio(gpioService, 29, lambda: self.leftClicked.emit())
-        self.connectGpio(gpioService, 31, lambda: self.rightClicked.emit())
-        self.connectGpio(gpioService, 33, lambda: self.downClicked.emit())
-        self.connectGpio(gpioService, 35, lambda: self.upClicked.emit())
-        self.connectGpio(gpioService, 37, lambda: self.confirmClicked.emit())
+        self.connectGpioContinous(gpioService, 29, lambda: self.leftClicked.emit())
+        self.connectGpioContinous(gpioService, 31, lambda: self.rightClicked.emit())
+        self.connectGpioContinous(gpioService, 33, lambda: self.downClicked.emit())
+        self.connectGpioContinous(gpioService, 35, lambda: self.upClicked.emit())
+        self.connectGpioOnce(gpioService, 37, lambda: self.confirmClicked.emit())
 
 class InputHandler(QtCore.QObject):
     def __init__(self, listOfProxies):

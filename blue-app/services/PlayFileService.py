@@ -5,13 +5,25 @@ import os
 
 from services.LoggingService import LoggingService
 
+class PlayWavFile(QtCore.QObject):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.process = QtCore.QProcess(self)
+        self.process.finished.connect(self.onFinished)
+
+    def playWav(self, path):
+        self.process.start()
+
+    def onFinished(a,b):
+        self.deleteLater()
+
 class PlayFileService(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     refreshTimerSignal = QtCore.pyqtSignal(int)
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.process = QtCore.QProcess(self)
         self.player = QtMultimedia.QMediaPlayer()
         self.player.stateChanged.connect(self.onPlayerChanged)
         self.player.error.connect(self.onError)
@@ -25,14 +37,6 @@ class PlayFileService(QtCore.QObject):
         if not (os.getenv('RUN_FROM_DOCKER', False) == False):
             return
 
-        self.emitFinished()
-
-    def playWav(self):
-        if self.process.state() == QtCore.QProcess.NotRunning:
-            self.process = QtCore.QProcess(self)
-            self.process.start("aplay resources/coin-ringtone.wav")
-
-    def emitFinished(self):
         self.finished.emit()
 
     def playMp3(self, path):
@@ -43,5 +47,5 @@ class PlayFileService(QtCore.QObject):
         self.player.play()
 
         if not (os.getenv('RUN_FROM_DOCKER', False) == False):
-            QtCore.QTimer.singleShot(10000, lambda: self.emitFinished())
+            QtCore.QTimer.singleShot(10000, lambda: self.finished.emit())
 
