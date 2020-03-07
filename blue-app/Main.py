@@ -55,7 +55,7 @@ def main():
 
     LoggingService.init()
     app = QtWidgets.QApplication(sys.argv)
-    QtGui.QFontDatabase.addApplicationFont(":/fonts/airstream/AirstreamNF.ttf")
+    QtGui.QFontDatabase.addApplicationFont(":/arial-black.ttf")
 
     setStyle(app)
     AppSettings.restoreLanguage()

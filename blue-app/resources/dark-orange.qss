@@ -1,15 +1,21 @@
 QWidget
 {
-    color: #b1b1b1;
+    color: white;
     background-color: #323232;
     font-size: 14px;
+    font-family: "arial-black"
+}
+
+QWidget:disabled
+{
+    color: #848484;
+    background-color: #424242;
 }
 
 QMainWindow
 {
-    background-image: url(":/images/back.png")
+    background-image: url(":/images/bg.jpg")
 }
-
 
 QAbstractItemView
 {
@@ -17,52 +23,42 @@ QAbstractItemView
 }
 
 QTableWidget,
-QTableView,
-QLabel#emptyLabel
+QTableView
 {  
    border : 3px solid cyan; 
    margin: 1px; border-radius: 15px;
    margin-top: 0px;
    margin-bottom: 0px;
    padding: 10px;
-   selection-background-color: #4d4d4d;
-}
-
-QFrame#livePlayFrame
-{
-   border : 3px solid cyan; 
-   margin: 1px; border-radius: 15px;
-   margin-top: 0px;
-   margin-bottom: 0px;
-   padding: 3px;
-   selection-background-color: #4d4d4d;
+   selection-background-color: transparent;
 }
 
 QTableView::item,
 QTableWidget::item
 {
     padding: 1px;
-    background-color: #4d4d4d;
+    background-color: transparent;
+    selection-background-color: transparent;
 }
 
 QTableView::item:selected,
 QTableWidget::item:selected
 {
     border-radius: 10px;
-    border : 3px solid cyan; 
+    border : 3px solid orange; 
+    background-color: orange;
 }
 
-QTableWidget#playQueueWidget,
+QLabel#emptyLabel,
 QFrame#livePlayFrame,
-QLabel#emptyLabel
+QWidget#playQueueTimeFrame,
+QTableWidget#playQueueWidget
 {
-   border : 3px solid #99006e; 
-}
-
-QWidget:disabled
-{
-    color: #848484;
-    background-color: #424242;
+   margin-left: 1px;
+   margin-right: 1px;
+   border : 3px solid #ABABAB; 
+   border-radius: 10px;
+   padding: 3px;
 }
 
 QLineEdit
@@ -87,8 +83,6 @@ QPushButton
     padding-right: 5px;
 }
 
-/*QPushButton:focus {  border : 3px solid #FF7800; }*/
-
 QPushButton:pressed
 {
     background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2d2d2d, stop: 0.1 #2b2b2b, stop: 0.5 #292929, stop: 0.9 #282828, stop: 1 #252525);
@@ -107,7 +101,6 @@ QComboBox:hover,QPushButton:hover
 {
     border: 2px solid QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffa02f, stop: 1 #d7801a);
 }
-
 
 QComboBox:on
 {
@@ -263,36 +256,12 @@ QCheckBox:disabled
 color: #414141;
 }
 
-QProgressBar
-{
-    border: 2px solid grey;
-    border-radius: 5px;
-    text-align: center;
-}
-
-QProgressBar::chunk
-{
-    background-color: #d7801a;
-    width: 2.15px;
-    margin: 0.5px;
-}
-
 QCheckBox::indicator{
     color: #b1b1b1;
     background-color: #323232;
     border: 1px solid #b1b1b1;
     width: 20px;
     height: 20px;
-}
-
-QRadioButton::indicator
-{
-    border-radius: 6px;
-}
-
-QRadioButton::indicator:hover, QCheckBox::indicator:hover
-{
-    border: 1px solid #ffaa00;
 }
 
 QCheckBox::indicator:checked
@@ -343,31 +312,14 @@ QLabel#playLabel,
 QLabel#insertNewCoinLabel,
 QLabel#emptyLabel
 {
-    font-size: 26px;
+    font-size: 22px;
 }
 
 QLabel#playLabel,
 QLabel#emptyLabel
 {
-    font-family: "Airstream NF";
     color: #FFFFFF
 }
-
-QLabel#bluetoothDeviceLabel,
-QLabel#playListLabel,
-QLabel#actualSongLabel,
-QLabel#selectSongLabel,
-QLabel#selectGenreLabel
-{
-    padding-left: 30px;
-}
-
-
-/*
-QWidget#scanButton,
-QWidget#bluetoothButton,
-QWidget#backFromBlueButton,
-*/
 
 QWidget#centralwidget,
 QWidget#nameLabel,
@@ -381,16 +333,23 @@ QWidget#pageBluetooth,
 QWidget#playLabel,
 QWidget#playSlider,
 QWidget#timeLabel,
-QWidget#playListLabel,
-QWidget#actualSongLabel,
-QWidget#selectSongLabel,
-QWidget#selectGenreLabel,
 QWidget#insertNewCoinLabel,
 QWidget#coinImageLabel,
 QWidget#actualCreditValue,
 QWidget#actualMoneyValue,
 QWidget#wifiStateLabel,
-QWidget#bluetoothDeviceLabel
+QWidget#infoLabel,
+QWidget#errorLabel,
+QWidget#actualTimeStampLabel,
+QWidget#totalTimeLabel,
+QWidget#label_2,
+QWidget#labelCpuTemp,
+QWidget#cpuTempValueLabel,
+QWidget#adminLeaveLabel,
+QWidget#playQueueContainer,
+QWidget#playQueueTimeFrame,
+QWidget#timeOfPlayQueueLabel,
+SongTableWidgetImpl *
 {
     background-color: transparent;
 }
@@ -398,39 +357,30 @@ QWidget#bluetoothDeviceLabel
 QWidget#livePlayFrame,
 QWidget#emptyLabel,
 QTableWidget#playQueueWidget,
-QTableWidget#genreWidget,
+QWidget#playQueueTimeFrame,
 QTableWidget#songsWidget,
 QTableWidget#devicesWidget
 {
-   background-color: rgba(50, 50, 50, 90%);
-   selection-background-color: rgba(50, 50, 50, 0%);
+   border-color : #ABABAB; 
+   background-color: rgba(0, 0, 0, 65%);
 }
 
 QTableWidget#playQueueWidget::item,
-QTableWidget#genreWidget::item,
 QTableWidget#songsWidget::item,
 QTableWidget#devicesWidget::item
 {
     padding: 1px;
-    background-color: rgba(50, 50, 50, 0%);
 }
 
-QTableWidget#playQueueWidget,
-QTableWidget#genreWidget,
-QTableWidget#songsWidget
+QTableWidget#playQueueWidget *
 {
-/*
-    font-family: "Airstream NF";
-*/
-    font-size: 16px;
+    font-size: 15px;
 }
 
-SongTableWidgetImpl * {
-    background-color: transparent;
+QTableWidget#songsWidget,
+SongTableWidgetImpl *
+{
     font-size: 16px;
-/*
-    font-family: "Airstream NF";
-*/
 }
 
 SongTableWidgetImpl QLabel#songDurationLabel {
@@ -449,7 +399,6 @@ QWidget#scanButton:focus,
 QWidget#bluetoothButton:focus,
 QWidget#backFromBlueButton:focus,
 QWidget#songsWidget:focus,
-QWidget#genreWidget:focus,
 QWidget#devicesWidget:focus,
 QWidget#backButton:focus
 {
@@ -461,3 +410,38 @@ QWidget#centerLabel
     border : 2px solid red;
 }
 
+QLabel#genreLabel
+{
+    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);
+    border: 2px solid white;
+    border-radius: 15;
+    font-size: 18px;
+    color: white;
+}
+
+QLabel#leftGenre,
+QLabel#leftLeftGenre,
+QLabel#rightGenre,
+QLabel#rightRightGenre
+{
+    background-color: rgba(0, 0, 0, 65%);
+    border-top: 2px solid #ABABAB;
+    border-bottom: 2px solid #ABABAB;
+    font-size: 16px;
+    color: white;
+}
+
+QWidget#playQueueContainer *,
+QLabel#leftGenre,
+QLabel#leftLeftGenre,
+QLabel#rightGenre,
+QLabel#rightRightGenre,
+QLabel#genreLabel,
+QWidget#actualCreditValue,
+QWidget#actualMoneyValue,
+QTableWidget#songsWidget *,
+QTableWidget#devicesWidget *,
+QLabel#insertNewCoinLabel
+{
+    font-weight: bold;
+}

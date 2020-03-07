@@ -3,6 +3,7 @@
         <file>dark-orange.qss</file>
         <file>dynamic-images/HU/fortune-style.qss</file>
         <file>dynamic-images/SK/fortune-style.qss</file>
+        <file>arial-black.ttf</file>
     </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>
@@ -10,10 +11,8 @@
         <file>back3_fialova.png</file>
         <file>bluetooth1_fialova.png</file>
         <file>checkbox.png</file>
-        <file>back.png</file>
         <file>down_arrow.png</file>
-    </qresource>
-    <qresource prefix="/fonts">
-        <file>airstream/AirstreamNF.ttf</file>
+        <file>bg2.jpg</file>
+        <file>bg.jpg</file>
     </qresource>
 </RCC>
