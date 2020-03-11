@@ -212,12 +212,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onBluetoothGenre(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+        self.setStyleSheet("QMainWindow { background-image: url(':/images/bg2.jpg') }");
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
         self.cleanScannedData()
 
     def onBackFromBlueButton(self):
         self.ui.stackedWidget.setCurrentIndex(0)
+        self.setStyleSheet("QMainWindow { background-image: url(':/images/bg.jpg') }");
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
 

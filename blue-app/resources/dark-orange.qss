@@ -445,3 +445,17 @@ QLabel#insertNewCoinLabel
 {
     font-weight: bold;
 }
+
+QTableWidget#playQueueWidget QScrollBar,
+QTableWidget#songsWidget QScrollBar,
+QTableWidget#devicesWidget QScrollBar
+{
+    height: 0px;
+    width: 0px;
+}
+
+QTableWidget#devicesWidget,
+QTableWidget#songsWidget {
+    outline: 0;
+}
+
