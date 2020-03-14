@@ -29,7 +29,7 @@ class GpioCallbackContinous(QtCore.QObject):
 
     def onTimeout(self):
         self.callbackGpio.emit()
-        self.gpioTimer.start(contTime)
+        self.gpioTimer.start(self.contTime)
 
     def onLowLevelGpioInterrupt(self, isRising):
         if isRising:

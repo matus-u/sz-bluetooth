@@ -16,8 +16,8 @@ class ArrowHandler(QtCore.QObject):
     upClicked = QtCore.pyqtSignal()
     confirmClicked = QtCore.pyqtSignal()
 
-    def connectGpioContinous(self, gpioService, num, callback):
-        gpioCall = GpioCallbackContinous(self, num, gpioService)
+    def connectGpioContinous(self, gpioService, num, contTime, callback):
+        gpioCall = GpioCallbackContinous(self, num, contTime, gpioService)
         gpioCall.callbackGpio.connect(callback)
 
     def connectGpioOnce(self, gpioService, num, callback):
