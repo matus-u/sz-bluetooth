@@ -8,11 +8,18 @@ fi
 
 #TODO FIRST INSTALL TO UNKNOWN BOARD FROM USB WITH OTHER SCRIPT
 
-sudo rm -rf blue-app/generated/*
-sudo rm -rf blue-app/configs/*
+rm -rf blue-app/generated/*
+rm -rf blue-app/configs/*
+
 pushd blue-app/scripts/
 ./generate-version.sh
 popd
-sudo find blue-app/ -name "__py*" | sudo xargs rm -rf
+
+pushd blue-app/
+. generate-from-uic.sh
+generate-from-uic
+popd
+
+find blue-app/ -name "__py*" | xargs rm -rf
 ssh root@$1 "rm -rf /media/usbstick/blue-app/" 
 scp -r blue-app root@$1:/media/usbstick/

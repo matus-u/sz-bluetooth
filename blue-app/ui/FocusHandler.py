@@ -26,10 +26,10 @@ class ArrowHandler(QtCore.QObject):
 
     def __init__(self, gpioService):
         super().__init__()
-        self.connectGpioContinous(gpioService, 29, lambda: self.leftClicked.emit())
-        self.connectGpioContinous(gpioService, 31, lambda: self.rightClicked.emit())
-        self.connectGpioContinous(gpioService, 33, lambda: self.downClicked.emit())
-        self.connectGpioContinous(gpioService, 35, lambda: self.upClicked.emit())
+        self.connectGpioContinous(gpioService, 29, 300, lambda: self.leftClicked.emit())
+        self.connectGpioContinous(gpioService, 31, 300, lambda: self.rightClicked.emit())
+        self.connectGpioContinous(gpioService, 33, 150, lambda: self.downClicked.emit())
+        self.connectGpioContinous(gpioService, 35, 150, lambda: self.upClicked.emit())
         self.connectGpioOnce(gpioService, 37, lambda: self.confirmClicked.emit())
 
 class InputHandler(QtCore.QObject):

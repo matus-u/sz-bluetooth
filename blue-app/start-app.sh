@@ -2,9 +2,14 @@
 
 MAC=$(ifconfig eth0 | grep ether | tr -s ' ' | cut -f 3 -d ' ' | tr -s ':' '_')
 
-. generate-from-uic.sh
-
 mkdir -p ../blue-app-configs/images
-generate-from-uic
+
+if [ ${RUN_FROM_DOCKER} == "TRUE" ]; then
+	. generate-from-uic.sh
+	generate-from-uic
+else
+	echo "NOT"
+fi
+
 export LANG=C.UTF-8
 python3 Main.py "[$MAC]"

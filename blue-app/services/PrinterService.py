@@ -30,7 +30,7 @@ class PrintingService(QtCore.QObject):
         self.errorStatus = 0
         self.paperError = 0
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
-        self.settings = QtCore.QSettings(PrintService.SettingsPath, PrintService.SettingsFormat)
+        self.settings = QtCore.QSettings(PrintingService.SettingsPath, PrintingService.SettingsFormat)
         self.ticketCounter = self.settings.value(PrintingService.TicketCounter, 0, int)
 
     def initialize(self):

@@ -30,4 +30,8 @@ RUN apt-get update \
     locales \
     python3-mutagen
 
+RUN apt-get update \
+    && apt-get install -y \
+    git
+
 ENV RUN_FROM_DOCKER TRUE

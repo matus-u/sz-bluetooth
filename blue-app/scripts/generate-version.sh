@@ -1,1 +1,4 @@
-echo "$(git describe --abbrev=10)" > version
+
+pushd ../../
+echo "$(git describe --abbrev=10)" > blue-app/scripts/version
+popd
