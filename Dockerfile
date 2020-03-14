@@ -34,4 +34,8 @@ RUN apt-get update \
     && apt-get install -y \
     git
 
+RUN apt-get update \
+    && apt-get install -y \
+    zip
+
 ENV RUN_FROM_DOCKER TRUE
