@@ -4,154 +4,164 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="66"/>
+        <location filename="../ui/ApplicationWindow.py" line="69"/>
         <source>Time to disconnect: {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="66"/>
+        <location filename="../ui/ApplicationWindow.py" line="69"/>
         <source>Scan bluetooth network</source>
         <translation>Bluetooth berendezések keresése</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="66"/>
+        <location filename="../ui/ApplicationWindow.py" line="69"/>
         <source>Connected to the device: </source>
         <translation>Csatlakozva</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="67"/>
+        <location filename="../ui/ApplicationWindow.py" line="70"/>
         <source>Connecting to the device: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="67"/>
+        <location filename="../ui/ApplicationWindow.py" line="70"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="67"/>
+        <location filename="../ui/ApplicationWindow.py" line="70"/>
         <source>Connection with {} failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="67"/>
+        <location filename="../ui/ApplicationWindow.py" line="70"/>
         <source>Scanninng...</source>
         <translation>keresés ...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="68"/>
+        <location filename="../ui/ApplicationWindow.py" line="71"/>
         <source>No credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="68"/>
+        <location filename="../ui/ApplicationWindow.py" line="71"/>
         <source>Zero credit, insert money first please!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="68"/>
+        <location filename="../ui/ApplicationWindow.py" line="71"/>
         <source>seconds</source>
         <translation>másodperc</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="68"/>
+        <location filename="../ui/ApplicationWindow.py" line="71"/>
         <source>CPU temp: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="69"/>
+        <location filename="../ui/ApplicationWindow.py" line="72"/>
         <source>Insert next coin please</source>
         <translation>Dobjon még be pénzt</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="69"/>
+        <location filename="../ui/ApplicationWindow.py" line="72"/>
         <source>Withdraw money?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="69"/>
+        <location filename="../ui/ApplicationWindow.py" line="72"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="70"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Withdraw succesful.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="70"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Internal counter was correctly reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="70"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Phone to service: {}</source>
         <translation>Szervisz: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="70"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Admin mode remainse for {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="71"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>songs</source>
         <translation>Zene</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="71"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Playing from bluetooth</source>
         <translation>Bluetooth lejátszás</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="71"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Not playing</source>
         <translation>Nem aktív</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="71"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>No bluetooth devices found</source>
         <translation>Nincs elérhető BT berendezés</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="71"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Start is possible at least 5s after previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="72"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="72"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>Connecting to device: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="72"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>Prize counts and probabilities were updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Print error {}, call service please.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation>Vigyázz, lassan kifogy a papír a nyomtatóból</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Paper is out - please insert new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="74"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Continue with music selection.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
+        <source>Toss count: {}</source>
+        <translation>Ajándéksorsolás: {}</translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
+        <source>To get next toss: {} {} needed</source>
+        <translation>Dobjon be {} {} a sorsoláshoz</translation>
     </message>
 </context>
 <context>
@@ -170,72 +180,72 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="529"/>
+        <location filename="../generated/MainWindow.py" line="555"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="538"/>
+        <location filename="../generated/MainWindow.py" line="564"/>
         <source>Admin settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="533"/>
+        <location filename="../generated/MainWindow.py" line="559"/>
         <source>Scan bluetooth network</source>
         <translation>Bluetooth berendezések keresése</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="530"/>
+        <location filename="../generated/MainWindow.py" line="556"/>
         <source>PlayLabel</source>
         <translation>Aktuális zene</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="531"/>
+        <location filename="../generated/MainWindow.py" line="557"/>
         <source>Empty playlist</source>
         <translation>Üres lista</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="534"/>
+        <location filename="../generated/MainWindow.py" line="560"/>
         <source>Back</source>
         <translation>Vissza</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="535"/>
+        <location filename="../generated/MainWindow.py" line="561"/>
         <source>Withdraw money</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="536"/>
+        <location filename="../generated/MainWindow.py" line="562"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="537"/>
+        <location filename="../generated/MainWindow.py" line="563"/>
         <source>Leave admin mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="539"/>
+        <location filename="../generated/MainWindow.py" line="565"/>
         <source>Wifi settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="540"/>
+        <location filename="../generated/MainWindow.py" line="566"/>
         <source>Add credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="542"/>
+        <location filename="../generated/MainWindow.py" line="568"/>
         <source>CpuTemp:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="532"/>
+        <location filename="../generated/MainWindow.py" line="558"/>
         <source>Time of playqueue:</source>
         <translation>Lejatszási idő</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="541"/>
+        <location filename="../generated/MainWindow.py" line="567"/>
         <source>Wheel settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,12 +430,12 @@
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="58"/>
+        <location filename="../ui/SettingsWindow.py" line="60"/>
         <source>Currency has changed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="58"/>
+        <location filename="../ui/SettingsWindow.py" line="60"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation type="unfinished"></translation>
     </message>

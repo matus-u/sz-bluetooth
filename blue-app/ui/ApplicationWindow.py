@@ -62,6 +62,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     LOW_PAPER = 27
     NO_PAPER = 28
     CONTINUE_WITH_MUSIC = 29
+    TOSS_COUNT = 30
+    TOSS_MONEY_NEEDED = 31
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -72,7 +74,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"),
         self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."),
-        self.tr("Continue with music selection.")
+        self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed")
         ]
 
     def __init__(self, timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler, errorHandler):
@@ -169,6 +171,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelFortuneService = wheelFortuneService
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
+        self.wheelFortuneService.fortuneDataChanged.connect(self.onFortuneDataChanged)
 
         self.wheelFortuneService.win.connect(self.onFortuneServiceTry)
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
@@ -187,6 +190,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.langBasedSettings = LangBasedSettings()
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
+
+        self.onFortuneDataChanged()
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -257,11 +262,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
         self.langBasedSettings.reloadLanguage()
+        self.onFortuneDataChanged()
         if x == 1:
             self.musicController.selectModel()
 
     def onAdminSettingsButton(self):
-        w = SettingsWindow.SettingsWindow(self, self.moneyTracker)
+        w = SettingsWindow.SettingsWindow(self, self.moneyTracker, self.wheelFortuneService, self.creditService)
         w.finished.connect(self.onSettingsFinished)
         self.openSubWindow(w)
 
@@ -347,7 +353,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.creditService.getSongsRepresentation().enoughMoney():
                 prevLastStarted = self.lastStarted
                 self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 0:
+                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(playQueueObject.mp3Info()))
@@ -488,3 +494,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             coinPixMap = self.langBasedSettings.getLangBasedCoinImage()
             self.ui.coinImgLabel.setPixmap(coinPixMap)
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
+
+    def onFortuneDataChanged(self):
+        if self.wheelFortuneService.isEnabled():
+            data = self.wheelFortuneService.getActualFortuneTryLevels()
+            self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
+            self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format("{0:.2f}".format(data[0]), AppSettings.actualCurrency()))
+            self.ui.actualFortuneCount.setVisible(True)
+            self.ui.actualNeedFortuneMoney.setVisible(True)
+        else:
+            self.ui.actualFortuneCount.setVisible(False)
+            self.ui.actualNeedFortuneMoney.setVisible(False)

@@ -85,6 +85,20 @@
                </widget>
               </item>
               <item>
+               <widget class="QLabel" name="actualFortuneCount">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="actualNeedFortuneMoney">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="wifiStateLabel">
                 <property name="text">
                  <string/>
@@ -836,6 +850,19 @@
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item>
              <widget class="QLabel" name="servicePhoneLabel">
               <property name="text">

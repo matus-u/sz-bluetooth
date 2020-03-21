@@ -18,6 +18,8 @@ class WheelFortuneService(QtCore.QObject):
 
     probabilitiesUpdated = QtCore.pyqtSignal()
 
+    fortuneDataChanged = QtCore.pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.printerActive = 1
@@ -33,6 +35,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def onTossTimeout(self):
         self.counter = 0
+        self.fortuneDataChanged.emit()
 
     def defaultProbs(self):
         return { 'expected_earnings': 0, 'total_costs': 0,
@@ -52,8 +55,9 @@ class WheelFortuneService(QtCore.QObject):
     def setSettings(self, enabled, moneyLevel):
         if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
             self.counter = 0.0
-        self.settings.setValue(WheelFortuneService.Enabled, enabled)
-        self.settings.setValue(WheelFortuneService.MoneyLevel, moneyLevel)
+            self.settings.setValue(WheelFortuneService.Enabled, enabled)
+            self.settings.setValue(WheelFortuneService.MoneyLevel, moneyLevel)
+            self.fortuneDataChanged.emit()
 
     def isEnabled(self):
         return self.settings.value(WheelFortuneService.Enabled, False, bool)
@@ -70,6 +74,7 @@ class WheelFortuneService(QtCore.QObject):
             while (self.counter >= mLevel):
                 self.counter = self.counter - self.moneyLevel()
                 self.winTries = self.winTries + 1
+            self.fortuneDataChanged.emit()
 
     def overtakeWinTries(self):
         if self.winTries > 0:
@@ -77,6 +82,7 @@ class WheelFortuneService(QtCore.QObject):
             self.winTries = 0
             for i in range(0, count):
                 self.tryWin()
+            self.fortuneDataChanged.emit()
 
     def setNewProbabilityValues(self, values):
         self.probabilityValues = values
@@ -132,3 +138,12 @@ class WheelFortuneService(QtCore.QObject):
 
     def lockWheel(self):
         self.printerActive = 0
+
+    def getActualFortuneTryLevels(self):
+        return [self.moneyLevel() - self.counter, self.winTries]
+
+    def resetActualFortuneTryLevels(self):
+        self.counter = 0.0
+        self.winTries = 0
+        self.fortuneDataChanged.emit()
+

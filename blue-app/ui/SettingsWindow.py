@@ -6,11 +6,13 @@ from generated.Settings import Ui_Settings
 from services.AppSettings import AppSettings
 
 class SettingsWindow(QtWidgets.QDialog):
-    def __init__(self, parent, moneyTracker):
+    def __init__(self, parent, moneyTracker, fortuneService, creditService):
         super(SettingsWindow, self).__init__(parent)
         self.ui = Ui_Settings()
         self.ui.setupUi(self)
         self.moneyTracker = moneyTracker
+        self.fortuneService = fortuneService
+        self.creditService = creditService
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.onCancelButton)
@@ -58,6 +60,8 @@ class SettingsWindow(QtWidgets.QDialog):
             shouldChangeCurrency = QtWidgets.QMessageBox.question(self, self.tr("Currency has changed!"), self.tr("Changing currency resets all internal money counters, proceed?"))
             if shouldChangeCurrency == QtWidgets.QMessageBox.Yes:
                 self.moneyTracker.resetAllCounters()
+                self.creditService.clearCredit()
+                self.fortuneService.resetActualFortuneTryLevels()
             else:
                 return
         AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(),
