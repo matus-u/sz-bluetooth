@@ -11,24 +11,13 @@ from services.PlayFileService import PlayWavFile
 from ui import FocusHandler
 from collections import deque
 
-
-def getLangBasedQssString():
-
-    lang = AppSettings.actualLanguage()
-
-    if (lang) == AppSettings.LanguageList[1]:
-        return QtCore.QFile(":/dynamic-images/HU/fortune-style.qss")
-
-    return QtCore.QFile(":/dynamic-images/SK/fortune-style.qss")
-
-
 class FortuneWheelWindow(QtWidgets.QDialog):
-    def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, arrowHandler):
+    def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, arrowHandler, langBasedSettings):
         super(FortuneWheelWindow, self).__init__(parent)
         self.ui = Ui_FortuneWheel()
         self.ui.setupUi(self)
 
-        styleFile = getLangBasedQssString()
+        styleFile = langBasedSettings.getLangBasedQssString()
         styleFile.open(QtCore.QIODevice.ReadOnly)
         data = styleFile.readAll()
         self.setStyleSheet(str(data, encoding="utf-8"))

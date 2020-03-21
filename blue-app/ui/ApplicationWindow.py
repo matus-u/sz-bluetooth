@@ -14,6 +14,7 @@ from services.WirelessService import WirelessService
 from services.PlayFileService import PlayWavFile
 from services.PlayLogicService import PlayLogicService
 from services.PlayTrackCounter import PlayTrackCounter
+from services.LangBasedSettings import LangBasedSettings
 
 from model.PlayQueue import PlayQueue
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
@@ -184,6 +185,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
         self.actualTimeStampTimer.start(1000)
 
+        self.langBasedSettings = LangBasedSettings()
+        QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
+
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             return self.mainFocusHandler
@@ -197,7 +201,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def openFortuneWindow(self):
         if (len(self.wheelPrizes) > 0) and (self.wheelWindow is None):
             data = self.wheelPrizes.pop(0)
-            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.arrowHandler)
+            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.arrowHandler, self.langBasedSettings)
             self.wheelWindow = w
             w.finished.connect(lambda: self.onWheelFortuneFinished(w))
             self.openSubWindow(w)
@@ -252,6 +256,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onSettingsFinished(self, x):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
+        self.langBasedSettings.reloadLanguage()
         if x == 1:
             self.musicController.selectModel()
 
@@ -434,9 +439,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         coinPixMap = QtGui.QPixmap()
         self.ui.coinImageLabel.setPixmap(coinPixMap)
 
-    #def onAddCreditFinished(self):
-    #    QtCore.QTimer.singleShot(1000, self.onAddCreditFinished)
-
     def onAddCreditButton(self):
         self.creditService.changeCredit(0.1)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
@@ -478,3 +480,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def updateTotalPlayQueueLabel(self):
         self.ui.timeOfPlayQueueLabel.setText(Helpers.formatDuration(self.playQueue.totalPlayQueueTime()))
+
+    def onCoinImageChange(self):
+        if ((self.ui.coinImgLabel.pixmap() != None) and (not self.ui.coinImgLabel.pixmap().isNull())):
+            self.ui.coinImgLabel.setPixmap(QtGui.QPixmap())
+        else:
+            coinPixMap = self.langBasedSettings.getLangBasedCoinImage()
+            self.ui.coinImgLabel.setPixmap(coinPixMap)
+        QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
