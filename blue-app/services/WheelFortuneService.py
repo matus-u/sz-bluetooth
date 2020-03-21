@@ -19,6 +19,7 @@ class WheelFortuneService(QtCore.QObject):
     probabilitiesUpdated = QtCore.pyqtSignal()
 
     fortuneDataChanged = QtCore.pyqtSignal()
+    fortuneTryFirstIncreased = QtCore.pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -74,6 +75,8 @@ class WheelFortuneService(QtCore.QObject):
             while (self.counter >= mLevel):
                 self.counter = self.counter - self.moneyLevel()
                 self.winTries = self.winTries + 1
+                if (self.winTries == 1):
+                    self.fortuneTryFirstIncreased.emit()
             self.fortuneDataChanged.emit()
 
     def overtakeWinTries(self):

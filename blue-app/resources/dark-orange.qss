@@ -444,9 +444,17 @@ QWidget#actualCreditValue,
 QWidget#actualMoneyValue,
 QTableWidget#songsWidget *,
 QTableWidget#devicesWidget *,
-QLabel#insertNewCoinLabel
+QLabel#insertNewCoinLabel,
+QWidget#infoLabel,
+QWidget#actualFortuneCount,
+QWidget#actualNeedFortuneMoney
 {
     font-weight: bold;
+}
+
+QWidget#infoLabel
+{
+    font-size: 16px;
 }
 
 QTableWidget#playQueueWidget QScrollBar,
