@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DamagedDevice</class>
+ <widget class="QDialog" name="DamagedDevice">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>683</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>140</y>
+     <width>661</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/Resources.qrc">:/damaged_device.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="hwErrorLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>80</y>
+     <width>651</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="damagedDeviceLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>30</y>
+     <width>651</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Device is damaged. Please call the service.</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../resources/Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

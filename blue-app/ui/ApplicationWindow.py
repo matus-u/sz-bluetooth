@@ -27,6 +27,7 @@ from ui import FocusHandler
 from ui import Helpers
 from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
+from ui import DamagedDeviceWindow
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -85,7 +86,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
-        errorHandler.hwError.connect(lambda error, info: QtWidgets.QMessageBox.critical(self, error, info))
+        errorHandler.hwError.connect(lambda error, info: DamagedDeviceWindow.DamagedDeviceWindow(self, error).exec())
         self.moneyTracker = moneyTracker
         self.scanData = []
 

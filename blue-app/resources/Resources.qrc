@@ -6,6 +6,7 @@
         <file>arial-black.ttf</file>
         <file>dynamic-images/HU/coin.png</file>
         <file>dynamic-images/SK/coin.png</file>
+        <file>damaged_device.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>
