@@ -13,7 +13,7 @@ class PlayWavFile(QtCore.QObject):
         self.process.finished.connect(self.onFinished)
 
     def playWav(self, path):
-        self.process.start()
+        self.process.start("aplay " + path)
 
     def onFinished(a,b):
         self.deleteLater()
@@ -30,7 +30,7 @@ class PlayFileService(QtCore.QObject):
 
     def onPlayerChanged(self, state):
         if state == QtMultimedia.QMediaPlayer.StoppedState:
-            self.emitFinished()
+            self.finished.emit()
 
     def onError(self, error):
         LoggingService.getLogger().info("Mp3 Error:".format(self.player.errorString()))

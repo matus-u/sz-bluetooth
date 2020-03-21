@@ -96,7 +96,7 @@ class WirelessService(QtCore.QObject):
     def disconnect(self):
         LoggingService.getLogger().info("Disconnect")
         QtCore.QProcess.execute("scripts/wifi-forget-connection.sh")
-    
+
     def onTimer(self):
         if QtCore.QProcess.execute("scripts/wifi-state.sh") == 1:
             return self.onConnect()

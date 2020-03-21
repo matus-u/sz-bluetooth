@@ -419,7 +419,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.playLogicService.isPlaying():
                 duration = 100
             else:
-                PlayWavFile(self).playWav("aplay resources/coin-ringtone.wav")
+                PlayWavFile(self).playWav("resources/coin-ringtone.wav")
             QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):

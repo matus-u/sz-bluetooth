@@ -73,7 +73,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
            self.maxRotation = self.maxRotation + 10
         self.counter = 0
 
-        PlayWavFile(self).playWav("aplay resources/coin-ringtone.wav")
+        PlayWavFile(self).playWav("aplay resources/")
 
     def rotateImages(self, index):
         indexes = deque(range(0,10))
