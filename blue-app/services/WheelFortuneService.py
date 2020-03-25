@@ -68,7 +68,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def moneyInserted(self, money):
         if self.isEnabled():
-            self.tossTimer.start(5000)
+            self.tossTimer.start(30000)
             mLevel = self.moneyLevel()
             self.counter = round (self.counter + round(money, 2), 2)
 

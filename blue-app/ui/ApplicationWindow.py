@@ -29,6 +29,20 @@ from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
 from ui import DamagedDeviceWindow
 
+class NotStartSameImmediatellyCheck:
+    def __init__(self):
+        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+        self.lastStartedInfo = None
+
+    def check(self, info):
+        prevLastStarted = self.lastStarted
+        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+        prevLastStartedInfo = self.lastStartedInfo
+        self.lastStartedInfo = info
+        if ((QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000) and (self.lastStartedInfo == prevLastStartedInfo):
+            return False
+        return True
+
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     adminModeLeaveButton = QtCore.pyqtSignal()
@@ -168,7 +182,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
-        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
         self.getActualFocusHandler().setFocus()
 
         self.wheelFortuneService = wheelFortuneService
@@ -196,6 +209,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
 
         self.onFortuneDataChanged()
+        self.noStartImmediatellyCheck = NotStartSameImmediatellyCheck()
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -355,15 +369,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         if playQueueObject != None:
             if self.creditService.getSongsRepresentation().enoughMoney():
-                prevLastStarted = self.lastStarted
-                self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-                if (QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000:
+                info = playQueueObject.mp3Info()
+                if not self.noStartImmediatellyCheck.check(info):
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
-                    self.playLogicService.play(Mp3PlayQueueObject(playQueueObject.mp3Info()))
+                    self.playLogicService.play(Mp3PlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()
                     self.wheelFortuneService.overtakeWinTries()
-
 
     def onPlayingInitialized(self):
         self.ui.playSlider.setValue(0)
