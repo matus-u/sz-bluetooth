@@ -65,7 +65,7 @@ class PrintingService(QtCore.QObject):
             s.write(b"\n")
             s.write([0x1d, 0x21, 0x00])
             s.write([0x1d, 0x21, 0x71])
-            s.write(("DEVICE: " + name + "\n").encode())
+            s.write((self.tr("DEVICE: ") + name + "\n").encode())
             s.write(("ID: "+ randomString(8) +"\n").encode())
             s.write(self.tr("Thank you for playing!\n").encode())
             s.write(b"\n")
