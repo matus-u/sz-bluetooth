@@ -60,7 +60,8 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
                 "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX],
                 "currency" : self.currencyString,
-                "version" : self.swVersion
+                "version" : self.swVersion,
+                "status" : ""
                 }}
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
