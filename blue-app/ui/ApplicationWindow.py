@@ -28,6 +28,7 @@ from ui import Helpers
 from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
 from ui import DamagedDeviceWindow
+from ui import TestHwWindow
 
 class NotStartSameImmediatellyCheck:
     def __init__(self):
@@ -210,6 +211,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.onFortuneDataChanged()
         self.noStartImmediatellyCheck = NotStartSameImmediatellyCheck()
+        self.ui.testMenuButton.clicked.connect(lambda: self.onTestMenuButton(self.printingService, self.ledButtonService))
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -228,6 +230,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.wheelWindow = w
             w.finished.connect(lambda: self.onWheelFortuneFinished(w))
             self.openSubWindow(w)
+
+    def onTestMenuButton(self, printerService, ledButtonService):
+        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService)
+        w.finished.connect(lambda: self.getActualFocusHandler().setFocus())
+        self.openSubWindow(w)
 
     def onWheelFortuneFinished(self, w):
         self.wheelWindow = None
@@ -265,6 +272,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.adminLeaveLabel.setVisible(enable)
             self.ui.leaveAdminButton.setVisible(enable)
             self.ui.wheelFortuneButton.setVisible(enable)
+            self.ui.testMenuButton.setVisible(enable)
             if enable:
                 self.temperatureStatus.start()
             else:

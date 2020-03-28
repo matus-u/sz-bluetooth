@@ -39,3 +39,6 @@ class PrintingService(QtCore.QObject):
 
     def getTicketCounter(self):
         return self.ticketCounter
+
+    def printTestTicket(self):
+        print ("Print test ticket!")

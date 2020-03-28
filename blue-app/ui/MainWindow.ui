@@ -929,35 +929,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="disconnectButton">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Disconnect</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="leaveAdminButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Leave admin mode</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="adminSettingsButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -984,6 +955,33 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="wheelFortuneButton">
+            <property name="text">
+             <string>Wheel settings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="leaveAdminButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Leave admin mode</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="testMenuButton">
+            <property name="text">
+             <string>Test menu</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="addCreditButton">
             <property name="enabled">
              <bool>true</bool>
@@ -1000,9 +998,18 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="wheelFortuneButton">
+           <widget class="QPushButton" name="disconnectButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
-             <string>Wheel settings</string>
+             <string>Disconnect</string>
             </property>
            </widget>
           </item>

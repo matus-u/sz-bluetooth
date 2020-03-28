@@ -155,3 +155,26 @@ class PrintingService(QtCore.QObject):
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
             self.ticketCounterChanged.emit()
 
+    def printTestTicket(self):
+        try:
+            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+            s.write([0x1b, 0x40])
+            s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+            s.write(("THIS IS TEST TICKET\n").encode())
+
+            for i in range(1,10):
+                s.write(("TEST " + " - " + str(i) + " - "  + "\n").encode())
+
+            s.write(b"\n")
+            s.write(b"\n")
+
+            #CUT PAPER#
+            s.write([0x1d, 0x56, 0])
+            #s.write(b"\n")
+            self.checkError(s)
+            s.close()
+
+            self.printFinished.emit()
+        except:
+            self.errorFunc()
+

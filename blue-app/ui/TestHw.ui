@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TestHw</class>
+ <widget class="QDialog" name="TestHw">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>914</width>
+    <height>693</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="testPrinterButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>30</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test printer</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="testLedButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>110</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test led</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="testSoundButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>190</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test sound</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="coinMachineTableWidget">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>390</y>
+     <width>391</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::NoSelection</enum>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>150</number>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>Coin 1</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Coin machine name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Count</string>
+    </property>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string>Coin 1</string>
+    </property>
+   </item>
+   <item row="0" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="1" column="0">
+    <property name="text">
+     <string>Coin 2</string>
+    </property>
+   </item>
+   <item row="1" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="2" column="0">
+    <property name="text">
+     <string>Coin 3</string>
+    </property>
+   </item>
+   <item row="2" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="3" column="0">
+    <property name="text">
+     <string>Coin 4</string>
+    </property>
+   </item>
+   <item row="3" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="4" column="0">
+    <property name="text">
+     <string>Coin 5</string>
+    </property>
+   </item>
+   <item row="4" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="5" column="0">
+    <property name="text">
+     <string>Coin 6</string>
+    </property>
+   </item>
+   <item row="5" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+   <item row="6" column="0">
+    <property name="text">
+     <string>CPP 0</string>
+    </property>
+   </item>
+   <item row="6" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTableWidget" name="buttonTestTableWidget">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>60</y>
+     <width>391</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::NoSelection</enum>
+   </property>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderStretchLastSection">
+    <bool>false</bool>
+   </attribute>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string/>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Button name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>State</string>
+    </property>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string>Button Left</string>
+    </property>
+   </item>
+   <item row="0" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="1" column="0">
+    <property name="text">
+     <string>Button Right</string>
+    </property>
+   </item>
+   <item row="1" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="2" column="0">
+    <property name="text">
+     <string>Button Up</string>
+    </property>
+   </item>
+   <item row="2" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="3" column="0">
+    <property name="text">
+     <string>Button Down</string>
+    </property>
+   </item>
+   <item row="3" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="4" column="0">
+    <property name="text">
+     <string>Button Confirm</string>
+    </property>
+   </item>
+   <item row="4" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTableWidget" name="removeControlerTableWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>390</y>
+     <width>391</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::NoSelection</enum>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>180</number>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Remove control button</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>State</string>
+    </property>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string>Volume up</string>
+    </property>
+   </item>
+   <item row="0" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="1" column="0">
+    <property name="text">
+     <string>Volume down</string>
+    </property>
+   </item>
+   <item row="1" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+   <item row="2" column="0">
+    <property name="text">
+     <string>Mute</string>
+    </property>
+   </item>
+   <item row="2" column="1">
+    <property name="text">
+     <string>IDLE</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>360</y>
+     <width>261</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Remote control test:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>360</y>
+     <width>261</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Coint machine test:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>30</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Button test:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeButton">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>610</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
