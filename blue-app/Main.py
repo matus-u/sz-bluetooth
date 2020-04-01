@@ -105,6 +105,9 @@ def main():
 
     arrowHandler = FocusHandler.ArrowHandler(gpioService)
 
+
+    AppSettings.getNotifier().moneyServerChanged.connect(lambda serverAddr: QtCore.QProcess.execute("scripts/update-money-server-logger.sh", [serverAddr]))
+
     application = ApplicationWindow.ApplicationWindow(timerService,
                                                       moneyTracker,
                                                       ledButtonService,

@@ -37,9 +37,6 @@ fi
 # close blueman applet
 killall -9 blueman-applet
 
-killall -9 sound-radio.py
-scripts/./sound-radio.py &
-
 #start blue-alsa
 export LIBASOUND_THREAD_SAFE=0
 bluealsa -p a2dp-sink 2> /dev/null &

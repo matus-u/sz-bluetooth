@@ -38,12 +38,12 @@ class PrintingService(QtCore.QObject):
     def initialize(self):
         try:
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
-            s.write([0x1b, 0x40])
+            #s.write([0x1b, 0x40])
             #s.write(b"\n")
             #s.write(b"\n")
             #s.write(b"\n")
             #s.write(b"\n")
-            s.write([0x1d, 0x56, 0])
+            #s.write([0x1d, 0x56, 0])
             self.checkError(s)
             s.close()
 
@@ -89,7 +89,7 @@ class PrintingService(QtCore.QObject):
             self.errorFunc()
 
     def readOneByte(self, serial):
-        byt = s.read(1)
+        byt = serial.read(1)
         if len(byt) == 0:
             try:
                 serial.close()

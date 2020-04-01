@@ -23,9 +23,9 @@ class AppWindowArrowHandler(QtCore.QObject):
         self.appWindow = parent
         self.arrowHandler = arrowHandler
 
+        self.connectSignals()
         testModeService.testModeEnabled.connect(self.disconnectSignals)
         testModeService.testModeDisabled.connect(self.connectSignals)
-        self.connectSignals()
 
     def connectSignals(self):
         self.arrowHandler.leftClicked.connect(self.onLeft)
