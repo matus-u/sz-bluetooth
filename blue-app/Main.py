@@ -17,15 +17,18 @@ from services.LedButtonService import LedButtonService
 from services.HwErrorHandling import HwErrorHandling
 from services.HwErrorHandling import HwErrorHandling
 from services.PixmapService import PixmapService
+from services.TestModeService import TestModeService
 
 from generated import Resources
 
 if os.getenv('RUN_FROM_DOCKER', False) == False:
     from services.GpioService import GpioService
     from services.PrinterService import PrintingService
+    from services.VolumeService import VolumeService
 else:
     from services.mocks.GpioService import GpioService
     from services.mocks.PrinterService import PrintingService
+    from services.mocks.VolumeService import VolumeService
 
 def setStyle(app):
     QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("motif"))
@@ -63,6 +66,15 @@ def main():
 
     errorHandler = HwErrorHandling()
 
+    testModeService = TestModeService()
+
+    volumeTimerService = TimerService()
+    volumeService = VolumeService()
+    volumeTimerService.addTimerWorker(volumeService)
+
+    testModeService.testModeEnabled.connect(volumeService.testModeEnabled, QtCore.Qt.QueuedConnection)
+    testModeService.testModeDisabled.connect(volumeService.testModeDisabled, QtCore.Qt.QueuedConnection)
+
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
@@ -93,7 +105,15 @@ def main():
 
     arrowHandler = FocusHandler.ArrowHandler(gpioService)
 
-    application = ApplicationWindow.ApplicationWindow(timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler, errorHandler)
+    application = ApplicationWindow.ApplicationWindow(timerService,
+                                                      moneyTracker,
+                                                      ledButtonService,
+                                                      wheelFortuneService,
+                                                      printingService,
+                                                      arrowHandler,
+                                                      errorHandler,
+                                                      testModeService,
+                                                      volumeService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
@@ -101,6 +121,7 @@ def main():
 
     application.show()
     printingService.initialize()
+    volumeService.start()
 
     application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
@@ -108,10 +129,13 @@ def main():
     app.installEventFilter(adminModeTracker)
 
     ret = app.exec_()
+
+    volumeService.stop()
     gpioService.cleanup()
     application.cleanup()
     webUpdateStatus.asyncDisconnect()
     updateStatusTimerService.quit()
+    volumeTimerService.quit()
     timerService.quit()
     sys.exit(ret)
 

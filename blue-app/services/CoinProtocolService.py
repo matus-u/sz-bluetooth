@@ -22,7 +22,7 @@ class CoinProtocolService(QtCore.QObject):
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Coin machine corrupted! Call service!")
         self.thread = QtCore.QThread()
         self.thread.start()
-        self.statusObject = CoinProtocol.CoinProtocolStatusObject()
+        self.statusObject = CoinProtocol.CoinProtocolStatusObject(hwErrorHandler)
         self.statusObject.actualStatus.connect(lambda x: self.onCoinStatus(x), QtCore.Qt.QueuedConnection)
         self.statusObject.coinMachineLockStatus.connect(lambda x: self.onCoinMachineLockStatus(x), QtCore.Qt.QueuedConnection)
         self.coinMachineLockRequest.connect(lambda x: self.statusObject.coinMachineLockSlot(x), QtCore.Qt.QueuedConnection)

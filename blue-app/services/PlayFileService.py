@@ -15,7 +15,7 @@ class PlayWavFile(QtCore.QObject):
     def playWav(self, path):
         self.process.start("aplay " + path)
 
-    def onFinished(a,b):
+    def onFinished(self,a,b):
         self.deleteLater()
 
 class PlayFileService(QtCore.QObject):

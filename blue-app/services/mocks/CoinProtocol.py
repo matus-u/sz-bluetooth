@@ -13,7 +13,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
     actualStatus = QtCore.pyqtSignal(str)
     coinMachineLockStatus = QtCore.pyqtSignal(bool)
 
-    def __init__(self):
+    def __init__(self, hwStatusHandler):
         super().__init__(200)
 
     def coinMachineLockSlot(self, toLock):

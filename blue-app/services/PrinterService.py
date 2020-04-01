@@ -4,6 +4,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.LoggingService import LoggingService
+
 import random
 import string
 
@@ -35,7 +37,7 @@ class PrintingService(QtCore.QObject):
 
     def initialize(self):
         try:
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             s.write([0x1b, 0x40])
             #s.write(b"\n")
             #s.write(b"\n")
@@ -47,11 +49,12 @@ class PrintingService(QtCore.QObject):
 
             self.printFinished.emit()
         except:
+            LoggingService.getLogger().error("PrintingService: initialize: Error func called")
             self.errorFunc()
 
     def printTicket(self, name, winNumber, prizeName):
         try:
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
 
             s.write([0x1b, 0x40])
             s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
@@ -82,24 +85,33 @@ class PrintingService(QtCore.QObject):
             self.printFinished.emit()
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
         except:
+            LoggingService.getLogger().error("PrintingService: printTicket: Error func called")
             self.errorFunc()
+
+    def readOneByte(self, serial):
+        byt = s.read(1)
+        if len(byt) == 0:
+            try:
+                serial.close()
+            except:
+                pass
+            raise "Read timeout exception"
+        return byt
 
     def checkError(self, s):
         s.write([0x10, 0x04, 0x03])
-        ret = ord(s.read(1))
-        self.errorStatus = ret
+        self.errorStatus = ord(self.readOneByte(s))
 
-        if ret != 18:
+        if self.errorStatus != 18:
             self.printError.emit()
 
         s.write([0x10, 0x04, 0x04])
-        ret = ord(s.read(1))
-        self.paperError = ret
+        self.paperError = ord(self.readOneByte(s))
 
-        if (ret & 0x8) > 0:
+        if (self.paperError & 0x8) > 0:
             self.lowPaper.emit()
 
-        if (ret & 0x40) > 0:
+        if (self.paperError & 0x40) > 0:
             self.noPaper.emit()
 
     def getPrintStatus(self):
@@ -122,7 +134,7 @@ class PrintingService(QtCore.QObject):
 
     def printDescTicket(self, name, prizeCounts, prizeNames):
         try:
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             s.write([0x1b, 0x40])
             s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
             s.write(("DEVICE: " + name + "\n").encode())
@@ -143,6 +155,7 @@ class PrintingService(QtCore.QObject):
 
             self.printFinished.emit()
         except:
+            LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
             self.errorFunc()
 
 
@@ -157,7 +170,7 @@ class PrintingService(QtCore.QObject):
 
     def printTestTicket(self):
         try:
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=None, xonxoff=0, rtscts=0)
+            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             s.write([0x1b, 0x40])
             s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
             s.write(("THIS IS TEST TICKET\n").encode())
@@ -176,5 +189,6 @@ class PrintingService(QtCore.QObject):
 
             self.printFinished.emit()
         except:
+            LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called")
             self.errorFunc()
 

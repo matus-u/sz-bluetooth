@@ -29,20 +29,7 @@ from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
 from ui import DamagedDeviceWindow
 from ui import TestHwWindow
-
-class NotStartSameImmediatellyCheck:
-    def __init__(self):
-        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-        self.lastStartedInfo = None
-
-    def check(self, info):
-        prevLastStarted = self.lastStarted
-        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-        prevLastStartedInfo = self.lastStartedInfo
-        self.lastStartedInfo = info
-        if ((QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000) and (self.lastStartedInfo == prevLastStartedInfo):
-            return False
-        return True
+from ui.ApplicationWindowHelpers import NotStartSameImmediatellyCheck, AppWindowArrowHandler
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -95,7 +82,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed.")
         ]
 
-    def __init__(self, timerService, moneyTracker, ledButtonService, wheelFortuneService, printingService, arrowHandler, errorHandler):
+    def __init__(self, timerService,
+                 moneyTracker,
+                 ledButtonService,
+                 wheelFortuneService,
+                 printingService,
+                 arrowHandler,
+                 errorHandler,
+                 testModeService,
+                 volumeService):
+
         super(ApplicationWindow, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -136,7 +132,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
 
-        self.creditService = CreditService(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel(), errorHandler)
+        self.creditService = CreditService(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel(), errorHandler, testModeService)
         self.creditService.creditChanged.connect(self.onCreditChange)
         self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters)
         self.creditService.changeCredit(0)
@@ -173,12 +169,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), self, lambda: self.getActualFocusHandler().onUp())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.getActualFocusHandler().onConfirm())
 
-        self.arrowHandler = arrowHandler
-        self.arrowHandler.leftClicked.connect(lambda: self.getActualFocusHandler().onLeft())
-        self.arrowHandler.rightClicked.connect(lambda: self.getActualFocusHandler().onRight())
-        self.arrowHandler.downClicked.connect(lambda: self.getActualFocusHandler().onDown())
-        self.arrowHandler.upClicked.connect(lambda: self.getActualFocusHandler().onUp())
-        self.arrowHandler.confirmClicked.connect(lambda: self.getActualFocusHandler().onConfirm())
+        self.appWindowArrowHandler = AppWindowArrowHandler(self, testModeService, arrowHandler)
 
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
@@ -211,7 +202,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.onFortuneDataChanged()
         self.noStartImmediatellyCheck = NotStartSameImmediatellyCheck()
-        self.ui.testMenuButton.clicked.connect(lambda: self.onTestMenuButton(self.printingService, self.ledButtonService))
+
+        self.testModeService = testModeService
+        self.ui.testMenuButton.clicked.connect(lambda: self.onTestMenuButton(self.printingService, self.ledButtonService, volumeService, arrowHandler))
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -226,15 +219,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def openFortuneWindow(self):
         if (len(self.wheelPrizes) > 0) and (self.wheelWindow is None):
             data = self.wheelPrizes.pop(0)
-            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.arrowHandler, self.langBasedSettings)
+            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.langBasedSettings)
             self.wheelWindow = w
             w.finished.connect(lambda: self.onWheelFortuneFinished(w))
             self.openSubWindow(w)
 
-    def onTestMenuButton(self, printerService, ledButtonService):
-        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService)
-        w.finished.connect(lambda: self.getActualFocusHandler().setFocus())
+    def onTestMenuButton(self, printerService, ledButtonService, volumeService, arrowHandler):
+        self.testModeService.enableTestMode()
+        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService, self.creditService.getCoinService(), volumeService, arrowHandler)
+        w.finished.connect(self.onTestHwWindowClosed)
         self.openSubWindow(w)
+
+    def onTestHwWindowClosed(self):
+        self.getActualFocusHandler().setFocus()
+        self.testModeService.disableTestMode()
 
     def onWheelFortuneFinished(self, w):
         self.wheelWindow = None
@@ -364,7 +362,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onPlaySong(self):
         playQueueObject = self.musicController.getSelectedPlayObject()
-        print (playQueueObject)
 
         #SPECIAL HANDLING OF BLUETOOTH
         if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject):
