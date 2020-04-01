@@ -25,10 +25,12 @@ class MoneyTracker(QtCore.QObject):
         #self.settings.sync()
 
     def withdraw(self):
+        LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)
         self.settings.sync()
 
     def resetAllCounters(self):
+        LoggingService.getLogger().info("Reset all counters")
         self.settings.setValue(MoneyTracker.TotalCounter, 0.0)
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)
         self.settings.sync()

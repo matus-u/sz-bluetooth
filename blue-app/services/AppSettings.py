@@ -179,7 +179,6 @@ class AppSettings:
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
 
-
     @classmethod
     def storeWirelessSettings(cls, enabled, SSID, password):
         settings = QtCore.QSettings(AppSettings.WirelessSettingsPath, AppSettings.SettingsFormat)

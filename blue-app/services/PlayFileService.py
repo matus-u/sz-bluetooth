@@ -37,6 +37,7 @@ class PlayFileService(QtCore.QObject):
         if not (os.getenv('RUN_FROM_DOCKER', False) == False):
             return
 
+        LoggingService.getLogger().info("Mp3 finished.")
         self.finished.emit()
 
     def playMp3(self, path):

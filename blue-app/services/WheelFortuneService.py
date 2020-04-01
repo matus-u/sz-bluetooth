@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.LoggingService import LoggingService
+
 import json
 import random
 
@@ -81,6 +83,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def overtakeWinTries(self):
         if self.winTries > 0:
+            LoggingService.getLogger().info("Overtake win tries")
             count = self.winTries
             self.winTries = 0
             for i in range(0, count):
@@ -134,18 +137,21 @@ class WheelFortuneService(QtCore.QObject):
                     self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
                     self.reducePrizeCount.emit(win[0])
 
+            LoggingService.getLogger().info("Try win " + str(win[0]))
             self.win.emit(win[0], counts[win[0]], names[win[0]])
 
     def actualProbs(self):
         return self.probabilityValues
 
     def lockWheel(self):
+        LoggingService.getLogger().info("Lock wheel!!!")
         self.printerActive = 0
 
     def getActualFortuneTryLevels(self):
         return [self.moneyLevel() - self.counter, self.winTries]
 
     def resetActualFortuneTryLevels(self):
+        LoggingService.getLogger().info("Reset actual fortune levels")
         self.counter = 0.0
         self.winTries = 0
         self.fortuneDataChanged.emit()

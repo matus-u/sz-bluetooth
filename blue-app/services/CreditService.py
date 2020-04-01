@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 import os
 from services.CoinProtocolService import CoinProtocolService
 from services.MoneyTracker import MoneyTracker
+from services.LoggingService import LoggingService
 
 class CreditBluetoothRepresentation:
     def __init__(self, creditService):
@@ -30,6 +31,7 @@ class CreditSongRepresentation:
         return self.creditService.getCredit() >= self.creditService.getCoinSettings()[8]
 
     def overTakeMoney(self):
+        LoggingService.getLogger().info("Credit song overtake money!")
         return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[8])
 
 class CreditService(QtCore.QObject):
@@ -62,6 +64,7 @@ class CreditService(QtCore.QObject):
         if money != 0:
             self.changeCredit(money)
             self.moneyInserted.emit(money)
+            LoggingService.getLogger().info("Money inserted " + str(money))
 
     def changeCredit(self, value):
         self.credit = round (self.credit + round(value, 2), 2)
@@ -83,6 +86,7 @@ class CreditService(QtCore.QObject):
         return self.coinSettings
 
     def clearCredit(self):
+        LoggingService.getLogger().info("Clear credit")
         self.changeCredit(-1 * self.credit)
         self.creditCleared.emit()
 
