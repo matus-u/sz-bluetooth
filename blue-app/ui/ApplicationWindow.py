@@ -97,7 +97,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
-        errorHandler.hwError.connect(lambda error, info: DamagedDeviceWindow.DamagedDeviceWindow(self, error).exec())
+        errorHandler.hwError.connect(lambda error, info: DamagedDeviceWindow.DamagedDeviceWindow(self, error, info).exec())
         self.moneyTracker = moneyTracker
         self.scanData = []
 
