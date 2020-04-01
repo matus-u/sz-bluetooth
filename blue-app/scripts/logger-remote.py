@@ -46,23 +46,45 @@ class WebSocketLogService(QtCore.QObject):
             self.websocket.open(QtCore.QUrl(self.URL))
 
     def onConnect(self):
+        self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr + "_logging", "_logging"));
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr));
+        self.sendLogStatus()
 
-    def sendLogRequest(self):
+    def sendLogStatus(self):
         if self.websocket is not None:
             if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
-                data = { 'id' : self.macAddr, 'log-data' : self.getLogs() }
+                data = { 'id' : self.macAddr }
+                textMsg = self.createPhxMessage("log-status", data)
+                self.websocket.sendTextMessage(textMsg)
+
+    def sendLogResponse(self):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                data = { 'id' : self.macAddr, 'log-response-data' : self.getLogs() }
                 textMsg = self.createPhxMessage("log-response", data)
                 self.websocket.sendTextMessage(textMsg)
 
+    def readContent(self, p):
+        content = ""
+        if os.path.exists(p):
+            try:
+                with open(p, 'r') as contentFile:
+                    content = contentFile.read()
+                    return content
+            except:
+                return ""
+        return content
+
     def getLogs(self):
-        #TODO LOGIC TO LOAD LOGS
-        pass
+        return self.readContent("/tmp/blue-app.log.2") + self.readContent("/tmp/blue-app.log.1") + self.readContent("/tmp/blue-app.log")
 
     def onTextMessageReceived(self, js):
         text = json.loads(js)
         if text["event"] == "log-request":
-            self.sendLogRequest()
+            self.sendLogResponse()
+
+        if text["event"] == "get-log-status":
+            self.sendLogStatus()
 
     def onDisconnect(self):
         self.scheduleConnect()
@@ -80,9 +102,6 @@ class WebSocketLogService(QtCore.QObject):
                             "ref" : str(self.ref)
         })
 
-
-
-
 def main():
 
     webSocketLogger = WebSocketLogService(sys.argv[1])
@@ -90,8 +109,8 @@ def main():
 
 
     def signalHandler(*args):
-        with open('/tmp/money-server', 'r') as content_file:
-            content = content_file.read()
+        with open('/tmp/money-server', 'r') as contentFile:
+            content = contentFile.read()
             webSocketLogger.setMoneyServer(content)
         os.remove('/tmp/money-server')
 

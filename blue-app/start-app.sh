@@ -9,7 +9,7 @@ if [ "${RUN_FROM_DOCKER}" == "TRUE" ]; then
 	generate-from-uic
 fi
 
-killall -9 logger-remote.py
+kill -9 $(pidof -x logger-remote.py)
 scripts/./logger-remote.py "[$MAC]" "$(cat ../blue-app-configs/blue-app.conf  | grep MoneyServer | cut -f 2 -d =)" &
 
 export LANG=C.UTF-8
