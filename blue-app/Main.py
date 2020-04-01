@@ -140,4 +140,8 @@ def main():
     sys.exit(ret)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        LoggingService.getLogger().error("GENERAL EXCEPTION %s:" % str(e))
+        raise e
