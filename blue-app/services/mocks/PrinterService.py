@@ -3,6 +3,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.HwErrorHandling import HwErrorHandling
+
 class PrintingService(QtCore.QObject):
 
     printError = QtCore.pyqtSignal()
@@ -11,10 +13,12 @@ class PrintingService(QtCore.QObject):
     printFinished = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
 
-    def __init__(self, hwErrorHandler):
+    def __init__(self, hwErrorHandler, wheelFortuneService):
         super().__init__()
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
         self.ticketCounter = 0
+
+        QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED))
 
     def initialize(self):
         self.printFinished.emit()

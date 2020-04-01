@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>683</height>
+    <width>472</width>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>140</y>
-     <width>661</width>
-     <height>491</height>
+     <x>70</x>
+     <y>260</y>
+     <width>331</width>
+     <height>251</height>
     </rect>
    </property>
    <property name="text">
@@ -29,30 +29,27 @@
     <pixmap resource="../resources/Resources.qrc">:/damaged_device.png</pixmap>
    </property>
   </widget>
-  <widget class="QLabel" name="hwErrorLabel">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>80</y>
-     <width>651</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="damagedDeviceLabel">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
-     <width>651</width>
+     <x>100</x>
+     <y>10</y>
+     <width>281</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Device is damaged. Please call the service.</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="damagedDeviceText">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>80</y>
+     <width>391</width>
+     <height>141</height>
+    </rect>
    </property>
   </widget>
  </widget>

@@ -82,11 +82,16 @@ def main():
     adminModeTracker = AdminModeTracker(gpioService)
 
     wheelFortuneService = WheelFortuneService()
-    printingService = PrintingService(errorHandler)
+    printingService = PrintingService(errorHandler, wheelFortuneService)
 
     pixmapService = PixmapService()
 
-    webUpdateStatus = WebSocketStatus(sys.argv[1], moneyTracker, wheelFortuneService, printingService)
+    webUpdateStatus = WebSocketStatus(sys.argv[1],
+                                      moneyTracker,
+                                      wheelFortuneService,
+                                      printingService,
+                                      errorHandler)
+
     updateStatusTimerService.addTimerWorker(webUpdateStatus)
 
     webUpdateStatus.newWinImage.connect(pixmapService.onNewImageData, QtCore.Qt.QueuedConnection)
@@ -119,6 +124,7 @@ def main():
                                                       volumeService)
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
+
 
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
 

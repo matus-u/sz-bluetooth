@@ -17,7 +17,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
     def __init__(self, hwErrorHandler):
         super().__init__(200)
 
-        self.serialError.connect(lambda: hwErrorHandler.hwErrorEmit("Coin machine corrupted! Call service!"), QtCore.Qt.QueuedConnection)
+        self.serialError.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED), QtCore.Qt.QueuedConnection)
 
     def coinMachineLockSlot(self, toLock):
         try:

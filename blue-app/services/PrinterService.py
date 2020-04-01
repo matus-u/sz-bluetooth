@@ -4,7 +4,9 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.AppSettings import AppSettings
 from services.LoggingService import LoggingService
+from services.HwErrorHandling import HwErrorHandling
 
 import random
 import string
@@ -26,30 +28,45 @@ class PrintingService(QtCore.QObject):
 
     TicketCounter = "TicketCounter"
 
-    def __init__(self, hwErrorHandler):
+    def __init__(self, hwErrorHandler, wheelFortuneService):
         super().__init__()
 
         self.errorStatus = 0
         self.paperError = 0
-        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
         self.settings = QtCore.QSettings(PrintingService.SettingsPath, PrintingService.SettingsFormat)
         self.ticketCounter = self.settings.value(PrintingService.TicketCounter, 0, int)
 
+        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED)
+        self.noPaper.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER))
+
+        self.testTimer = QtCore.QTimer(self)
+        self.testTimer.timeout.connect(self.checkState)
+
+        wheelFortuneService.enabledNotification.connect(lambda enabled: self.onWheelFortuneEnabledNotification(enabled, hwErrorHandler))
+
+        self.initFunc = lambda: self.onWheelFortuneEnabledNotification(wheelFortuneService.isEnabled(), hwErrorHandler)
+
     def initialize(self):
+        self.initFunc()
+
+    def onWheelFortuneEnabledNotification(self, enabled, hwErrorHandler):
+        if enabled:
+            if not self.testTimer.isActive():
+                self.checkState()
+                self.testTimer.start(30000)
+        else:
+            if self.testTimer.isActive():
+                self.testTimer.stop()
+                hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER)
+                hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED)
+
+    def checkState(self):
         try:
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
-            #s.write([0x1b, 0x40])
-            #s.write(b"\n")
-            #s.write(b"\n")
-            #s.write(b"\n")
-            #s.write(b"\n")
-            #s.write([0x1d, 0x56, 0])
             self.checkError(s)
             s.close()
-
-            self.printFinished.emit()
         except:
-            LoggingService.getLogger().error("PrintingService: initialize: Error func called")
+            LoggingService.getLogger().error("Check state func called")
             self.errorFunc()
 
     def printTicket(self, name, winNumber, prizeName):

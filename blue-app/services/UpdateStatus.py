@@ -19,7 +19,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     newWinProbabilityValues = QtCore.pyqtSignal(object)
     newWinImage = QtCore.pyqtSignal(object)
 
-    def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService):
+    def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService, errorHandler):
         super().__init__(10000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
@@ -31,9 +31,14 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.ref = 0
         self.swVersion = AppSettings.actualAppVersion()
         self.currencyString = AppSettings.actualCurrency()
+        self.errors = []
+        errorHandler.hwErrorChanged.connect(self.setErrors, QtCore.Qt.QueuedConnection)
 
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
         AppSettings.getNotifier().currencyChanged.connect(self.setCurrency)
+
+    def setErrors(self, errs):
+        self.errors = errs
 
     def setCurrency(self, val):
         self.currencyString = val
@@ -53,15 +58,23 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.asyncDisconnect()
 
     def onTimeout(self):
+        self.sendActualMoneyValue()
+        self.sendErrorStrings()
+
+    def sendActualMoneyValue(self):
         logger = LoggingService.getLogger()
         logger.info("Update state to server with id: %s" % self.URL)
         counters = self.moneyTracker.getCounters()
+        status = ""
+        if len(self.errors) != 0:
+            status = "ERRORS"
+
         data = { 'id' : self.macAddr, 'dev' : {
                 "money_total" : counters[MoneyTracker.TOTAL_COUNTER_INDEX],
                 "money_from_last_withdraw" : counters[MoneyTracker.FROM_LAST_WITHDRAW_COUNTER_INDEX],
                 "currency" : self.currencyString,
                 "version" : self.swVersion,
-                "status" : ""
+                "status" : status
                 }}
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
@@ -95,9 +108,20 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr));
         self.adminModeStateRequested.emit()
         self.startTimerSync()
-        self.onTimeout()
+        self.sendActualMoneyValue()
+        self.sendErrorStrings()
         self.sendWinProbsStatus()
         self.sendPrintStatus()
+
+    def sendErrorStrings(self):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                logger = LoggingService.getLogger()
+                logger.info("Send error strings:")
+                data = { 'id' : self.macAddr, 'data' : { 'error-strings' : self.errors } }
+                textMsg = self.createPhxMessage("error-strings", data)
+                LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
+                self.websocket.sendTextMessage(textMsg)
 
     def sendWinProbsStatus(self):
         if self.websocket is not None:
@@ -171,7 +195,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
         if text["event"] == "get-actual-money-value":
             LoggingService.getLogger().info("get-actual-money-value")
-            self.onTimeout()
+            self.sendActualMoneyValue()
 
         if text["event"] == "get-win-probability-status":
             LoggingService.getLogger().info("get-actual-prob-values")
@@ -185,6 +209,10 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             LoggingService.getLogger().info("win-image-request")
             self.sendWinImageRequestResponse(text["payload"]["image_id"])
             self.newWinImage.emit(text["payload"])
+
+        if text["event"] == "get-error-strings":
+            LoggingService.getLogger().info("get-error-strings")
+            self.sendErrorStrings()
 
     def onDisconnect(self):
         self.stopTimerSync()

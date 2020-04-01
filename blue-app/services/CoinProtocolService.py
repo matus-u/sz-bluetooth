@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from services import TimerService
 from services.LoggingService import LoggingService
+from services.HwErrorHandling import HwErrorHandling
 import os
 import time
 
@@ -19,7 +20,7 @@ class CoinProtocolService(QtCore.QObject):
     def __init__(self, hwErrorHandler):
         super().__init__()
         self.locked = False
-        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Coin machine corrupted! Call service!")
+        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED)
         self.thread = QtCore.QThread()
         self.thread.start()
         self.statusObject = CoinProtocol.CoinProtocolStatusObject(hwErrorHandler)

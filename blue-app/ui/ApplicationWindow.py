@@ -97,7 +97,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.showFullScreen()
-        errorHandler.hwError.connect(lambda error, info: DamagedDeviceWindow.DamagedDeviceWindow(self, error, info).exec())
         self.moneyTracker = moneyTracker
         self.scanData = []
 
@@ -205,6 +204,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.testModeService = testModeService
         self.ui.testMenuButton.clicked.connect(lambda: self.onTestMenuButton(self.printingService, self.ledButtonService, volumeService, arrowHandler))
+
+        self.damagedDeviceWindow = DamagedDeviceWindow.DamagedDeviceWindow(self, errorHandler)
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -529,4 +530,3 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onFortuneTryFirstIncreased(self):
         self.showStatusInfo(5000, self.texts[self.FIRST_TOSS_INFO], self.ui.infoLabel)
-

@@ -23,6 +23,8 @@ class WheelFortuneService(QtCore.QObject):
     fortuneDataChanged = QtCore.pyqtSignal()
     fortuneTryFirstIncreased = QtCore.pyqtSignal()
 
+    enabledNotification = QtCore.pyqtSignal(bool)
+
     def __init__(self):
         super().__init__()
         self.printerActive = 1
@@ -56,6 +58,7 @@ class WheelFortuneService(QtCore.QObject):
                 'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
 
     def setSettings(self, enabled, moneyLevel):
+        self.enabledNotification.emit(enabled)
         if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
             self.counter = 0.0
             self.settings.setValue(WheelFortuneService.Enabled, enabled)

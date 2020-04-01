@@ -402,7 +402,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Coint machine test:</string>
+    <string>Coin machine test:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
