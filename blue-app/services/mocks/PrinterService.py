@@ -18,7 +18,7 @@ class PrintingService(QtCore.QObject):
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
         self.ticketCounter = 0
 
-        QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED))
+        #QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED))
 
     def initialize(self):
         self.printFinished.emit()

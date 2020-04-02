@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services.LoggingService import LoggingService
+
 class MoneyTracker(QtCore.QObject):
     SettingsPath = "../blue-app-configs/money-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
