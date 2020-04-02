@@ -468,10 +468,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.coinImageLabel.setPixmap(coinPixMap)
 
     def onAddCreditButton(self):
-        self.creditService.changeCredit(0.1)
+        value = 0.0
+        values = list(filter(lambda x: (x != 0.0), self.creditService.getCoinSettings()[0:7]))
+        if values:
+            value = min(values)
+        print (value)
+        self.creditService.changeCredit(value)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
-            self.moneyTracker.addToCounters(0.1)
-            self.wheelFortuneService.moneyInserted(0.1)
+            self.moneyTracker.addToCounters(value)
+            self.wheelFortuneService.moneyInserted(value)
 
     def onWithdrawMoneyButton(self):
         shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])
