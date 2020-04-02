@@ -3,167 +3,167 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Time to disconnect: {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Scan bluetooth network</source>
         <translation>Oskenuj bluetooth siet</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Connected to the device: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Connecting to the device: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Connection with {} failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Scanninng...</source>
         <translation>Skenujem...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>No credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>Zero credit, insert money first please!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>seconds</source>
         <translation>sekúnd</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>CPU temp: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Insert next coin please</source>
         <translation>Najprv vlož peniaze</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Withdraw money?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Withdraw succesful.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Internal counter was correctly reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Phone to service: {}</source>
         <translation>Servis: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Admin mode remainse for {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>songs</source>
         <translation>pesničiek</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Playing from bluetooth</source>
         <translation>Prehrávanie z bluetooth</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Not playing</source>
         <translation>Neaktívne</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>No bluetooth devices found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Start is possible at least 5s after previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Connecting to device: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Prize counts and probabilities were updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Print error {}, call service please.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Paper is out - please insert new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Continue with music selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Toss count: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>To get next toss: {} {} needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="94"/>
+        <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>Thank you. You have got access to toss. 
 Select one song and toss will be executed.</source>
         <translation type="unfinished"></translation>
@@ -172,12 +172,12 @@ Select one song and toss will be executed.</source>
 <context>
     <name>DamagedDevice</name>
     <message>
-        <location filename="../generated/DamagedDevice.py" line="33"/>
+        <location filename="../generated/DamagedDevice.py" line="32"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/DamagedDevice.py" line="34"/>
+        <location filename="../generated/DamagedDevice.py" line="33"/>
         <source>Device is damaged. Please call the service.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,69 +196,82 @@ Select one song and toss will be executed.</source>
     </message>
 </context>
 <context>
+    <name>HwErrorHandling</name>
+    <message>
+        <location filename="../services/HwErrorHandling.py" line="38"/>
+        <source>Coin machine corrupted, call service please.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../services/HwErrorHandling.py" line="41"/>
+        <source>No paper. Coin machine cannot operate, please insert paper.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="555"/>
+        <location filename="../generated/MainWindow.py" line="558"/>
         <source>MainWindow</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="564"/>
+        <location filename="../generated/MainWindow.py" line="565"/>
         <source>Admin settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="559"/>
+        <location filename="../generated/MainWindow.py" line="562"/>
         <source>Scan bluetooth network</source>
         <translation>Oskenuj bluetooth siet</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="556"/>
+        <location filename="../generated/MainWindow.py" line="559"/>
         <source>PlayLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="557"/>
+        <location filename="../generated/MainWindow.py" line="560"/>
         <source>Empty playlist</source>
         <translation>Zoznam skladieb je prázdny</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="560"/>
+        <location filename="../generated/MainWindow.py" line="563"/>
         <source>Back</source>
         <translation>Spät</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="561"/>
+        <location filename="../generated/MainWindow.py" line="564"/>
         <source>Withdraw money</source>
         <translation>Vyber peniaze</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="562"/>
+        <location filename="../generated/MainWindow.py" line="571"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="563"/>
+        <location filename="../generated/MainWindow.py" line="568"/>
         <source>Leave admin mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="565"/>
+        <location filename="../generated/MainWindow.py" line="566"/>
         <source>Wifi settings</source>
         <translation>Nastavenie wifi</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="566"/>
+        <location filename="../generated/MainWindow.py" line="570"/>
         <source>Add credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="568"/>
+        <location filename="../generated/MainWindow.py" line="572"/>
         <source>CpuTemp:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="558"/>
+        <location filename="../generated/MainWindow.py" line="561"/>
         <source>Time of playqueue:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,17 +280,22 @@ Select one song and toss will be executed.</source>
         <source>Wheel settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../generated/MainWindow.py" line="569"/>
+        <source>Test menu</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PrintingService</name>
     <message>
-        <location filename="../services/PrinterService.py" line="70"/>
+        <location filename="../services/PrinterService.py" line="90"/>
         <source>Thank you for playing!
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../services/PrinterService.py" line="68"/>
+        <location filename="../services/PrinterService.py" line="88"/>
         <source>DEVICE: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -478,6 +496,159 @@ Select one song and toss will be executed.</source>
     <message>
         <location filename="../generated/SongTableWidget.py" line="58"/>
         <source>00:00</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TestHw</name>
+    <message>
+        <location filename="../generated/TestHw.py" line="173"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="174"/>
+        <source>Test printer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="175"/>
+        <source>Test led</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="176"/>
+        <source>Test sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="196"/>
+        <source>Coin 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="256"/>
+        <source>New Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="190"/>
+        <source>Coin machine name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="192"/>
+        <source>Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="274"/>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="200"/>
+        <source>Coin 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="204"/>
+        <source>Coin 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="208"/>
+        <source>Coin 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="212"/>
+        <source>Coin 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="216"/>
+        <source>Coin 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="220"/>
+        <source>CPP 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="225"/>
+        <source>Button name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="260"/>
+        <source>Click count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="231"/>
+        <source>Button Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="235"/>
+        <source>Button Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="239"/>
+        <source>Button Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="243"/>
+        <source>Button Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="247"/>
+        <source>Button Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="258"/>
+        <source>Remove control button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="264"/>
+        <source>Volume up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="268"/>
+        <source>Volume down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="272"/>
+        <source>Mute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="276"/>
+        <source>Remote control test:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="277"/>
+        <source>Coin machine test:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="278"/>
+        <source>Button test:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/TestHw.py" line="279"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
