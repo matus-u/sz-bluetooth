@@ -28,6 +28,9 @@ class PrintingService(QtCore.QObject):
 
     TicketCounter = "TicketCounter"
 
+    enoughPaper = QtCore.pyqtSignal()
+    printerOk = QtCore.pyqtSignal()
+
     def __init__(self, hwErrorHandler, wheelFortuneService):
         super().__init__()
 
@@ -38,6 +41,8 @@ class PrintingService(QtCore.QObject):
 
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED)
         self.noPaper.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER))
+        self.enoughPaper.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER))
+        self.printerOk.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED))
 
         self.testTimer = QtCore.QTimer(self)
         self.testTimer.timeout.connect(self.checkState)
@@ -57,14 +62,15 @@ class PrintingService(QtCore.QObject):
         else:
             if self.testTimer.isActive():
                 self.testTimer.stop()
-                hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER)
-                hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED)
+                self.enoughPaper.emit()
+                self.printerOk.emit()
 
     def checkState(self):
         try:
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             self.checkError(s)
             s.close()
+            self.printerOk.emit()
         except:
             LoggingService.getLogger().error("Check state func called")
             self.errorFunc()
@@ -85,9 +91,9 @@ class PrintingService(QtCore.QObject):
             s.write(b"\n")
             s.write([0x1d, 0x21, 0x00])
             s.write([0x1d, 0x21, 0x71])
-            s.write((self.tr("DEVICE: ") + name + "\n").encode())
-            s.write(("ID: "+ randomString(8) +"\n").encode())
-            s.write(self.tr("Thank you for playing!\n").encode())
+            s.write((self.tr("DEVICE: ") + name + "\n").encode(encoding='cp437'))
+            s.write(("ID: "+ randomString(8) +"\n").encode(encoding='cp437'))
+            s.write(self.tr("Thank you for playing!\n").encode(encoding='cp437'))
             s.write(b"\n")
             s.write(b"\n")
             s.write(b"\n")
@@ -101,6 +107,7 @@ class PrintingService(QtCore.QObject):
             self.ticketCounter = self.ticketCounter + 1
             self.printFinished.emit()
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
+            self.printerOk.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printTicket: Error func called")
             self.errorFunc()
@@ -130,6 +137,8 @@ class PrintingService(QtCore.QObject):
 
         if (self.paperError & 0x40) > 0:
             self.noPaper.emit()
+        else:
+            self.enoughPaper.emit()
 
     def getPrintStatus(self):
         errorString = "OK"
@@ -171,6 +180,7 @@ class PrintingService(QtCore.QObject):
             s.close()
 
             self.printFinished.emit()
+            self.printerOk.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
             self.errorFunc()
@@ -205,6 +215,7 @@ class PrintingService(QtCore.QObject):
             s.close()
 
             self.printFinished.emit()
+            self.printerOk.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called")
             self.errorFunc()

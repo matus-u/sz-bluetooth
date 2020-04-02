@@ -35,7 +35,7 @@ class HwErrorHandling(QtCore.QObject):
             return self.tr("Coin machine corrupted, call service please.")
 
         if code == HwErrorHandling.PRINTER_CORRUPTED:
-            return self.tr("Coin machine corrupted, call service please.")
+            return self.tr("Printer machine corrupted, call service please.")
 
         if code == HwErrorHandling.NO_PAPER:
             return self.tr("No paper. Coin machine cannot operate, please insert paper.")
