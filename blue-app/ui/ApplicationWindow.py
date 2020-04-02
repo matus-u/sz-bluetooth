@@ -79,7 +79,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."),
         self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
-        self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed.")
+        self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
         ]
 
     def __init__(self, timerService,
@@ -251,6 +251,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.cleanScannedData()
 
     def onBackFromBlueButton(self):
+        self.getActualFocusHandler().onLeft()
         self.ui.stackedWidget.setCurrentIndex(0)
         self.setStyleSheet("QMainWindow { background-image: url(':/images/bg.jpg') }");
         self.getActualFocusHandler().setFocus()
@@ -535,3 +536,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onFortuneTryFirstIncreased(self):
         self.showStatusInfo(5000, self.texts[self.FIRST_TOSS_INFO], self.ui.infoLabel)
+
+    def onActualServerStateChanged(self, state):
+        if state == 0:
+            self.ui.serverStateLabel.setText("SIDLE")
+
+        if state == 1:
+            self.ui.serverStateLabel.setText("SCETD")
+
+        if state == 2:
+            self.ui.serverStateLabel.setText("SDERR")
+
+        if state == 3:
+            self.ui.serverStateLabel.setText("SCING")

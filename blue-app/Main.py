@@ -127,6 +127,7 @@ def main():
 
 
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
+    webUpdateStatus.actualStateChanged.connect(application.onActualServerStateChanged, QtCore.Qt.QueuedConnection)
 
     application.show()
     printingService.initialize()

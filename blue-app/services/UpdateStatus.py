@@ -12,6 +12,7 @@ import json
 
 class WebSocketStatus(TimerService.TimerStatusObject):
 
+    actualStateChanged = QtCore.pyqtSignal(int)
     asyncStartSignal = QtCore.pyqtSignal()
     asyncStopSignal = QtCore.pyqtSignal()
     adminModeServerRequest = QtCore.pyqtSignal()
@@ -90,6 +91,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.ref = 0
         self.connectScheduled = False
         if self.moneyServer is not "":
+            self.actualStateChanged.emit(3)
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
             self.URL = URL.replace("http://", "ws://")
             LoggingService.getLogger().info("Connecting to websocket server: %s" % URL)
@@ -99,10 +101,12 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.websocket.textMessageReceived.connect(self.onTextMessageReceived)
             self.websocket.open(QtCore.QUrl(self.URL))
         else:
+            self.actualStateChanged.emit(0)
             LoggingService.getLogger().info("Stop connecting to empty websocket!")
 
 
     def onConnect(self):
+        self.actualStateChanged.emit(1)
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr + "_priv", "_priv"));
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr));
@@ -215,6 +219,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.sendErrorStrings()
 
     def onDisconnect(self):
+        self.actualStateChanged.emit(2)
         self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
         self.scheduleConnect()

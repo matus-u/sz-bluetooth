@@ -352,6 +352,7 @@ QWidget#timeOfPlayQueueLabel,
 QWidget#actualFortuneCount,
 QWidget#actualNeedFortuneMoney,
 QWidget#coinImgLabel,
+QWidget#serverStateLabel,
 SongTableWidgetImpl *
 {
     background-color: transparent;
