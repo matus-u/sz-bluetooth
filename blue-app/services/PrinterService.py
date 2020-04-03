@@ -19,8 +19,10 @@ class PrintingService(QtCore.QObject):
 
     printError = QtCore.pyqtSignal()
     lowPaper = QtCore.pyqtSignal()
+    lowPaperClear = QtCore.pyqtSignal()
     noPaper = QtCore.pyqtSignal()
-    printFinished = QtCore.pyqtSignal()
+    enoughPaper = QtCore.pyqtSignal()
+    printStatusUpdated = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
 
     SettingsPath = "../blue-app-configs/print-tracking.conf"
@@ -28,8 +30,6 @@ class PrintingService(QtCore.QObject):
 
     TicketCounter = "TicketCounter"
 
-    enoughPaper = QtCore.pyqtSignal()
-    printerOk = QtCore.pyqtSignal()
 
     def __init__(self, hwErrorHandler, wheelFortuneService):
         super().__init__()
@@ -42,7 +42,8 @@ class PrintingService(QtCore.QObject):
         self.errorFunc = lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED)
         self.noPaper.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER))
         self.enoughPaper.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER))
-        self.printerOk.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED))
+        self.clearPrintCorruptedFunc = lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED)
+        self.printStatusUpdated.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED))
 
         self.testTimer = QtCore.QTimer(self)
         self.testTimer.timeout.connect(self.checkState)
@@ -63,14 +64,14 @@ class PrintingService(QtCore.QObject):
             if self.testTimer.isActive():
                 self.testTimer.stop()
                 self.enoughPaper.emit()
-                self.printerOk.emit()
+                self.clearPrintCorruptedFunc()
 
     def checkState(self):
         try:
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             self.checkError(s)
             s.close()
-            self.printerOk.emit()
+            self.printStatusUpdated.emit()
         except:
             LoggingService.getLogger().error("Check state func called")
             self.errorFunc()
@@ -105,9 +106,8 @@ class PrintingService(QtCore.QObject):
             s.close()
 
             self.ticketCounter = self.ticketCounter + 1
-            self.printFinished.emit()
+            self.printStatusUpdated.emit()
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
-            self.printerOk.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printTicket: Error func called")
             self.errorFunc()
@@ -134,6 +134,8 @@ class PrintingService(QtCore.QObject):
 
         if (self.paperError & 0x8) > 0:
             self.lowPaper.emit()
+        else:
+            self.lowPaperClear.emit()
 
         if (self.paperError & 0x40) > 0:
             self.noPaper.emit()
@@ -179,8 +181,7 @@ class PrintingService(QtCore.QObject):
             self.checkError(s)
             s.close()
 
-            self.printFinished.emit()
-            self.printerOk.emit()
+            self.printStatusUpdated.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
             self.errorFunc()
@@ -214,8 +215,7 @@ class PrintingService(QtCore.QObject):
             self.checkError(s)
             s.close()
 
-            self.printFinished.emit()
-            self.printerOk.emit()
+            self.printStatusUpdated.emit()
         except:
             LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called")
             self.errorFunc()

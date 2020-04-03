@@ -9,8 +9,10 @@ class PrintingService(QtCore.QObject):
 
     printError = QtCore.pyqtSignal()
     lowPaper = QtCore.pyqtSignal()
+    lowPaperClear = QtCore.pyqtSignal()
     noPaper = QtCore.pyqtSignal()
-    printFinished = QtCore.pyqtSignal()
+    enoughPaper = QtCore.pyqtSignal()
+    printStatusUpdated = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
 
     def __init__(self, hwErrorHandler, wheelFortuneService):
@@ -21,12 +23,12 @@ class PrintingService(QtCore.QObject):
         #QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED))
 
     def initialize(self):
-        self.printFinished.emit()
+        self.printStatusUpdated.emit()
         #self.errorFunc()
 
     def printTicket(self, name, winNumber, prizeName):
         print ("NAME {} winNumber {} prize name: {}".format(name,winNumber, prizeName))
-        self.printFinished.emit()
+        self.printStatusUpdated.emit()
 
     def getPrintStatus(self):
         return { "ticketCounter" : self.ticketCounter, "errorStatus" : "OK", "errorStatusValue" : 25, "paperStatus" : "LOW_PAPER", "paperStatusValue" : 15 }

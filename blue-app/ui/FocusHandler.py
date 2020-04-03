@@ -148,25 +148,28 @@ class TableWidgetFocusProxy(QtCore.QObject):
         self.ledButtonService.setButtonState(LedButtonService.DOWN, True)
         self.ledButtonService.setButtonState(LedButtonService.CONFIRM, True)
 
+    def getUnderlyingWidgetRowCount(self):
+        return self.widget.rowCount()
+
     def onUp(self):
-        if self.widget.rowCount() > 0:
+        if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
-                if (self.widget.rowCount() - 1) > row:
+                if (self.getUnderlyingWidgetRowCount() - 1) > row:
                     self.widget.selectRow(row + 1)
                 else:
                     self.widget.selectRow(0)
             else:
-                self.widget.selectRow(self.widget.rowCount() - 1)
+                self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
 
     def onDown(self):
-        if self.widget.rowCount() > 0:
+        if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
                 if row > 0:
                     self.widget.selectRow(row - 1)
                 else:
-                    self.widget.selectRow(self.widget.rowCount() - 1)
+                    self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
             else:
                 self.widget.selectRow(0)
 
@@ -190,5 +193,8 @@ class MusicWidgetFocusProxy(TableWidgetFocusProxy):
 
     def onRight(self):
         self.musicControl.nextGenre()
+
+    def getUnderlyingWidgetRowCount(self):
+        return self.musicControl.rowCount()
 
 

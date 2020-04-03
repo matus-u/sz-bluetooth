@@ -11,6 +11,8 @@ from services.AppSettings import AppSettings
 
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
+import operator
+
 class SongModel:
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         self.music = {}
@@ -36,26 +38,33 @@ class SongModel:
         self.rotate(-1)
         self.reloadSongsWidget()
 
+    def rowCount(self):
+        return len(self.actualSongs)
+
     def reloadSongsWidget(self):
         self.genreLabelList[0].setText(self.actualGenreList[0])
         self.genreLabelList[1].setText(self.actualGenreList[-2])
         self.genreLabelList[2].setText(self.actualGenreList[-1])
         self.genreLabelList[3].setText(self.actualGenreList[1])
         self.genreLabelList[4].setText(self.actualGenreList[2])
-        self.songsWidget.clear()
         genreKey = self.actualGenreList[0]
         self.actualGenre = genreKey
         self.actualSongs = self.music[genreKey]()
-        self.songsWidget.setRowCount(len(self.actualSongs))
         durationVisible = AppSettings.actualSongTimeVisible()
-        for index, item in enumerate(self.actualSongs):
-            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl.fromPlayQueueObject(item, False, durationVisible, True, self.playTrackCounter))
 
-        if (self.songsWidget.rowCount() > 0):
+        for index in range(0, self.songsWidget.rowCount()):
+            self.songsWidget.hideRow(index)
+
+        for index, item in enumerate(self.actualSongs):
+            w = self.songsWidget.cellWidget(index,0)
+            w.updateFromPlayQueueObject(item,durationVisible)
+            self.songsWidget.showRow(index)
+
+        if self.rowCount() > 0:
             self.songsWidget.selectRow(0)
 
     def getSelectedPlayObject(self):
-        if self.songsWidget.rowCount() > 0:
+        if self.rowCount() > 0:
             if len(self.songsWidget.selectionModel().selectedRows()) > 0:
                 return self.actualSongs[self.songsWidget.selectionModel().selectedRows()[0].row()]
         return None
@@ -84,6 +93,12 @@ class SongModel:
             l.append(self.musicByPath[i[0]])
         return l
 
+    def afterModelChange(self):
+        maxRowCount = len(max(self.music.items(), key=lambda x: len(x[1]()))[1]())
+        self.songsWidget.clear()
+        self.songsWidget.setRowCount(maxRowCount)
+        for index in range(0, maxRowCount):
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl("", BluetoothPlayQueueObject("", "", 0), True, True, self.playTrackCounter))
 
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
@@ -175,5 +190,9 @@ class MusicController(QtCore.QObject):
 
     def selectModel(self):
         self.actualModel = self.getActualModel()
+        self.actualModel.afterModelChange()
         self.actualModel.generateGenreList()
         self.actualModel.reloadSongsWidget()
+
+    def rowCount(self):
+        return self.actualModel.rowCount()

@@ -19,6 +19,7 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.setDurationVisible(durationVisible)
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
         self.playQueueObject = playQueueObject
+        self.playTrackCounter= playTrackCounter
 
         if (countVisible):
             self.ui.playCountLabel.setText(self.formatCountValue(playTrackCounter.getCount(playQueueObject.path())))
@@ -36,6 +37,17 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
             self.ui.songDurationLabel.setText(Helpers.formatDuration(self.duration, self.ui.songNameLabel.text()))
         else:
             self.ui.songDurationLabel.setText("")
+
+    def updateFromPlayQueueObject(self, playQueueObject, durationVisible):
+        self.playQueueObject = playQueueObject
+        self.ui.songNameLabel.setText(self.playQueueObject.name())
+        self.duration = playQueueObject.duration()
+        self.setDurationVisible(durationVisible)
+
+        if not isinstance(playQueueObject, BluetoothPlayQueueObject):
+            self.ui.playCountLabel.setText(self.formatCountValue(self.playTrackCounter.getCount(playQueueObject.path())))
+        else:
+            self.ui.playCountLabel.setText("")
 
     @classmethod
     def fromPlayQueueObject(cls, playQueueObject, useStartTime, durationVisible, countVisible, playTrackCounter=None):

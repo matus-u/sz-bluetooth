@@ -150,6 +150,10 @@ class WheelFortuneService(QtCore.QObject):
         LoggingService.getLogger().info("Lock wheel!!!")
         self.printerActive = 0
 
+    def unlockWheel(self):
+        LoggingService.getLogger().info("Unlock wheel!!!")
+        self.printerActive = 1
+
     def getActualFortuneTryLevels(self):
         return [self.moneyLevel() - self.counter, self.winTries]
 

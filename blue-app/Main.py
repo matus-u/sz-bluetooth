@@ -99,10 +99,11 @@ def main():
     wheelFortuneService.probabilitiesUpdated.connect(webUpdateStatus.sendWinProbsStatus, QtCore.Qt.QueuedConnection)
     wheelFortuneService.reducePrizeCount.connect(webUpdateStatus.sendReducePrizeCount, QtCore.Qt.QueuedConnection)
 
-    printingService.printFinished.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
+    printingService.printStatusUpdated.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
     printingService.ticketCounterChanged.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
     printingService.printError.connect(lambda: wheelFortuneService.lockWheel())
     printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel())
+    printingService.enoughPaper.connect(lambda: wheelFortuneService.unlockWheel())
 
     timerService = TimerService()
     ledButtonService = LedButtonService(gpioService)

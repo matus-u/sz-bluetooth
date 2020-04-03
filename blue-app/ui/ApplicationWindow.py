@@ -63,11 +63,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     WIN_PROB_UPDATED = 25
     PRINT_ERROR = 26
     LOW_PAPER = 27
-    NO_PAPER = 28
-    CONTINUE_WITH_MUSIC = 29
-    TOSS_COUNT = 30
-    TOSS_MONEY_NEEDED = 31
-    FIRST_TOSS_INFO = 32
+    CONTINUE_WITH_MUSIC = 28
+    TOSS_COUNT = 29
+    TOSS_MONEY_NEEDED = 30
+    FIRST_TOSS_INFO = 31
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -77,7 +76,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"),
         self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
-        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."), self.tr("Paper is out - please insert new one."),
+        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."),
         self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
         self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
         ]
@@ -185,9 +184,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
 
         self.printingService = printingService
-        printingService.printError.connect(lambda: self.ui.errorLabel.setText(self.texts[self.PRINT_ERROR]).format(printingService.getErrorStatus()))
         printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
-        printingService.noPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.NO_PAPER]))
+        printingService.lowPaperClear.connect(lambda: self.ui.errorLabel.setText(""))
 
         self.wheelPrizes = []
         self.wheelWindow = None
