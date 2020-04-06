@@ -38,7 +38,7 @@ class HwErrorHandling(QtCore.QObject):
             return self.tr("Printer machine corrupted, call service please.")
 
         if code == HwErrorHandling.NO_PAPER:
-            return self.tr("No paper. Coin machine cannot operate, please insert paper.")
+            return self.tr("No paper. Printer machine cannot operate, please insert paper.")
 
     def getErrorDescs(self):
         return [self.getErrorDesc(x) for x in self.errors]

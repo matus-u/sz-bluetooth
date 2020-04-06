@@ -157,6 +157,12 @@ class WheelFortuneService(QtCore.QObject):
     def getActualFortuneTryLevels(self):
         return [self.moneyLevel() - self.counter, self.winTries]
 
+    def actualPrizesCount(self):
+        if self.isEnabled():
+            return sum([(self.probabilityValues["count_" + str(x)]) for x in range(1,10)])
+        else:
+            return -1
+
     def resetActualFortuneTryLevels(self):
         LoggingService.getLogger().info("Reset actual fortune levels")
         self.counter = 0.0

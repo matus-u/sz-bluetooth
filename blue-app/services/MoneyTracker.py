@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.LoggingService import LoggingService
+from datetime import date
 
 class MoneyTracker(QtCore.QObject):
     SettingsPath = "../blue-app-configs/money-tracking.conf"
@@ -10,6 +11,7 @@ class MoneyTracker(QtCore.QObject):
 
     FromLastWithdrawCounter = "FromLastWithdrawCounter"
     TotalCounter = "TotalCounter"
+    LastWithdrawDate = "LastWithdrawDate"
 
     FROM_LAST_WITHDRAW_COUNTER_INDEX = 0
     TOTAL_COUNTER_INDEX = 1
@@ -29,15 +31,21 @@ class MoneyTracker(QtCore.QObject):
     def withdraw(self):
         LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)
+        self.settings.setValue(MoneyTracker.LastWithdrawDate, str(date.today()))
         self.settings.sync()
 
     def resetAllCounters(self):
         LoggingService.getLogger().info("Reset all counters")
         self.settings.setValue(MoneyTracker.TotalCounter, 0.0)
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)
+        self.settings.setValue(MoneyTracker.LastWithdrawDate, "")
         self.settings.sync()
 
     def getCounters(self):
         return [self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float), self.settings.value(MoneyTracker.TotalCounter, 0.0, float) ]
+
+    def lastWithdrawDate(self):
+        return self.settings.value(MoneyTracker.LastWithdrawDate, "")
+
 
 
