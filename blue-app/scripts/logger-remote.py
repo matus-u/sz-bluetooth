@@ -9,6 +9,7 @@ import sys
 import json
 import signal
 import os
+import base64
 
 class WebSocketLogService(QtCore.QObject):
 
@@ -64,6 +65,22 @@ class WebSocketLogService(QtCore.QObject):
                 textMsg = self.createPhxMessage("log-response", data)
                 self.websocket.sendTextMessage(textMsg)
 
+    def sendScreenShotResponse(self):
+        if self.websocket is not None:
+            if self.websocket.state() == QtNetwork.QAbstractSocket.ConnectedState:
+                data = { 'id' : self.macAddr, 'screenshot-response-data' : self.getScreenshot() }
+                textMsg = self.createPhxMessage("screenshot-response", data)
+                self.websocket.sendTextMessage(textMsg)
+
+    def getScreenshot(self):
+        QtCore.QProcess.execute("scrot /tmp/screenshot.png")
+        try:
+            with open("/tmp/screenshot.png", "rb") as f:
+                return base64.b64encode(f.read()).decode('utf-8')
+                os.remove('/tmp/screenshot.png')
+        except:
+            return base64.b64encode('test-data'.encode('utf-8')).decode('utf-8')
+
     def readContent(self, p):
         content = ""
         if os.path.exists(p):
@@ -82,6 +99,9 @@ class WebSocketLogService(QtCore.QObject):
         text = json.loads(js)
         if text["event"] == "log-request":
             self.sendLogResponse()
+
+        if text["event"] == "screenshot-request":
+            self.sendScreenShotResponse()
 
         if text["event"] == "get-log-status":
             self.sendLogStatus()
