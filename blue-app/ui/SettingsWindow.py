@@ -59,9 +59,14 @@ class SettingsWindow(QtWidgets.QDialog):
         if AppSettings.actualCurrency() != AppSettings.currencyStringByIndex(self.ui.currencyCombobox.currentIndex()):
             shouldChangeCurrency = QtWidgets.QMessageBox.question(self, self.tr("Currency has changed!"), self.tr("Changing currency resets all internal money counters, proceed?"))
             if shouldChangeCurrency == QtWidgets.QMessageBox.Yes:
-                self.moneyTracker.resetAllCounters()
-                self.creditService.clearCredit()
-                self.fortuneService.resetActualFortuneTryLevels()
+
+                shouldChangeCurrency = QtWidgets.QMessageBox.question(self, self.tr("Currency is goin to change!"), self.tr("Proceed?"))
+                if shouldChangeCurrency == QtWidgets.QMessageBox.Yes:
+                    self.moneyTracker.resetAllCounters()
+                    self.creditService.clearCredit()
+                    self.fortuneService.resetActualFortuneTryLevels()
+                else:
+                    return
             else:
                 return
         AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(),
