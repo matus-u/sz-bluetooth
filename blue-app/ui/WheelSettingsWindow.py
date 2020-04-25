@@ -28,7 +28,12 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.updateTable()
         self.updateLabels()
 
-        self.ui.descriptionTicket.clicked.connect(lambda: self.printerService.printDescTicket(AppSettings.actualDeviceName(), self.wheelFortuneService.getAllCounts(), self.wheelFortuneService.getAllNames()))
+        self.ui.descriptionTicket.clicked.connect(lambda: self.printerService.printDescTicket(
+            AppSettings.actualDeviceName(),
+            self.wheelFortuneService.getAllCounts(),
+            self.wheelFortuneService.getAllNames(),
+            self.wheelFortuneService.getInitialProbabilityCounts(),
+        ))
 
     def onOkButton(self):
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())

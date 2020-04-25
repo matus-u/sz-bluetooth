@@ -130,7 +130,7 @@ class PrintingService(QtCore.QObject):
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
             self.ticketCounterChanged.emit()
 
-    def printDescTicket(self, name, prizeCounts, prizeNames):
+    def printDescTicket(self, name, prizeCounts, prizeNames, initPrizeCounts):
         try:
             self.statusValid = False
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
@@ -139,7 +139,7 @@ class PrintingService(QtCore.QObject):
             s.write(("DEVICE: " + name + "\n").encode())
 
             for i in range(1,10):
-                s.write((str(i) + " - " + prizeNames[i][0:20] + " - " + str(prizeCounts[i]) + "\n").encode())
+                s.write((str(i) + " - " + prizeNames[i][0:18] + " - " + str(initPrizeCounts[i]) + "/" + str(prizeCounts[i]) + "\n").encode())
 
             s.write(b"\n")
             s.write(b"\n")

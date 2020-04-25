@@ -33,10 +33,11 @@ class PrintingService(QtCore.QObject):
     def getPrintStatus(self):
         return { "ticketCounter" : self.ticketCounter, "errorStatus" : "OK", "errorStatusValue" : 25, "paperStatus" : "LOW_PAPER", "paperStatusValue" : 15 }
 
-    def printDescTicket(self, name, prizeCounts, prizeNames):
+    def printDescTicket(self, name, prizeCounts, prizeNames, initPrizeCounts):
         print (name)
         print (prizeCounts)
         print (prizeNames)
+        print (initPrizeCounts)
 
     def setNewTicketCounter(self, value):
         if value != self.ticketCounter:
