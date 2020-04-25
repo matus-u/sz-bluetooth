@@ -7,6 +7,11 @@ export LD_LIBRARY_PATH=$DIR:$LD_LIBRARY_PATH
 $DIR/./gpio mode 14 out
 $DIR/./gpio write 14 0
 
+sleep 1
+$DIR/./gpio write 14 1
+sleep 15
+$DIR/./gpio write 14 0
+
 while true; do
 
 TEMPERATURE=$(($(cat /sys/devices/virtual/thermal/thermal_zone0/temp) / 1000))
