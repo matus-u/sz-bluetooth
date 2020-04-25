@@ -14,6 +14,7 @@ class WheelFortuneService(QtCore.QObject):
     Enabled = "Enabled"
     MoneyLevel = "MoneyLevel"
     Probabilities = "Probabilities"
+    InitProbabilities = "InitProbabilities"
 
     reducePrizeCount = QtCore.pyqtSignal(int)
     win = QtCore.pyqtSignal(int, int, str)
@@ -95,8 +96,17 @@ class WheelFortuneService(QtCore.QObject):
 
     def setNewProbabilityValues(self, values):
         self.probabilityValues = values
+        self.settings.setValue(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))
         self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
         self.probabilitiesUpdated.emit()
+
+    def getInitialProbabilityCounts(self):
+        return self.getAllInternalCounts(json.loads(self.settings.value(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))))
+
+    def getAllInternalCounts(self, values):
+        counts = [(values["count_" + str(x)]) for x in range(1,10)]
+        counts =  [-1] + counts
+        return counts
 
     def getAllProbs(self):
         probs = [float((self.probabilityValues["prob_" + str(x)])) for x in range(1,10)]
@@ -109,9 +119,7 @@ class WheelFortuneService(QtCore.QObject):
         return names
 
     def getAllCounts(self):
-        counts = [(self.probabilityValues["count_" + str(x)]) for x in range(1,10)]
-        counts =  [-1] + counts
-        return counts
+        return self.getAllInternalCounts(self.probabilityValues)
 
     def getAllCosts(self):
         costs = [(self.probabilityValues["cost_" + str(x)]) for x in range(1,10)]
