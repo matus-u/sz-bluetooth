@@ -135,6 +135,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.moneyInserted.connect(self.moneyTracker.addToCounters)
         self.creditService.changeCredit(0)
         timerService.addTimerWorker(self.temperatureStatus)
+        self.temperatureStatus.start()
 
         self.ledButtonService = ledButtonService
         self.ledButtonService.start()
@@ -263,18 +264,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.adminSettingsButton.setVisible(enable)
             self.ui.wifiSettingsButton.setVisible(enable)
             self.ui.withdrawMoneyButton.setVisible(enable)
-            self.ui.cpuTempValueLabel.setVisible(enable)
-            self.ui.labelCpuTemp.setVisible(enable)
+            #self.ui.cpuTempValueLabel.setVisible(enable)
+            #self.ui.labelCpuTemp.setVisible(enable)
             self.ui.addCreditButton.setVisible(enable)
             self.ui.disconnectButton.setVisible(enable)
             self.ui.adminLeaveLabel.setVisible(enable)
             self.ui.leaveAdminButton.setVisible(enable)
             self.ui.wheelFortuneButton.setVisible(enable)
             self.ui.testMenuButton.setVisible(enable)
-            if enable:
-                self.temperatureStatus.start()
-            else:
-                self.temperatureStatus.stop()
+            #if enable:
+            #    self.temperatureStatus.start()
+            #else:
+            #    self.temperatureStatus.stop()
 
     def openSubWindow(self, window):
         window.show()
