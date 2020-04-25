@@ -205,6 +205,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.testMenuButton.clicked.connect(lambda: self.onTestMenuButton(self.printingService, self.ledButtonService, volumeService, arrowHandler))
 
         self.damagedDeviceWindow = DamagedDeviceWindow.DamagedDeviceWindow(self, errorHandler)
+        self.damagedDeviceWindow.hidden.connect(lambda: self.getActualFocusHandler().setFocus())
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:

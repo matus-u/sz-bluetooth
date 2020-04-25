@@ -4,6 +4,9 @@ from PyQt5 import QtCore
 from generated.DamagedDevice import Ui_DamagedDevice
 
 class DamagedDeviceWindow(QtWidgets.QDialog):
+
+    hidden = QtCore.pyqtSignal()
+
     def __init__(self, parent, hwErrorHandler):
         super(DamagedDeviceWindow, self).__init__(parent)
 
@@ -18,6 +21,7 @@ class DamagedDeviceWindow(QtWidgets.QDialog):
 
         if len(errors) == 0:
             self.hide()
+            self.hidden.emit()
 
         if len(errors) > 0:
             text = ""

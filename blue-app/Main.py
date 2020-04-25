@@ -15,7 +15,6 @@ from services.AdminModeTracker import AdminModeTracker
 from services.WheelFortuneService import WheelFortuneService
 from services.LedButtonService import LedButtonService
 from services.HwErrorHandling import HwErrorHandling
-from services.HwErrorHandling import HwErrorHandling
 from services.PixmapService import PixmapService
 from services.TestModeService import TestModeService
 
