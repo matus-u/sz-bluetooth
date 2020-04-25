@@ -17,6 +17,7 @@ class TestHwWindow(QtWidgets.QDialog):
         self.ui.testSoundButton.clicked.connect(self.onTestSoundButton)
         self.ui.testLedButton.clicked.connect(lambda: self.onTestLedButton(ledButtonService))
         self.ui.closeButton.clicked.connect(self.accept)
+        self.ui.ventilatorButton.clicked.connect(self.enableVentilator)
 
         self.ledButtonIndex = 0
         self.ledButtonIndexArray = [ LedButtonService.DOWN, LedButtonService.UP, LedButtonService.LEFT, LedButtonService.RIGHT, LedButtonService.CONFIRM ]
@@ -74,4 +75,7 @@ class TestHwWindow(QtWidgets.QDialog):
 
     def updateButtonTestTableWidget(self, index):
         self.ui.buttonTestTableWidget.setItem(index,1 ,QtWidgets.QTableWidgetItem(str(int(self.ui.buttonTestTableWidget.item(index, 1).text()) + 1)))
+
+    def enableVentilator(self):
+        QtCore.QProcess.execute("scripts/setup-ventilator.sh", ["1"])
 
