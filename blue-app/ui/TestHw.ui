@@ -431,6 +431,19 @@
     <string>Close</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="ventilatorButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>270</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test ventilator</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
