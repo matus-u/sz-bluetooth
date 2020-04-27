@@ -32,6 +32,7 @@ class GpioService:
         self.callbacks = {}
 
     def onGpio(self, channel):
+        LoggingService.getLogger().info("ON GPIO " + str(channel) + " " + str(GPIO.input(channel) == GPIO.HIGH))
         self.callbacks[channel](GPIO.input(channel) == GPIO.HIGH)
 
     def registerCallback(self, trigger_type, pin, callback):

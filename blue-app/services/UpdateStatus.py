@@ -66,6 +66,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         logger = LoggingService.getLogger()
         logger.info("Update state to server with id: %s" % self.URL)
         counters = self.moneyTracker.getCounters()
+        gains = self.moneyTracker.getGainData()
         status = ""
         if len(self.errors) != 0:
             status = "ERRORS"
@@ -77,7 +78,11 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 "version" : self.swVersion,
                 "status" : status,
                 "left_prizes" : self.wheelFortuneService.actualPrizesCount(),
-                "last_withdraw_date" : self.moneyTracker.lastWithdrawDate()
+                "last_withdraw_date" : self.moneyTracker.lastWithdrawDate(),
+                "previous_gain" : gains[MoneyTracker.PreviousGain],
+                "previous_gain_date" : gains[MoneyTracker.PreviousDate],
+                "actual_gain" : gains[MoneyTracker.ActualGain],
+                "actual_gain_date" : gains[MoneyTracker.ActualDate],
                 }}
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
