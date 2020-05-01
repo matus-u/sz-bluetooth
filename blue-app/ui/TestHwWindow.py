@@ -7,7 +7,7 @@ from services.PlayFileService import PlayWavFile
 from services.LedButtonService import LedButtonService
 
 class TestHwWindow(QtWidgets.QDialog):
-    def __init__(self, parent, printerService, ledButtonService, coinProtocolService, volumeService, arrowHandler):
+    def __init__(self, parent, printerService, ledButtonService, coinProtocolService, volumeService, arrowHandler, wheelService):
         super(TestHwWindow, self).__init__(parent)
 
         self.ui = Ui_TestHw()
@@ -39,6 +39,7 @@ class TestHwWindow(QtWidgets.QDialog):
         self.disableLedButtonStates(ledButtonService)
 
         self.ui.testPrinterButton.setFocus()
+        self.ui.fortuneWheelTest.clicked.connect(lambda: self.ui.fortuneWheelTestOutput.setText(wheelService.testWinn()))
 
     def onTestLedButton(self, ledButtonService):
         self.ui.testLedButton.setEnabled(False)
@@ -78,4 +79,3 @@ class TestHwWindow(QtWidgets.QDialog):
 
     def enableVentilator(self):
         QtCore.QProcess.execute("scripts/setup-ventilator.sh", ["1"])
-

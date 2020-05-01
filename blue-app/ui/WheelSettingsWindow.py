@@ -18,9 +18,8 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         self.ui.cancelButton.clicked.connect(self.reject)
         self.ui.ticketCounterBox.setValue(printerService.getTicketCounter())
 
-        self.ui.fortuneCheckBox.toggled.connect(lambda state: self.ui.moneySpinBox.setEnabled(state))
         self.ui.fortuneCheckBox.setChecked(self.service.isEnabled())
-        self.ui.moneySpinBox.setValue(self.service.moneyLevel())
+        self.ui.moneySpinBox.setText(str(self.service.moneyLevel()))
 
         self.wheelFortuneService = wheelFortuneService
         self.wheelFortuneService.probabilitiesUpdated.connect(self.updateTable)

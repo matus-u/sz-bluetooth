@@ -227,7 +227,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onTestMenuButton(self, printerService, ledButtonService, volumeService, arrowHandler):
         self.testModeService.enableTestMode()
-        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService, self.creditService.getCoinService(), volumeService, arrowHandler)
+        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService, self.creditService.getCoinService(), volumeService, arrowHandler, self.wheelFortuneService)
         w.finished.connect(self.onTestHwWindowClosed)
         self.openSubWindow(w)
 

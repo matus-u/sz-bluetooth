@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>914</width>
-    <height>693</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,8 +55,8 @@
   <widget class="QTableWidget" name="coinMachineTableWidget">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>390</y>
+     <x>470</x>
+     <y>330</y>
      <width>391</width>
      <height>271</height>
     </rect>
@@ -192,7 +192,7 @@
   <widget class="QTableWidget" name="buttonTestTableWidget">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>470</x>
      <y>60</y>
      <width>391</width>
      <height>201</height>
@@ -306,7 +306,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>390</y>
+     <y>330</y>
      <width>391</width>
      <height>171</height>
     </rect>
@@ -383,7 +383,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>360</y>
+     <y>300</y>
      <width>261</width>
      <height>16</height>
     </rect>
@@ -395,8 +395,8 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>360</y>
+     <x>470</x>
+     <y>300</y>
      <width>261</width>
      <height>16</height>
     </rect>
@@ -408,7 +408,7 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>470</x>
      <y>30</y>
      <width>171</width>
      <height>16</height>
@@ -422,7 +422,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>610</y>
+     <y>550</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -434,14 +434,37 @@
   <widget class="QPushButton" name="ventilatorButton">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>270</y>
+     <x>240</x>
+     <y>30</y>
      <width>191</width>
      <height>61</height>
     </rect>
    </property>
    <property name="text">
     <string>Test ventilator</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="fortuneWheelTest">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>110</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test fortune wheel</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="fortuneWheelTestOutput">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>190</y>
+     <width>191</width>
+     <height>111</height>
+    </rect>
    </property>
   </widget>
  </widget>

@@ -6,13 +6,13 @@ from services.LoggingService import LoggingService
 
 import json
 import random
+import copy
 
 class WheelFortuneService(QtCore.QObject):
     SettingsPath = "../blue-app-configs/wheel-fortune.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     Enabled = "Enabled"
-    MoneyLevel = "MoneyLevel"
     Probabilities = "Probabilities"
     InitProbabilities = "InitProbabilities"
 
@@ -44,7 +44,7 @@ class WheelFortuneService(QtCore.QObject):
         self.fortuneDataChanged.emit()
 
     def defaultProbs(self):
-        return { 'expected_earnings': 0, 'total_costs': 0,
+        return { 'money_level': 1.0, 'expected_earnings': 0, 'total_costs': 0,
                 'cost_1': 0, 'cost_2': 0, 'cost_3': 0,
                 'cost_4': 0, 'cost_5': 0, 'cost_6': 0,
                 'cost_7': 0, 'cost_8': 0, 'cost_9': 0,
@@ -58,19 +58,18 @@ class WheelFortuneService(QtCore.QObject):
                 'prob_3': 0, 'prob_4': 0, 'prob_5': 0,
                 'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
 
-    def setSettings(self, enabled, moneyLevel):
+    def setSettings(self, enabled):
         self.enabledNotification.emit(enabled)
-        if (self.isEnabled() != enabled) or (moneyLevel != self.moneyLevel()):
+        if self.isEnabled() != enabled:
             self.counter = 0.0
             self.settings.setValue(WheelFortuneService.Enabled, enabled)
-            self.settings.setValue(WheelFortuneService.MoneyLevel, moneyLevel)
             self.fortuneDataChanged.emit()
 
     def isEnabled(self):
         return self.settings.value(WheelFortuneService.Enabled, False, bool)
 
     def moneyLevel(self):
-        return self.settings.value(WheelFortuneService.MoneyLevel, 0.0, float)
+        return self.probabilityValues.get("money_level", 1.0)
 
     def moneyInserted(self, money):
         if self.isEnabled():
@@ -176,4 +175,24 @@ class WheelFortuneService(QtCore.QObject):
         self.counter = 0.0
         self.winTries = 0
         self.fortuneDataChanged.emit()
+
+    def testWinn(self):
+        probs = self.getAllProbs()
+        probs =  [(float(x) / 100) for x in probs]
+        values = [x for x in range (0,10)]
+
+        myTestProbs = copy.deepcopy(self.probabilityValues)
+
+        result = ""
+        wheelTurns = int(self.probabilityValues["expected_earnings"]/self.moneyLevel())
+        for i in range (0,wheelTurns):
+            win = random.choices(values, probs)
+            names = self.getAllNames()
+            key = "count_" + str(win[0])
+            if win[0] > 0 and myTestProbs[key] > 0:
+                myTestProbs[key] = myTestProbs[key] - 1
+                result = result + "1"
+            else:
+                result = result + "0"
+        return "Count of games: " + str(wheelTurns) + "\n" + result
 

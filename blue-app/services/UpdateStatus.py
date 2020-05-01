@@ -140,8 +140,8 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 logger = LoggingService.getLogger()
                 logger.info("Send win probs status:")
                 data = { 'id' : self.macAddr, 'data' : { 'probability-data' : self.wheelFortuneService.actualProbs(),
-                                                        'fortune-enabled' : self.wheelFortuneService.isEnabled(),
-                                                        'money-toss-level' : self.wheelFortuneService.moneyLevel() } }
+                                                        'fortune-enabled' : self.wheelFortuneService.isEnabled()
+                                                        } }
                 textMsg = self.createPhxMessage("win-probability-status", data)
                 LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
                 self.websocket.sendTextMessage(textMsg)
