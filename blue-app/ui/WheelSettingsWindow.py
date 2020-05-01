@@ -47,10 +47,11 @@ class WheelSettingsWindow(QtWidgets.QDialog):
                                                   self.wheelFortuneService.getAllNames(),
                                                   self.wheelFortuneService.getAllCosts(),
                                                   range(0,10)):
+            print(prob)
             self.ui.probTableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(str(index)))
             self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(cost)))
             self.ui.probTableWidget.setItem(index, 2, QtWidgets.QTableWidgetItem(str(initCount) + "/" + str(count)))
-            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem("{0:.2f}".format(prob)))
+            self.ui.probTableWidget.setItem(index, 3, QtWidgets.QTableWidgetItem("{0:.4f}".format(prob)))
             self.ui.probTableWidget.setItem(index, 4, QtWidgets.QTableWidgetItem(str(name)))
 
     def updateLabels(self):

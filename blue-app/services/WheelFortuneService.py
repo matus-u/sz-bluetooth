@@ -45,18 +45,23 @@ class WheelFortuneService(QtCore.QObject):
 
     def defaultProbs(self):
         return { 'money_level': 1.0, 'expected_earnings': 0, 'total_costs': 0,
-                'cost_1': 0, 'cost_2': 0, 'cost_3': 0,
-                'cost_4': 0, 'cost_5': 0, 'cost_6': 0,
-                'cost_7': 0, 'cost_8': 0, 'cost_9': 0,
-                'count_1': 0, 'count_2': 0, 'count_3': 0,
-                'count_4': 0, 'count_5': 0, 'count_6': 0,
-                'count_7': 0, 'count_8': 0, 'count_9': 0,
-                'id': None, 'name_1': '', 'name_2': '',
+                'cost_0': 1.0, 'cost_1': 0, 'cost_2': 0,
+                'cost_3': 0, 'cost_4': 0, 'cost_5': 0,
+                'cost_6': 0, 'cost_7': 0, 'cost_8': 0,
+                'cost_9': 0,
+                'count_0': 0, 'count_1': 0, 'count_2': 0,
+                'count_3': 0, 'count_4': 0, 'count_5': 0,
+                'count_6': 0, 'count_7': 0, 'count_8': 0,
+                'count_9': 0,
+                'id': None,
+                'name_0':'None', 'name_1': '', 'name_2': '',
                 'name_3': '', 'name_4': '', 'name_5': '',
                 'name_6': '', 'name_7': '', 'name_8': '',
-                'name_9': '', 'prob_1': 0, 'prob_2': 0,
+                'name_9': '',
+                'prob_0': 0.0, 'prob_1': 0, 'prob_2': 0,
                 'prob_3': 0, 'prob_4': 0, 'prob_5': 0,
-                'prob_6': 0, 'prob_7': 0, 'prob_8': 0, 'prob_9': 0}
+                'prob_6': 0, 'prob_7': 0, 'prob_8': 0,
+                'prob_9': 0}
 
     def setSettings(self, enabled):
         self.enabledNotification.emit(enabled)
@@ -100,30 +105,28 @@ class WheelFortuneService(QtCore.QObject):
         self.probabilitiesUpdated.emit()
 
     def getInitialProbabilityCounts(self):
-        return self.getAllInternalCounts(json.loads(self.settings.value(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))))
+        return self.parseCountsFromValues(json.loads(self.settings.value(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))))
 
-    def getAllInternalCounts(self, values):
-        counts = [(values["count_" + str(x)]) for x in range(1,10)]
-        counts =  [-1] + counts
-        return counts
+    def parseCountsFromValues(self, values):
+        return [(values["count_" + str(x)]) for x in range(0,10)]
 
-    def getAllProbs(self):
-        probs = [float((self.probabilityValues["prob_" + str(x)])) for x in range(1,10)]
-        probs =  [(float(100) - sum(probs))] + probs
-        return probs
+    def parseProbsFromValues(self, values):
+        return [(float((values["prob_" + str(x)]))) for x in range(0,10)]
+
+    def parseCostsFromValues(self, values):
+        return [(values["cost_" + str(x)]) for x in range(0,10)]
 
     def getAllNames(self):
-        names = [(self.probabilityValues["name_" + str(x)]) for x in range(1,10)]
-        names =  ["None"] + names
-        return names
+        return [(self.probabilityValues["name_" + str(x)]) for x in range(0,10)]
+
+    def getAllProbs(self):
+        return self.parseProbsFromValues(self.probabilityValues)
 
     def getAllCounts(self):
-        return self.getAllInternalCounts(self.probabilityValues)
+        return self.parseCountsFromValues(self.probabilityValues)
 
     def getAllCosts(self):
-        costs = [(self.probabilityValues["cost_" + str(x)]) for x in range(1,10)]
-        costs =  [-1] + costs
-        return costs
+        return self.parseCostsFromValues(self.probabilityValues)
 
     def getTotalInfo(self):
         return (self.probabilityValues["total_costs"], self.probabilityValues["expected_earnings"])
@@ -165,10 +168,7 @@ class WheelFortuneService(QtCore.QObject):
         return [self.moneyLevel() - self.counter, self.winTries]
 
     def actualPrizesCount(self):
-        if self.isEnabled():
-            return sum([(self.probabilityValues["count_" + str(x)]) for x in range(1,10)])
-        else:
-            return -1
+        return sum([(self.probabilityValues["count_" + str(x)]) for x in range(1,10)])
 
     def resetActualFortuneTryLevels(self):
         LoggingService.getLogger().info("Reset actual fortune levels")
@@ -177,22 +177,40 @@ class WheelFortuneService(QtCore.QObject):
         self.fortuneDataChanged.emit()
 
     def testWinn(self):
-        probs = self.getAllProbs()
-        probs =  [(float(x) / 100) for x in probs]
+
+        myTestProbsValues = copy.deepcopy(self.probabilityValues)
+        wheelTurns = self.computeTotalPrizeCount(myTestProbsValues)
         values = [x for x in range (0,10)]
-
-        myTestProbs = copy.deepcopy(self.probabilityValues)
-
         result = ""
-        wheelTurns = int(self.probabilityValues["expected_earnings"]/self.moneyLevel())
+        winGames = 0
+
         for i in range (0,wheelTurns):
-            win = random.choices(values, probs)
-            names = self.getAllNames()
-            key = "count_" + str(win[0])
-            if win[0] > 0 and myTestProbs[key] > 0:
-                myTestProbs[key] = myTestProbs[key] - 1
+            probs = self.parseProbsFromValues(myTestProbsValues)
+            print(self.parseProbsFromValues(myTestProbsValues))
+            win = random.choices(values, self.parseProbsFromValues(myTestProbsValues))
+            self.updatePrizeCount(win[0], myTestProbsValues, -1)
+            self.recomputeProbs(myTestProbsValues)
+            if win[0] > 0:
                 result = result + "1"
+                winGames = winGames+1
             else:
                 result = result + "0"
-        return "Count of games: " + str(wheelTurns) + "\n" + result
+        return "Count of games: " + str(wheelTurns) + "\n" + "Win games: " + str(winGames) + "\n" + result
 
+    def updatePrizeCount(self, index, probabilityValues, change):
+        probabilityValues["count_" + str(index)] = probabilityValues["count_" + str(index)] + change
+
+    def computeTotalPrizeCount(self, probabilityValues):
+        return sum([int(probabilityValues["count_" + str(x)]) for x in range(0,10)])
+
+    def recomputeProbs(self, probabilityValues):
+        totalPrizesCount = self.computeTotalPrizeCount(probabilityValues)
+        print(totalPrizesCount)
+        for i in range(0,10):
+            if (totalPrizesCount > 0):
+                probabilityValues["prob_" + str(i)] = (float(probabilityValues["count_" + str(i)]) / float(totalPrizesCount))
+            else:
+                probabilityValues["prob_" + str(i)] = 0.0
+
+    def isPossibleWin(self, probabilityValues):
+        return self.computeTotalPrizeCount(probabilityValues) > 0
