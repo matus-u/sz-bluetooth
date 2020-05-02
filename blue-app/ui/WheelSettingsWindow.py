@@ -35,7 +35,7 @@ class WheelSettingsWindow(QtWidgets.QDialog):
         ))
 
     def onOkButton(self):
-        self.service.setSettings(self.ui.fortuneCheckBox.isChecked(), self.ui.moneySpinBox.value())
+        self.service.setSettings(self.ui.fortuneCheckBox.isChecked())
         self.printerService.setNewTicketCounter(self.ui.ticketCounterBox.value())
         self.accept()
 
@@ -47,7 +47,6 @@ class WheelSettingsWindow(QtWidgets.QDialog):
                                                   self.wheelFortuneService.getAllNames(),
                                                   self.wheelFortuneService.getAllCosts(),
                                                   range(0,10)):
-            print(prob)
             self.ui.probTableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(str(index)))
             self.ui.probTableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(str(cost)))
             self.ui.probTableWidget.setItem(index, 2, QtWidgets.QTableWidgetItem(str(initCount) + "/" + str(count)))

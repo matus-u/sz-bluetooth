@@ -67,6 +67,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     TOSS_COUNT = 29
     TOSS_MONEY_NEEDED = 30
     FIRST_TOSS_INFO = 31
+    NO_PRIZES_LEFT = 32
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -79,6 +80,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."),
         self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
         self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
+        self.tr("No prizes left, only music available."),
         ]
 
     def __init__(self, timerService,
@@ -179,6 +181,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
         self.wheelFortuneService.fortuneDataChanged.connect(self.onFortuneDataChanged)
+        self.wheelFortuneService.winCounterChanged.connect(self.onWinCounterChange)
         self.wheelFortuneService.fortuneTryFirstIncreased.connect(self.onFortuneTryFirstIncreased)
 
         self.wheelFortuneService.win.connect(self.onFortuneServiceTry)
@@ -188,7 +191,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
         printingService.lowPaperClear.connect(lambda: self.ui.errorLabel.setText(""))
 
-        self.wheelPrizes = []
         self.wheelWindow = None
 
         self.actualTimeStampTimer = QtCore.QTimer(self)
@@ -213,17 +215,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             return self.bluetoothFocusHandler
 
-    def onFortuneServiceTry(self, indexOfPrize, prizeCount, prizeName):
-        self.wheelPrizes.append([indexOfPrize, prizeCount, prizeName])
-        self.openFortuneWindow()
-
-    def openFortuneWindow(self):
-        if (len(self.wheelPrizes) > 0) and (self.wheelWindow is None):
-            data = self.wheelPrizes.pop(0)
-            w = FortuneWheelWindow.FortuneWheelWindow(self, data[0], data[1], data[2], self.printingService, self.ledButtonService, self.langBasedSettings)
-            self.wheelWindow = w
-            w.finished.connect(lambda: self.onWheelFortuneFinished(w))
-            self.openSubWindow(w)
+    def onFortuneServiceTry(self, indexOfPrize, prizeName):
+        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeName, self.printingService, self.ledButtonService, self.langBasedSettings)
+        self.wheelWindow = w
+        w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+        self.openSubWindow(w)
 
     def onTestMenuButton(self, printerService, ledButtonService, volumeService, arrowHandler):
         self.testModeService.enableTestMode()
@@ -237,11 +233,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onWheelFortuneFinished(self, w):
         self.wheelWindow = None
-        if len(self.wheelPrizes):
-            self.openFortuneWindow()
+        if self.wheelFortuneService.hasTries():
+            self.updateWinCounterLabels()
+            self.wheelFortuneService.overtakeWinTries()
         else:
             self.getActualFocusHandler().setFocus()
             self.showStatusInfo(2000, self.texts[self.CONTINUE_WITH_MUSIC], self.ui.infoLabel)
+            self.onFortuneDataChanged()
 
     def onBluetoothGenre(self):
         self.ui.stackedWidget.setCurrentIndex(1)
@@ -522,13 +520,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.coinImgLabel.setPixmap(coinPixMap)
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
 
+    def updateWinCounterLabels(self):
+        data = self.wheelFortuneService.getActualFortuneTryLevels()
+        self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
+        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format("{0:.2f}".format(data[0]), AppSettings.actualCurrency()))
+        self.ui.actualFortuneCount.setVisible(True)
+        self.ui.actualNeedFortuneMoney.setVisible(True)
+
+    def onWinCounterChange(self):
+        if self.wheelFortuneService.isEnabled():
+            if self.wheelFortuneService.actualPrizesCount() > 0:
+                self.updateWinCounterLabels()
+
     def onFortuneDataChanged(self):
         if self.wheelFortuneService.isEnabled():
-            data = self.wheelFortuneService.getActualFortuneTryLevels()
-            self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
-            self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format("{0:.2f}".format(data[0]), AppSettings.actualCurrency()))
-            self.ui.actualFortuneCount.setVisible(True)
-            self.ui.actualNeedFortuneMoney.setVisible(True)
+            if self.wheelFortuneService.actualPrizesCount() > 0:
+                self.updateWinCounterLabels()
+            else:
+                self.ui.actualFortuneCount.setText(self.texts[self.NO_PRIZES_LEFT])
+                self.ui.actualFortuneCount.setVisible(True)
+                self.ui.actualNeedFortuneMoney.setVisible(False)
         else:
             self.ui.actualFortuneCount.setVisible(False)
             self.ui.actualNeedFortuneMoney.setVisible(False)

@@ -17,10 +17,11 @@ class WheelFortuneService(QtCore.QObject):
     InitProbabilities = "InitProbabilities"
 
     reducePrizeCount = QtCore.pyqtSignal(int)
-    win = QtCore.pyqtSignal(int, int, str)
+    win = QtCore.pyqtSignal(int, str)
 
     probabilitiesUpdated = QtCore.pyqtSignal()
 
+    winCounterChanged= QtCore.pyqtSignal()
     fortuneDataChanged = QtCore.pyqtSignal()
     fortuneTryFirstIncreased = QtCore.pyqtSignal()
 
@@ -41,7 +42,7 @@ class WheelFortuneService(QtCore.QObject):
 
     def onTossTimeout(self):
         self.counter = 0
-        self.fortuneDataChanged.emit()
+        self.winCounterChanged.emit()
 
     def defaultProbs(self):
         return { 'money_level': 1.0, 'expected_earnings': 0, 'total_costs': 0,
@@ -78,31 +79,30 @@ class WheelFortuneService(QtCore.QObject):
 
     def moneyInserted(self, money):
         if self.isEnabled():
-            self.tossTimer.start(30000)
-            mLevel = self.moneyLevel()
-            self.counter = round (self.counter + round(money, 2), 2)
+            if (self.computeTotalPrizeCount(self.probabilityValues)) > 0:
+                self.tossTimer.start(30000)
+                mLevel = self.moneyLevel()
+                self.counter = round (self.counter + round(money, 2), 2)
 
-            while (self.counter >= mLevel):
-                self.counter = self.counter - self.moneyLevel()
-                self.winTries = self.winTries + 1
-                if (self.winTries == 1):
-                    self.fortuneTryFirstIncreased.emit()
-            self.fortuneDataChanged.emit()
+                while (self.counter >= mLevel):
+                    self.counter = self.counter - self.moneyLevel()
+                    self.winTries = self.winTries + 1
+                    if (self.winTries == 1):
+                        self.fortuneTryFirstIncreased.emit()
+                self.winCounterChanged.emit()
 
     def overtakeWinTries(self):
         if self.winTries > 0:
             LoggingService.getLogger().info("Overtake win tries")
-            count = self.winTries
-            self.winTries = 0
-            for i in range(0, count):
-                self.tryWin()
-            self.fortuneDataChanged.emit()
+            self.winTries = self.winTries-1
+            self.tryWin()
 
     def setNewProbabilityValues(self, values):
         self.probabilityValues = values
         self.settings.setValue(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))
         self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
         self.probabilitiesUpdated.emit()
+        self.fortuneDataChanged.emit()
 
     def getInitialProbabilityCounts(self):
         return self.parseCountsFromValues(json.loads(self.settings.value(WheelFortuneService.InitProbabilities, json.dumps(self.probabilityValues))))
@@ -132,26 +132,21 @@ class WheelFortuneService(QtCore.QObject):
         return (self.probabilityValues["total_costs"], self.probabilityValues["expected_earnings"])
 
     def getLeftCost(self):
-        a = sum ([(int(self.probabilityValues["count_" + str(x)]) * int(self.probabilityValues["cost_" + str(x)])) for x in range(1,10)])
-        return a
+        return sum([(int(self.probabilityValues["count_" + str(x)]) * int(self.probabilityValues["cost_" + str(x)])) for x in range(1,10)])
+
+    def hasTries(self):
+        return self.winTries > 0
 
     def tryWin(self):
         if self.printerActive == 1:
-            probs = self.getAllProbs()
-            probs =  [(float(x) / 100) for x in probs]
-            values = [x for x in range (0,10)]
-            win = random.choices(values, probs)
-            counts = self.getAllCounts()
-            names = self.getAllNames()
-            if win[0] > 0:
-                key = "count_" + str(win[0])
-                if self.probabilityValues[key] > 0:
-                    self.probabilityValues[key] = self.probabilityValues[key] - 1
-                    self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
-                    self.reducePrizeCount.emit(win[0])
-
-            LoggingService.getLogger().info("Try win " + str(win[0]))
-            self.win.emit(win[0], counts[win[0]], names[win[0]])
+            if (self.computeTotalPrizeCount(self.probabilityValues)) > 0:
+                win = self.tossNumber(self.probabilityValues)
+                self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
+                self.reducePrizeCount.emit(win)
+                LoggingService.getLogger().info("Toss number " + str(win))
+                self.win.emit(win, self.getAllNames()[win])
+            else:
+                self.win.emit(0, self.getAllNames()[0])
 
     def actualProbs(self):
         return self.probabilityValues
@@ -176,21 +171,46 @@ class WheelFortuneService(QtCore.QObject):
         self.winTries = 0
         self.fortuneDataChanged.emit()
 
-    def testWinn(self):
+    def lowestPrizeIndex(self, probabilityValues):
+        ind = -1
+        actualMin = float('inf')
+        for i in range(1,10):
+            if probabilityValues["count_" + str(i)] > 0:
+                if probabilityValues["cost_" + str(i)] <= actualMin:
+                    ind = i
+                    actualMin = probabilityValues["cost_" + str(i)]
+        return ind
 
+
+    def tossNumber(self, probabilityValues):
+        values = [x for x in range (0,10)]
+        increaseBack = False
+        incDecIndex = -1
+        #Last prize has to be taken out
+        if (self.computeTotalPrizeCount(probabilityValues)) > 1:
+            increaseBack = True
+            incDecIndex = self.lowestPrizeIndex(probabilityValues)
+            self.updatePrizeCount(incDecIndex, probabilityValues, -1)
+
+        self.recomputeProbs(probabilityValues)
+        probs = self.parseProbsFromValues(probabilityValues)
+        win = random.choices(values, self.parseProbsFromValues(probabilityValues))
+        self.updatePrizeCount(win[0], probabilityValues, -1)
+        #Last prize is given back
+        if increaseBack:
+            self.updatePrizeCount(incDecIndex, probabilityValues, 1)
+        self.recomputeProbs(probabilityValues)
+        return win[0]
+
+    def testWinn(self):
         myTestProbsValues = copy.deepcopy(self.probabilityValues)
         wheelTurns = self.computeTotalPrizeCount(myTestProbsValues)
-        values = [x for x in range (0,10)]
         result = ""
         winGames = 0
 
         for i in range (0,wheelTurns):
-            probs = self.parseProbsFromValues(myTestProbsValues)
-            print(self.parseProbsFromValues(myTestProbsValues))
-            win = random.choices(values, self.parseProbsFromValues(myTestProbsValues))
-            self.updatePrizeCount(win[0], myTestProbsValues, -1)
-            self.recomputeProbs(myTestProbsValues)
-            if win[0] > 0:
+            win = self.tossNumber(myTestProbsValues)
+            if win > 0:
                 result = result + "1"
                 winGames = winGames+1
             else:
@@ -205,7 +225,6 @@ class WheelFortuneService(QtCore.QObject):
 
     def recomputeProbs(self, probabilityValues):
         totalPrizesCount = self.computeTotalPrizeCount(probabilityValues)
-        print(totalPrizesCount)
         for i in range(0,10):
             if (totalPrizesCount > 0):
                 probabilityValues["prob_" + str(i)] = (float(probabilityValues["count_" + str(i)]) / float(totalPrizesCount))

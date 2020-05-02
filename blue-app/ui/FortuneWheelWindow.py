@@ -12,7 +12,7 @@ from ui import FocusHandler
 from collections import deque
 
 class FortuneWheelWindow(QtWidgets.QDialog):
-    def __init__(self, parent, winningIndex, prizeCount, prizeName, printingService, ledButtonService, langBasedSettings):
+    def __init__(self, parent, winningIndex, prizeName, printingService, ledButtonService, langBasedSettings):
         super(FortuneWheelWindow, self).__init__(parent)
         self.ui = Ui_FortuneWheel()
         self.ui.setupUi(self)
@@ -24,11 +24,7 @@ class FortuneWheelWindow(QtWidgets.QDialog):
 
         self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
 
-        if (prizeCount > 0):
-            self.winningIndex = winningIndex
-        else:
-            self.winningIndex = 0
-
+        self.winningIndex = winningIndex
         self.realWinName = prizeName
         self.printingService = printingService
         self.ledButtonService = ledButtonService
