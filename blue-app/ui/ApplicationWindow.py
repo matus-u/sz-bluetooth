@@ -156,7 +156,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController = MusicController.MusicController(self.ui.songsWidget,
                                                                [self.ui.genreLabel, self.ui.leftLeftGenre, self.ui.leftGenre, self.ui.rightGenre, self.ui.rightRightGenre],
                                                                self.playTrackCounter)
-        self.mainFocusHandler = FocusHandler.InputHandler([FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController)])
+        self.mainFocusHandler = FocusHandler.InputHandler([
+            FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController),
+            FocusHandler.ButtonFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
+            FocusHandler.ButtonFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
+        ])
+
         self.bluetoothFocusHandler = FocusHandler.InputHandler(
             [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
              FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
@@ -271,6 +276,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.leaveAdminButton.setVisible(enable)
             self.ui.wheelFortuneButton.setVisible(enable)
             self.ui.testMenuButton.setVisible(enable)
+            if not enable:
+                self.getActualFocusHandler().onLeft()
+                self.getActualFocusHandler().onRight()
+                self.getActualFocusHandler().setFocus()
             #if enable:
             #    self.temperatureStatus.start()
             #else:
@@ -476,11 +485,36 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.moneyTracker.addToCounters(value)
             self.wheelFortuneService.moneyInserted(value)
 
+    def openMessageBox(self, messageBoxType, header, info, buttonsFlags, buttonsFlagsList):
+        box = QtWidgets.QMessageBox(self)
+        box.setStandardButtons(buttonsFlags)
+        box.button(buttonsFlagsList[0]).setFocus()
+        box.setIcon(messageBoxType)
+        box.setText(info)
+        box.setWindowTitle(header)
+
+        focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(box.button(flagValue), self.ledButtonService) for flagValue in buttonsFlagsList])
+
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), box, lambda: focusHandler.onLeft())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), box, lambda: focusHandler.onRight())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+b"), box, lambda: focusHandler.onDown())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), box, lambda: focusHandler.onUp())
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), box, lambda: focusHandler.onConfirm())
+
+        return box.exec_()
+
     def onWithdrawMoneyButton(self):
-        shouldWithdraw = QtWidgets.QMessageBox.question(self, self.texts[self.WITHDRAW_MONEY_TEXT_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_MAIN])
+        shouldWithdraw = self.openMessageBox(QtWidgets.QMessageBox.Question,
+                                        self.texts[self.WITHDRAW_MONEY_TEXT_HEADER],
+                                        self.texts[self.WITHDRAW_MONEY_TEXT_MAIN],
+                                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                        [QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No])
         if shouldWithdraw == QtWidgets.QMessageBox.Yes:
             self.moneyTracker.withdraw()
-            QtWidgets.QMessageBox.information(self, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], self.texts[self.WITHDRAW_MONEY_TEXT_INFO])
+            self.openMessageBox(QtWidgets.QMessageBox.Information, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER],
+                                             self.texts[self.WITHDRAW_MONEY_TEXT_INFO],
+                                             QtWidgets.QMessageBox.Ok,
+                                             [QtWidgets.QMessageBox.Ok])
 
     def onAddToPlayQueue(self):
         self.updateTotalPlayQueueLabel()

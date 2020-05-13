@@ -143,7 +143,7 @@ class WheelFortuneService(QtCore.QObject):
                 win = self.tossNumber(self.probabilityValues)
                 self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
                 self.reducePrizeCount.emit(win)
-                LoggingService.getLogger().info("Toss number " + str(win))
+                LoggingService.getLogger().info("Toss number " + str(win) + " " + self.getAllNames()[win])
                 self.win.emit(win, self.getAllNames()[win])
             else:
                 self.win.emit(0, self.getAllNames()[0])
