@@ -214,6 +214,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.damagedDeviceWindow = DamagedDeviceWindow.DamagedDeviceWindow(self, errorHandler)
         self.damagedDeviceWindow.hidden.connect(lambda: self.getActualFocusHandler().setFocus())
 
+        self.arrowHandler = arrowHandler
+
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             return self.mainFocusHandler
@@ -501,7 +503,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), box, lambda: focusHandler.onUp())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), box, lambda: focusHandler.onConfirm())
 
-        return box.exec_()
+        self.arrowHandler.leftClicked.connect(focusHandler.onLeft)
+        self.arrowHandler.rightClicked.connect(focusHandler.onRight)
+        self.arrowHandler.confirmClicked.connect(focusHandler.onConfirm)
+
+        retVal = box.exec_()
+
+        self.arrowHandler.leftClicked.disconnect(focusHandler.onLeft)
+        self.arrowHandler.rightClicked.disconnect(focusHandler.onRight)
+        self.arrowHandler.confirmClicked.disconnect(focusHandler.onConfirm)
+
+        return retVal
 
     def onWithdrawMoneyButton(self):
         shouldWithdraw = self.openMessageBox(QtWidgets.QMessageBox.Question,

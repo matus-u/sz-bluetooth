@@ -46,3 +46,9 @@ bluealsa-aplay 00:00:00:00:00:00 2> /dev/null &
 ./start-app.sh
 #done
 
+echo "After application close"
+
+while true; do
+    sleep 100
+done
+
