@@ -16,16 +16,13 @@ class NotStartSameImmediatellyCheck:
             return False
         return True
 
-
-class AppWindowArrowHandler(QtCore.QObject):
-    def __init__(self, parent, testModeService, arrowHandler):
+class StandardArrowHandler(QtCore.QObject):
+    def __init__(self, parent, arrowHandler):
         super().__init__(parent)
         self.appWindow = parent
         self.arrowHandler = arrowHandler
 
         self.connectSignals()
-        testModeService.testModeEnabled.connect(self.disconnectSignals)
-        testModeService.testModeDisabled.connect(self.connectSignals)
 
     def connectSignals(self):
         self.arrowHandler.leftClicked.connect(self.onLeft)
@@ -56,3 +53,9 @@ class AppWindowArrowHandler(QtCore.QObject):
     def onConfirm(self):
         self.appWindow.getActualFocusHandler().onConfirm()
 
+class AppWindowArrowHandler(StandardArrowHandler):
+    def __init__(self, parent, testModeService, arrowHandler):
+        super().__init__(parent, arrowHandler)
+
+        testModeService.testModeEnabled.connect(self.disconnectSignals)
+        testModeService.testModeDisabled.connect(self.connectSignals)

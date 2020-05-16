@@ -15,6 +15,7 @@ class AdminModeTracker(QtCore.QObject):
         self.timer = QtCore.QTimer(self)
         self.refreshTimer = QtCore.QTimer(self)
         self.gpioTimer = QtCore.QTimer(self)
+        self.gpioTimer.setSingleShot(True)
         self.timer.timeout.connect(lambda: self.disableAdminMode())
         self.refreshTimer.timeout.connect(lambda: self.adminModeLeaveTime.emit(self.timer.remainingTime()/1000))
         self.gpioTimer.timeout.connect(lambda: self.enableAdminMode())

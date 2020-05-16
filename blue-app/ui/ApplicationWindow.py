@@ -27,6 +27,8 @@ from ui import FocusHandler
 from ui import Helpers
 from ui import WheelSettingsWindow
 from ui import FortuneWheelWindow
+from ui import WithdrawAskWindow
+from ui import WithdrawInfoWindow
 from ui import DamagedDeviceWindow
 from ui import TestHwWindow
 from ui.ApplicationWindowHelpers import NotStartSameImmediatellyCheck, AppWindowArrowHandler
@@ -487,46 +489,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.moneyTracker.addToCounters(value)
             self.wheelFortuneService.moneyInserted(value)
 
-    def openMessageBox(self, messageBoxType, header, info, buttonsFlags, buttonsFlagsList):
-        box = QtWidgets.QMessageBox(self)
-        box.setStandardButtons(buttonsFlags)
-        box.button(buttonsFlagsList[0]).setFocus()
-        box.setIcon(messageBoxType)
-        box.setText(info)
-        box.setWindowTitle(header)
-
-        focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(box.button(flagValue), self.ledButtonService) for flagValue in buttonsFlagsList])
-
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), box, lambda: focusHandler.onLeft())
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), box, lambda: focusHandler.onRight())
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+b"), box, lambda: focusHandler.onDown())
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+n"), box, lambda: focusHandler.onUp())
-        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), box, lambda: focusHandler.onConfirm())
-
-        self.arrowHandler.leftClicked.connect(focusHandler.onLeft)
-        self.arrowHandler.rightClicked.connect(focusHandler.onRight)
-        self.arrowHandler.confirmClicked.connect(focusHandler.onConfirm)
-
-        retVal = box.exec_()
-
-        self.arrowHandler.leftClicked.disconnect(focusHandler.onLeft)
-        self.arrowHandler.rightClicked.disconnect(focusHandler.onRight)
-        self.arrowHandler.confirmClicked.disconnect(focusHandler.onConfirm)
-
-        return retVal
-
     def onWithdrawMoneyButton(self):
-        shouldWithdraw = self.openMessageBox(QtWidgets.QMessageBox.Question,
-                                        self.texts[self.WITHDRAW_MONEY_TEXT_HEADER],
-                                        self.texts[self.WITHDRAW_MONEY_TEXT_MAIN],
-                                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                                        [QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No])
-        if shouldWithdraw == QtWidgets.QMessageBox.Yes:
+        self.appWindowArrowHandler.disconnectSignals()
+        w = WithdrawAskWindow.WithdrawAskWindow(self, self.ledButtonService, self.arrowHandler, self.texts[self.WITHDRAW_MONEY_TEXT_MAIN], self.texts[self.WITHDRAW_MONEY_TEXT_HEADER])
+        w.finished.connect(self.onWithdrawWindowFinished)
+        self.openSubWindow(w)
+        w.move(w.pos().x(), self.pos().y() + 150)
+        w.setFocus()
+
+    def onWithdrawWindowFinished(self, result):
+        if result == QtWidgets.QDialog.Accepted:
             self.moneyTracker.withdraw()
-            self.openMessageBox(QtWidgets.QMessageBox.Information, self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER],
-                                             self.texts[self.WITHDRAW_MONEY_TEXT_INFO],
-                                             QtWidgets.QMessageBox.Ok,
-                                             [QtWidgets.QMessageBox.Ok])
+            w = WithdrawInfoWindow.WithdrawInfoWindow(self, self.ledButtonService, self.arrowHandler, self.texts[self.WITHDRAW_MONEY_TEXT_INFO], self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER])
+            self.openSubWindow(w)
+            w.move(w.pos().x(), self.pos().y() + 150)
+            w.setFocus()
+            w.finished.connect(lambda: self.appWindowArrowHandler.connectSignals())
+        else:
+            self.appWindowArrowHandler.connectSignals()
 
     def onAddToPlayQueue(self):
         self.updateTotalPlayQueueLabel()

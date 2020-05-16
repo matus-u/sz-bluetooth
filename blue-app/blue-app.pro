@@ -4,5 +4,7 @@ FORMS += ui/*.ui \
     ui/WheelSettings.ui \
     ui/FortuneWheel.ui \
     ui/DamagedDevice.ui \
-    ui/TestHw.ui
+    ui/TestHw.ui \
+    ui/WithdrawAsk.ui \
+    ui/WithdrawInfo.ui
 

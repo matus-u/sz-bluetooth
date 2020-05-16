@@ -406,15 +406,12 @@ QWidget#songsWidget:focus,
 QWidget#devicesWidget:focus,
 QWidget#backButton:focus,
 QWidget#leaveAdminButton:focus,
-QWidget#withdrawMoneyButton:focus
+QWidget#withdrawMoneyButton:focus,
+QWidget#yesButton:focus,
+QWidget#noButton:focus,
+QWidget#withdrawOkButton:focus
 {
     border : 5px solid #FF7800;
-}
-
-QMessageBox QWidget:focus
-{
-    border : 3px solid #FF7800;
-    border-radius: 15;
 }
 
 QWidget#centerLabel
