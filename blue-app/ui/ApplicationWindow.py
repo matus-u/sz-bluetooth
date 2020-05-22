@@ -195,8 +195,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
 
         self.printingService = printingService
-        printingService.lowPaper.connect(lambda: self.ui.errorLabel.setText(self.texts[self.LOW_PAPER]))
-        printingService.lowPaperClear.connect(lambda: self.ui.errorLabel.setText(""))
+        printingService.lowPaper.connect(lambda: self.showError(self.texts[self.LOW_PAPER]))
+        printingService.lowPaperClear.connect(lambda: self.hideError())
 
         self.wheelWindow = None
 
@@ -217,6 +217,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.damagedDeviceWindow.hidden.connect(lambda: self.getActualFocusHandler().setFocus())
 
         self.arrowHandler = arrowHandler
+        self.ui.errorLabel.setVisible(False)
+
+    def showError(self, error):
+        self.ui.errorLabel.setText(error)
+        self.ui.errorLabel.setVisible(True)
+
+    def hideError(self):
+        self.ui.errorLabel.setText("")
+        self.ui.errorLabel.setVisible(False)
 
     def getActualFocusHandler(self):
         if self.ui.stackedWidget.currentIndex() == 0:
@@ -355,7 +364,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onConnectButton(self):
         if self.creditService.getCredit() == 0.0:
-            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.insertNewCoinLabel)
+            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.infoLabel)
             return
 
         if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
@@ -382,7 +391,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
 
         if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
-            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.insertNewCoinLabel)
+            self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.infoLabel)
             return
 
         if playQueueObject != None:
@@ -423,8 +432,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.playSlider.setValue(0)
         self.ui.playSlider.setMaximum(1.0)
 
-        #self.ui.insertNewCoinLabel.setText(self.texts[self.INSERT_COIN_STRING])
-
     def onPlayingFailed(self, deviceName):
         self.showStatusInfo(2000, self.texts[self.CONNECTION_FAILED_STR].format(deviceName), self.ui.infoLabel)
 
@@ -456,28 +463,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onCreditChange(self, credit):
         self.updateCreditLabel()
         if self.creditService.getCredit() > 0:
-            self.ui.insertNewCoinLabel.setText("")
+            self.ui.infoLabel.setText("")
 
         if (credit > 0):
-            self.showCoinImage()
             duration = 500
             if self.playLogicService.isPlaying():
                 duration = 100
             else:
                 PlayWavFile(self).playWav("resources/coin-ringtone.wav")
-            QtCore.QTimer.singleShot(duration, self.hideCoinImage)
 
     def onRefreshTimer(self, value):
         self.ui.playSlider.setValue(value)
         self.ui.timeLabel.setText(Helpers.formatDuration(value))
 
-    def showCoinImage(self):
-        coinPixMap = QtGui.QPixmap(':/images/coin180.png')
-        self.ui.coinImageLabel.setPixmap(coinPixMap.scaled(self.ui.coinImageLabel.width(), self.ui.coinImageLabel.height()))
-
-    def hideCoinImage(self):
-        coinPixMap = QtGui.QPixmap()
-        self.ui.coinImageLabel.setPixmap(coinPixMap)
 
     def onAddCreditButton(self):
         value = 0.0
