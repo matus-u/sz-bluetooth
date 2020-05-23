@@ -227,8 +227,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.languageFocusHandler = FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)])
         self.tempLanguageChanger.languageChanged.connect(lambda: self.setActiveFocusHandler(self.mainFocusHandler))
 
-        QtCore.QTimer.singleShot(3000, lambda: self.setActiveFocusHandler(self.languageFocusHandler))
-
     def setActiveFocusHandler(self, focusHandler):
         self.activeFocusHandler = focusHandler
         self.activeFocusHandler.setFocus()
