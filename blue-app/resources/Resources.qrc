@@ -16,6 +16,9 @@
         <file>checkbox.png</file>
         <file>down_arrow.png</file>
         <file>bg2.jpg</file>
-        <file>bg.jpg</file>
+        <file>slovak.gif</file>
+        <file>poland.gif</file>
+        <file>hungary.gif</file>
+        <file>england.gif</file>
     </qresource>
 </RCC>

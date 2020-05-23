@@ -31,6 +31,9 @@ from ui import WithdrawAskWindow
 from ui import WithdrawInfoWindow
 from ui import DamagedDeviceWindow
 from ui import TestHwWindow
+
+from ui import TempLanguageChanger
+
 from ui.ApplicationWindowHelpers import NotStartSameImmediatellyCheck, AppWindowArrowHandler
 
 class ApplicationWindow(QtWidgets.QMainWindow):
@@ -219,6 +222,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.arrowHandler = arrowHandler
         self.ui.errorLabel.setVisible(False)
 
+        self.tempLanguageChanger = TempLanguageChanger.TempLanguageChanger(self, self.ui.leftLanguageLabel, self.ui.rightLanguageLabel)
+
     def showError(self, error):
         self.ui.errorLabel.setText(error)
         self.ui.errorLabel.setVisible(True)
@@ -261,7 +266,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onBluetoothGenre(self):
         self.ui.stackedWidget.setCurrentIndex(1)
-        self.setStyleSheet("QMainWindow { background-image: url(':/images/bg2.jpg') }");
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
         self.cleanScannedData()
@@ -269,7 +273,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onBackFromBlueButton(self):
         self.getActualFocusHandler().onLeft()
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.setStyleSheet("QMainWindow { background-image: url(':/images/bg.jpg') }");
         self.getActualFocusHandler().setFocus()
         self.updateCreditLabel()
 
@@ -309,6 +312,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.updateCreditLabel()
         self.langBasedSettings.reloadLanguage()
         self.onFortuneDataChanged()
+
+        self.tempLanguageChanger.reloadWidgets(AppSettings.getCurrentLanguageIndex())
         if x == 1:
             self.musicController.selectModel()
 

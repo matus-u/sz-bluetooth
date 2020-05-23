@@ -14,7 +14,7 @@ QWidget:disabled
 
 QMainWindow
 {
-    background-image: url(":/images/bg.jpg")
+     background-image: url(":/images/bg2.jpg")
 }
 
 QAbstractItemView
@@ -409,7 +409,8 @@ QWidget#leaveAdminButton:focus,
 QWidget#withdrawMoneyButton:focus,
 QWidget#yesButton:focus,
 QWidget#noButton:focus,
-QWidget#withdrawOkButton:focus
+QWidget#withdrawOkButton:focus,
+QWidget#leftLanguageLabel:focus
 {
     border : 5px solid #FF7800;
 }
