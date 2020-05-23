@@ -309,7 +309,6 @@ QSlider::sub-page:horizontal {
 }
 
 QLabel#playLabel,
-QLabel#insertNewCoinLabel,
 QLabel#emptyLabel
 {
     font-size: 22px;
@@ -333,8 +332,6 @@ QWidget#pageBluetooth,
 QWidget#playLabel,
 QWidget#playSlider,
 QWidget#timeLabel,
-QWidget#insertNewCoinLabel,
-QWidget#coinImageLabel,
 QWidget#actualCreditValue,
 QWidget#actualMoneyValue,
 QWidget#wifiStateLabel,
@@ -353,7 +350,10 @@ QWidget#actualFortuneCount,
 QWidget#actualNeedFortuneMoney,
 QWidget#coinImgLabel,
 QWidget#serverStateLabel,
-SongTableWidgetImpl *
+SongTableWidgetImpl *,
+QLabel#leftLanguageLabel,
+QLabel#rightLanguageLabel,
+QLabel#middleLanguageLabel
 {
     background-color: transparent;
 }
@@ -451,7 +451,6 @@ QWidget#actualCreditValue,
 QWidget#actualMoneyValue,
 QTableWidget#songsWidget *,
 QTableWidget#devicesWidget *,
-QLabel#insertNewCoinLabel,
 QWidget#infoLabel,
 QWidget#actualFortuneCount,
 QWidget#actualNeedFortuneMoney
