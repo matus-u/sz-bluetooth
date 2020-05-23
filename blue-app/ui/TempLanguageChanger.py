@@ -16,10 +16,13 @@ def getLanguagePixmap(languageString):
         return QtGui.QMovie(":/images/poland.gif")
 
 class TempLanguageChanger(QtCore.QObject):
+    languageChanged = QtCore.pyqtSignal()
+
     def __init__(self, parent, leftLabel, rightLabel):
         super().__init__(parent)
         self.leftLabel = leftLabel
         self.rightLabel = rightLabel
+        self.index = -1
         self.reloadWidgets(AppSettings.getCurrentLanguageIndex())
 
     def getNextLanguage(self, index):
@@ -27,12 +30,6 @@ class TempLanguageChanger(QtCore.QObject):
         if index == (len(langList) -1):
             return langList[0]
         return langList[index+1]
-
-    def getPreviousLanguage(self, index):
-        langList = AppSettings.LanguageList
-        if index == 0:
-            return langList[len(langList) -1]
-        return langList[index-1]
 
     def reloadWidgets(self, leftIndex):
         leftMovie = getLanguagePixmap(AppSettings.LanguageList[leftIndex])
@@ -44,3 +41,23 @@ class TempLanguageChanger(QtCore.QObject):
         self.rightLabel.setMovie(rightMovie)
         rightMovie.setScaledSize(self.rightLabel.size());
         rightMovie.start()
+
+        self.index = leftIndex
+
+    def moveLanguageLeft(self):
+        if self.index == 0:
+            self.index = len(AppSettings.LanguageList)-1
+        else:
+            self.index = self.index-1
+        self.reloadWidgets(self.index)
+
+    def moveLanguageRight(self):
+        if self.index == (len(AppSettings.LanguageList)-1):
+            self.index = 0
+        else:
+            self.index = self.index + 1
+        self.reloadWidgets(self.index)
+
+    def confirmLanguageChange(self):
+        AppSettings._loadLanguage(AppSettings.LanguageList[self.index])
+        self.languageChanged.emit()

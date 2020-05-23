@@ -197,4 +197,16 @@ class MusicWidgetFocusProxy(TableWidgetFocusProxy):
     def getUnderlyingWidgetRowCount(self):
         return self.musicControl.rowCount()
 
+class LanguageLabelFocusProxy(ButtonFocusProxy):
+    def __init__(self, widget, ledButtonService, tempLanguageChanger):
+        super().__init__(widget, ledButtonService)
+        self.tempLanguageChanger = tempLanguageChanger
 
+    def onLeft(self):
+        self.tempLanguageChanger.moveLanguageLeft()
+
+    def onRight(self):
+        self.tempLanguageChanger.moveLanguageRight()
+
+    def onConfirm(self):
+        self.tempLanguageChanger.confirmLanguageChange()

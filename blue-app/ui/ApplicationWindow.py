@@ -167,10 +167,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             FocusHandler.ButtonFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
         ])
 
-        self.bluetoothFocusHandler = FocusHandler.InputHandler(
-            [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
-             FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
-             FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)])
+       ## self.bluetoothFocusHandler = FocusHandler.InputHandler(
+       ##     [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
+       ##      FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
+       ##      FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)])
 
         self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
 
@@ -185,6 +185,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
+        self.setActiveFocusHandler(self.mainFocusHandler)
         self.getActualFocusHandler().setFocus()
 
         self.wheelFortuneService = wheelFortuneService
@@ -223,6 +224,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.errorLabel.setVisible(False)
 
         self.tempLanguageChanger = TempLanguageChanger.TempLanguageChanger(self, self.ui.leftLanguageLabel, self.ui.rightLanguageLabel)
+        self.languageFocusHandler = FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)])
+        self.tempLanguageChanger.languageChanged.connect(lambda: self.setActiveFocusHandler(self.mainFocusHandler))
+
+        QtCore.QTimer.singleShot(3000, lambda: self.setActiveFocusHandler(self.languageFocusHandler))
+
+    def setActiveFocusHandler(self, focusHandler):
+        self.activeFocusHandler = focusHandler
+        self.activeFocusHandler.setFocus()
 
     def showError(self, error):
         self.ui.errorLabel.setText(error)
@@ -233,10 +242,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.errorLabel.setVisible(False)
 
     def getActualFocusHandler(self):
-        if self.ui.stackedWidget.currentIndex() == 0:
-            return self.mainFocusHandler
-        else:
-            return self.bluetoothFocusHandler
+        return self.activeFocusHandler
 
     def onFortuneServiceTry(self, indexOfPrize, prizeName):
         w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeName, self.printingService, self.ledButtonService, self.langBasedSettings)
