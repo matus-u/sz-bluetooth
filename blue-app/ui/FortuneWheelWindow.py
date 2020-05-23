@@ -99,10 +99,6 @@ class FortuneWheelWindow(QtWidgets.QDialog):
     def openWinWindow(self):
         self.setPixForLabel(self.ui.winLabelPicture, PixmapService.pixMaps[self.winningIndex])
         self.printingService.printTicket(AppSettings.actualDeviceName(), self.winningIndex, self.realWinName)
-        #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
-        #self.focusHandler = FocusHandler.InputHandler([FocusHandler.ButtonFocusProxy(self.ui.backButton, self.ledButtonService, False)])
-        #self.arrowHandler.confirmClicked.connect(lambda: self.focusHandler.onConfirm())
-        #QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+m"), self, lambda: self.focusHandler.onConfirm())
         self.ui.stackedWidget.setCurrentIndex(3)
 
     def lastAnimationFinished(self):

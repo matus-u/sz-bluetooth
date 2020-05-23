@@ -353,7 +353,10 @@ QWidget#serverStateLabel,
 SongTableWidgetImpl *,
 QLabel#leftLanguageLabel,
 QLabel#rightLanguageLabel,
-QLabel#middleLanguageLabel
+QLabel#middleLanguageLabel,
+QWidget#stackedWidgetPage0,
+QWidget#stackedWidgetPage1,
+QWidget#stackedWidgetPage2
 {
     background-color: transparent;
 }
@@ -399,12 +402,9 @@ SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
     padding-left: 2px;
 }
 
-QWidget#scanButton:focus,
 QWidget#bluetoothButton:focus,
-QWidget#backFromBlueButton:focus,
 QWidget#songsWidget:focus,
 QWidget#devicesWidget:focus,
-QWidget#backButton:focus,
 QWidget#leaveAdminButton:focus,
 QWidget#withdrawMoneyButton:focus,
 QWidget#yesButton:focus,

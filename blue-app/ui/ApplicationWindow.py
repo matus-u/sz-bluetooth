@@ -132,7 +132,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.withdrawMoneyButton.clicked.connect(self.onWithdrawMoneyButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
         self.ui.wifiSettingsButton.clicked.connect(lambda: self.openSubWindow(WifiSettingsWindow.WifiSettingsWindow(self, self.wirelessService)))
-        self.ui.scanButton.clicked.connect(self.onScanButton)
         self.ui.disconnectButton.clicked.connect(self.bluetoothService.asyncDisconnect)
         self.ui.leaveAdminButton.clicked.connect(lambda: self.adminModeLeaveButton.emit())
         self.texts = self.createTrTexts()
@@ -166,13 +165,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             FocusHandler.ButtonFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
             FocusHandler.ButtonFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
         ])
-
-       ## self.bluetoothFocusHandler = FocusHandler.InputHandler(
-       ##     [FocusHandler.ButtonFocusProxy(self.ui.scanButton, self.ledButtonService),
-       ##      FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService),
-       ##      FocusHandler.ButtonFocusProxy(self.ui.backFromBlueButton, self.ledButtonService)])
-
-        self.ui.backFromBlueButton.clicked.connect(self.onBackFromBlueButton)
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.getActualFocusHandler().onLeft())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), self, lambda: self.getActualFocusHandler().onRight())
@@ -327,14 +319,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.openSubWindow(w)
 
     def setWidgetsEnabled(self):
-        self.ui.scanButton.setEnabled(True)
         self.ui.devicesWidget.setEnabled(True)
-        #self.ui.backFromBlueButton.setEnabled(True)
 
     def setWidgetsDisabled(self):
-        self.ui.scanButton.setEnabled(False)
         self.ui.devicesWidget.setEnabled(False)
-        #self.ui.backFromBlueButton.setEnabled(False)
 
     def cleanScannedData(self):
         self.ui.devicesWidget.clear()
@@ -351,7 +339,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if len(self.scanData) > 0:
             self.ui.devicesWidget.selectRow(0)
 
-        self.ui.scanButton.setText(self.texts[self.SCAN_STR])
         self.setWidgetsEnabled()
 
         if len(self.scanData) == 0:
@@ -363,7 +350,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onScanButton(self):
         self.cleanScannedData()
         self.setWidgetsDisabled()
-        self.ui.scanButton.setText(self.texts[self.SCANNING_STR])
         QtCore.QCoreApplication.processEvents()
         QtCore.QTimer.singleShot(3000, self.onScanFinished)
 
@@ -447,8 +433,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
             newTexts = self.createTrTexts()
-            if self.ui.scanButton.text() != "":
-                self.ui.scanButton.setText(newTexts[self.texts.index(self.ui.scanButton.text())])
             self.texts = newTexts
             self.ui.retranslateUi(self)
         super(ApplicationWindow, self).changeEvent(event)
