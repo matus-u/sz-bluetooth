@@ -303,14 +303,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         window.activateWindow()
         window.move(window.pos().x(), self.pos().y() + 60)
 
-    def onSettingsFinished(self, x):
+    def onSettingsFinished(self, dialogResult):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
         self.langBasedSettings.reloadLanguage()
+        self.tempLanguageChanger.reloadWidgets(AppSettings.getCurrentLanguageIndex())
+
         self.onFortuneDataChanged()
 
-        self.tempLanguageChanger.reloadWidgets(AppSettings.getCurrentLanguageIndex())
-        if x == 1:
+        if dialogResult == 1:
             self.musicController.selectModel()
 
     def onAdminSettingsButton(self):
