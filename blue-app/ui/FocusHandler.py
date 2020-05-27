@@ -22,7 +22,7 @@ class ArrowHandler(QtCore.QObject):
 
     def connectGpioOnce(self, gpioService, num, callback):
         gpioCall = GpioCallback(self, num, gpioService)
-        gpioCall.callbackGpio.connect(callback, QtCore.Qt.QueuedConnection)
+        gpioCall.callbackGpio.connect(callback)
 
     def __init__(self, gpioService):
         super().__init__()

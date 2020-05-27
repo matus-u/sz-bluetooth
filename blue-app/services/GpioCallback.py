@@ -2,15 +2,18 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+
 class GpioCallback(QtCore.QObject):
     callbackGpio = QtCore.pyqtSignal()
+    internalCallbackGpio = QtCore.pyqtSignal()
 
     def __init__(self, parent, number, gpioService):
         super().__init__(parent)
-        gpioService.registerCallback(gpioService.FALLING, number, self.onLowLevelGpioInterrupt)
+        self.internalCallbackGpio.connect(lambda: self.callbackGpio.emit(), QtCore.Qt.QueuedConnection)
+        gpioService.registerCallback(number, gpioService.FALLING, self.onLowLevelGpioInterrupt)
 
-    def onLowLevelGpioInterrupt(self, channel):
-        self.callbackGpio.emit()
+    def onLowLevelGpioInterrupt(self):
+        self.internalCallbackGpio.emit()
 
 class GpioCallbackContinous(QtCore.QObject):
 
@@ -22,17 +25,21 @@ class GpioCallbackContinous(QtCore.QObject):
         super().__init__(parent)
         self.gpioTimer = QtCore.QTimer(self)
         self.contTime = timeCont
+
         self.risingGpio.connect(lambda: self.gpioTimer.stop(), QtCore.Qt.QueuedConnection)
         self.fallingGpio.connect(self.onTimeout, QtCore.Qt.QueuedConnection)
-        gpioService.registerBothCallbacks(number, self.onLowLevelGpioInterrupt)
+
+        gpioService.registerCallback(number, gpioService.RISING, self.onLowLevelGpioUp)
+        gpioService.registerCallback(number, gpioService.FALLING, self.onLowLevelGpioDown)
+
         self.gpioTimer.timeout.connect(self.onTimeout)
 
     def onTimeout(self):
         self.callbackGpio.emit()
         self.gpioTimer.start(self.contTime)
 
-    def onLowLevelGpioInterrupt(self, isRising):
-        if isRising:
-            self.risingGpio.emit()
-        else:
-            self.fallingGpio.emit()
+    def onLowLevelGpioUp(self):
+        self.risingGpio.emit()
+
+    def onLowLevelGpioDown(self):
+        self.fallingGpio.emit()

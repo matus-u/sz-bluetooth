@@ -24,13 +24,14 @@ class AdminModeTracker(QtCore.QObject):
         self.fallingGpio.connect(lambda: self.gpioTimer.start(3000), QtCore.Qt.QueuedConnection)
 
         GPIO_NUM = 28
-        gpioService.registerBothCallbacks(GPIO_NUM, self.onLowLevelGpioInterrupt)
+        gpioService.registerCallback(GPIO_NUM, gpioService.FALLING, self.onLowLevelGpioDown)
+        gpioService.registerCallback(GPIO_NUM, gpioService.RISING, self.onLowLevelGpioUp)
 
-    def onLowLevelGpioInterrupt(self, isRising):
-        if isRising:
-            self.risingGpio.emit()
-        else:
-            self.fallingGpio.emit()
+    def onLowLevelGpioUp(self):
+        self.risingGpio.emit()
+
+    def onLowLevelGpioDown(self):
+        self.fallingGpio.emit()
 
     def informAboutActualState(self):
         self.adminModeInfoState.emit(self.state)

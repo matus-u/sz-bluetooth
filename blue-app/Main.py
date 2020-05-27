@@ -77,7 +77,11 @@ def main():
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
+
+    gpioTimerService = TimerService()
     gpioService = GpioService()
+    gpioTimerService.addTimerWorker(gpioService)
+
     adminModeTracker = AdminModeTracker(gpioService)
 
     wheelFortuneService = WheelFortuneService()
@@ -132,6 +136,7 @@ def main():
     application.show()
     printingService.initialize()
     volumeService.start()
+    gpioService.start()
 
     application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
