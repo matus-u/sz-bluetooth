@@ -381,11 +381,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onPlaySong(self):
         playQueueObject = self.musicController.getSelectedPlayObject()
 
-        #SPECIAL HANDLING OF BLUETOOTH
-        if playQueueObject != None and isinstance(playQueueObject, BluetoothPlayQueueObject):
-            self.onBluetoothGenre()
-            return
-
         if (int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) <= 0:
             self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.infoLabel)
             return
@@ -469,7 +464,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onRefreshTimer(self, value):
         self.ui.playSlider.setValue(value)
         self.ui.timeLabel.setText(Helpers.formatDuration(value))
-
 
     def onAddCreditButton(self):
         value = 0.0

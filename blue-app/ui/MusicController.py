@@ -118,6 +118,9 @@ class SongModel:
         if self.actualGenre in self.actualGenreList:
             self.rotate(-1 * self.actualGenreList.index(self.actualGenre))
 
+    def isBluetooth(self):
+        return self.actualGenreList[0] == "Bluetooth"
+
 class GenreBasedModel(SongModel):
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         super().__init__(songsWidget, genreLabelList, playTrackCounter)
@@ -135,6 +138,7 @@ class AlphaBasedModel(SongModel):
 class MusicController(QtCore.QObject):
 
     bluetoothSelected = QtCore.pyqtSignal()
+    bluetoothNotSelected = QtCore.pyqtSignal()
 
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         super().__init__()
@@ -147,6 +151,12 @@ class MusicController(QtCore.QObject):
 
     def nextGenre(self):
         self.actualModel.nextGenre()
+
+    def notifyBluetoothModel(self):
+        if self.actualModel.isBluetooth():
+            self.bluetoothSelected.emit()
+        else:
+            self.bluetoothNotSelected.emit()
 
     def previousGenre(self):
         self.actualModel.previousGenre()

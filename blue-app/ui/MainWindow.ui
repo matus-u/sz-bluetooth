@@ -312,7 +312,13 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="stackedWidgetPage1"/>
+          <widget class="QWidget" name="stackedWidgetPage1">
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QTextBrowser" name="textBrowser"/>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="stackedWidgetPage2">
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
