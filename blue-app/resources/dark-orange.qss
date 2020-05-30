@@ -356,7 +356,8 @@ QLabel#rightLanguageLabel,
 QLabel#middleLanguageLabel,
 QWidget#stackedWidgetPage0,
 QWidget#stackedWidgetPage1,
-QWidget#stackedWidgetPage2
+QWidget#stackedWidgetPage2,
+QWidget#stackedWidgetPage3
 {
     background-color: transparent;
 }
@@ -366,7 +367,9 @@ QWidget#emptyLabel,
 QTableWidget#playQueueWidget,
 QWidget#playQueueTimeFrame,
 QTableWidget#songsWidget,
-QTableWidget#devicesWidget
+QTableWidget#devicesWidget,
+QWidget#scanInfoLabel,
+QWidget#infoBrowser
 {
    border-color : #ABABAB; 
    background-color: rgba(0, 0, 0, 65%);
@@ -402,6 +405,13 @@ SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
     padding-left: 2px;
 }
 
+QWidget#scanInfoLabel,
+QWidget#infoBrowser
+{
+    border: 5px solid #FF7800;
+    border-radius: 15;
+}
+
 QWidget#bluetoothButton:focus,
 QWidget#songsWidget:focus,
 QWidget#devicesWidget:focus,
@@ -410,7 +420,9 @@ QWidget#withdrawMoneyButton:focus,
 QWidget#yesButton:focus,
 QWidget#noButton:focus,
 QWidget#withdrawOkButton:focus,
-QWidget#leftLanguageLabel:focus
+QWidget#leftLanguageLabel:focus,
+QWidget#scanInfoLabel:focus,
+QWidget#infoBrowser:focus
 {
     border : 5px solid #FF7800;
 }
@@ -475,4 +487,5 @@ QTableWidget#devicesWidget,
 QTableWidget#songsWidget {
     outline: 0;
 }
+
 

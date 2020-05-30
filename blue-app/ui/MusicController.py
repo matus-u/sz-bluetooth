@@ -151,6 +151,7 @@ class MusicController(QtCore.QObject):
 
     def nextGenre(self):
         self.actualModel.nextGenre()
+        self.notifyBluetoothModel()
 
     def notifyBluetoothModel(self):
         if self.actualModel.isBluetooth():
@@ -160,6 +161,7 @@ class MusicController(QtCore.QObject):
 
     def previousGenre(self):
         self.actualModel.previousGenre()
+        self.notifyBluetoothModel()
 
     def getMp3Info(self, fileName, fullFileName, genre):
         mp3 = MP3(fullFileName)
@@ -186,9 +188,6 @@ class MusicController(QtCore.QObject):
         self.genreBasedModel.addSpecials()
         self.alphaBasedModel.addSpecials()
 
-    def reloadSongsWidget(self):
-        self.actualModel.reloadSongsWidget()
-
     def getSelectedPlayObject(self):
         return self.actualModel.getSelectedPlayObject()
 
@@ -203,6 +202,7 @@ class MusicController(QtCore.QObject):
         self.actualModel.afterModelChange()
         self.actualModel.generateGenreList()
         self.actualModel.reloadSongsWidget()
+        self.notifyBluetoothModel()
 
     def rowCount(self):
         return self.actualModel.rowCount()

@@ -160,11 +160,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController = MusicController.MusicController(self.ui.songsWidget,
                                                                [self.ui.genreLabel, self.ui.leftLeftGenre, self.ui.leftGenre, self.ui.rightGenre, self.ui.rightRightGenre],
                                                                self.playTrackCounter)
-        self.mainFocusHandler = FocusHandler.InputHandler([
-            FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController),
-            FocusHandler.ButtonFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
-            FocusHandler.ButtonFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
-        ])
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.getActualFocusHandler().onLeft())
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+v"), self, lambda: self.getActualFocusHandler().onRight())
@@ -177,8 +172,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
-        self.setActiveFocusHandler(self.mainFocusHandler)
-        self.getActualFocusHandler().setFocus()
+        self.selectStackWidget(0)
 
         self.wheelFortuneService = wheelFortuneService
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService)))
@@ -217,11 +211,28 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.tempLanguageChanger = TempLanguageChanger.TempLanguageChanger(self, self.ui.leftLanguageLabel, self.ui.rightLanguageLabel)
         self.languageFocusHandler = FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)])
-        self.tempLanguageChanger.languageChanged.connect(lambda: self.setActiveFocusHandler(self.mainFocusHandler))
+        self.tempLanguageChanger.languageChanged.connect(lambda: self.selectStackWidget(self.ui.stackedWidget.currentIndex()))
+        self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
+        self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
 
     def setActiveFocusHandler(self, focusHandler):
         self.activeFocusHandler = focusHandler
         self.activeFocusHandler.setFocus()
+
+    def selectStackWidget(self, stackIndex):
+        self.ui.stackedWidget.setCurrentIndex(stackIndex)
+        if stackIndex == 0:
+            self.setActiveFocusHandler(FocusHandler.InputHandler([
+                FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController),
+                FocusHandler.SimpleInputFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
+                FocusHandler.SimpleInputFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
+            ]))
+        elif stackIndex == 1:
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.infoBrowser, self.ledButtonService, self.musicController, self.onScan)]))
+        elif stackIndex == 2:
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.scanInfoLabel)]))
+        elif stackIndex == 3:
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService, self.musicController)]))
 
     def showError(self, error):
         self.ui.errorLabel.setText(error)
@@ -260,11 +271,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.showStatusInfo(2000, self.texts[self.CONTINUE_WITH_MUSIC], self.ui.infoLabel)
             self.onFortuneDataChanged()
 
-    def onBluetoothGenre(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-        self.getActualFocusHandler().setFocus()
+    def onNonBluetoothGenre(self):
+        self.selectStackWidget(0)
         self.updateCreditLabel()
-        self.cleanScannedData()
+
+    def onBluetoothGenre(self):
+        self.selectStackWidget(1)
+        self.updateCreditLabel()
 
     def onBackFromBlueButton(self):
         self.getActualFocusHandler().onLeft()
@@ -319,12 +332,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         w.finished.connect(self.onSettingsFinished)
         self.openSubWindow(w)
 
-    def setWidgetsEnabled(self):
-        self.ui.devicesWidget.setEnabled(True)
-
-    def setWidgetsDisabled(self):
-        self.ui.devicesWidget.setEnabled(False)
-
     def cleanScannedData(self):
         self.ui.devicesWidget.clear()
         self.ui.devicesWidget.clearSelection()
@@ -340,19 +347,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if len(self.scanData) > 0:
             self.ui.devicesWidget.selectRow(0)
 
-        self.setWidgetsEnabled()
-
         if len(self.scanData) == 0:
             self.showStatusInfo(2000, self.texts[self.EMPTY_SCAN], self.ui.infoLabel)
             self.getActualFocusHandler().setFocus()
         else:
             self.getActualFocusHandler().onLeft()
+        self.selectStackWidget(3)
 
-    def onScanButton(self):
+    def onScan(self):
         self.cleanScannedData()
-        self.setWidgetsDisabled()
-        QtCore.QCoreApplication.processEvents()
         QtCore.QTimer.singleShot(3000, self.onScanFinished)
+        self.selectStackWidget(2)
 
     def showStatusInfo(self, duration, message, label):
         label.setText(message)

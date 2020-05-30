@@ -80,6 +80,9 @@ class InputHandler(QtCore.QObject):
         self.setFocus()
 
 class FocusNullObject:
+    def __init__(self, widget=None):
+        self.widget = widget
+
     def setFocus(self):
         pass
 
@@ -98,14 +101,17 @@ class FocusNullObject:
     def onConfirm(self):
         pass
 
-class ButtonFocusProxy:
-    def __init__(self, button, ledButtonService, arrowsEnabled=True):
-        self.button = button
+    def getManangedWidget(self):
+        return self.widget
+
+class SimpleInputFocusProxy:
+    def __init__(self, inputWidget, ledButtonService, arrowsEnabled=True):
+        self.inputWidget = inputWidget
         self.ledButtonService = ledButtonService
         self.arrowsEnabled = arrowsEnabled
 
     def setFocus(self):
-        self.button.setFocus()
+        self.inputWidget.setFocus()
         self.ledButtonService.setButtonState(LedButtonService.LEFT, self.arrowsEnabled)
         self.ledButtonService.setButtonState(LedButtonService.RIGHT, self.arrowsEnabled)
         self.ledButtonService.setButtonState(LedButtonService.UP, False)
@@ -125,17 +131,27 @@ class ButtonFocusProxy:
         pass
 
     def onConfirm(self):
-        self.button.animateClick()
+        self.inputWidget.animateClick()
 
     def getManangedWidget(self):
-        return self.button
+        return self.inputWidget
 
 class TableWidgetFocusProxy(QtCore.QObject):
-    def __init__(self, widget, confirmHandler, ledButtonService):
+    def __init__(self, widget, confirmHandler, ledButtonService, musicControl = None):
         super().__init__()
         self.widget = widget
         self.confirmHandler = confirmHandler
         self.ledButtonService = ledButtonService
+
+        self.musicControl = musicControl
+
+    def onLeft(self):
+        if self.musicControl:
+            self.musicControl.previousGenre()
+
+    def onRight(self):
+        if self.musicControl:
+            self.musicControl.nextGenre()
 
     def getManangedWidget(self):
         return self.widget
@@ -177,12 +193,6 @@ class TableWidgetFocusProxy(QtCore.QObject):
         if self.confirmHandler:
             self.confirmHandler()
 
-    def onLeft(self):
-        pass
-
-    def onRight(self):
-        pass
-
 class MusicWidgetFocusProxy(TableWidgetFocusProxy):
     def __init__(self, widget, confirmHandler, ledButtonService, musicControl):
         super().__init__(widget, confirmHandler, ledButtonService)
@@ -197,7 +207,7 @@ class MusicWidgetFocusProxy(TableWidgetFocusProxy):
     def getUnderlyingWidgetRowCount(self):
         return self.musicControl.rowCount()
 
-class LanguageLabelFocusProxy(ButtonFocusProxy):
+class LanguageLabelFocusProxy(SimpleInputFocusProxy):
     def __init__(self, widget, ledButtonService, tempLanguageChanger):
         super().__init__(widget, ledButtonService)
         self.tempLanguageChanger = tempLanguageChanger
@@ -210,3 +220,19 @@ class LanguageLabelFocusProxy(ButtonFocusProxy):
 
     def onConfirm(self):
         self.tempLanguageChanger.confirmLanguageChange()
+
+class TextBrowserFocusProxy(SimpleInputFocusProxy):
+    def __init__(self, textBrowser, ledButtonService, musicControl, confirmHandler):
+        super().__init__(textBrowser, ledButtonService)
+
+        self.musicControl = musicControl
+        self.confirmHandler = confirmHandler
+
+    def onLeft(self):
+        self.musicControl.previousGenre()
+
+    def onRight(self):
+        self.musicControl.nextGenre()
+
+    def onConfirm(self):
+        self.confirmHandler()
