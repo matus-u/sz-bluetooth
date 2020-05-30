@@ -42,6 +42,15 @@ class SongModel:
         return len(self.actualSongs)
 
     def reloadSongsWidget(self):
+
+#        if self.isBluetooth():
+#           # self.genreLabelList[0].setText(self.actualGenreList[0])
+#            pix = QtGui.QPixmap(":/images/bluetooth.png")
+#            w = self.genreLabelList[0].width()
+#            h = self.genreLabelList[0].height()
+#            self.genreLabelList[0].setPixmap(pix.scaled(,h))
+#        else:
+#
         self.genreLabelList[0].setText(self.actualGenreList[0])
         self.genreLabelList[1].setText(self.actualGenreList[-2])
         self.genreLabelList[2].setText(self.actualGenreList[-1])
