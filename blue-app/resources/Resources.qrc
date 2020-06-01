@@ -4,8 +4,6 @@
         <file>dynamic-images/HU/fortune-style.qss</file>
         <file>dynamic-images/SK/fortune-style.qss</file>
         <file>arial-black.ttf</file>
-        <file>dynamic-images/HU/coin.png</file>
-        <file>dynamic-images/SK/coin.png</file>
         <file>damaged_device.png</file>
     </qresource>
     <qresource prefix="/images">
@@ -18,5 +16,6 @@
         <file>hungary.gif</file>
         <file>england.gif</file>
         <file>bluetooth.png</file>
+        <file>blue-scan.gif</file>
     </qresource>
 </RCC>

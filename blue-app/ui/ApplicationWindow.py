@@ -217,6 +217,31 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
         self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
 
+        movie = QtGui.QMovie(":/images/blue-scan.gif")
+        self.ui.scanInfoLabel.setMovie(movie)
+        movie.setScaledSize(self.ui.scanInfoLabel.size());
+        movie.start()
+
+        self.ui.infoBrowser.setHtml(self.generateInfoBrowserHtml())
+
+    def generateInfoBrowserHtml(self):
+        return """
+        <html>
+        <body>
+        <center>
+        <p style="
+            font-family:arial;
+            font-size:30px";
+            font-size:30px";
+        >
+        {0} = 10min.
+        </p>
+
+        </center>
+        </body>
+        </html>
+        """.format(AppSettings.actualCoinSettings()[7]*600)
+
     def focusLanguageChange(self):
         self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)]))
 
