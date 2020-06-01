@@ -217,12 +217,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
         self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
 
-        movie = QtGui.QMovie(":/images/blue-scan.gif")
-        self.ui.scanInfoLabel.setMovie(movie)
-        movie.setScaledSize(self.ui.scanInfoLabel.size());
-        movie.start()
-
-        self.ui.infoBrowser.setHtml(self.generateInfoBrowserHtml())
+        self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
 
     def generateInfoBrowserHtml(self):
         return """
@@ -258,9 +253,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 FocusHandler.SimpleInputFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
             ]))
         elif stackIndex == 1:
-            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.infoBrowser, self.ledButtonService, self.musicController, self.onScan)]))
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.stackedWidgetPage1, self.ledButtonService, self.musicController, self.onScan)]))
         elif stackIndex == 2:
-            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.scanInfoLabel)]))
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
+            self.ui.processInfoTitleLabel.setText(self.texts[self.SCANNING_STR])
+            movie = QtGui.QMovie(":/images/blue-scan.gif")
+            self.ui.processInfoLabel.setMovie(movie)
+            movie.setScaledSize(self.ui.processInfoLabel.size());
+            movie.start()
+
         elif stackIndex == 3:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TableWidgetFocusProxy(self.ui.devicesWidget, self.onConnectButton, self.ledButtonService, self.musicController)]))
 

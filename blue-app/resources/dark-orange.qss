@@ -355,9 +355,13 @@ QLabel#leftLanguageLabel,
 QLabel#rightLanguageLabel,
 QLabel#middleLanguageLabel,
 QWidget#stackedWidgetPage0,
+QWidget#stackedWidgetPage3,
 QWidget#stackedWidgetPage1,
 QWidget#stackedWidgetPage2,
-QWidget#stackedWidgetPage3
+QWidget#processInfoLabel,
+QWidget#processInfoTitleLabel,
+QWidget#infoScanLabel,
+QWidget#infoScanBrowser
 {
     background-color: transparent;
 }
@@ -368,8 +372,8 @@ QTableWidget#playQueueWidget,
 QWidget#playQueueTimeFrame,
 QTableWidget#songsWidget,
 QTableWidget#devicesWidget,
-QWidget#scanInfoLabel,
-QWidget#infoBrowser
+QFrame#infoScanFrame,
+QWidget#processInfoWidget
 {
    border-color : #ABABAB; 
    background-color: rgba(0, 0, 0, 65%);
@@ -405,8 +409,8 @@ SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
     padding-left: 2px;
 }
 
-QWidget#scanInfoLabel,
-QWidget#infoBrowser
+QWidget#processInfoWidget,
+QFrame#infoScanFrame
 {
     border: 5px solid #FF7800;
     border-radius: 15;
