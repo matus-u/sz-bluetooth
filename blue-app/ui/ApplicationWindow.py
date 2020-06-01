@@ -73,6 +73,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     TOSS_MONEY_NEEDED = 30
     FIRST_TOSS_INFO = 31
     NO_PRIZES_LEFT = 32
+    SCAN_AGAIN = 33
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
@@ -85,7 +86,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."),
         self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
         self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
-        self.tr("No prizes left, only music available."),
+        self.tr("No prizes left, only music available."), self.tr("SCAN AGAIN...")
         ]
 
     def __init__(self, timerService,
@@ -210,10 +211,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.errorLabel.setVisible(False)
 
         self.tempLanguageChanger = TempLanguageChanger.TempLanguageChanger(self, self.ui.leftLanguageLabel, self.ui.rightLanguageLabel)
-        self.languageFocusHandler = FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)])
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+x"), self, self.focusLanguageChange)
+
         self.tempLanguageChanger.languageChanged.connect(lambda: self.selectStackWidget(self.ui.stackedWidget.currentIndex()))
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
         self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
+
+    def focusLanguageChange(self):
+        self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)]))
 
     def setActiveFocusHandler(self, focusHandler):
         self.activeFocusHandler = focusHandler
@@ -340,18 +345,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onScanFinished(self):
         self.scanData = self.bluetoothService.scan()
-        self.ui.devicesWidget.setRowCount(len(self.scanData))
+        self.ui.devicesWidget.setRowCount(len(self.scanData)+1)
+        self.ui.devicesWidget.setItem(0,0, QtWidgets.QTableWidgetItem(self.texts[self.SCAN_AGAIN]))
         for index, item in enumerate(self.scanData):
-            self.ui.devicesWidget.setItem(index,0, QtWidgets.QTableWidgetItem(str(item[0])))
+            self.ui.devicesWidget.setItem(index+1,0, QtWidgets.QTableWidgetItem(str(item[0])))
 
-        if len(self.scanData) > 0:
-            self.ui.devicesWidget.selectRow(0)
-
-        if len(self.scanData) == 0:
-            self.showStatusInfo(2000, self.texts[self.EMPTY_SCAN], self.ui.infoLabel)
-            self.getActualFocusHandler().setFocus()
-        else:
-            self.getActualFocusHandler().onLeft()
+        self.ui.devicesWidget.selectRow(0)
         self.selectStackWidget(3)
 
     def onScan(self):
@@ -364,14 +363,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtCore.QTimer.singleShot(duration, lambda: label.setText(""))
 
     def onConnectButton(self):
+        if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
+            if self.ui.devicesWidget.selectionModel().selectedRows()[0].row() == 0:
+                self.onScan()
+                return
+
         if self.creditService.getCredit() == 0.0:
             self.showStatusInfo(2000, self.texts[self.INSERT_COIN_STRING], self.ui.infoLabel)
             return
 
         if len(self.ui.devicesWidget.selectionModel().selectedRows()) > 0:
             self.onBackFromBlueButton()
-            macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][1][1:-1]
-            name = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()][0]
+            macAddr = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()-1][1][1:-1]
+            name = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()-1][0]
             self.ui.devicesWidget.clear()
             self.ui.devicesWidget.clearContents()
             code = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))

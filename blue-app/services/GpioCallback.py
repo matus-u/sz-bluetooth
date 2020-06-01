@@ -2,6 +2,33 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+class DoubleButtonHandler(QtCore.QObject):
+    bothClick = QtCore.pyqtSignal()
+    internalCallbackGpio = QtCore.pyqtSignal()
+
+    def __init__(self, parent, gpioService, firstGpioNumber, secondGpioNumber):
+        super().__init__(parent)
+        self.internalCallbackGpio.connect(lambda: self.bothClick.emit(), QtCore.Qt.QueuedConnection)
+        self.buttonAPressed = False
+        self.buttonBPressed = False
+
+        gpioService.registerCallback(firstGpioNumber, gpioService.FALLING, lambda: self.onAChange(True))
+        gpioService.registerCallback(secondGpioNumber, gpioService.FALLING, lambda: self.onBChange(True))
+
+        gpioService.registerCallback(firstGpioNumber, gpioService.RISING, lambda: self.onAChange(False))
+        gpioService.registerCallback(secondGpioNumber, gpioService.RISING, lambda: self.onBChange(False))
+
+    def testBothClick(self):
+        if self.buttonAPressed and self.buttonBPressed:
+            self.internalCallbackGpio.emit()
+
+    def onAChange(self, newState):
+        self.buttonAPressed = newState
+        self.testBothClick()
+
+    def onBChange(self, newState):
+        self.buttonBPressed = newState
+        self.testBothClick()
 
 class GpioCallback(QtCore.QObject):
     callbackGpio = QtCore.pyqtSignal()

@@ -59,3 +59,14 @@ class AppWindowArrowHandler(StandardArrowHandler):
 
         testModeService.testModeEnabled.connect(self.disconnectSignals)
         testModeService.testModeDisabled.connect(self.connectSignals)
+
+    def connectSignals(self):
+        super().connectSignals()
+        self.arrowHandler.leftAndRightClicked.connect(self.onLeftRight)
+
+    def disconnectSignals(self):
+        super().disconnectSignals()
+        self.arrowHandler.leftAndRightClicked.disconnect(self.onLeftRight)
+
+    def onLeftRight(self):
+        self.appWindow.focusLanguageChange()
