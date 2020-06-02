@@ -74,19 +74,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     FIRST_TOSS_INFO = 31
     NO_PRIZES_LEFT = 32
     SCAN_AGAIN = 33
+    INFO_BROWSER_TEXT = 34
 
     def createTrTexts(self):
         return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
         self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
         self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
         self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
-        self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
+            self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
         self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"),
         self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
         self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."),
         self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
         self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
-        self.tr("No prizes left, only music available."), self.tr("SCAN AGAIN...")
+        self.tr("No prizes left, only music available."), self.tr("SCAN AGAIN..."),
+        self.tr("Aktivujte na vasom zariadeni funkciu {} Nastavte viditelnost vaseho zariadenia a stlacte {} pre spustenie skenovania")
         ]
 
     def __init__(self, timerService,
@@ -217,25 +219,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
         self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
 
-        self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
-
     def generateInfoBrowserHtml(self):
         return """
         <html>
-        <body>
-        <center>
-        <p style="
-            font-family:arial;
-            font-size:30px";
-            font-size:30px";
-        >
-        {0} = 10min.
-        </p>
-
-        </center>
+        <body>""" + self.texts[self.INFO_BROWSER_TEXT].format(
+            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />",
+            "<img src=\"qrc:/images/enter.png\" height=\"40\" height=\"40\" />") + """
         </body>
         </html>
-        """.format(AppSettings.actualCoinSettings()[7]*600)
+        """
 
     def focusLanguageChange(self):
         self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)]))
@@ -254,6 +246,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             ]))
         elif stackIndex == 1:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.stackedWidgetPage1, self.ledButtonService, self.musicController, self.onScan)]))
+            self.ui.infoScanLabel.setText("{0} = 10min".format(AppSettings.actualCoinSettings()[7]*600))
+            self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
         elif stackIndex == 2:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
             self.ui.processInfoTitleLabel.setText(self.texts[self.SCANNING_STR])

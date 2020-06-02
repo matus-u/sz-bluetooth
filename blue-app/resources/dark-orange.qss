@@ -372,7 +372,7 @@ QTableWidget#playQueueWidget,
 QWidget#playQueueTimeFrame,
 QTableWidget#songsWidget,
 QTableWidget#devicesWidget,
-QFrame#infoScanFrame,
+QWidget#infoScanWidget,
 QWidget#processInfoWidget
 {
    border-color : #ABABAB; 
@@ -410,7 +410,7 @@ SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
 }
 
 QWidget#processInfoWidget,
-QFrame#infoScanFrame
+QWidget#infoScanWidget
 {
     border: 5px solid #FF7800;
     border-radius: 15;
@@ -492,4 +492,24 @@ QTableWidget#songsWidget {
     outline: 0;
 }
 
+QWidget#processInfoTitleLabel,
+QWidget#infoScanBrowser
+{
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 30px;
+    color: white;
+}
 
+QWidget#infoScanBrowser {
+    margin-left: 25px;
+}
+
+QWidget#infoScanLabel
+{
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 50px;
+    color: blue;
+    /*color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);*/
+}
