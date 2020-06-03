@@ -28,6 +28,9 @@ class SettingsWindow(QtWidgets.QDialog):
         self.setCoinSettings(AppSettings.actualCoinSettings())
         self.ui.coinLockLevel.setValue(AppSettings.actualCoinLockLevel())
 
+        self.ui.availableLanguagesWidget.setColumnWidth(0,250)
+
+
     def setCoinSettings(self,coinSettings):
         self.ui.coin1value.setValue(coinSettings[0])
         self.ui.coin2value.setValue(coinSettings[1])

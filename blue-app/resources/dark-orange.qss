@@ -351,9 +351,7 @@ QWidget#actualNeedFortuneMoney,
 QWidget#coinImgLabel,
 QWidget#serverStateLabel,
 SongTableWidgetImpl *,
-QLabel#leftLanguageLabel,
-QLabel#rightLanguageLabel,
-QLabel#middleLanguageLabel,
+QLabel#languageLabel,
 QWidget#stackedWidgetPage0,
 QWidget#stackedWidgetPage3,
 QWidget#stackedWidgetPage1,
@@ -361,7 +359,8 @@ QWidget#stackedWidgetPage2,
 QWidget#processInfoLabel,
 QWidget#processInfoTitleLabel,
 QWidget#infoScanLabel,
-QWidget#infoScanBrowser
+QWidget#infoScanBrowser,
+QWidget#LanguageSwitcher QLabel
 {
     background-color: transparent;
 }
@@ -373,7 +372,8 @@ QWidget#playQueueTimeFrame,
 QTableWidget#songsWidget,
 QTableWidget#devicesWidget,
 QWidget#infoScanWidget,
-QWidget#processInfoWidget
+QWidget#processInfoWidget,
+QWidget#LanguageSwitcher
 {
    border-color : #ABABAB; 
    background-color: rgba(0, 0, 0, 65%);
@@ -410,7 +410,8 @@ SongTableWidgetImpl[selected=true] QLabel#songNameLabel {
 }
 
 QWidget#processInfoWidget,
-QWidget#infoScanWidget
+QWidget#infoScanWidget,
+QWidget#LanguageSwitcher QLabel#middleLabel:focus
 {
     border: 5px solid #FF7800;
     border-radius: 15;
@@ -424,7 +425,6 @@ QWidget#withdrawMoneyButton:focus,
 QWidget#yesButton:focus,
 QWidget#noButton:focus,
 QWidget#withdrawOkButton:focus,
-QWidget#leftLanguageLabel:focus,
 QWidget#scanInfoLabel:focus,
 QWidget#infoBrowser:focus
 {
@@ -512,4 +512,10 @@ QWidget#infoScanLabel
     font-size: 50px;
     color: white;
     /*color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);*/
+}
+
+QWidget#LanguageSwitcher
+{
+    border: 5px solid white;
+    border-radius: 15px;
 }

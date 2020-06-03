@@ -6,5 +6,6 @@ FORMS += ui/*.ui \
     ui/DamagedDevice.ui \
     ui/TestHw.ui \
     ui/WithdrawAsk.ui \
-    ui/WithdrawInfo.ui
+    ui/WithdrawInfo.ui \
+    ui/LanguageSwitcher.ui
 

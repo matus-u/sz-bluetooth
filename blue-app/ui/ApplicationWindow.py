@@ -32,7 +32,7 @@ from ui import WithdrawInfoWindow
 from ui import DamagedDeviceWindow
 from ui import TestHwWindow
 
-from ui import TempLanguageChanger
+from ui import LanguageSwitcher
 
 from ui.ApplicationWindowHelpers import NotStartSameImmediatellyCheck, AppWindowArrowHandler
 
@@ -212,12 +212,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.arrowHandler = arrowHandler
         self.ui.errorLabel.setVisible(False)
 
-        self.tempLanguageChanger = TempLanguageChanger.TempLanguageChanger(self, self.ui.leftLanguageLabel, self.ui.rightLanguageLabel)
+        self.languageSwitcher = LanguageSwitcher.LanguageSwitcherWidget(self)
+        self.languageSwitcher.languageChanged.connect(lambda language: self.onLanguageChange(language, True))
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+x"), self, self.focusLanguageChange)
 
-        self.tempLanguageChanger.languageChanged.connect(lambda: self.selectStackWidget(self.ui.stackedWidget.currentIndex()))
         self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
         self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
+
+        self.onLanguageChange(AppSettings.actualLanguage())
 
     def generateInfoBrowserHtml(self):
         return """
@@ -229,8 +231,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         </html>
         """
 
+    def onLanguageChange(self, language, selectStackedWidget=False):
+        self.languageSwitcher.setVisible(False)
+        LanguageSwitcher.setLabelMovie(self.ui.languageLabel, language)
+        if selectStackedWidget:
+            self.selectStackWidget(self.ui.stackedWidget.currentIndex())
+
     def focusLanguageChange(self):
-        self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.ui.leftLanguageLabel, self.ledButtonService, self.tempLanguageChanger)]))
+        if not self.languageSwitcher.isVisible():
+            self.languageSwitcher.setVisible(True)
+            self.languageSwitcher.move(200, 160)
+            self.languageSwitcher.refresh()
+            self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.LanguageLabelFocusProxy(self.languageSwitcher.getMainLabel(), self.ledButtonService, self.languageSwitcher)]))
 
     def setActiveFocusHandler(self, focusHandler):
         self.activeFocusHandler = focusHandler
@@ -345,7 +357,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
         self.langBasedSettings.reloadLanguage()
-        self.tempLanguageChanger.reloadWidgets(AppSettings.getCurrentLanguageIndex())
+        self.onLanguageChange(AppSettings.actualLanguage())
 
         self.onFortuneDataChanged()
 

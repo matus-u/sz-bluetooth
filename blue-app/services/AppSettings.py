@@ -20,6 +20,7 @@ class AppSettings:
     LanguageList = ["english","hungarian","slovak"]
     LanguageString = "language"
     TimeZoneString = "timezone"
+    AvailableLanguagesListString = "availableLanguages"
     Translator = QtCore.QTranslator()
 
     CurrencyList = ["EUR","HUF"]
@@ -71,6 +72,10 @@ class AppSettings:
             return f.read()
         except:
             return AppVersion.AppVersion
+
+    @staticmethod
+    def actualAvailableLanguages(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.AvailableLanguagesListString, AppSettings.LanguageList)
 
     @staticmethod
     def actualLanguage(appSettings = None):
@@ -154,6 +159,11 @@ class AppSettings:
         cls.Translator.load(language + ".qm", "./translation")
         app.installTranslator(cls.Translator)
         QtCore.QCoreApplication.processEvents()
+
+    @classmethod
+    def storeLanguage(cls, language):
+        settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
+        settings.setValue(AppSettings.LanguageString, language)
 
     @classmethod
     def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, coinLockLevel):
