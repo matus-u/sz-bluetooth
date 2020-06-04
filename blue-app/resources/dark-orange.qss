@@ -253,7 +253,7 @@ QPlainTextEdit
 
 QCheckBox:disabled
 {
-color: #414141;
+    color: #b1b1b1;
 }
 
 QCheckBox::indicator{

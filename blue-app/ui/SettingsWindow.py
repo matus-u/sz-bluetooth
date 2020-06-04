@@ -16,7 +16,6 @@ class SettingsWindow(QtWidgets.QDialog):
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.onCancelButton)
-        self.ui.languageCombobox.setCurrentIndex(AppSettings.getCurrentLanguageIndex())
         self.ui.timeZoneCombobox.setCurrentIndex(AppSettings.getCurrentTimeZoneIndex())
         self.ui.currencyCombobox.setCurrentIndex(AppSettings.getCurrentCurrencyIndex())
         self.ui.languageCombobox.currentIndexChanged.connect(self.onLanguageComboboxChanged)
@@ -28,8 +27,45 @@ class SettingsWindow(QtWidgets.QDialog):
         self.setCoinSettings(AppSettings.actualCoinSettings())
         self.ui.coinLockLevel.setValue(AppSettings.actualCoinLockLevel())
 
-        self.ui.availableLanguagesWidget.setColumnWidth(0,250)
+        availableLanguages = AppSettings.actualAvailableLanguages()
+        allLanguageList = AppSettings.LanguageList
+        self.ui.availableLanguagesWidget.setRowCount(len(allLanguageList))
+        row = 0
+        self.checkBoxes = []
+        for language in allLanguageList:
+            checkBox = QtWidgets.QCheckBox(language, self)
+            checkBox.setChecked(language in availableLanguages)
+            checkBox.stateChanged.connect(lambda state: self.rePopulageLanguageCombobox())
+            self.checkBoxes.append(checkBox)
+            self.ui.availableLanguagesWidget.setCellWidget(row,0, checkBox)
+            row = row+1
 
+        self.ui.languageCombobox.clear()
+        self.ui.languageCombobox.addItems(availableLanguages)
+        self.ui.languageCombobox.setEditable(False)
+        self.ui.languageCombobox.setCurrentText(AppSettings.actualLanguage())
+        self.enableCheckBoxes()
+
+    def rePopulageLanguageCombobox(self):
+        currentLang = self.ui.languageCombobox.currentText()
+
+        self.ui.languageCombobox.clear()
+        for checkBox in self.checkBoxes:
+            if checkBox.isChecked():
+                self.ui.languageCombobox.addItem(checkBox.text())
+        self.ui.languageCombobox.setEditable(False)
+        self.ui.languageCombobox.setCurrentText(currentLang)
+        self.enableCheckBoxes()
+
+    def enableCheckBoxes(self):
+        for checkBox in self.checkBoxes:
+            if (checkBox.text() == self.ui.languageCombobox.currentText()):
+                checkBox.setEnabled(False)
+            else:
+                checkBox.setEnabled(True)
+
+    def onCheckBoxChange(self, checkbox, state):
+        self.enableCheckBoxes()
 
     def setCoinSettings(self,coinSettings):
         self.ui.coin1value.setValue(coinSettings[0])
@@ -56,7 +92,8 @@ class SettingsWindow(QtWidgets.QDialog):
         ]
 
     def onLanguageComboboxChanged(self, index):
-        AppSettings.loadLanguageByIndex(index)
+        AppSettings._loadLanguage(self.ui.languageCombobox.currentText())
+        self.enableCheckBoxes()
 
     def onOkButton(self):
         if AppSettings.actualCurrency() != AppSettings.currencyStringByIndex(self.ui.currencyCombobox.currentIndex()):
@@ -72,7 +109,8 @@ class SettingsWindow(QtWidgets.QDialog):
                     return
             else:
                 return
-        AppSettings.storeSettings(self.ui.languageCombobox.currentIndex(),
+        AppSettings.storeSettings(self.ui.languageCombobox.currentText(),
+                                  [self.ui.languageCombobox.itemText(i) for i in range(self.ui.languageCombobox.count())],
                                   self.ui.timeZoneCombobox.currentIndex(),
                                   self.ui.currencyCombobox.currentIndex(),
                                   self.getCoinSettingsFromUi(),

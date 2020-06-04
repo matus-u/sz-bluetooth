@@ -503,14 +503,14 @@
     <widget class="QTableWidget" name="availableLanguagesWidget">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>560</x>
        <y>50</y>
-       <width>441</width>
+       <width>291</width>
        <height>221</height>
       </rect>
      </property>
      <property name="columnCount">
-      <number>2</number>
+      <number>1</number>
      </property>
      <attribute name="horizontalHeaderCascadingSectionResizes">
       <bool>true</bool>
@@ -520,6 +520,9 @@
      </attribute>
      <attribute name="horizontalHeaderStretchLastSection">
       <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
      </attribute>
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>30</number>
@@ -532,16 +535,11 @@
        <string>Language</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Enabled</string>
-      </property>
-     </column>
     </widget>
     <widget class="QLabel" name="label_16">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>570</x>
        <y>20</y>
        <width>231</width>
        <height>16</height>
@@ -551,7 +549,7 @@
       <string>Available languages:</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -576,21 +574,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>English</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Hungarian</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Slovak</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>

@@ -17,7 +17,7 @@ class AppSettings:
     SettingsPath = "../blue-app-configs/blue-app.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
     TimeZoneList = ["UTC","Europe/Budapest","Europe/Bratislava","Europe/London"]
-    LanguageList = ["english","hungarian","slovak"]
+    LanguageList = ["english","hungarian","slovak","polish"]
     LanguageString = "language"
     TimeZoneString = "timezone"
     AvailableLanguagesListString = "availableLanguages"
@@ -83,7 +83,7 @@ class AppSettings:
 
     @staticmethod
     def getCurrentLanguageIndex():
-        return AppSettings.LanguageList.index(AppSettings.actualLanguage())
+        return AppSettings.actualAvailableLanguages().index(AppSettings.actualLanguage())
 
     @classmethod
     def restoreLanguage(cls):
@@ -100,10 +100,6 @@ class AppSettings:
     @staticmethod
     def getCurrentTimeZoneIndex():
         return AppSettings.TimeZoneList.index(AppSettings.actualTimeZone())
-
-    @classmethod
-    def loadLanguageByIndex(cls, index):
-        cls._loadLanguage(AppSettings.LanguageList[index])
 
     @staticmethod
     def actualCurrency(appSettings = None):
@@ -166,9 +162,10 @@ class AppSettings:
         settings.setValue(AppSettings.LanguageString, language)
 
     @classmethod
-    def storeSettings(cls, languageIndex, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, coinLockLevel):
+    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, coinLockLevel):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
-        settings.setValue(AppSettings.LanguageString, AppSettings.LanguageList[languageIndex])
+        settings.setValue(AppSettings.LanguageString, language)
+        settings.setValue(AppSettings.AvailableLanguagesListString, availableLanguages)
         settings.setValue(AppSettings.TimeZoneString, AppSettings.TimeZoneList[timeZoneIndex])
 
         if AppSettings.CurrencyList[currencyIndex] != AppSettings.actualCurrency(settings):
