@@ -1,11 +1,11 @@
-RESOURCES += resources/*.qrc
-FORMS += ui/*.ui \
-    ui/SongTableWidget.ui \
-    ui/WheelSettings.ui \
-    ui/FortuneWheel.ui \
-    ui/DamagedDevice.ui \
-    ui/TestHw.ui \
-    ui/WithdrawAsk.ui \
-    ui/WithdrawInfo.ui \
-    ui/LanguageSwitcher.ui
+RESOURCES += compiled-resources/*.qrc
+FORMS += ui-design/*.ui \
+    ui-design/SongTableWidget.ui \
+    ui-design/WheelSettings.ui \
+    ui-design/FortuneWheel.ui \
+    ui-design/DamagedDevice.ui \
+    ui-design/TestHw.ui \
+    ui-design/WithdrawAsk.ui \
+    ui-design/WithdrawInfo.ui \
+    ui-design/LanguageSwitcher.ui
 

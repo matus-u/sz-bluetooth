@@ -40,56 +40,62 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     adminModeLeaveButton = QtCore.pyqtSignal()
 
-    DISCONNECT_STR = 0
-    SCAN_STR = 1
-    CONNECTED_STR = 2
-    CONNECTING_STR = 3
-    CONNECTION_ERR_STR = 4
-    CONNECTION_FAILED_STR = 5
-    SCANNING_STR = 6
-    NO_CREDIT_HEAD = 7
-    NO_CREDIT = 8
-    SECONDS = 9
-    CPU_TEMP = 10
-    INSERT_COIN_STRING = 11
-    WITHDRAW_MONEY_TEXT_HEADER = 12
-    WITHDRAW_MONEY_TEXT_MAIN = 13
-    WITHDRAW_MONEY_TEXT_INFO_HEADER = 14
-    WITHDRAW_MONEY_TEXT_INFO = 15
-    SERVICE_PHONE = 16
-    ADMIN_LEAVE_TXT = 17
-    SONGS = 18
-    PLAYING_FROM_BLUETOOTH = 19
-    NOT_PLAYING = 20
-    EMPTY_SCAN = 21
-    WAIT_WITH_START = 22
-    ADDED_TO_QUEUE = 23
-    CONNECTION_INITIALIZED = 24
-    WIN_PROB_UPDATED = 25
-    PRINT_ERROR = 26
-    LOW_PAPER = 27
-    CONTINUE_WITH_MUSIC = 28
-    TOSS_COUNT = 29
-    TOSS_MONEY_NEEDED = 30
-    FIRST_TOSS_INFO = 31
-    NO_PRIZES_LEFT = 32
-    SCAN_AGAIN = 33
-    INFO_BROWSER_TEXT = 34
+    CONNECTION_FAILED_STR = 0
+    SCANNING_STR = 1
+    SECONDS = 2
+    CPU_TEMP = 3
+    INSERT_COIN_STRING =4
+    WITHDRAW_MONEY_TEXT_HEADER =5
+    WITHDRAW_MONEY_TEXT_MAIN = 6
+    WITHDRAW_MONEY_TEXT_INFO_HEADER = 7
+    WITHDRAW_MONEY_TEXT_INFO = 8
+    SERVICE_PHONE = 9
+    ADMIN_LEAVE_TXT = 10
+    SONGS = 11
+    PLAYING_FROM_BLUETOOTH = 12
+    NOT_PLAYING = 13
+    WAIT_WITH_START = 14
+    ADDED_TO_QUEUE = 15
+    CONNECTION_INITIALIZED = 16
+    WIN_PROB_UPDATED = 17
+    LOW_PAPER = 18
+    CONTINUE_WITH_MUSIC = 19
+    TOSS_COUNT = 20
+    TOSS_MONEY_NEEDED = 21
+    FIRST_TOSS_INFO = 22
+    NO_PRIZES_LEFT = 23
+    SCAN_AGAIN = 24
+    INFO_BROWSER_TEXT = 25
 
     def createTrTexts(self):
-        return [ self.tr("Time to disconnect: {}s"), self.tr("Scan bluetooth network"), self.tr("Connected to the device: "),
-        self.tr("Connecting to the device: "), self.tr("Connection error"), self.tr("Connection with {} failed"), self.tr("Scanninng..."),
-        self.tr("No credit"), self.tr("Zero credit, insert money first please!"), self.tr("seconds"), self.tr("CPU temp: {}"),
-        self.tr("Insert next coin please"), self.tr("Withdraw money?"), self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
-            self.tr("Withdraw succesful."), self.tr("Internal counter was correctly reset."), self.tr("Phone to service: {}"), self.tr("Admin mode remainse for {}s"),
-        self.tr("songs"), self.tr("Playing from bluetooth"), self.tr("Not playing"), self.tr("No bluetooth devices found"), self.tr("Start is possible at least 5s after previous"),
-        self.tr("Bluetooth will be connected at: {} "), self.tr("Connecting to device: {}"), self.tr("Prize counts and probabilities were updated"),
-        self.tr("Print error {}, call service please."), self.tr("Paper will out soon, please insert new one."),
-        self.tr("Continue with music selection."), self.tr("Toss count: {}"), self.tr("To get next toss: {} {} needed"),
-        self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
-        self.tr("No prizes left, only music available."), self.tr("SCAN AGAIN..."),
-        self.tr("Aktivujte na vasom zariadeni funkciu {} Nastavte viditelnost vaseho zariadenia a stlacte {} pre spustenie skenovania")
-        ]
+        return {
+            self.CONNECTION_FAILED_STR : self.tr("Connection with {} failed"),
+            self.SCANNING_STR : self.tr("Scanninng..."),
+            self.SECONDS : self.tr("seconds"),
+            self.CPU_TEMP : self.tr("CPU temp: {}"),
+            self.INSERT_COIN_STRING : self.tr("Insert next coin please"),
+            self.WITHDRAW_MONEY_TEXT_HEADER : self.tr("Withdraw money?"),
+            self.WITHDRAW_MONEY_TEXT_MAIN : self.tr("Withdraw money action requested. It will reset internal counter. Proceed?"),
+            self.WITHDRAW_MONEY_TEXT_INFO_HEADER : self.tr("Withdraw succesful."),
+            self.WITHDRAW_MONEY_TEXT_INFO : self.tr("Internal counter was correctly reset."),
+            self.SERVICE_PHONE : self.tr("Phone to service: {}"),
+            self.ADMIN_LEAVE_TXT : self.tr("Admin mode remainse for {}s"),
+            self.SONGS : self.tr("songs"),
+            self.PLAYING_FROM_BLUETOOTH : self.tr("Playing from bluetooth"),
+            self.NOT_PLAYING : self.tr("Not playing"),
+            self.WAIT_WITH_START : self.tr("Start is possible at least 5s after previous"),
+            self.ADDED_TO_QUEUE : self.tr("Bluetooth will be connected at: {} "),
+            self.CONNECTION_INITIALIZED : self.tr("Connecting to device: {}"),
+            self.WIN_PROB_UPDATED : self.tr("Prize counts and probabilities were updated"),
+            self.LOW_PAPER : self.tr("Paper will out soon, please insert new one."),
+            self.CONTINUE_WITH_MUSIC : self.tr("Continue with music selection."),
+            self.TOSS_COUNT : self.tr("Toss count: {}"),
+            self.TOSS_MONEY_NEEDED : self.tr("To get next toss: {} {} needed"),
+            self.FIRST_TOSS_INFO : self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
+            self.NO_PRIZES_LEFT :  self.tr("No prizes left, only music available."),
+            self.SCAN_AGAIN : self.tr("SCAN AGAIN..."),
+            self.INFO_BROWSER_TEXT : self.tr("Activate funcion {} on your device. Set it to visible and press {} for network scanning."),
+            }
 
     def __init__(self, timerService,
                  moneyTracker,

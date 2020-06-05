@@ -3,102 +3,67 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
-        <source>Time to disconnect: {}s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
-        <source>Scan bluetooth network</source>
-        <translation>Bluetooth berendezések keresése</translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
-        <source>Connected to the device: </source>
-        <translation>Csatlakozva</translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
-        <source>Connecting to the device: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
-        <source>Connection error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
+        <location filename="../ui/ApplicationWindow.py" line="72"/>
         <source>Connection with {} failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Scanninng...</source>
         <translation>keresés ...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
-        <source>No credit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
-        <source>Zero credit, insert money first please!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>seconds</source>
         <translation>másodperc</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>CPU temp: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>Insert next coin please</source>
         <translation>Dobjon még be pénzt</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Withdraw money?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Withdraw succesful.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Internal counter was correctly reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Phone to service: {}</source>
         <translation>Szervisz: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>Admin mode remainse for {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="83"/>
         <source>songs</source>
         <translation>Zene</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="84"/>
         <source>Playing from bluetooth</source>
         <translation>Bluetooth lejátszás</translation>
     </message>
@@ -108,75 +73,65 @@
         <translation>Nem aktív</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
-        <source>No bluetooth devices found</source>
-        <translation>Nincs elérhető BT berendezés</translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="86"/>
         <source>Start is possible at least 5s after previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="87"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="88"/>
         <source>Connecting to device: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="89"/>
         <source>Prize counts and probabilities were updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
-        <source>Print error {}, call service please.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="90"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation>Vigyázz, lassan kifogy a papír a nyomtatóból</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="91"/>
         <source>Continue with music selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="92"/>
         <source>Toss count: {}</source>
         <translation>Ajándéksorsolás: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="93"/>
         <source>To get next toss: {} {} needed</source>
         <translation>Dobjon be {} {} a sorsoláshoz</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="94"/>
         <source>Thank you. You have got access to toss. 
 Select one song and toss will be executed.</source>
         <translation>Köszönöm. Ajándéksorsolás következik. 
 Válasszon ki egy zenét.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>No prizes left, only music available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="96"/>
         <source>SCAN AGAIN...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
-        <source>Aktivujte na vasom zariadeni funkciu {} Nastavte viditelnost vaseho zariadenia a stlacte {} pre spustenie skenovania</source>
+        <location filename="../ui/ApplicationWindow.py" line="97"/>
+        <source>Activate funcion {} on your device. Set it to visible and press {} for network scanning.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
