@@ -21,11 +21,13 @@ prepare-blue-app-dir
 if [ "$1" == "" ];
 then
     echo "Generating package only in zip-packages"
-    zip -r blue-app.zip blue-app
+    zip -r blue-app.zip blue-app # -x "blue-app/resources/compiled/*" -x "blue-app/ui/ui-design/*"
+    #zip -r blue-app.zip blue-app -x "blue-app/resources/compiled/*" -x "blue-app/ui/ui-design/*"
     mkdir -p zip-packages
     mv blue-app.zip zip-packages/
     exit 0
 else
+    shopt -s extglob
     echo "Sending to device: $1"
     ssh root@$1 "rm -rf /media/usbstick/blue-app/"
     scp -r blue-app root@$1:/media/usbstick/
