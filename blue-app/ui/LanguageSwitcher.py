@@ -7,20 +7,21 @@ from services.AppSettings import AppSettings
 
 def getLanguagePixmap(languageString):
     if languageString == "english":
-        return QtGui.QMovie(":/images/england.gif")
+        return QtGui.QPixmap(":/images/england.png")
     if languageString == "hungarian":
-        return QtGui.QMovie(":/images/hungary.gif")
+        return QtGui.QPixmap(":/images/hungary.png")
     if languageString == "slovak":
-        return QtGui.QMovie(":/images/slovak.gif")
+        return QtGui.QPixmap(":/images/slovak.png")
     if languageString == "polish":
-        return QtGui.QMovie(":/images/poland.gif")
+        return QtGui.QPixmap(":/images/poland.png")
 
 def setLabelMovie(label, language):
-    pass
-    #movie = getLanguagePixmap(language)
-    #label.setMovie(movie)
-    #movie.setScaledSize(label.size());
-    #movie.start()
+    pixmap = getLanguagePixmap(language)
+    w = label.width()
+    h = label.height()
+    pixmap = pixmap.scaled(w-10,h-10)
+    label.setPixmap(pixmap)
+    label.setMask(pixmap.mask())
 
 class LanguageSwitcherWidget(QtWidgets.QWidget):
 

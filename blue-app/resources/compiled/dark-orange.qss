@@ -519,3 +519,10 @@ QWidget#LanguageSwitcher
     border: 5px solid white;
     border-radius: 15px;
 }
+
+QWidget#LanguageSwitcher QLabel#leftLabel,
+QWidget#LanguageSwitcher QLabel#rightLabel
+{
+    border: 5px solid transparent;
+    border-radius: 15;
+}

@@ -13,12 +13,12 @@
         <file>checkbox.png</file>
         <file>down_arrow.png</file>
         <file>bg2.jpg</file>
-        <file>slovak.gif</file>
-        <file>poland.gif</file>
-        <file>hungary.gif</file>
-        <file>england.gif</file>
         <file>bluetooth.png</file>
         <file>blue-scan.gif</file>
         <file>enter.png</file>
+        <file>england.png</file>
+        <file>hungary.png</file>
+        <file>poland.png</file>
+        <file>slovak.png</file>
     </qresource>
 </RCC>
