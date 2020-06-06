@@ -16,10 +16,11 @@ def getLanguagePixmap(languageString):
         return QtGui.QMovie(":/images/poland.gif")
 
 def setLabelMovie(label, language):
-    movie = getLanguagePixmap(language)
-    label.setMovie(movie)
-    movie.setScaledSize(label.size());
-    movie.start()
+    pass
+    #movie = getLanguagePixmap(language)
+    #label.setMovie(movie)
+    #movie.setScaledSize(label.size());
+    #movie.start()
 
 class LanguageSwitcherWidget(QtWidgets.QWidget):
 
