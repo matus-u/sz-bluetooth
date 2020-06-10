@@ -94,7 +94,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.FIRST_TOSS_INFO : self.tr("Thank you. You have got access to toss. \nSelect one song and toss will be executed."),
             self.NO_PRIZES_LEFT :  self.tr("No prizes left, only music available."),
             self.SCAN_AGAIN : self.tr("SCAN AGAIN..."),
-            self.INFO_BROWSER_TEXT : self.tr("Activate funcion {} on your device. Set it to visible and press {} for network scanning."),
+            self.INFO_BROWSER_TEXT : self.tr("Activate funcion {} on your device. Set it to visible and press enter for network scanning."),
             }
 
     def __init__(self, timerService,
@@ -231,8 +231,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return """
         <html>
         <body>""" + self.texts[self.INFO_BROWSER_TEXT].format(
-            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />",
-            "<img src=\"qrc:/images/enter.png\" height=\"40\" height=\"40\" />") + """
+            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />") + """
         </body>
         </html>
         """

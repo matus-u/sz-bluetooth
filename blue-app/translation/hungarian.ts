@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="hu" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>ApplicationWindow</name>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="72"/>
         <source>Connection with {} failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Csatlakozás {} hiba</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="73"/>
@@ -20,7 +21,7 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>CPU temp: {}</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU temp: {}</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="76"/>
@@ -30,22 +31,23 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Withdraw money?</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénzkivétel ?</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénzkivétel. Belsõ számlálók nullázódnak. Mehet ?</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Withdraw succesful.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Pénzkivétel OK.</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Internal counter was correctly reset.</source>
-        <translation type="unfinished"></translation>
+        <translation>A bels˜õ számlálók nullázódtak.</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="81"/>
@@ -55,7 +57,7 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>Admin mode remainse for {}s</source>
-        <translation type="unfinished"></translation>
+        <translation>Admin mód {} s</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="83"/>
@@ -75,32 +77,32 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="86"/>
         <source>Start is possible at least 5s after previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Start 5sec múlva lehetséges</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="87"/>
         <source>Bluetooth will be connected at: {} </source>
-        <translation type="unfinished"></translation>
+        <translation>Bluetooth csatlakoztatva {} s </translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="88"/>
         <source>Connecting to device: {}</source>
-        <translation type="unfinished"></translation>
+        <translation>Csatlakozás: {}</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="89"/>
         <source>Prize counts and probabilities were updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajándéklista frissítve</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="90"/>
         <source>Paper will out soon, please insert new one.</source>
-        <translation>Vigyázz, lassan kifogy a papír a nyomtatóból</translation>
+        <translation>Vigyázz, lassan kifogy a papír a nyomtatóból.</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="91"/>
         <source>Continue with music selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zenekiválasztás.</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="92"/>
@@ -122,17 +124,18 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>No prizes left, only music available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nincs több ajándék. Csak zene.</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="96"/>
         <source>SCAN AGAIN...</source>
-        <translation type="unfinished"></translation>
+        <translation>KERESÉS...</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="97"/>
         <source>Activate funcion {} on your device. Set it to visible and press {} for network scanning.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Aktiváld a {} funkciót a telefonon. Legyél látható a {} hálózatban, majd keresd a {} berendezéseket az {}-el.</translatorcomment>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -140,12 +143,12 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/DamagedDevice.py" line="32"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/DamagedDevice.py" line="33"/>
         <source>Device is damaged. Please call the service.</source>
-        <translation type="unfinished"></translation>
+        <translation>A berendezés elromlott. Hívjon szerviszt.</translation>
     </message>
 </context>
 <context>
@@ -153,12 +156,12 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/FortuneWheel.py" line="90"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/FortuneWheel.py" line="91"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
 </context>
 <context>
@@ -166,17 +169,17 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../services/HwErrorHandling.py" line="35"/>
         <source>Coin machine corrupted, call service please.</source>
-        <translation type="unfinished"></translation>
+        <translation>Érmevizsgáló elromlott. Hívjon szerviszt.</translation>
     </message>
     <message>
         <location filename="../services/HwErrorHandling.py" line="38"/>
         <source>Printer machine corrupted, call service please.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyomtató elromlott, hívjon szerviszt.</translation>
     </message>
     <message>
         <location filename="../services/HwErrorHandling.py" line="41"/>
         <source>No paper. Printer machine cannot operate, please insert paper.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kifogyott a papír. Nyomtató nem mûködik. Hívjon szerviszt.</translation>
     </message>
 </context>
 <context>
@@ -184,7 +187,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/LanguageSwitcher.py" line="54"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Alak</translation>
     </message>
 </context>
 <context>
@@ -192,12 +195,12 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/MainWindow.py" line="560"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Fõ ablak</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="566"/>
         <source>Admin settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Admin beállítások</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="562"/>
@@ -212,17 +215,17 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/MainWindow.py" line="565"/>
         <source>Withdraw money</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénzkivétel</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="572"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Csatlakozás megszûnt</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="569"/>
         <source>Leave admin mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Kilépés az Adminból</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="567"/>
@@ -232,32 +235,32 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/MainWindow.py" line="571"/>
         <source>Add credit</source>
-        <translation type="unfinished"></translation>
+        <translation>Kredit</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="573"/>
         <source>CpuTemp:</source>
-        <translation type="unfinished"></translation>
+        <translation>CpuTemp:</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="564"/>
         <source>Time of playqueue:</source>
-        <translation>Lejatszási idő</translation>
+        <translation>Lejatszási idő:</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="568"/>
         <source>Wheel settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerencsekerék beállítás</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="570"/>
         <source>Test menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Teszt menu</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="561"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Text</translation>
     </message>
 </context>
 <context>
@@ -280,167 +283,167 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/Settings.py" line="301"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="313"/>
         <source>Time zone selection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Idõzóna választás:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="302"/>
         <source>ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="303"/>
         <source>cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="306"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="307"/>
         <source>Europe/Budapest</source>
-        <translation type="unfinished"></translation>
+        <translation>Europe/Budapest</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="308"/>
         <source>Europe/Bratislava</source>
-        <translation type="unfinished"></translation>
+        <translation>Europe/Bratislava</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="309"/>
         <source>Europe/London</source>
-        <translation type="unfinished"></translation>
+        <translation>Europe/London</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="316"/>
         <source>Currency:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénznem:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="314"/>
         <source>EUR</source>
-        <translation type="unfinished"></translation>
+        <translation>EUR</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="315"/>
         <source>HUF</source>
-        <translation type="unfinished"></translation>
+        <translation>HUF</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="319"/>
         <source>COIN 3:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 3:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="320"/>
         <source>COIN 4:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 4:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="321"/>
         <source>COIN 5:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 5:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="322"/>
         <source>COIN 6:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 6:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="323"/>
         <source>CPP:</source>
-        <translation type="unfinished"></translation>
+        <translation>CPP:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="324"/>
         <source>COIN 1:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 1:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="325"/>
         <source>COIN 2:</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉRME 2:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="326"/>
         <source>1s of bluetooth costs:</source>
-        <translation type="unfinished"></translation>
+        <translation>1s blueotooth ára:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="327"/>
         <source>One song costs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy zene ára:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="317"/>
         <source>Money tracking server address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerver címe:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="304"/>
         <source>Bluetooth enabled:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bluetooth megengedve:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="305"/>
         <source>Song times visible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zene idejének ábrázolása:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="310"/>
         <source>Genre based</source>
-        <translation type="unfinished"></translation>
+        <translation>Zsáner</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="311"/>
         <source>Alphabetical</source>
-        <translation type="unfinished"></translation>
+        <translation>ABC sorrend</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="312"/>
         <source>View type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Listázás típusa:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="318"/>
         <source>General settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Fõ beállítások</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="328"/>
         <source>Coin machine locked at:</source>
-        <translation type="unfinished"></translation>
+        <translation>Érmevizsgáló lezár:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="329"/>
         <source>Money settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénzbeállítás</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="331"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyelv</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="332"/>
         <source>Available languages:</source>
-        <translation type="unfinished"></translation>
+        <translation>Beállítható hangok:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="333"/>
         <source>Actual selected language</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiválasztott nyelv</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="334"/>
         <source>Language settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyelvbeállítás</translation>
     </message>
 </context>
 <context>
@@ -448,22 +451,22 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../ui/SettingsWindow.py" line="100"/>
         <source>Currency has changed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénznem megváltozott!</translation>
     </message>
     <message>
         <location filename="../ui/SettingsWindow.py" line="100"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>A Valuta változtatása törli a belsõ változókat, mehet ?</translation>
     </message>
     <message>
         <location filename="../ui/SettingsWindow.py" line="103"/>
         <source>Currency is goin to change!</source>
-        <translation type="unfinished"></translation>
+        <translation>Pénznemváltoztatás!</translation>
     </message>
     <message>
         <location filename="../ui/SettingsWindow.py" line="103"/>
         <source>Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehet?</translation>
     </message>
 </context>
 <context>
@@ -471,17 +474,17 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/SongTableWidget.py" line="56"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Alak</translation>
     </message>
     <message>
         <location filename="../generated/SongTableWidget.py" line="57"/>
         <source>songName</source>
-        <translation type="unfinished"></translation>
+        <translation>Zene név</translation>
     </message>
     <message>
         <location filename="../generated/SongTableWidget.py" line="58"/>
         <source>00:00</source>
-        <translation type="unfinished"></translation>
+        <translation>00:00</translation>
     </message>
 </context>
 <context>
@@ -489,162 +492,162 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/TestHw.py" line="182"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="183"/>
         <source>Test printer</source>
-        <translation type="unfinished"></translation>
+        <translation>Printer teszt</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="184"/>
         <source>Test led</source>
-        <translation type="unfinished"></translation>
+        <translation>Led teszt</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="185"/>
         <source>Test sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Zene teszt</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="205"/>
         <source>Coin 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 1</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="265"/>
         <source>New Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Új sor</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="199"/>
         <source>Coin machine name</source>
-        <translation type="unfinished"></translation>
+        <translation>Érmevizsgáló neve</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="201"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Darab</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="283"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="209"/>
         <source>Coin 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 2</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="213"/>
         <source>Coin 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 3</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="217"/>
         <source>Coin 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 4</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="221"/>
         <source>Coin 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 5</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="225"/>
         <source>Coin 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Érme 6</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="229"/>
         <source>CPP 0</source>
-        <translation type="unfinished"></translation>
+        <translation>CPP 0</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="234"/>
         <source>Button name</source>
-        <translation type="unfinished"></translation>
+        <translation>Button neve</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="269"/>
         <source>Click count</source>
-        <translation type="unfinished"></translation>
+        <translation>Click számláló</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="240"/>
         <source>Button Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Bal gomb</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="244"/>
         <source>Button Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Jobb gomb</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="248"/>
         <source>Button Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Fol gomb</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="252"/>
         <source>Button Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Le gomb</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="256"/>
         <source>Button Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Bluetooth jóváhagyás</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="267"/>
         <source>Remove control button</source>
-        <translation type="unfinished"></translation>
+        <translation>Távirányító törlõ gomb</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="273"/>
         <source>Volume up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hangerõ föl</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="277"/>
         <source>Volume down</source>
-        <translation type="unfinished"></translation>
+        <translation>Hangerõ le</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="281"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Csönd</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="285"/>
         <source>Remote control test:</source>
-        <translation type="unfinished"></translation>
+        <translation>Távirányító teszt:</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="286"/>
         <source>Coin machine test:</source>
-        <translation type="unfinished"></translation>
+        <translation>Érmevizsgáló teszt:</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="287"/>
         <source>Button test:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gomb teszt:</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="288"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezár</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="289"/>
         <source>Test ventilator</source>
-        <translation type="unfinished"></translation>
+        <translation>Ventilátor teszt</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="290"/>
         <source>Test fortune wheel</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerencsekerék teszt</translation>
     </message>
 </context>
 <context>
@@ -652,77 +655,77 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/WheelSettings.py" line="120"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="121"/>
         <source>ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="122"/>
         <source>cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="123"/>
         <source>Wheel of fortune enabled:</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerencsekerék megengedése:</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="124"/>
         <source>Money toss level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorsoláshoz szükséges:</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="126"/>
         <source>Prize number</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajándék száma</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="128"/>
         <source>Cost</source>
-        <translation type="unfinished"></translation>
+        <translation>Ár</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="130"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Darab</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="132"/>
         <source>Probability</source>
-        <translation type="unfinished"></translation>
+        <translation>Valószinûség</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="134"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Név</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="135"/>
         <source>Print descriptin ticket (table)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyomtató elromlott, hívjon szerviszt</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="136"/>
         <source>Expected earnings:</source>
-        <translation type="unfinished"></translation>
+        <translation>Várható nyeremény:</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="137"/>
         <source>Total cost:</source>
-        <translation type="unfinished"></translation>
+        <translation>Total ár:</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="138"/>
         <source>Left prizes cost:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maradék ajándékok ára:</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="139"/>
         <source>Ticket counter:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyomtatás számláló:</translation>
     </message>
 </context>
 <context>
@@ -730,37 +733,37 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/WifiSettings.py" line="83"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="84"/>
         <source>cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="85"/>
         <source>ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="86"/>
         <source>Scan wireless networks</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi hálózat keresése</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="87"/>
         <source>Wireless password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi jelszó:</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="88"/>
         <source>Wireless SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi SID:</translation>
     </message>
     <message>
         <location filename="../generated/WifiSettings.py" line="89"/>
         <source>Enable wireless:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi megengedés:</translation>
     </message>
 </context>
 <context>
@@ -768,22 +771,22 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/WithdrawAsk.py" line="31"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/WithdrawAsk.py" line="32"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Text</translation>
     </message>
     <message>
         <location filename="../generated/WithdrawAsk.py" line="33"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Igen</translation>
     </message>
     <message>
         <location filename="../generated/WithdrawAsk.py" line="34"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem</translation>
     </message>
 </context>
 <context>
@@ -791,17 +794,17 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/WithdrawInfo.py" line="28"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialógus</translation>
     </message>
     <message>
         <location filename="../generated/WithdrawInfo.py" line="29"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Text</translation>
     </message>
     <message>
         <location filename="../generated/WithdrawInfo.py" line="30"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 </TS>
