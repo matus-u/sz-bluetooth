@@ -54,7 +54,7 @@
           <item>
            <widget class="QLabel" name="languageLabel">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -228,7 +228,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="stackedWidgetPage0">
            <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -371,7 +371,7 @@
             </property>
             <item>
              <widget class="QWidget" name="processInfoWidget" native="true">
-              <layout class="QVBoxLayout" name="verticalLayout_16">
+              <layout class="QVBoxLayout" name="verticalLayout_16" stretch="1,9">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -389,6 +389,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="processInfoTitleLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
