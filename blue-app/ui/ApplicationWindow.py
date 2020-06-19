@@ -477,6 +477,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             newTexts = self.createTrTexts()
             self.texts = newTexts
             self.ui.retranslateUi(self)
+            self.updateCreditLabel()
+            self.onFortuneDataChanged()
+            self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
+            if self.ui.errorLabel.isVisible():
+                self.showError(self.texts[self.LOW_PAPER])
+
         super(ApplicationWindow, self).changeEvent(event)
 
     def cleanup(self):
