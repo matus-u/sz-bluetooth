@@ -23,3 +23,10 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
     def onTimeout(self):
         self.actualStatus.emit("S=0,0,0,0,0,0,0021")
 
+
+    def storePersistentCredit(self, value):
+        print ("STORING " + str(value))
+
+    def readPersistentValue(self):
+        print ("READING")
+        return 10

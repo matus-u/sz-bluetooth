@@ -7,6 +7,7 @@ from services.LoggingService import LoggingService
 import os
 import time
 import sys, serial
+import struct
 
 class CoinProtocolStatusObject(TimerService.TimerStatusObject):
 
@@ -56,3 +57,41 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
         except:
             LoggingService.getLogger().info("CoinProtocolStatusObject: onTimeout: CPU communication error!")
             self.serialError.emit()
+
+    def storePersistentCredit(self, value):
+        creditBytes = bytearray(struct.pack('d', value))
+
+        s = serial.Serial('/dev/ttyS3', baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
+        s.write(b"U@ff00K?SS\r\n")
+        serialString = s.read(54)[8:-6]
+        byteArray = bytearray.fromhex(serialString.decode())
+        for i in range(0,8):
+            byteArray[i] = creditBytes[i]
+
+        su = 0
+        for x in byteArray:
+            su = su+x
+            su = su % 256
+        byteArray.append(su)
+
+        toWrite = "U@ff00K="+byteArray.hex()+"SS\r\n"
+        s.write(toWrite.encode())
+        print (s.readline())
+        s.close()
+
+
+    def readPersistentValue(self):
+        creditBytes = []
+
+        s = serial.Serial('/dev/ttyS3', baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
+        s.write(b"U@ff00K?SS\r\n")
+
+        serialString = s.read(54)[8:-6]
+        s.close()
+
+        byteArray = bytearray.fromhex(serialString.decode("utf-8"))
+        for i in range(0,8):
+            creditBytes.append(byteArray[i])
+        return struct.unpack('d', bytes(creditBytes))[0]
+
+

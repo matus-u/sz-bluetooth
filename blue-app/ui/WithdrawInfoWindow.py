@@ -20,7 +20,7 @@ class WithdrawInfoWindow(QtWidgets.QDialog):
         self.ui.withdrawOkButton.clicked.connect(self.onOkButton)
 
         self.mainFocusHandler = FocusHandler.InputHandler([
-            FocusHandler.ButtonFocusProxy(self.ui.withdrawOkButton, ledButtonService),
+            FocusHandler.SimpleInputFocusProxy(self.ui.withdrawOkButton, ledButtonService),
         ])
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.mainFocusHandler.onLeft())

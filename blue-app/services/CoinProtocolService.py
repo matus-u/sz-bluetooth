@@ -16,6 +16,7 @@ else:
 class CoinProtocolService(QtCore.QObject):
     actualStatus = QtCore.pyqtSignal(int, int)
     coinMachineLockRequest = QtCore.pyqtSignal(bool)
+    storeRequest = QtCore.pyqtSignal(float)
 
     def __init__(self, hwErrorHandler):
         super().__init__()
@@ -24,11 +25,19 @@ class CoinProtocolService(QtCore.QObject):
         self.thread = QtCore.QThread()
         self.thread.start()
         self.statusObject = CoinProtocol.CoinProtocolStatusObject(hwErrorHandler)
+        self.startCreditValue = self.statusObject.readPersistentValue()
         self.statusObject.actualStatus.connect(lambda x: self.onCoinStatus(x), QtCore.Qt.QueuedConnection)
         self.statusObject.coinMachineLockStatus.connect(lambda x: self.onCoinMachineLockStatus(x), QtCore.Qt.QueuedConnection)
         self.coinMachineLockRequest.connect(lambda x: self.statusObject.coinMachineLockSlot(x), QtCore.Qt.QueuedConnection)
+        self.storeRequest.connect(lambda x: self.statusObject.storePersistentCredit(x), QtCore.Qt.QueuedConnection)
         TimerService.addTimerWorker(self.statusObject, self.thread)
         self.statusObject.start()
+
+    def getStartCreditValue(self):
+        return self.startCreditValue
+
+    def storePersistentCreditValue(self, value):
+        return self.storeRequest.emit(value)
 
     def lockCoinMachine(self, toLock):
         self.coinMachineLockRequest.emit(toLock)

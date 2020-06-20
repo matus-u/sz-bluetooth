@@ -48,6 +48,7 @@ class CreditService(QtCore.QObject):
 
         testModeService.testModeEnabled.connect(self.disConnectActualStatus)
         testModeService.testModeDisabled.connect(self.connectActualStatus)
+        self.credit = self.coinService.getStartCreditValue()
         self.connectActualStatus()
 
         self.moneyLevelCounter = 0
@@ -69,6 +70,9 @@ class CreditService(QtCore.QObject):
     def changeCredit(self, value):
         self.credit = round (self.credit + round(value, 2), 2)
         self.creditChanged.emit(value)
+
+        if value != 0:
+            self.coinService.storePersistentCreditValue(self.credit)
 
         self.checkCoinLockLevel()
 

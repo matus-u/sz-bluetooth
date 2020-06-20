@@ -20,8 +20,8 @@ class WithdrawAskWindow(QtWidgets.QDialog):
         self.ui.noButton.clicked.connect(self.onNoButton)
 
         self.mainFocusHandler = FocusHandler.InputHandler([
-            FocusHandler.ButtonFocusProxy(self.ui.noButton, ledButtonService),
-            FocusHandler.ButtonFocusProxy(self.ui.yesButton, ledButtonService)
+            FocusHandler.SimpleInputFocusProxy(self.ui.noButton, ledButtonService),
+            FocusHandler.SimpleInputFocusProxy(self.ui.yesButton, ledButtonService)
         ])
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.mainFocusHandler.onLeft())

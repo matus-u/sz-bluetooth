@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="hu" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>ApplicationWindow</name>
     <message>
@@ -132,7 +133,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="97"/>
         <source>Activate funcion {} on your device. Set it to visible and press enter for network scanning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiváld a {} funkciót a telefonon. Legyél látható a hálózatban, majd keresd a berendezéseket az enter-el.</translation>
     </message>
 </context>
 <context>
