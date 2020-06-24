@@ -12,12 +12,14 @@ class LangBasedSettings:
         self.lang = AppSettings.actualLanguage()
 
     def getLangBasedQssString(self):
+        self.reloadLanguage()
         if (self.lang) == AppSettings.LanguageList[1]:
             return QtCore.QFile(":/dynamic-images/HU/fortune-style.qss")
 
         return QtCore.QFile(":/dynamic-images/SK/fortune-style.qss")
 
     def getLangBasedCoinImage(self):
+        self.reloadLanguage()
         if (self.lang) == AppSettings.LanguageList[1]:
             return QtGui.QPixmap(":/dynamic-images/HU/coin.png")
 
