@@ -267,7 +267,7 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
         <location filename="../services/PrinterService.py" line="221"/>
         <source>Thank you for playing!
 </source>
-        <translation>Vďaka za prehranie hudby!
+        <translation>Dakujeme za hru!
 </translation>
     </message>
     <message>
@@ -530,7 +530,7 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
     <message>
         <location filename="../generated/TestHw.py" line="283"/>
         <source>0</source>
-        <translation>é</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="209"/>
