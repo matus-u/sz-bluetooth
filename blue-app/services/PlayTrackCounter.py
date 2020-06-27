@@ -2,9 +2,11 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+from services import PathSettings
+
 class PlayTrackCounter(QtCore.QObject):
 
-    SettingsPath = "../blue-app-configs/track-counter.conf"
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/track-counter.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     Counts = "Counts"

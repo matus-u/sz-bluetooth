@@ -3,13 +3,14 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.LoggingService import LoggingService
+from services import PathSettings
 
 import json
 import random
 import copy
 
 class WheelFortuneService(QtCore.QObject):
-    SettingsPath = "../blue-app-configs/wheel-fortune.conf"
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/wheel-fortune.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     Enabled = "Enabled"

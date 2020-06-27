@@ -1,6 +1,9 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from PyQt5 import QtCore
+
+from services import PathSettings
 
 class AppSettingsNotifier(QtCore.QObject):
 
@@ -14,7 +17,7 @@ class AppSettingsNotifier(QtCore.QObject):
 
 
 class AppSettings:
-    SettingsPath = "../blue-app-configs/blue-app.conf"
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/blue-app.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
     TimeZoneList = ["UTC","Europe/Budapest","Europe/Bratislava","Europe/London"]
     LanguageList = ["english","hungarian","slovak","polish"]
@@ -26,7 +29,7 @@ class AppSettings:
     CurrencyList = ["EUR","HUF"]
     CurrencyString = "currency"
 
-    WirelessSettingsPath = "../blue-app-configs/wireless.conf"
+    WirelessSettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/wireless.conf"
     WirelessEnabledString = "Enabled"
     SSIDString = "SSID"
     WirelessPassString = "WirelessPass"

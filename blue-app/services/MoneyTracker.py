@@ -4,9 +4,10 @@ from PyQt5 import QtCore
 
 from services.LoggingService import LoggingService
 from datetime import date, timedelta
+from services import PathSettings
 
 class MoneyTracker(QtCore.QObject):
-    SettingsPath = "../blue-app-configs/money-tracking.conf"
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/money-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     FromLastWithdrawCounter = "FromLastWithdrawCounter"

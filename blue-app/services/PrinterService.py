@@ -11,6 +11,8 @@ from services.HwErrorHandling import HwErrorHandling
 import random
 import string
 
+from services import PathSettings
+
 def randomString(stringLength):
     letters = string.ascii_letters
     return ''.join(random.choice(letters) for i in range(stringLength))
@@ -25,7 +27,7 @@ class PrintingService(QtCore.QObject):
     printStatusUpdated = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
 
-    SettingsPath = "../blue-app-configs/print-tracking.conf"
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/print-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
 
     TicketCounter = "TicketCounter"

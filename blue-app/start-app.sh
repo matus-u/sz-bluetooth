@@ -13,5 +13,9 @@ fi
 kill -9 $(pidof -x logger-remote.py)
 scripts/./logger-remote.py "[$MAC]" "$(cat ../blue-app-configs/blue-app.conf  | grep MoneyServer | cut -f 2 -d =)" &
 
+cd ..
+cp -r blue-app /tmp/
+cd /tmp/blue-app
+
 export LANG=C.UTF-8
 python3 Main.py "[$MAC]"
