@@ -30,8 +30,8 @@ class TestHwWindow(QtWidgets.QDialog):
         volumeService.signalVolumeDown.connect(lambda: self.updateRemoveControllerTableWidget(1), QtCore.Qt.QueuedConnection)
         volumeService.signalMute.connect(lambda: self.updateRemoveControllerTableWidget(2), QtCore.Qt.QueuedConnection)
 
-        arrowHandler.leftClicked.connect(lambda: self.updateButtonTestTableWidget(0))
-        arrowHandler.rightClicked.connect(lambda: self.updateButtonTestTableWidget(1))
+        arrowHandler.rightClicked.connect(lambda: self.updateButtonTestTableWidget(0))
+        arrowHandler.leftClicked.connect(lambda: self.updateButtonTestTableWidget(1))
         arrowHandler.upClicked.connect(lambda: self.updateButtonTestTableWidget(2))
         arrowHandler.downClicked.connect(lambda: self.updateButtonTestTableWidget(3))
         arrowHandler.confirmClicked.connect(lambda: self.updateButtonTestTableWidget(4))

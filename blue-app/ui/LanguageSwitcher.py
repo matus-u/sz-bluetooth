@@ -58,9 +58,9 @@ class LanguageSwitcherWidget(QtWidgets.QWidget):
         return langList[index-1]
 
     def reloadWidgets(self, middleIndex):
-        setLabelMovie(self.ui.leftLabel, self.getPreviousLanguage(middleIndex))
+        setLabelMovie(self.ui.leftLabel, self.getNextLanguage(middleIndex))
         setLabelMovie(self.ui.middleLabel, self.getLanguage(middleIndex))
-        setLabelMovie(self.ui.rightLabel, self.getNextLanguage(middleIndex))
+        setLabelMovie(self.ui.rightLabel, self.getPreviousLanguage(middleIndex))
         self.index = middleIndex
 
     def moveLanguageLeft(self):

@@ -703,7 +703,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/WheelSettings.py" line="135"/>
         <source>Print descriptin ticket (table)</source>
-        <translation>Nyomtató elromlott, hívjon szerviszt</translation>
+        <translation>Inventura nyomtatás</translation>
     </message>
     <message>
         <location filename="../generated/WheelSettings.py" line="136"/>

@@ -575,27 +575,27 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
     <message>
         <location filename="../generated/TestHw.py" line="240"/>
         <source>Button Left</source>
-        <translation>Talčidlo vľavo</translation>
+        <translation>Tlačidlo vľavo</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="244"/>
         <source>Button Right</source>
-        <translation>Talčidlo vpravo</translation>
+        <translation>Tlačidlo vpravo</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="248"/>
         <source>Button Up</source>
-        <translation>Talčidlo hore</translation>
+        <translation>Tlačidlo hore</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="252"/>
         <source>Button Down</source>
-        <translation>Talčidlo dloe</translation>
+        <translation>Tlačidlo dloe</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="256"/>
         <source>Button Confirm</source>
-        <translation>Talčidlo enter</translation>
+        <translation>Tlačidlo enter</translation>
     </message>
     <message>
         <location filename="../generated/TestHw.py" line="267"/>
