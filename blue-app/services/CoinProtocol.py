@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from services import TimerService
 from services.LoggingService import LoggingService
+from services.HwErrorHandling import HwErrorHandling
 import os
 import time
 import sys, serial

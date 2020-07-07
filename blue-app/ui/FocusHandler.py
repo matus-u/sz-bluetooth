@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from services.LedButtonService import LedButtonService
 from services.GpioCallback import GpioCallback
 from services.GpioCallback import GpioCallbackContinous
+from services.GpioCallback import GpioTimedCallback
 from services.GpioCallback import DoubleButtonHandler
 
 from collections import deque
@@ -17,6 +18,7 @@ class ArrowHandler(QtCore.QObject):
     upClicked = QtCore.pyqtSignal()
     confirmClicked = QtCore.pyqtSignal()
     leftAndRightClicked = QtCore.pyqtSignal()
+    remoteClicked = QtCore.pyqtSignal()
 
     def connectGpioContinous(self, gpioService, num, contTime, callback):
         gpioCall = GpioCallbackContinous(self, num, contTime, gpioService)
@@ -36,6 +38,9 @@ class ArrowHandler(QtCore.QObject):
 
         gpioBothCall = DoubleButtonHandler(self, gpioService, 29, 31)
         gpioBothCall.bothClick.connect(lambda: self.leftAndRightClicked.emit())
+
+        gpioTimedCallback = GpioTimedCallback(self, 24, 6000, gpioService)
+        gpioTimedCallback.callbackGpio.connect(lambda: self.remoteClicked.emit())
 
 class InputHandler(QtCore.QObject):
     def __init__(self, listOfProxies):

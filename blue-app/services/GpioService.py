@@ -48,6 +48,7 @@ class GpioService(TimerService.TimerStatusObject):
         super().__init__(2)
         LoggingService.getLogger().info("GPIO - INIT")
         GPIO.setmode(orangepi.pc.BOARD)
+        GPIO.setup(24, GPIO.IN)
         GPIO.setup(28, GPIO.IN)
         GPIO.setup(29, GPIO.IN)
         GPIO.setup(31, GPIO.IN)
@@ -63,6 +64,7 @@ class GpioService(TimerService.TimerStatusObject):
 
 
         self.gpioHandlers = {
+            24: GpioHandler(24),
             28: GpioHandler(28),
             29: GpioHandler(29),
             31: GpioHandler(31),

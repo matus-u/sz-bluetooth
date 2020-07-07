@@ -230,6 +230,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.processInfoLabel.setMovie(self.movie)
         self.movie.setScaledSize(self.ui.processInfoLabel.size());
 
+        self.arrowHandler.remoteClicked.connect(self.creditService.clearCredit)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
+
     def generateInfoBrowserHtml(self):
         return """
         <html>

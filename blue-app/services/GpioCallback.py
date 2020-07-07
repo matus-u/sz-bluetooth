@@ -70,3 +70,33 @@ class GpioCallbackContinous(QtCore.QObject):
 
     def onLowLevelGpioDown(self):
         self.fallingGpio.emit()
+
+class GpioTimedCallback(QtCore.QObject):
+
+    callbackGpio = QtCore.pyqtSignal()
+    risingGpio = QtCore.pyqtSignal()
+    fallingGpio = QtCore.pyqtSignal()
+
+    def __init__(self, parent, number, timeout, gpioService):
+        super().__init__(parent)
+        self.gpioTimer = QtCore.QTimer(self)
+        self.gpioTimer.setSingleShot(True)
+        self.timeout = timeout
+
+        self.risingGpio.connect(lambda: self.gpioTimer.stop(), QtCore.Qt.QueuedConnection)
+        self.fallingGpio.connect(lambda: self.gpioTimer.start(self.timeout), QtCore.Qt.QueuedConnection)
+
+        gpioService.registerCallback(number, gpioService.FALLING, self.onLowLevelGpioUp)
+        gpioService.registerCallback(number, gpioService.RISING, self.onLowLevelGpioDown)
+
+        self.gpioTimer.timeout.connect(self.onTimeout)
+
+    def onTimeout(self):
+        self.callbackGpio.emit()
+        self.gpioTimer.stop()
+
+    def onLowLevelGpioUp(self):
+        self.risingGpio.emit()
+
+    def onLowLevelGpioDown(self):
+        self.fallingGpio.emit()
