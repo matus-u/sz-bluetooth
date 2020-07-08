@@ -7,6 +7,7 @@
         <file>damaged_device.png</file>
         <file>dynamic-images/HU/coin.png</file>
         <file>dynamic-images/SK/coin.png</file>
+        <file>dynamic-images/EN/fortune-style.qss</file>
     </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>

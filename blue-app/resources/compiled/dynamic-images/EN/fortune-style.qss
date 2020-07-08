@@ -1,0 +1,25 @@
+QWidget#timeCounterWidget
+{
+    border-image: url('./resources/dynamic-images/EN/get_ready.jpg') 0 0 0 0 stretch stretch; 
+}
+
+QWidget#fortuneTryWidget
+{
+    border-image: url('./resources/dynamic-images/EN/ures.jpg') 0 0 0 0 stretch stretch; 
+}
+
+QWidget#noWinWidget
+{
+    border-image: url('./resources/dynamic-images/EN/prehral_si.jpg') 0 0 0 0 stretch stretch; 
+}
+
+QWidget#winWidget
+{
+    border-image: url('./resources/dynamic-images/EN/vyhral_si.jpg') 0 0 0 0 stretch stretch; 
+}
+
+QWidget#timeCounterLabel 
+{
+    background-color: transparent;
+    font-size: 150px;
+}
