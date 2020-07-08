@@ -28,10 +28,10 @@ class CoinProtocolService(QtCore.QObject):
         self.startCreditValue = self.statusObject.readPersistentValue()
         self.statusObject.actualStatus.connect(lambda x: self.onCoinStatus(x), QtCore.Qt.QueuedConnection)
         self.statusObject.coinMachineLockStatus.connect(lambda x: self.onCoinMachineLockStatus(x), QtCore.Qt.QueuedConnection)
-        self.coinMachineLockRequest.connect(lambda x: self.statusObject.coinMachineLockSlot(x), QtCore.Qt.QueuedConnection)
-        self.storeRequest.connect(lambda x: self.statusObject.storePersistentCredit(x), QtCore.Qt.QueuedConnection)
         TimerService.addTimerWorker(self.statusObject, self.thread)
         self.statusObject.start()
+        self.coinMachineLockRequest.connect(self.statusObject.coinMachineLockSlot, QtCore.Qt.QueuedConnection)
+        self.storeRequest.connect(self.statusObject.storePersistentCredit, QtCore.Qt.QueuedConnection)
 
     def getStartCreditValue(self):
         return self.startCreditValue

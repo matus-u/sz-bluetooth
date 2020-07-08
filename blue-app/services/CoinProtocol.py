@@ -77,7 +77,7 @@ class CoinProtocolStatusObject(TimerService.TimerStatusObject):
 
         toWrite = "U@ff00K="+byteArray.hex()+"SS\r\n"
         s.write(toWrite.encode())
-        print (s.readline())
+        s.readline()
         s.close()
 
 
