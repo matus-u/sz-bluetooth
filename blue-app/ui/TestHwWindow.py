@@ -32,8 +32,8 @@ class TestHwWindow(QtWidgets.QDialog):
 
         arrowHandler.rightClicked.connect(lambda: self.updateButtonTestTableWidget(0))
         arrowHandler.leftClicked.connect(lambda: self.updateButtonTestTableWidget(1))
-        arrowHandler.upClicked.connect(lambda: self.updateButtonTestTableWidget(2))
-        arrowHandler.downClicked.connect(lambda: self.updateButtonTestTableWidget(3))
+        arrowHandler.upClicked.connect(lambda: self.updateButtonTestTableWidget(3))
+        arrowHandler.downClicked.connect(lambda: self.updateButtonTestTableWidget(2))
         arrowHandler.confirmClicked.connect(lambda: self.updateButtonTestTableWidget(4))
 
         self.disableLedButtonStates(ledButtonService)
