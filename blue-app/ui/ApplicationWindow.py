@@ -248,6 +248,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if selectStackedWidget:
             self.selectStackWidget(self.ui.stackedWidget.currentIndex())
 
+        styleFile = self.langBasedSettings.getLangBasedQssString()
+        styleFile.open(QtCore.QIODevice.ReadOnly)
+        data = styleFile.readAll()
+        self.setStyleSheet(str(data, encoding="utf-8"))
+
     def focusLanguageChange(self):
         if not self.languageSwitcher.isVisible():
             self.languageSwitcher.setVisible(True)

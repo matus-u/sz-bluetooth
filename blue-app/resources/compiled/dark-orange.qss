@@ -12,11 +12,6 @@ QWidget:disabled
     background-color: #424242;
 }
 
-QMainWindow
-{
-     background-image: url(":/images/bg2.jpg")
-}
-
 QAbstractItemView
 {
     background-color: #4d4d4d;
