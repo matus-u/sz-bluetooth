@@ -203,7 +203,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.actualTimeStampTimer.timeout.connect(lambda: self.ui.actualTimeStampLabel.setText(QtCore.QTime.currentTime().toString("hh:mm")))
         self.actualTimeStampTimer.start(1000)
 
-        self.langBasedSettings = LangBasedSettings()
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
 
         self.onFortuneDataChanged()
@@ -248,7 +247,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if selectStackedWidget:
             self.selectStackWidget(self.ui.stackedWidget.currentIndex())
 
-        styleFile = self.langBasedSettings.getLangBasedQssString()
+        styleFile = LangBasedSettings.getLangBasedQssString(language)
         styleFile.open(QtCore.QIODevice.ReadOnly)
         data = styleFile.readAll()
         self.setStyleSheet(str(data, encoding="utf-8"))
@@ -296,7 +295,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return self.activeFocusHandler
 
     def onFortuneServiceTry(self, indexOfPrize, prizeName):
-        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeName, self.printingService, self.ledButtonService, self.langBasedSettings)
+        w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeName, self.printingService, self.ledButtonService)
         self.wheelWindow = w
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))
         self.openSubWindow(w)
@@ -369,7 +368,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def onSettingsFinished(self, dialogResult):
         self.creditService.setCoinSettings(AppSettings.actualCoinSettings(), AppSettings.actualCoinLockLevel())
         self.updateCreditLabel()
-        self.langBasedSettings.reloadLanguage()
         self.onLanguageChange(AppSettings.actualLanguage())
 
         self.onFortuneDataChanged()
@@ -588,7 +586,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if ((self.ui.coinImgLabel.pixmap() != None) and (not self.ui.coinImgLabel.pixmap().isNull())):
             self.ui.coinImgLabel.setPixmap(QtGui.QPixmap())
         else:
-            coinPixMap = self.langBasedSettings.getLangBasedCoinImage()
+            coinPixMap = LangBasedSettings.getCurrBasedCoinImage()
             self.ui.coinImgLabel.setPixmap(coinPixMap)
         QtCore.QTimer.singleShot(1000, self.onCoinImageChange)
 

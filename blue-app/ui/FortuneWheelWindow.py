@@ -7,17 +7,19 @@ from services.AppSettings import AppSettings
 from services.LedButtonService import LedButtonService
 from services.PixmapService import PixmapService
 from services.PlayFileService import PlayWavFile
+from services.LangBasedSettings import LangBasedSettings
+
 
 from ui import FocusHandler
 from collections import deque
 
 class FortuneWheelWindow(QtWidgets.QDialog):
-    def __init__(self, parent, winningIndex, prizeName, printingService, ledButtonService, langBasedSettings):
+    def __init__(self, parent, winningIndex, prizeName, printingService, ledButtonService):
         super(FortuneWheelWindow, self).__init__(parent)
         self.ui = Ui_FortuneWheel()
         self.ui.setupUi(self)
 
-        styleFile = langBasedSettings.getLangBasedQssString()
+        styleFile = LangBasedSettings.getLangBasedQssString()
         styleFile.open(QtCore.QIODevice.ReadOnly)
         data = styleFile.readAll()
         self.setStyleSheet(str(data, encoding="utf-8"))
