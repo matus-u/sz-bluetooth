@@ -106,6 +106,10 @@ class WebSocketStatus(TimerService.TimerStatusObject):
             self.websocket.connected.connect(self.onConnect)
             self.websocket.disconnected.connect(self.onDisconnect)
             self.websocket.textMessageReceived.connect(self.onTextMessageReceived)
+            sslConfiguration = self.websocket.sslConfiguration()
+            sslConfiguration.setPeerVerifyMode(QtNetwork.QSslSocket.VerifyNone)
+            self.websocket.setSslConfiguration(sslConfiguration)
+            self.websocket.ignoreSslErrors()
             self.websocket.open(QtCore.QUrl(self.URL))
         else:
             self.actualStateChanged.emit(0)
@@ -229,6 +233,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.actualStateChanged.emit(2)
         self.stopTimerSync()
         LoggingService.getLogger().info("Disconnected from websocket %s" % self.URL)
+        LoggingService.getLogger().info("Error from websocket %s" % self.websocket.errorString())
         self.scheduleConnect()
 
     def scheduleConnect(self):
