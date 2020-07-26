@@ -100,7 +100,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         if self.moneyServer is not "":
             self.actualStateChanged.emit(3)
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
-            self.URL = URL.replace("http://", "ws://")
+            self.URL = URL.replace("https://", "wss://")
             LoggingService.getLogger().info("Connecting to websocket server: %s" % URL)
             self.websocket = QtWebSockets.QWebSocket(parent=self)
             self.websocket.connected.connect(self.onConnect)
