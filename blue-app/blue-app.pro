@@ -7,5 +7,6 @@ FORMS += ui/ui-design/*.ui \
     ui/ui-design/TestHw.ui \
     ui/ui-design/WithdrawAsk.ui \
     ui/ui-design/WithdrawInfo.ui \
-    ui/ui-design/LanguageSwitcher.ui
+    ui/ui-design/LanguageSwitcher.ui \
+    ui/ui-design/WaitUser.ui
 

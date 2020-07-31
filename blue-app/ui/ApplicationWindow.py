@@ -278,6 +278,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         elif stackIndex == 2:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
             self.ui.processInfoTitleLabel.setText(self.texts[self.SCANNING_STR])
+            self.movie.setScaledSize(self.ui.processInfoLabel.size());
             self.movie.start()
 
         elif stackIndex == 3:

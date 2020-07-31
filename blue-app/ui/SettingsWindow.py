@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from generated.Settings import Ui_Settings
 
 from services.AppSettings import AppSettings
+from ui import WaitUserWindow
 
 class SettingsWindow(QtWidgets.QDialog):
     def __init__(self, parent, moneyTracker, fortuneService, creditService):
@@ -45,6 +46,8 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.languageCombobox.setEditable(False)
         self.ui.languageCombobox.setCurrentText(AppSettings.actualLanguage())
         self.enableCheckBoxes()
+        self.waitUserWindow = WaitUserWindow.WaitUserWindow(self)
+        self.waitUserWindow.hideWindow()
 
     def rePopulageLanguageCombobox(self):
         currentLang = self.ui.languageCombobox.currentText()
@@ -109,6 +112,12 @@ class SettingsWindow(QtWidgets.QDialog):
                     return
             else:
                 return
+
+        QtCore.QTimer.singleShot(500, self.onOkWork)
+        self.waitUserWindow.showWindow()
+        self.waitUserWindow.exec()
+
+    def onOkWork(self):
         AppSettings.storeSettings(self.ui.languageCombobox.currentText(),
                                   [self.ui.languageCombobox.itemText(i) for i in range(self.ui.languageCombobox.count())],
                                   self.ui.timeZoneCombobox.currentIndex(),
@@ -121,6 +130,7 @@ class SettingsWindow(QtWidgets.QDialog):
                                   self.ui.coinLockLevel.value()
                                   )
         self.accept()
+        self.waitUserWindow.accept()
 
     def onCancelButton(self):
         AppSettings.restoreLanguage()

@@ -521,3 +521,8 @@ QWidget#LanguageSwitcher QLabel#rightLabel
     border: 5px solid transparent;
     border-radius: 15;
 }
+
+QLabel#waitUserLabel
+{
+    background-color: transparent;
+}
