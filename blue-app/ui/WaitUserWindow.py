@@ -10,9 +10,7 @@ class WaitUserWindow(QtWidgets.QDialog):
         self.ui = Ui_WaitUser()
         self.ui.setupUi(self)
 
-        self.movie = QtGui.QMovie(":/images/blue-scan.gif")
-        self.ui.waitUserLabel.setMovie(self.movie)
-        self.movie.setScaledSize(self.ui.waitUserLabel.size());
+        self.ui.waitUserLabel.setPixmap(QtGui.QPixmap(":/images/hourglass.png"))
         #self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
@@ -22,14 +20,3 @@ class WaitUserWindow(QtWidgets.QDialog):
         painter.setBrush(QtCore.Qt.gray)
         painter.setPen(QtGui.QPen(QtCore.Qt.gray))
         painter.drawRect(self.rect())
-
-    def hideWindow(self):
-        self.movie.stop()
-        self.hide()
-
-    def showWindow(self):
-        self.show()
-        self.movie.start()
-        self.movie.setScaledSize(self.ui.waitUserLabel.size());
-
-

@@ -47,7 +47,6 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.languageCombobox.setCurrentText(AppSettings.actualLanguage())
         self.enableCheckBoxes()
         self.waitUserWindow = WaitUserWindow.WaitUserWindow(self)
-        self.waitUserWindow.hideWindow()
 
     def rePopulageLanguageCombobox(self):
         currentLang = self.ui.languageCombobox.currentText()
@@ -114,7 +113,6 @@ class SettingsWindow(QtWidgets.QDialog):
                 return
 
         QtCore.QTimer.singleShot(500, self.onOkWork)
-        self.waitUserWindow.showWindow()
         self.waitUserWindow.exec()
 
     def onOkWork(self):

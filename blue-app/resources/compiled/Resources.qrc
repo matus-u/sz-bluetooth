@@ -21,5 +21,6 @@
         <file>hungary.png</file>
         <file>poland.png</file>
         <file>slovak.png</file>
+        <file>hourglass.png</file>
     </qresource>
 </RCC>
