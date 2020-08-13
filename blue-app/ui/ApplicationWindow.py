@@ -227,7 +227,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.onLanguageChange(AppSettings.actualLanguage())
         self.movie = QtGui.QMovie(":/images/blue-scan.gif")
         self.ui.processInfoLabel.setMovie(self.movie)
-        self.movie.setScaledSize(self.ui.processInfoLabel.size());
+        self.movie.setScaledSize(QtCore.QSize(587,356));
 
         self.arrowHandler.remoteClicked.connect(self.creditService.clearCredit)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
@@ -278,7 +278,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         elif stackIndex == 2:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
             self.ui.processInfoTitleLabel.setText(self.texts[self.SCANNING_STR])
-            self.movie.setScaledSize(self.ui.processInfoLabel.size());
             self.movie.start()
 
         elif stackIndex == 3:
