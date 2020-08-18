@@ -39,11 +39,15 @@ class WebSocketLogService(QtCore.QObject):
         self.connectScheduled = False
         if self.moneyServer is not "":
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
-            self.URL = URL.replace("http://", "ws://")
+            self.URL = URL.replace("https://", "wss://")
             self.websocket = QtWebSockets.QWebSocket(parent=self)
             self.websocket.connected.connect(self.onConnect)
             self.websocket.disconnected.connect(self.onDisconnect)
             self.websocket.textMessageReceived.connect(self.onTextMessageReceived)
+            sslConfiguration = self.websocket.sslConfiguration()
+            sslConfiguration.setPeerVerifyMode(QtNetwork.QSslSocket.VerifyNone)
+            self.websocket.setSslConfiguration(sslConfiguration)
+            self.websocket.ignoreSslErrors()
             self.websocket.open(QtCore.QUrl(self.URL))
 
     def onConnect(self):
