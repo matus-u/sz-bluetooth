@@ -21,7 +21,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
     newWinImage = QtCore.pyqtSignal(object)
 
     def __init__(self, macAddr, moneyTracker, wheelFortuneService, printService, errorHandler):
-        super().__init__(10000)
+        super().__init__(23000)
         self.macAddr = macAddr
         self.moneyTracker = moneyTracker
         self.wheelFortuneService = wheelFortuneService
@@ -34,6 +34,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.currencyString = AppSettings.actualCurrency()
         self.errors = []
         errorHandler.hwErrorChanged.connect(self.setErrors, QtCore.Qt.QueuedConnection)
+        self.updateStatusResponseWaiting = False
 
         AppSettings.getNotifier().moneyServerChanged.connect(self.setMoneyServer)
         AppSettings.getNotifier().currencyChanged.connect(self.setCurrency)
@@ -59,8 +60,13 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         self.asyncDisconnect()
 
     def onTimeout(self):
-        self.sendActualMoneyValue()
-        self.sendErrorStrings()
+        if self.updateStatusResponseWaiting:
+            self.updateStatusResponseWaiting = False
+            self.forceDisconnect()
+            LoggingService.getLogger().info("No response from server -> disconnect!")
+        else:
+            self.sendActualMoneyValue()
+            self.sendErrorStrings()
 
     def sendActualMoneyValue(self):
         logger = LoggingService.getLogger()
@@ -87,6 +93,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)
         self.websocket.sendTextMessage(textMsg)
+        self.updateStatusResponseWaiting = True
 
     def forceDisconnect(self):
         if self.websocket:
@@ -117,6 +124,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
 
 
     def onConnect(self):
+        self.updateStatusResponseWaiting = False
         self.actualStateChanged.emit(1)
         LoggingService.getLogger().info("Connected to websocket %s" % self.URL)
         self.websocket.sendTextMessage(self.createPhxMessage( "phx_join", self.macAddr + "_priv", "_priv"));
@@ -193,6 +201,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
         LoggingService.getLogger().debug("Data from websocket %s" % js)
         text = json.loads(js)
         if text["event"] == "phx_reply" and text["payload"]["status"] == "ok" and ("msg_type" in text["payload"]["response"].keys()) and text["payload"]["response"]["msg_type"] == "update-status":
+            self.updateStatusResponseWaiting = False
             data = text["payload"]["response"]["data"]
             AppSettings.storeServerSettings(data["name"], data["owner"], data["desc"], data["service_phone"])
 
