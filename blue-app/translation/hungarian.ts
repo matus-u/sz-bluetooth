@@ -191,72 +191,72 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="574"/>
+        <location filename="../generated/MainWindow.py" line="575"/>
         <source>MainWindow</source>
         <translation>Fõ ablak</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="580"/>
+        <location filename="../generated/MainWindow.py" line="581"/>
         <source>Admin settings</source>
         <translation>Admin beállítások</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="576"/>
+        <location filename="../generated/MainWindow.py" line="577"/>
         <source>PlayLabel</source>
         <translation>Aktuális zene</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="577"/>
+        <location filename="../generated/MainWindow.py" line="578"/>
         <source>Empty playlist</source>
         <translation>Üres lista</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="579"/>
+        <location filename="../generated/MainWindow.py" line="580"/>
         <source>Withdraw money</source>
         <translation>Pénzkivétel</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="586"/>
+        <location filename="../generated/MainWindow.py" line="587"/>
         <source>Disconnect</source>
         <translation>Csatlakozás megszûnt</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="583"/>
+        <location filename="../generated/MainWindow.py" line="584"/>
         <source>Leave admin mode</source>
         <translation>Kilépés az Adminból</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="581"/>
+        <location filename="../generated/MainWindow.py" line="582"/>
         <source>Wifi settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="585"/>
+        <location filename="../generated/MainWindow.py" line="586"/>
         <source>Add credit</source>
         <translation>Kredit</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="587"/>
+        <location filename="../generated/MainWindow.py" line="588"/>
         <source>CpuTemp:</source>
         <translation>CpuTemp:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="578"/>
+        <location filename="../generated/MainWindow.py" line="579"/>
         <source>Time of playqueue:</source>
         <translation>Lejatszási idő:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="582"/>
+        <location filename="../generated/MainWindow.py" line="583"/>
         <source>Wheel settings</source>
         <translation>Szerencsekerék beállítás</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="584"/>
+        <location filename="../generated/MainWindow.py" line="585"/>
         <source>Test menu</source>
         <translation>Teszt menu</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="575"/>
+        <location filename="../generated/MainWindow.py" line="576"/>
         <source>TextLabel</source>
         <translation>Text</translation>
     </message>
@@ -264,14 +264,14 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>PrintingService</name>
     <message>
-        <location filename="../services/PrinterService.py" line="221"/>
+        <location filename="../services/PrinterService.py" line="223"/>
         <source>Thank you for playing!
 </source>
         <translation>Köszönöm a játékot!
 </translation>
     </message>
     <message>
-        <location filename="../services/PrinterService.py" line="219"/>
+        <location filename="../services/PrinterService.py" line="221"/>
         <source>DEVICE: </source>
         <translation>BERENDEZÉS: </translation>
     </message>
@@ -431,7 +431,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/Settings.py" line="335"/>
         <source>Available languages:</source>
-        <translation>Beállítható hangok:</translation>
+        <translation>Beállítható nyelvek:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="336"/>
@@ -447,22 +447,22 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="100"/>
+        <location filename="../ui/SettingsWindow.py" line="102"/>
         <source>Currency has changed!</source>
         <translation>Pénznem megváltozott!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="100"/>
+        <location filename="../ui/SettingsWindow.py" line="102"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>A Valuta változtatása törli a belsõ változókat, mehet ?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="105"/>
         <source>Currency is goin to change!</source>
         <translation>Pénznemváltoztatás!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="105"/>
         <source>Proceed?</source>
         <translation>Mehet?</translation>
     </message>
@@ -646,6 +646,14 @@ Válasszon ki egy zenét.</translation>
         <location filename="../generated/TestHw.py" line="290"/>
         <source>Test fortune wheel</source>
         <translation>Szerencsekerék teszt</translation>
+    </message>
+</context>
+<context>
+    <name>WaitUser</name>
+    <message>
+        <location filename="../generated/WaitUser.py" line="37"/>
+        <source>Form</source>
+        <translation type="unfinished">Alak</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sk_SK">
+<!DOCTYPE TS><TS version="2.0" language="sk_SK" sourcelanguage="">
 <context>
     <name>ApplicationWindow</name>
     <message>
@@ -191,72 +190,72 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="574"/>
+        <location filename="../generated/MainWindow.py" line="575"/>
         <source>MainWindow</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="580"/>
+        <location filename="../generated/MainWindow.py" line="581"/>
         <source>Admin settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="576"/>
+        <location filename="../generated/MainWindow.py" line="577"/>
         <source>PlayLabel</source>
         <translation>Aktuálna pesnička</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="577"/>
+        <location filename="../generated/MainWindow.py" line="578"/>
         <source>Empty playlist</source>
         <translation>Zoznam skladieb je prázdny</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="579"/>
+        <location filename="../generated/MainWindow.py" line="580"/>
         <source>Withdraw money</source>
         <translation>Vyber peniaze</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="586"/>
+        <location filename="../generated/MainWindow.py" line="587"/>
         <source>Disconnect</source>
         <translation>Odpojiť</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="583"/>
+        <location filename="../generated/MainWindow.py" line="584"/>
         <source>Leave admin mode</source>
         <translation>Opustiť admin mód</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="581"/>
+        <location filename="../generated/MainWindow.py" line="582"/>
         <source>Wifi settings</source>
         <translation>Wifi nastavenia</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="585"/>
+        <location filename="../generated/MainWindow.py" line="586"/>
         <source>Add credit</source>
         <translation>Kredit</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="587"/>
+        <location filename="../generated/MainWindow.py" line="588"/>
         <source>CpuTemp:</source>
         <translation>Cpu teplota:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="578"/>
+        <location filename="../generated/MainWindow.py" line="579"/>
         <source>Time of playqueue:</source>
         <translation>Čas playlistu:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="582"/>
+        <location filename="../generated/MainWindow.py" line="583"/>
         <source>Wheel settings</source>
         <translation>Nastavenia losovania</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="584"/>
+        <location filename="../generated/MainWindow.py" line="585"/>
         <source>Test menu</source>
         <translation>Test menu</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="575"/>
+        <location filename="../generated/MainWindow.py" line="576"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
@@ -264,14 +263,14 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>PrintingService</name>
     <message>
-        <location filename="../services/PrinterService.py" line="221"/>
+        <location filename="../services/PrinterService.py" line="223"/>
         <source>Thank you for playing!
 </source>
         <translation>Dakujeme za hru!
 </translation>
     </message>
     <message>
-        <location filename="../services/PrinterService.py" line="219"/>
+        <location filename="../services/PrinterService.py" line="221"/>
         <source>DEVICE: </source>
         <translation>ZARIADENIE: </translation>
     </message>
@@ -447,22 +446,22 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="100"/>
+        <location filename="../ui/SettingsWindow.py" line="102"/>
         <source>Currency has changed!</source>
         <translation>Mena bola zmenená!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="100"/>
+        <location filename="../ui/SettingsWindow.py" line="102"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>Zmena meny resetne všetky interné počítadlá, pokračovať?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="105"/>
         <source>Currency is goin to change!</source>
         <translation>Ideš zmeniť menu!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="105"/>
         <source>Proceed?</source>
         <translation>Pokračovať?</translation>
     </message>
@@ -646,6 +645,14 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
         <location filename="../generated/TestHw.py" line="290"/>
         <source>Test fortune wheel</source>
         <translation>Otestovať losovanie</translation>
+    </message>
+</context>
+<context>
+    <name>WaitUser</name>
+    <message>
+        <location filename="../generated/WaitUser.py" line="37"/>
+        <source>Form</source>
+        <translation type="unfinished">Form</translation>
     </message>
 </context>
 <context>
