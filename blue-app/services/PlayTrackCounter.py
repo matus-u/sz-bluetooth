@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services import PathSettings
+import os
 
 class PlayTrackCounter(QtCore.QObject):
 
@@ -19,6 +20,7 @@ class PlayTrackCounter(QtCore.QObject):
 
         self.settings = QtCore.QSettings(PlayTrackCounter.SettingsPath, PlayTrackCounter.SettingsFormat)
         self.musicCounters = self.settings.value(PlayTrackCounter.Counts, {})
+        self.musicCounters = {k: v for k, v in self.musicCounters.items() if os.path.isfile(k)}
         self.topTracks = self.calculateTopTrackNames()
 
     def addToCounter(self, path):
