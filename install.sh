@@ -13,6 +13,10 @@ function prepare-blue-app-dir {
     generate-from-uic
     popd
 
+    pushd blue-app/translation
+    ./release-languages.sh
+    popd
+
     find blue-app/ -name "__py*" | xargs rm -rf
 }
 

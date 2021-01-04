@@ -8,6 +8,10 @@ mkdir -p ../blue-app-configs/logging
 if [ "${RUN_FROM_DOCKER}" == "TRUE" ]; then
 	. generate-from-uic.sh
 	generate-from-uic
+
+	pushd translation/
+  ./release-languages.sh
+	popd
 fi
 
 kill -9 $(pidof -x logger-remote.py)
