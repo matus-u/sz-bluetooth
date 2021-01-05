@@ -47,6 +47,9 @@ class AppSettings:
     ViewTypeString = "ViewType"
     ViewTypeList = ["Genre based","Alphabetical"]
 
+    GenreIteratingString = "GenreIterating"
+    GenreIteratingList = ["Type 1","Type 2"]
+
     BluetoothEnabledString = "BluetoothEnabled"
     SongTimeVisString = "SongTimesVisible"
     CoinLockLevel = "CoinLockLevel"
@@ -117,8 +120,16 @@ class AppSettings:
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.ViewTypeString, AppSettings.ViewTypeList[0])
 
     @staticmethod
+    def actualGenreIteratingType(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.GenreIteratingString, AppSettings.GenreIteratingList[0])
+
+    @staticmethod
     def getCurrentViewTypeIndex():
         return AppSettings.ViewTypeList.index(AppSettings.actualViewType())
+
+    @staticmethod
+    def getCurrentGenreIteratingTypeIndex():
+        return AppSettings.GenreIteratingList.index(AppSettings.actualGenreIteratingType())
 
     @staticmethod
     def actualSongTimeVisible(appSettings = None):
@@ -165,7 +176,7 @@ class AppSettings:
         settings.setValue(AppSettings.LanguageString, language)
 
     @classmethod
-    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, coinLockLevel):
+    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, language)
         settings.setValue(AppSettings.AvailableLanguagesListString, availableLanguages)
@@ -183,6 +194,7 @@ class AppSettings:
             cls.getNotifier().moneyServerChanged.emit(moneyServer)
 
         settings.setValue(AppSettings.ViewTypeString, AppSettings.ViewTypeList[viewTypeIndex])
+        settings.setValue(AppSettings.GenreIteratingString, AppSettings.GenreIteratingList[genreIteratingIndex])
         settings.setValue(AppSettings.SongTimeVisString, songTimeVisEnabled)
         settings.setValue(AppSettings.BluetoothEnabledString, bluetoothEnabled)
 

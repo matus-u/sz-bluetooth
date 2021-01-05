@@ -167,7 +167,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.playTrackCounter = PlayTrackCounter()
 
         self.musicController = MusicController.MusicController(self.ui.songsWidget,
-                                                               [self.ui.genreLabel, self.ui.leftLeftGenre, self.ui.leftGenre, self.ui.rightGenre, self.ui.rightRightGenre],
+                                                               [self.ui.leftLeftGenre, self.ui.leftGenre, self.ui.genreLabel, self.ui.rightGenre, self.ui.rightRightGenre],
                                                                self.playTrackCounter)
 
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+c"), self, lambda: self.getActualFocusHandler().onLeft())

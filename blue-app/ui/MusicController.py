@@ -17,43 +17,78 @@ class SongModel:
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         self.music = {}
         self.actualGenreList = []
-        self.nonRotatedGenreList = []
         self.genreLabelList = genreLabelList
         self.songsWidget = songsWidget
         self.actualGenre = None
         self.playTrackCounter = playTrackCounter
         self.musicByPath = {}
         self.actualSongs = {}
+        self.originalGenreLabelList = [v for v in genreLabelList]
+        self.genreLabelMoving = False
 
-    def rotate(self, value):
-        l = deque(self.actualGenreList)
+    def rotate(self, value, listToRotate):
+        l = deque(listToRotate)
         l.rotate(value)
-        self.actualGenreList = list(l)
+        return list(l)
 
     def nextGenre(self):
-        self.rotate(1)
+        self.actualGenreList = self.rotate(1, self.actualGenreList)
+        if self.genreLabelMoving and self.genreLabelList[2] != self.originalGenreLabelList[0]:
+            self.genreLabelList = self.rotate(1, self.genreLabelList)
         self.reloadSongsWidget()
 
     def previousGenre(self):
-        self.rotate(-1)
+        self.actualGenreList = self.rotate(-1, self.actualGenreList)
+        if self.genreLabelMoving and self.genreLabelList[2] != self.originalGenreLabelList[4]:
+            self.genreLabelList = self.rotate(-1, self.genreLabelList)
         self.reloadSongsWidget()
+
+    def centerGenreLabel(self):
+        self.genreLabelList = self.originalGenreLabelList
+        self.reloadGenreWidgets()
 
     def rowCount(self):
         return len(self.actualSongs)
 
+    def reloadGenreWidgets(self):
+        for i in (0,1,3,4):
+            self.genreLabelList[i].setStyleSheet("""
+                background-color: rgba(0, 0, 0, 65%);
+                border-top: 2px solid #ABABAB;
+                border-bottom: 2px solid #ABABAB;
+                font-size: 16px;
+                color: white;
+                """)
+            self.genreLabelList[i].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed);
+            self.genreLabelList[i].setMinimumSize(0,30)
+            self.genreLabelList[i].setMaximumSize(16777215,30)
+
+        self.genreLabelList[2].setStyleSheet("""
+            background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);
+            border: 2px solid white;
+            border-radius: 15;
+            font-size: 18px;
+            color: white;
+            """)
+        self.genreLabelList[2].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding);
+        self.genreLabelList[2].setMinimumSize(0,30)
+        self.genreLabelList[2].setMaximumSize(16777215,16777215)
+
     def reloadSongsWidget(self):
+        if self.genreLabelMoving:
+            self.reloadGenreWidgets()
 
         if self.isBluetooth():
             pix = QtGui.QPixmap(":/images/bluetooth.png")
-            self.genreLabelList[0].setMinimumSize(54,54)
-            self.genreLabelList[0].setMaximumSize(54,54)
-            self.genreLabelList[0].setPixmap(pix.scaled(50,50))
+            self.genreLabelList[2].setMinimumSize(54,54)
+            self.genreLabelList[2].setMaximumSize(54,54)
+            self.genreLabelList[2].setPixmap(pix.scaled(50,50))
         else:
-            self.genreLabelList[0].setText(self.actualGenreList[0])
-            self.genreLabelList[0].setMinimumSize(204,54)
-            self.genreLabelList[0].setMaximumSize(204,54)
-        self.genreLabelList[1].setText(self.actualGenreList[-2])
-        self.genreLabelList[2].setText(self.actualGenreList[-1])
+            self.genreLabelList[2].setText(self.actualGenreList[0])
+            self.genreLabelList[2].setMinimumSize(204,54)
+            self.genreLabelList[2].setMaximumSize(204,54)
+        self.genreLabelList[0].setText(self.actualGenreList[-2])
+        self.genreLabelList[1].setText(self.actualGenreList[-1])
         self.genreLabelList[3].setText(self.actualGenreList[1])
         self.genreLabelList[4].setText(self.actualGenreList[2])
         genreKey = self.actualGenreList[0]
@@ -125,7 +160,7 @@ class SongModel:
             if "Bluetooth" in self.actualGenreList:
                 self.actualGenreList.remove("Bluetooth")
         if self.actualGenre in self.actualGenreList:
-            self.rotate(-1 * self.actualGenreList.index(self.actualGenre))
+            self.actualGenreList = self.rotate(-1 * self.actualGenreList.index(self.actualGenre), self.actualGenreList)
 
     def isBluetooth(self):
         return self.actualGenreList[0] == "Bluetooth"
@@ -201,7 +236,7 @@ class MusicController(QtCore.QObject):
         return self.actualModel.getSelectedPlayObject()
 
     def getActualModel(self):
-        if AppSettings.actualViewType() == "Alphabetical":
+        if AppSettings.actualViewType() == AppSettings.ViewTypeList[1]:
             return self.alphaBasedModel
         else:
             return self.genreBasedModel
@@ -210,6 +245,8 @@ class MusicController(QtCore.QObject):
         self.actualModel = self.getActualModel()
         self.actualModel.afterModelChange()
         self.actualModel.generateGenreList()
+        self.actualModel.genreLabelMoving = AppSettings.actualGenreIteratingType() == AppSettings.GenreIteratingList[1]
+        self.actualModel.centerGenreLabel()
         self.actualModel.reloadSongsWidget()
         self.notifyBluetoothModel()
 

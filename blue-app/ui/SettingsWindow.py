@@ -23,6 +23,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.currencyCombobox.currentIndexChanged.connect(lambda index: self.setCoinSettings(AppSettings.defaultCoinSettings(AppSettings.currencyStringByIndex(index))))
         self.ui.moneyServerAddress.setText(AppSettings.actualMoneyServer())
         self.ui.viewTypeComboBox.setCurrentIndex(AppSettings.getCurrentViewTypeIndex())
+        self.ui.genreIteratingComboBox.setCurrentIndex(AppSettings.getCurrentGenreIteratingTypeIndex())
         self.ui.songTimeCheckBox.setChecked(AppSettings.actualSongTimeVisible())
         self.ui.bluetoothEnabledCheckBox.setChecked(AppSettings.actualBluetoothEnabled())
         self.setCoinSettings(AppSettings.actualCoinSettings())
@@ -125,6 +126,7 @@ class SettingsWindow(QtWidgets.QDialog):
                                   self.ui.bluetoothEnabledCheckBox.isChecked(),
                                   self.ui.songTimeCheckBox.isChecked(),
                                   self.ui.viewTypeComboBox.currentIndex(),
+                                  self.ui.genreIteratingComboBox.currentIndex(),
                                   self.ui.coinLockLevel.value()
                                   )
         self.accept()
