@@ -12,7 +12,7 @@ class CreditBluetoothRepresentation:
         self.creditService = creditService
 
     def getCreditValueRepresentation(self):
-        return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[7]))
+        return int((self.creditService.getCredit()/(self.creditService.getCoinSettings()[7]))*60)
 
     def enoughMoney(self):
         return self.creditService.getCredit() > 0

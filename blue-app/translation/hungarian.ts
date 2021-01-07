@@ -4,136 +4,141 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="72"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Connection with {} failed</source>
         <translation>Csatlakozás {} hiba</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Scanninng...</source>
         <translation>keresés ...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="74"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>seconds</source>
         <translation>másodperc</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="75"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>CPU temp: {}</source>
         <translation>CPU temp: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="76"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Insert next coin please</source>
         <translation>Dobjon még be pénzt</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="77"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Withdraw money?</source>
         <translation>Pénzkivétel ?</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="78"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation>Pénzkivétel. Belsõ számlálók nullázódnak. Mehet ?</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="79"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Withdraw succesful.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Internal counter was correctly reset.</source>
         <translation>A bels˜õ számlálók nullázódtak.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
+        <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>Phone to service: {}</source>
         <translation>Szervisz: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
+        <location filename="../ui/ApplicationWindow.py" line="83"/>
         <source>Admin mode remainse for {}s</source>
         <translation>Admin mód {} s</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="84"/>
         <source>songs</source>
         <translation>Zene</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="85"/>
         <source>Playing from bluetooth</source>
         <translation>Bluetooth lejátszás</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="86"/>
         <source>Not playing</source>
         <translation>Nem aktív</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="87"/>
         <source>Start is possible at least 5s after previous</source>
         <translation>Start 5sec múlva lehetséges</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="88"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation>Bluetooth csatlakoztatva {} s </translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="89"/>
         <source>Connecting to device: {}</source>
         <translation>Csatlakozás: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="90"/>
         <source>Prize counts and probabilities were updated</source>
         <translation>Ajándéklista frissítve</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="91"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation>Vigyázz, lassan kifogy a papír a nyomtatóból.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="92"/>
         <source>Continue with music selection.</source>
         <translation>Zenekiválasztás.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="93"/>
         <source>Toss count: {}</source>
         <translation>Ajándéksorsolás: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="94"/>
         <source>To get next toss: {} {} needed</source>
         <translation>Dobjon be {} {} a sorsoláshoz</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="94"/>
+        <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>Thank you. You have got access to toss. 
 Select one song and toss will be executed.</source>
         <translation>Köszönöm. Ajándéksorsolás következik. 
 Válasszon ki egy zenét.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="95"/>
+        <location filename="../ui/ApplicationWindow.py" line="96"/>
         <source>No prizes left, only music available.</source>
         <translation>Nincs több ajándék. Csak zene.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="96"/>
+        <location filename="../ui/ApplicationWindow.py" line="97"/>
         <source>SCAN AGAIN...</source>
         <translation>KERESÉS...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="97"/>
+        <location filename="../ui/ApplicationWindow.py" line="98"/>
         <source>Activate funcion {} on your device. Set it to visible and press enter for network scanning.</source>
         <translation>Aktiváld a {} funkciót a telefonon. Legyél látható a hálózatban, majd keresd a berendezéseket az enter-el.</translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="99"/>
+        <source>min</source>
+        <translation>perc</translation>
     </message>
 </context>
 <context>
@@ -369,11 +374,6 @@ Válasszon ki egy zenét.</translation>
         <translation>ÉRME 2:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="345"/>
-        <source>1s of bluetooth costs:</source>
-        <translation>1s blueotooth ára:</translation>
-    </message>
-    <message>
         <location filename="../generated/Settings.py" line="346"/>
         <source>One song costs:</source>
         <translation>Egy zene ára:</translation>
@@ -457,6 +457,11 @@ Válasszon ki egy zenét.</translation>
         <location filename="../generated/Settings.py" line="335"/>
         <source>Type 2</source>
         <translation>Típus 2</translation>
+    </message>
+    <message>
+        <location filename="../generated/Settings.py" line="345"/>
+        <source>1 minute of bluetooth costs:</source>
+        <translation>1 perc BT ára:</translation>
     </message>
 </context>
 <context>

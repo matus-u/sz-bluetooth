@@ -66,6 +66,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     NO_PRIZES_LEFT = 23
     SCAN_AGAIN = 24
     INFO_BROWSER_TEXT = 25
+    MINUTES = 26
 
     def createTrTexts(self):
         return {
@@ -95,6 +96,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.NO_PRIZES_LEFT :  self.tr("No prizes left, only music available."),
             self.SCAN_AGAIN : self.tr("SCAN AGAIN..."),
             self.INFO_BROWSER_TEXT : self.tr("Activate funcion {} on your device. Set it to visible and press enter for network scanning."),
+            self.MINUTES : self.tr("min"),
             }
 
     def __init__(self, timerService,
@@ -273,7 +275,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             ]))
         elif stackIndex == 1:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.stackedWidgetPage1, self.ledButtonService, self.musicController, self.onScan)]))
-            self.ui.infoScanLabel.setText("{0} = 10min".format(AppSettings.actualCoinSettings()[7]*600))
+            currentCurrencyClass = AppSettings.currencyClass()
+            self.ui.infoScanLabel.setText("{0} {1} = 10{2}".format(currentCurrencyClass.toString(AppSettings.actualCoinSettings()[7]*10), currentCurrencyClass.shortString(), self.texts[self.MINUTES]))
             self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
         elif stackIndex == 2:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
@@ -504,8 +507,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if self.ui.stackedWidget.currentIndex() == 0:
             self.ui.actualCreditValue.setText(str(int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) + " " + self.texts[self.SONGS])
         else:
-            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()) + " " + self.texts[self.SECONDS])
-        self.ui.actualMoneyValue.setText(str(self.creditService.getCredit()) + " " + AppSettings.actualCurrency())
+            self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()/60) + " " + self.texts[self.MINUTES])
+        currentCurrencyClass = AppSettings.currencyClass()
+        self.ui.actualMoneyValue.setText(currentCurrencyClass.toString(self.creditService.getCredit()) + " " + currentCurrencyClass.longString())
 
     def onCreditChange(self, credit):
         self.updateCreditLabel()

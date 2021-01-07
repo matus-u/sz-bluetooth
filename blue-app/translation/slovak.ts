@@ -4,136 +4,141 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="72"/>
+        <location filename="../ui/ApplicationWindow.py" line="73"/>
         <source>Connection with {} failed</source>
         <translation>Spojenie s {} zlyhalo</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="74"/>
         <source>Scanninng...</source>
         <translation>Skenujem...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="74"/>
+        <location filename="../ui/ApplicationWindow.py" line="75"/>
         <source>seconds</source>
         <translation>sekúnd</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="75"/>
+        <location filename="../ui/ApplicationWindow.py" line="76"/>
         <source>CPU temp: {}</source>
         <translation>CPU teplota: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="76"/>
+        <location filename="../ui/ApplicationWindow.py" line="77"/>
         <source>Insert next coin please</source>
         <translation>Najprv vlož peniaze</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="77"/>
+        <location filename="../ui/ApplicationWindow.py" line="78"/>
         <source>Withdraw money?</source>
         <translation>Vybrat peniaze?</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="78"/>
+        <location filename="../ui/ApplicationWindow.py" line="79"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation>Výber penazí vymaže vnútorné počítadlá. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="79"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Withdraw succesful.</source>
         <translation>Výber úspešný.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Internal counter was correctly reset.</source>
         <translation>Interné počítadlá boli vymazané.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
+        <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>Phone to service: {}</source>
         <translation>Servis: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
+        <location filename="../ui/ApplicationWindow.py" line="83"/>
         <source>Admin mode remainse for {}s</source>
         <translation>Admin mód aktívny na {}s</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="84"/>
         <source>songs</source>
         <translation>pesničiek</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="85"/>
         <source>Playing from bluetooth</source>
         <translation>Prehrávanie z bluetooth</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="86"/>
         <source>Not playing</source>
         <translation>Neaktívne</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="87"/>
         <source>Start is possible at least 5s after previous</source>
         <translation>Výber je možný minimálne 5s po predošlom</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="88"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation>Bluetooth sa pripojí o: {} </translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="89"/>
         <source>Connecting to device: {}</source>
         <translation>Pripájam sa na: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="90"/>
         <source>Prize counts and probabilities were updated</source>
         <translation>Množstvo a pravdepodobnsti výhier boli upravené</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="91"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation>Za chvílu sa minie papier, doplnte prosím.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="92"/>
         <source>Continue with music selection.</source>
         <translation>Pokračujte výberom hudby.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="93"/>
         <source>Toss count: {}</source>
         <translation>Počet losovaní kolesom: {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="94"/>
         <source>To get next toss: {} {} needed</source>
         <translation>K dalšiemu otočeniu je potreba: {} {}</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="94"/>
+        <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>Thank you. You have got access to toss. 
 Select one song and toss will be executed.</source>
         <translation>Ďakujeme. Získali ste právo na losovanie.
 Vyberte skladbu a losovanie sa vykoná.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="95"/>
+        <location filename="../ui/ApplicationWindow.py" line="96"/>
         <source>No prizes left, only music available.</source>
         <translation>Nie sú k dispozícii ceny, len hudba.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="96"/>
+        <location filename="../ui/ApplicationWindow.py" line="97"/>
         <source>SCAN AGAIN...</source>
         <translation>SKENUJ ZNOVA...</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="97"/>
+        <location filename="../ui/ApplicationWindow.py" line="98"/>
         <source>Activate funcion {} on your device. Set it to visible and press enter for network scanning.</source>
         <translation>Zapnite funkciu {} na vašom zariadení. Dajte ho do viditelného módu a enterom spustite skenovanie siete.</translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="99"/>
+        <source>min</source>
+        <translation>min</translation>
     </message>
 </context>
 <context>
@@ -369,11 +374,6 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
         <translation>MINCA 2:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="345"/>
-        <source>1s of bluetooth costs:</source>
-        <translation>1s bluetooth stojí:</translation>
-    </message>
-    <message>
         <location filename="../generated/Settings.py" line="346"/>
         <source>One song costs:</source>
         <translation>Jedna pieseň stojí:</translation>
@@ -457,6 +457,11 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
         <location filename="../generated/Settings.py" line="335"/>
         <source>Type 2</source>
         <translation>Typ 2</translation>
+    </message>
+    <message>
+        <location filename="../generated/Settings.py" line="345"/>
+        <source>1 minute of bluetooth costs:</source>
+        <translation>1min bluetooth stojí:</translation>
     </message>
 </context>
 <context>

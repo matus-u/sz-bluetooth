@@ -15,6 +15,25 @@ class AppSettingsNotifier(QtCore.QObject):
     def __init__(self):
         super().__init__()
 
+class CurrencyEur:
+    def toString(value):
+        return '%.2f' % value
+
+    def longString():
+        return "eur"
+
+    def shortString():
+        return "eur"
+
+class CurrencyHuf:
+    def toString(value):
+        return '%.0f' % value
+
+    def longString():
+        return "forintot"
+
+    def shortString():
+        return "Ft"
 
 class AppSettings:
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/blue-app.conf"
@@ -35,7 +54,7 @@ class AppSettings:
     WirelessPassString = "WirelessPass"
 
     CoinValuesString = "coin-settings"
-    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.01, 0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
+    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,1,0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
 
     AppVersion = "UNKNOWN"
     DeviceNameString = "DeviceName"
@@ -160,6 +179,13 @@ class AppSettings:
     @staticmethod
     def currencyStringByIndex(index):
         return AppSettings.CurrencyList[index]
+
+    @staticmethod
+    def currencyClass():
+        currency = AppSettings.actualCurrency()
+        if currency == "HUF":
+            return CurrencyHuf
+        return CurrencyEur
 
     @classmethod
     def _loadLanguage(cls, language):

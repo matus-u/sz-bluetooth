@@ -18,7 +18,7 @@ class PairRequest(QtCore.QObject):
         pass
 
     def end(self):
-        self.connected.emit(1)
+        self.connected.emit(0)
 
     def disconnect(self):
         pass
