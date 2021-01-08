@@ -481,6 +481,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.retranslateUi(self)
             self.updateCreditLabel()
             self.onFortuneDataChanged()
+            currentCurrencyClass = AppSettings.currencyClass()
+            self.ui.infoScanLabel.setText("{0} {1} = 10{2}".format(currentCurrencyClass.toString(AppSettings.actualCoinSettings()[CoinSettingsIndexes.MINUTE_COST_VALUE]*10), currentCurrencyClass.shortString(), self.texts[self.MINUTES]))
             self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
             if self.ui.errorLabel.isVisible():
                 self.showError(self.texts[self.LOW_PAPER])
