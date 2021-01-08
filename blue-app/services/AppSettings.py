@@ -54,7 +54,7 @@ class AppSettings:
     WirelessPassString = "WirelessPass"
 
     CoinValuesString = "coin-settings"
-    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,1,0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
+    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.05,0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
 
     AppVersion = "UNKNOWN"
     DeviceNameString = "DeviceName"
