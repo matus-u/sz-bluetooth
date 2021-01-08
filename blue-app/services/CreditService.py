@@ -6,13 +6,14 @@ import os
 from services.CoinProtocolService import CoinProtocolService
 from services.MoneyTracker import MoneyTracker
 from services.LoggingService import LoggingService
+from services.AppSettings import CoinSettingsIndexes
 
 class CreditBluetoothRepresentation:
     def __init__(self, creditService):
         self.creditService = creditService
 
     def getCreditValueRepresentation(self):
-        return int((self.creditService.getCredit()/(self.creditService.getCoinSettings()[7]))*60)
+        return int((self.creditService.getCredit()/(self.creditService.getCoinSettings()[CoinSettingsIndexes.MINUTE_COST_VALUE]))*60)
 
     def enoughMoney(self):
         return self.creditService.getCredit() > 0
@@ -25,14 +26,14 @@ class CreditSongRepresentation:
         self.creditService = creditService
 
     def getCreditValueRepresentation(self):
-        return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[8]))
+        return int(self.creditService.getCredit()/(self.creditService.getCoinSettings()[CoinSettingsIndexes.SONG_COST_VALUE]))
 
     def enoughMoney(self):
-        return self.creditService.getCredit() >= self.creditService.getCoinSettings()[8]
+        return self.creditService.getCredit() >= self.creditService.getCoinSettings()[CoinSettingsIndexes.SONG_COST_VALUE]
 
     def overTakeMoney(self):
         LoggingService.getLogger().info("Credit song overtake money!")
-        return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[8])
+        return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[CoinSettingsIndexes.SONG_COST_VALUE])
 
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)

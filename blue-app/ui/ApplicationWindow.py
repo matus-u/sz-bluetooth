@@ -8,7 +8,7 @@ from generated import Resources
 import os
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
-from services.AppSettings import AppSettings,AppSettingsNotifier
+from services.AppSettings import AppSettings,AppSettingsNotifier,CoinSettingsIndexes
 from services.TemperatureStatus import TemperatureStatus
 from services.WirelessService import WirelessService
 from services.PlayFileService import PlayWavFile
@@ -276,7 +276,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         elif stackIndex == 1:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.stackedWidgetPage1, self.ledButtonService, self.musicController, self.onScan)]))
             currentCurrencyClass = AppSettings.currencyClass()
-            self.ui.infoScanLabel.setText("{0} {1} = 10{2}".format(currentCurrencyClass.toString(AppSettings.actualCoinSettings()[7]*10), currentCurrencyClass.shortString(), self.texts[self.MINUTES]))
+            self.ui.infoScanLabel.setText("{0} {1} = 10{2}".format(currentCurrencyClass.toString(AppSettings.actualCoinSettings()[CoinSettingsIndexes.MINUTE_COST_VALUE]*10), currentCurrencyClass.shortString(), self.texts[self.MINUTES]))
             self.ui.infoScanBrowser.setHtml(self.generateInfoBrowserHtml())
         elif stackIndex == 2:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.FocusNullObject(self.ui.stackedWidgetPage2)]))
@@ -523,7 +523,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onAddCreditButton(self):
         value = 0.0
-        values = list(filter(lambda x: (x != 0.0), self.creditService.getCoinSettings()[0:7]))
+        values = list(filter(lambda x: (x != 0.0), self.creditService.getCoinSettings()[CoinSettingsIndexes.COIN_1:CoinSettingsIndexes.MINUTE_COST_VALUE]))
         if values:
             value = min(values)
         self.creditService.changeCredit(value)
