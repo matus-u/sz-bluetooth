@@ -14,9 +14,12 @@ def formatDuration(duration, name=""):
     else:
         return formatNumber(int(int(duration)/60)) + ":" + formatNumber(int(duration)%60)
 
+def formatStartTime(startTime):
+    return str(startTime.time().strftime("%H:%M"))
+
 def formatNameWithStartTime(name, startTime=None):
     if startTime is not None:
-        return formatSongName(name) + " - " + str(startTime.time().strftime("%H:%M"))
+        return formatSongName(name) + " - " + formatStartTime(startTime)
     return formatSongName(name)
 
 def formatSongName(name):
