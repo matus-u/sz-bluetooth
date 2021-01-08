@@ -12,14 +12,28 @@ class CreditBluetoothRepresentation:
     def __init__(self, creditService):
         self.creditService = creditService
 
+    def _calcValueRepr(self, value):
+        return int((value/(self.creditService.getCoinSettings()[CoinSettingsIndexes.MINUTE_COST_VALUE]))*60)
+
     def getCreditValueRepresentation(self):
-        return int((self.creditService.getCredit()/(self.creditService.getCoinSettings()[CoinSettingsIndexes.MINUTE_COST_VALUE]))*60)
+        return self._calcValueRepr(self.creditService.getCredit())
 
     def enoughMoney(self):
         return self.creditService.getCredit() > 0
 
     def overTakeMoney(self):
-        pass
+        LoggingService.getLogger().info("Bluetooth overtake money!")
+        credit = self.creditService.getCredit()
+        bluetoothThreshold = self.creditService.getCoinSettings()[CoinSettingsIndexes.MONEY_BLUETOOTH_OVERTAKING_VALUE]
+
+        print (credit)
+        print (bluetoothThreshold)
+        if credit > bluetoothThreshold:
+            self.creditService.changeCredit(-1*bluetoothThreshold)
+            return self._calcValueRepr(bluetoothThreshold)
+
+        self.creditService.clearCredit()
+        return self._calcValueRepr(credit)
 
 class CreditSongRepresentation:
     def __init__(self, creditService):
@@ -33,7 +47,7 @@ class CreditSongRepresentation:
 
     def overTakeMoney(self):
         LoggingService.getLogger().info("Credit song overtake money!")
-        return self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[CoinSettingsIndexes.SONG_COST_VALUE])
+        self.creditService.changeCredit(-1*self.creditService.getCoinSettings()[CoinSettingsIndexes.SONG_COST_VALUE])
 
 class CreditService(QtCore.QObject):
     creditChanged = QtCore.pyqtSignal(float)

@@ -56,7 +56,7 @@ class PlayLogicService(QtCore.QObject):
                 self.refreshTimer.start(1000)
 
             self.actualPlayInfo.setStartTime(datetime.now())
-            return PlayLogicService.PLAY_RETURN_IMMEDIATELLY
+            return [PlayLogicService.PLAY_RETURN_IMMEDIATELLY, None]
         else:
             if (self.playQueue.isEmpty()):
                 playQueueObject.setStartTime(self.actualPlayInfo.endTime())
@@ -65,7 +65,7 @@ class PlayLogicService(QtCore.QObject):
 
             self.playQueue.addToPlayQueue(playQueueObject)
 
-            return PlayLogicService.PLAY_RETURN_QUEUE
+            return [PlayLogicService.PLAY_RETURN_QUEUE, playQueueObject.startTime()]
 
     def onConnectedSignal(self, exitCode):
         if exitCode == 1:

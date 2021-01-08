@@ -418,11 +418,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             name = self.scanData[self.ui.devicesWidget.selectionModel().selectedRows()[0].row()-1][0]
             self.ui.devicesWidget.clear()
             self.ui.devicesWidget.clearContents()
-            code = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()))
-            self.creditService.clearCredit()
+            code, startTime = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().overTakeMoney()))
 
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
-                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(""), self.ui.infoLabel)
+                self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(Helpers.formatStartTime(startTime)), self.ui.infoLabel)
                 self.wheelFortuneService.overtakeWinTries()
             else:
                 QtCore.QTimer.singleShot(2000, lambda: self.wheelFortuneService.overtakeWinTries())
