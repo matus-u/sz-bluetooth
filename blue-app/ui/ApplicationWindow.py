@@ -138,7 +138,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.playLogicService.playingFailed.connect(self.onPlayingFailed)
 
         self.temperatureStatus = TemperatureStatus()
-        self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.labelCpuTemp.setText(self.texts[self.CPU_TEMP].format(str(value))))
+        self.temperatureStatus.actualTemperature.connect( lambda value: self.ui.cpuTempValueLabel.setText("{}".format(str(value))))
         self.ui.addCreditButton.clicked.connect(self.onAddCreditButton)
         self.ui.withdrawMoneyButton.clicked.connect(self.onWithdrawMoneyButton)
         self.ui.adminSettingsButton.clicked.connect(self.onAdminSettingsButton)
@@ -345,8 +345,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.adminSettingsButton.setVisible(enable)
             self.ui.wifiSettingsButton.setVisible(enable)
             self.ui.withdrawMoneyButton.setVisible(enable)
-            #self.ui.cpuTempValueLabel.setVisible(enable)
-            #self.ui.labelCpuTemp.setVisible(enable)
             self.ui.addCreditButton.setVisible(enable)
             self.ui.disconnectButton.setVisible(enable)
             self.ui.adminLeaveLabel.setVisible(enable)
@@ -357,10 +355,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.getActualFocusHandler().onLeft()
                 self.getActualFocusHandler().onRight()
                 self.getActualFocusHandler().setFocus()
-            #if enable:
-            #    self.temperatureStatus.start()
-            #else:
-            #    self.temperatureStatus.stop()
 
     def openSubWindow(self, window):
         window.show()
