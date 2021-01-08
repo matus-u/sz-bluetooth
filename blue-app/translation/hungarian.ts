@@ -196,72 +196,67 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="575"/>
+        <location filename="../generated/MainWindow.py" line="566"/>
         <source>MainWindow</source>
         <translation>Fõ ablak</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="581"/>
+        <location filename="../generated/MainWindow.py" line="572"/>
         <source>Admin settings</source>
         <translation>Admin beállítások</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="577"/>
+        <location filename="../generated/MainWindow.py" line="568"/>
         <source>PlayLabel</source>
         <translation>Aktuális zene</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="578"/>
+        <location filename="../generated/MainWindow.py" line="569"/>
         <source>Empty playlist</source>
         <translation>Üres lista</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="580"/>
+        <location filename="../generated/MainWindow.py" line="571"/>
         <source>Withdraw money</source>
         <translation>Pénzkivétel</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="587"/>
+        <location filename="../generated/MainWindow.py" line="578"/>
         <source>Disconnect</source>
         <translation>Csatlakozás megszûnt</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="584"/>
+        <location filename="../generated/MainWindow.py" line="575"/>
         <source>Leave admin mode</source>
         <translation>Kilépés az Adminból</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="582"/>
+        <location filename="../generated/MainWindow.py" line="573"/>
         <source>Wifi settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="586"/>
+        <location filename="../generated/MainWindow.py" line="577"/>
         <source>Add credit</source>
         <translation>Kredit</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="588"/>
-        <source>CpuTemp:</source>
-        <translation>CpuTemp:</translation>
-    </message>
-    <message>
-        <location filename="../generated/MainWindow.py" line="579"/>
+        <location filename="../generated/MainWindow.py" line="570"/>
         <source>Time of playqueue:</source>
         <translation>Lejatszási idő:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="583"/>
+        <location filename="../generated/MainWindow.py" line="574"/>
         <source>Wheel settings</source>
         <translation>Szerencsekerék beállítás</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="585"/>
+        <location filename="../generated/MainWindow.py" line="576"/>
         <source>Test menu</source>
         <translation>Teszt menu</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="576"/>
+        <location filename="../generated/MainWindow.py" line="567"/>
         <source>TextLabel</source>
         <translation>Text</translation>
     </message>
@@ -284,205 +279,210 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../generated/Settings.py" line="317"/>
+        <location filename="../generated/Settings.py" line="329"/>
         <source>Dialog</source>
         <translation>Dialógus</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="328"/>
+        <location filename="../generated/Settings.py" line="340"/>
         <source>Time zone selection:</source>
         <translation>Idõzóna választás:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="318"/>
+        <location filename="../generated/Settings.py" line="330"/>
         <source>ok</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="319"/>
+        <location filename="../generated/Settings.py" line="331"/>
         <source>cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="321"/>
+        <location filename="../generated/Settings.py" line="333"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="322"/>
+        <location filename="../generated/Settings.py" line="334"/>
         <source>Europe/Budapest</source>
         <translation>Europe/Budapest</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="323"/>
+        <location filename="../generated/Settings.py" line="335"/>
         <source>Europe/Bratislava</source>
         <translation>Europe/Bratislava</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="324"/>
+        <location filename="../generated/Settings.py" line="336"/>
         <source>Europe/London</source>
         <translation>Europe/London</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="331"/>
+        <location filename="../generated/Settings.py" line="343"/>
         <source>Currency:</source>
         <translation>Pénznem:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="329"/>
+        <location filename="../generated/Settings.py" line="341"/>
         <source>EUR</source>
         <translation>EUR</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="330"/>
+        <location filename="../generated/Settings.py" line="342"/>
         <source>HUF</source>
         <translation>HUF</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="338"/>
+        <location filename="../generated/Settings.py" line="350"/>
         <source>COIN 3:</source>
         <translation>ÉRME 3:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="339"/>
+        <location filename="../generated/Settings.py" line="351"/>
         <source>COIN 4:</source>
         <translation>ÉRME 4:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="340"/>
+        <location filename="../generated/Settings.py" line="352"/>
         <source>COIN 5:</source>
         <translation>ÉRME 5:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="341"/>
+        <location filename="../generated/Settings.py" line="353"/>
         <source>COIN 6:</source>
         <translation>ÉRME 6:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="342"/>
+        <location filename="../generated/Settings.py" line="354"/>
         <source>CPP:</source>
         <translation>CPP:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="343"/>
+        <location filename="../generated/Settings.py" line="355"/>
         <source>COIN 1:</source>
         <translation>ÉRME 1:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="344"/>
+        <location filename="../generated/Settings.py" line="356"/>
         <source>COIN 2:</source>
         <translation>ÉRME 2:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="346"/>
+        <location filename="../generated/Settings.py" line="358"/>
         <source>One song costs:</source>
         <translation>Egy zene ára:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="336"/>
+        <location filename="../generated/Settings.py" line="348"/>
         <source>Money tracking server address:</source>
         <translation>Szerver címe:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="320"/>
+        <location filename="../generated/Settings.py" line="332"/>
         <source>Bluetooth enabled:</source>
         <translation>Bluetooth megengedve:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="333"/>
+        <location filename="../generated/Settings.py" line="345"/>
         <source>Song times visible:</source>
         <translation>Zene idejének ábrázolása:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="325"/>
+        <location filename="../generated/Settings.py" line="337"/>
         <source>Genre based</source>
         <translation>Zsáner</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="326"/>
+        <location filename="../generated/Settings.py" line="338"/>
         <source>Alphabetical</source>
         <translation>ABC sorrend</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="327"/>
+        <location filename="../generated/Settings.py" line="339"/>
         <source>View type:</source>
         <translation>Listázás típusa:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="337"/>
+        <location filename="../generated/Settings.py" line="349"/>
         <source>General settings</source>
         <translation>Fõ beállítások</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="347"/>
+        <location filename="../generated/Settings.py" line="359"/>
         <source>Coin machine locked at:</source>
         <translation>Érmevizsgáló lezár:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="348"/>
+        <location filename="../generated/Settings.py" line="361"/>
         <source>Money settings</source>
         <translation>Pénzbeállítás</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="350"/>
+        <location filename="../generated/Settings.py" line="363"/>
         <source>Language</source>
         <translation>Nyelv</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="351"/>
+        <location filename="../generated/Settings.py" line="364"/>
         <source>Available languages:</source>
         <translation>Beállítható nyelvek:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="352"/>
+        <location filename="../generated/Settings.py" line="365"/>
         <source>Actual selected language</source>
         <translation>Kiválasztott nyelv</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="353"/>
+        <location filename="../generated/Settings.py" line="366"/>
         <source>Language settings</source>
         <translation>Nyelvbeállítás</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="332"/>
+        <location filename="../generated/Settings.py" line="344"/>
         <source>Genre selection type:</source>
         <translation>Zsánerlistázás:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="334"/>
+        <location filename="../generated/Settings.py" line="346"/>
         <source>Type 1</source>
         <translation>Típus 1</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="335"/>
+        <location filename="../generated/Settings.py" line="347"/>
         <source>Type 2</source>
         <translation>Típus 2</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="345"/>
+        <location filename="../generated/Settings.py" line="357"/>
         <source>1 minute of bluetooth costs:</source>
         <translation>1 perc BT ára:</translation>
+    </message>
+    <message>
+        <location filename="../generated/Settings.py" line="360"/>
+        <source>Price for one BT pairing:</source>
+        <translation>Egy BT párosítás ára:</translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="106"/>
         <source>Currency has changed!</source>
         <translation>Pénznem megváltozott!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="103"/>
+        <location filename="../ui/SettingsWindow.py" line="106"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>A Valuta változtatása törli a belsõ változókat, mehet ?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="106"/>
+        <location filename="../ui/SettingsWindow.py" line="109"/>
         <source>Currency is goin to change!</source>
         <translation>Pénznemváltoztatás!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="106"/>
+        <location filename="../ui/SettingsWindow.py" line="109"/>
         <source>Proceed?</source>
         <translation>Mehet?</translation>
     </message>
