@@ -35,6 +35,18 @@ class CurrencyHuf:
     def shortString():
         return "Ft"
 
+class CoinSettingsIndexes:
+    COIN_1 = 0
+    COIN_2 = 1
+    COIN_3 = 2
+    COIN_4 = 3
+    COIN_5 = 4
+    COIN_6 = 5
+    CPP_VALUE = 6
+    MINUTE_COST_VALUE = 7
+    SONG_COST_VALUE = 8
+    MONEY_BLUETOOTH_OVERTAKING_VALUE = 9
+
 class AppSettings:
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/blue-app.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
@@ -54,7 +66,7 @@ class AppSettings:
     WirelessPassString = "WirelessPass"
 
     CoinValuesString = "coin-settings"
-    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.05,0.50], "HUF" : [100,200,0,0,0,0,500,10,100] }
+    DefaultCoinValues = { "EUR" : [0,0,0.5,1,2,0,1,0.05,0.50,0.50], "HUF" : [100,200,0,0,0,0,500,10,100,100] }
 
     AppVersion = "UNKNOWN"
     DeviceNameString = "DeviceName"
@@ -160,7 +172,10 @@ class AppSettings:
 
     @staticmethod
     def actualCoinSettings(appSettings = None):
-        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinValuesString, AppSettings.DefaultCoinValues[AppSettings.actualCurrency()], float)
+        default = AppSettings.DefaultCoinValues[AppSettings.actualCurrency()]
+        value = AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinValuesString, [], float)
+        value.extend(default[len(value):])
+        return value
 
     @staticmethod
     def defaultCoinSettings(currency):

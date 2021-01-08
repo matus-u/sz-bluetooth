@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from generated.Settings import Ui_Settings
 
 from services.AppSettings import AppSettings
+from services.AppSettings import CoinSettingsIndexes
 from ui import WaitUserWindow
 
 class SettingsWindow(QtWidgets.QDialog):
@@ -77,9 +78,10 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.coin4value.setValue(coinSettings[3])
         self.ui.coin5value.setValue(coinSettings[4])
         self.ui.coin6value.setValue(coinSettings[5])
-        self.ui.cppValue.setValue(coinSettings[6])
-        self.ui.secondCostsValue.setValue(coinSettings[7])
-        self.ui.songCostsValue.setValue(coinSettings[8])
+        self.ui.cppValue.setValue(coinSettings[CoinSettingsIndexes.CPP_VALUE])
+        self.ui.secondCostsValue.setValue(coinSettings[CoinSettingsIndexes.MINUTE_COST_VALUE])
+        self.ui.songCostsValue.setValue(coinSettings[CoinSettingsIndexes.SONG_COST_VALUE])
+        self.ui.btMoneyOvertakeValue.setValue(coinSettings[CoinSettingsIndexes.MONEY_BLUETOOTH_OVERTAKING_VALUE])
 
     def getCoinSettingsFromUi(self):
         return [
@@ -91,7 +93,8 @@ class SettingsWindow(QtWidgets.QDialog):
             self.ui.coin6value.value(),
             self.ui.cppValue.value(),
             self.ui.secondCostsValue.value(),
-            self.ui.songCostsValue.value()
+            self.ui.songCostsValue.value(),
+            self.ui.btMoneyOvertakeValue.value()
         ]
 
     def onLanguageComboboxChanged(self, index):

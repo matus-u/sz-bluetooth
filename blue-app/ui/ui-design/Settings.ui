@@ -49,7 +49,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -455,8 +455,8 @@
       <rect>
        <x>305</x>
        <y>60</y>
-       <width>321</width>
-       <height>131</height>
+       <width>391</width>
+       <height>181</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
@@ -483,14 +483,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string>One song costs:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="songCostsValue">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -499,21 +499,21 @@
          </sizepolicy>
         </property>
         <property name="decimals">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
          <string>Coin machine locked at:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="coinLockLevel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -522,10 +522,30 @@
          </sizepolicy>
         </property>
         <property name="decimals">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="maximum">
          <double>100000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Price for one BT pairing:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="btMoneyOvertakeValue">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <double>999.990000000000009</double>
         </property>
        </widget>
       </item>
