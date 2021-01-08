@@ -592,7 +592,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def updateWinCounterLabels(self):
         data = self.wheelFortuneService.getActualFortuneTryLevels()
         self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
-        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format("{0:.2f}".format(data[0]), AppSettings.actualCurrency()))
+        currentCurrencyClass = AppSettings.currencyClass()
+        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format(currentCurrencyClass.toString(data[0]), currentCurrencyClass.shortString()))
         self.ui.actualFortuneCount.setVisible(True)
         self.ui.actualNeedFortuneMoney.setVisible(True)
 
