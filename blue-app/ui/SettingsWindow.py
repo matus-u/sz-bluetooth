@@ -29,6 +29,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.bluetoothEnabledCheckBox.setChecked(AppSettings.actualBluetoothEnabled())
         self.setCoinSettings(AppSettings.actualCoinSettings())
         self.ui.coinLockLevel.setValue(AppSettings.actualCoinLockLevel())
+        self.ui.inkeeperPercentile.setValue(AppSettings.actualInkeeperPercentile())
 
         availableLanguages = AppSettings.actualAvailableLanguages()
         allLanguageList = AppSettings.LanguageList
@@ -130,7 +131,8 @@ class SettingsWindow(QtWidgets.QDialog):
                                   self.ui.songTimeCheckBox.isChecked(),
                                   self.ui.viewTypeComboBox.currentIndex(),
                                   self.ui.genreIteratingComboBox.currentIndex(),
-                                  self.ui.coinLockLevel.value()
+                                  self.ui.coinLockLevel.value(),
+                                  self.ui.inkeeperPercentile.value()
                                   )
         self.accept()
         self.waitUserWindow.accept()

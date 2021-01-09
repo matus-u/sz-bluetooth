@@ -89,6 +89,7 @@ class WebSocketStatus(TimerService.TimerStatusObject):
                 "previous_gain_date" : gains[MoneyTracker.PreviousDate],
                 "actual_gain" : gains[MoneyTracker.ActualGain],
                 "actual_gain_date" : gains[MoneyTracker.ActualDate],
+                "inkeeper_perc" : AppSettings.actualInkeeperPercentile(),
                 }}
         textMsg = self.createPhxMessage("update-status", data)
         LoggingService.getLogger().debug("Data to websocket %s" % textMsg)

@@ -74,6 +74,7 @@ class AppSettings:
     ServicePhoneString = "ServicePhone"
     DescString = "Description"
     MoneyServerString = "MoneyServer"
+    InkeeperPercentileString = "InkeeperPercentile"
 
     ViewTypeString = "ViewType"
     ViewTypeList = ["Genre based","Alphabetical"]
@@ -178,6 +179,10 @@ class AppSettings:
         return value
 
     @staticmethod
+    def actualInkeeperPercentile(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.InkeeperPercentileString, 0, int)
+
+    @staticmethod
     def defaultCoinSettings(currency):
         return AppSettings.DefaultCoinValues[currency]
 
@@ -217,7 +222,7 @@ class AppSettings:
         settings.setValue(AppSettings.LanguageString, language)
 
     @classmethod
-    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel):
+    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, language)
         settings.setValue(AppSettings.AvailableLanguagesListString, availableLanguages)
@@ -238,6 +243,7 @@ class AppSettings:
         settings.setValue(AppSettings.GenreIteratingString, AppSettings.GenreIteratingList[genreIteratingIndex])
         settings.setValue(AppSettings.SongTimeVisString, songTimeVisEnabled)
         settings.setValue(AppSettings.BluetoothEnabledString, bluetoothEnabled)
+        settings.setValue(AppSettings.InkeeperPercentileString, inkeeperPercentile)
 
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])

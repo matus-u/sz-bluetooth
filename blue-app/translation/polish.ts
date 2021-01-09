@@ -194,67 +194,67 @@ Select one song and toss will be executed.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="566"/>
+        <location filename="../generated/MainWindow.py" line="568"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="567"/>
+        <location filename="../generated/MainWindow.py" line="569"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="568"/>
+        <location filename="../generated/MainWindow.py" line="570"/>
         <source>PlayLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="569"/>
+        <location filename="../generated/MainWindow.py" line="571"/>
         <source>Empty playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="570"/>
+        <location filename="../generated/MainWindow.py" line="572"/>
         <source>Time of playqueue:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="571"/>
+        <location filename="../generated/MainWindow.py" line="573"/>
         <source>Withdraw money</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="572"/>
+        <location filename="../generated/MainWindow.py" line="574"/>
         <source>Admin settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="573"/>
+        <location filename="../generated/MainWindow.py" line="575"/>
         <source>Wifi settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="574"/>
+        <location filename="../generated/MainWindow.py" line="576"/>
         <source>Wheel settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="575"/>
+        <location filename="../generated/MainWindow.py" line="577"/>
         <source>Leave admin mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="576"/>
+        <location filename="../generated/MainWindow.py" line="578"/>
         <source>Test menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="577"/>
+        <location filename="../generated/MainWindow.py" line="579"/>
         <source>Add credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="578"/>
+        <location filename="../generated/MainWindow.py" line="580"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -276,210 +276,215 @@ Select one song and toss will be executed.</source>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../generated/Settings.py" line="329"/>
+        <location filename="../generated/Settings.py" line="341"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="330"/>
+        <location filename="../generated/Settings.py" line="342"/>
         <source>ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="331"/>
+        <location filename="../generated/Settings.py" line="343"/>
         <source>cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="332"/>
+        <location filename="../generated/Settings.py" line="344"/>
         <source>Bluetooth enabled:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="345"/>
+        <location filename="../generated/Settings.py" line="357"/>
         <source>Song times visible:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="333"/>
+        <location filename="../generated/Settings.py" line="345"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="334"/>
+        <location filename="../generated/Settings.py" line="346"/>
         <source>Europe/Budapest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="335"/>
+        <location filename="../generated/Settings.py" line="347"/>
         <source>Europe/Bratislava</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="336"/>
+        <location filename="../generated/Settings.py" line="348"/>
         <source>Europe/London</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="337"/>
+        <location filename="../generated/Settings.py" line="349"/>
         <source>Genre based</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="338"/>
+        <location filename="../generated/Settings.py" line="350"/>
         <source>Alphabetical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="339"/>
+        <location filename="../generated/Settings.py" line="351"/>
         <source>View type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="340"/>
+        <location filename="../generated/Settings.py" line="352"/>
         <source>Time zone selection:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="341"/>
+        <location filename="../generated/Settings.py" line="353"/>
         <source>EUR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="342"/>
+        <location filename="../generated/Settings.py" line="354"/>
         <source>HUF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="343"/>
+        <location filename="../generated/Settings.py" line="355"/>
         <source>Currency:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="348"/>
+        <location filename="../generated/Settings.py" line="360"/>
         <source>Money tracking server address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="349"/>
+        <location filename="../generated/Settings.py" line="361"/>
         <source>General settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="350"/>
+        <location filename="../generated/Settings.py" line="362"/>
         <source>COIN 3:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="351"/>
+        <location filename="../generated/Settings.py" line="363"/>
         <source>COIN 4:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="352"/>
+        <location filename="../generated/Settings.py" line="364"/>
         <source>COIN 5:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="353"/>
+        <location filename="../generated/Settings.py" line="365"/>
         <source>COIN 6:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="354"/>
+        <location filename="../generated/Settings.py" line="366"/>
         <source>CPP:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="355"/>
+        <location filename="../generated/Settings.py" line="367"/>
         <source>COIN 1:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="356"/>
+        <location filename="../generated/Settings.py" line="368"/>
         <source>COIN 2:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="358"/>
+        <location filename="../generated/Settings.py" line="370"/>
         <source>One song costs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="359"/>
+        <location filename="../generated/Settings.py" line="371"/>
         <source>Coin machine locked at:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="361"/>
+        <location filename="../generated/Settings.py" line="374"/>
         <source>Money settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="363"/>
+        <location filename="../generated/Settings.py" line="376"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="364"/>
+        <location filename="../generated/Settings.py" line="377"/>
         <source>Available languages:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="365"/>
+        <location filename="../generated/Settings.py" line="378"/>
         <source>Actual selected language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="366"/>
+        <location filename="../generated/Settings.py" line="379"/>
         <source>Language settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="344"/>
+        <location filename="../generated/Settings.py" line="356"/>
         <source>Genre selection type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="346"/>
+        <location filename="../generated/Settings.py" line="358"/>
         <source>Type 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="347"/>
+        <location filename="../generated/Settings.py" line="359"/>
         <source>Type 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="357"/>
+        <location filename="../generated/Settings.py" line="369"/>
         <source>1 minute of bluetooth costs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="360"/>
+        <location filename="../generated/Settings.py" line="372"/>
         <source>Price for one BT pairing:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../generated/Settings.py" line="373"/>
+        <source>Inkeeper percentile:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="106"/>
+        <location filename="../ui/SettingsWindow.py" line="107"/>
         <source>Currency has changed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="106"/>
+        <location filename="../ui/SettingsWindow.py" line="107"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="109"/>
+        <location filename="../ui/SettingsWindow.py" line="110"/>
         <source>Currency is goin to change!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="109"/>
+        <location filename="../ui/SettingsWindow.py" line="110"/>
         <source>Proceed?</source>
         <translation type="unfinished"></translation>
     </message>

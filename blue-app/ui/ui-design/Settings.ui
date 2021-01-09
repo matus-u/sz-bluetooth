@@ -49,7 +49,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -456,7 +456,7 @@
        <x>305</x>
        <y>60</y>
        <width>391</width>
-       <height>181</height>
+       <height>221</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
@@ -546,6 +546,26 @@
         </property>
         <property name="maximum">
          <double>999.990000000000009</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>Inkeeper percentile:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="inkeeperPercentile">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>100</number>
         </property>
        </widget>
       </item>
