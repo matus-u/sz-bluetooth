@@ -50,7 +50,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,6,6">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_17" stretch="1,0">
+         <layout class="QVBoxLayout" name="verticalLayout_17" stretch="1,0,0">
           <item>
            <widget class="QLabel" name="languageLabel">
             <property name="sizePolicy">
@@ -79,6 +79,19 @@
              <string/>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>

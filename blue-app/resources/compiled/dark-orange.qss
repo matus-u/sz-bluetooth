@@ -459,6 +459,14 @@ QWidget#actualNeedFortuneMoney
     font-weight: bold;
 }
 
+QWidget#actualCreditValue,
+QWidget#actualMoneyValue,
+QWidget#actualFortuneCount,
+QWidget#actualNeedFortuneMoney
+{
+    font-size: 23px;
+}
+
 QWidget#infoLabel
 {
     font-size: 16px;
