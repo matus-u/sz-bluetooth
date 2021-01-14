@@ -69,6 +69,7 @@ def main():
 
     volumeTimerService = TimerService()
     volumeService = VolumeService()
+    volumeService.setVolume(AppSettings.actualVolumeAtStart())
     volumeTimerService.addTimerWorker(volumeService)
 
     testModeService.testModeEnabled.connect(volumeService.testModeEnabled, QtCore.Qt.QueuedConnection)

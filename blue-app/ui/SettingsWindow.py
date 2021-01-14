@@ -30,6 +30,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.setCoinSettings(AppSettings.actualCoinSettings())
         self.ui.coinLockLevel.setValue(AppSettings.actualCoinLockLevel())
         self.ui.inkeeperPercentile.setValue(AppSettings.actualInkeeperPercentile())
+        self.ui.volumeAtStartBox.setValue(AppSettings.actualVolumeAtStart())
 
         availableLanguages = AppSettings.actualAvailableLanguages()
         allLanguageList = AppSettings.LanguageList
@@ -132,7 +133,8 @@ class SettingsWindow(QtWidgets.QDialog):
                                   self.ui.viewTypeComboBox.currentIndex(),
                                   self.ui.genreIteratingComboBox.currentIndex(),
                                   self.ui.coinLockLevel.value(),
-                                  self.ui.inkeeperPercentile.value()
+                                  self.ui.inkeeperPercentile.value(),
+                                  self.ui.volumeAtStartBox.value()
                                   )
         self.accept()
         self.waitUserWindow.accept()

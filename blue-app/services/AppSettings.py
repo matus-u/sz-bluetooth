@@ -86,7 +86,10 @@ class AppSettings:
     SongTimeVisString = "SongTimesVisible"
     CoinLockLevel = "CoinLockLevel"
 
+    VolumeAtStartString = "VolumeAtStart"
+
     Notifier = AppSettingsNotifier()
+
 
     @staticmethod
     def checkSettingsMap(settings, path):
@@ -183,6 +186,10 @@ class AppSettings:
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.InkeeperPercentileString, 0, int)
 
     @staticmethod
+    def actualVolumeAtStart(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.VolumeAtStartString, 30, int)
+
+    @staticmethod
     def defaultCoinSettings(currency):
         return AppSettings.DefaultCoinValues[currency]
 
@@ -222,7 +229,7 @@ class AppSettings:
         settings.setValue(AppSettings.LanguageString, language)
 
     @classmethod
-    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile):
+    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile, volumeAtStart):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, language)
         settings.setValue(AppSettings.AvailableLanguagesListString, availableLanguages)
@@ -244,6 +251,7 @@ class AppSettings:
         settings.setValue(AppSettings.SongTimeVisString, songTimeVisEnabled)
         settings.setValue(AppSettings.BluetoothEnabledString, bluetoothEnabled)
         settings.setValue(AppSettings.InkeeperPercentileString, inkeeperPercentile)
+        settings.setValue(AppSettings.VolumeAtStartString, volumeAtStart)
 
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])

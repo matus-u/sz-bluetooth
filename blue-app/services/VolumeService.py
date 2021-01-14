@@ -52,3 +52,6 @@ class VolumeService(TimerService.TimerStatusObject):
         if self.active:
             os.system("amixer sset 'Line Out' 1%-")
         self.signalVolumeDown.emit()
+
+    def setVolume(self, volume):
+        os.system("amixer sset 'Line Out' {}%".format(volume))

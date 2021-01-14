@@ -34,3 +34,6 @@ class VolumeService(TimerService.TimerStatusObject):
 
     def testModeDisabled(self):
         print ("Test mode in volume disabled")
+
+    def setVolume(self, volume):
+        print ("Set volume {}".format(volume))
