@@ -3,139 +3,174 @@
 <context>
     <name>ApplicationWindow</name>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="73"/>
+        <location filename="../ui/ApplicationWindow.py" line="80"/>
         <source>Connection with {} failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="74"/>
+        <location filename="../ui/ApplicationWindow.py" line="81"/>
         <source>Scanninng...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="75"/>
+        <location filename="../ui/ApplicationWindow.py" line="82"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="76"/>
+        <location filename="../ui/ApplicationWindow.py" line="83"/>
         <source>CPU temp: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="77"/>
+        <location filename="../ui/ApplicationWindow.py" line="84"/>
         <source>Insert next coin please</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="78"/>
+        <location filename="../ui/ApplicationWindow.py" line="85"/>
         <source>Withdraw money?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="79"/>
+        <location filename="../ui/ApplicationWindow.py" line="86"/>
         <source>Withdraw money action requested. It will reset internal counter. Proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="80"/>
+        <location filename="../ui/ApplicationWindow.py" line="87"/>
         <source>Withdraw succesful.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="81"/>
+        <location filename="../ui/ApplicationWindow.py" line="88"/>
         <source>Internal counter was correctly reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="82"/>
+        <location filename="../ui/ApplicationWindow.py" line="89"/>
         <source>Phone to service: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="83"/>
+        <location filename="../ui/ApplicationWindow.py" line="90"/>
         <source>Admin mode remainse for {}s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="84"/>
+        <location filename="../ui/ApplicationWindow.py" line="91"/>
         <source>songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="85"/>
+        <location filename="../ui/ApplicationWindow.py" line="92"/>
         <source>Playing from bluetooth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="86"/>
+        <location filename="../ui/ApplicationWindow.py" line="93"/>
         <source>Not playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="87"/>
+        <location filename="../ui/ApplicationWindow.py" line="94"/>
         <source>Start is possible at least 5s after previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="88"/>
+        <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>Bluetooth will be connected at: {} </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="89"/>
+        <location filename="../ui/ApplicationWindow.py" line="96"/>
         <source>Connecting to device: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="90"/>
+        <location filename="../ui/ApplicationWindow.py" line="97"/>
         <source>Prize counts and probabilities were updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="91"/>
+        <location filename="../ui/ApplicationWindow.py" line="98"/>
         <source>Paper will out soon, please insert new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="92"/>
+        <location filename="../ui/ApplicationWindow.py" line="99"/>
         <source>Continue with music selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="93"/>
+        <location filename="../ui/ApplicationWindow.py" line="100"/>
         <source>Toss count: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="94"/>
+        <location filename="../ui/ApplicationWindow.py" line="101"/>
         <source>To get next toss: {} {} needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="95"/>
+        <location filename="../ui/ApplicationWindow.py" line="102"/>
         <source>Thank you. You have got access to toss. 
 Select one song and toss will be executed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="96"/>
+        <location filename="../ui/ApplicationWindow.py" line="103"/>
         <source>No prizes left, only music available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="97"/>
+        <location filename="../ui/ApplicationWindow.py" line="104"/>
         <source>SCAN AGAIN...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="98"/>
+        <location filename="../ui/ApplicationWindow.py" line="105"/>
         <source>Activate funcion {} on your device. Set it to visible and press enter for network scanning.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationWindow.py" line="99"/>
+        <location filename="../ui/ApplicationWindow.py" line="106"/>
         <source>min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="107"/>
+        <source>1. Insert money!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="108"/>
+        <source>2. Activate {} on your device!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="109"/>
+        <source>3. Set it to visible and press enter for network scanning!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="110"/>
+        <source>4. Choose your device!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="112"/>
+        <source>6. Your device will be notified, when it is your turn!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="113"/>
+        <source>7. Play music on from your device!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationWindow.py" line="111"/>
+        <source>5. Try enable/disable {} if you device not found!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -67,6 +67,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     SCAN_AGAIN = 24
     INFO_BROWSER_TEXT = 25
     MINUTES = 26
+    BROWSER_TEXT_1 = 27
+    BROWSER_TEXT_2 = 28
+    BROWSER_TEXT_3 = 29
+    BROWSER_TEXT_4 = 30
+    BROWSER_TEXT_5 = 31
+    BROWSER_TEXT_6 = 32
+    BROWSER_TEXT_7 = 33
 
     def createTrTexts(self):
         return {
@@ -97,6 +104,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.SCAN_AGAIN : self.tr("SCAN AGAIN..."),
             self.INFO_BROWSER_TEXT : self.tr("Activate funcion {} on your device. Set it to visible and press enter for network scanning."),
             self.MINUTES : self.tr("min"),
+            self.BROWSER_TEXT_1 : self.tr("1. Insert money!"),
+            self.BROWSER_TEXT_2 : self.tr("2. Activate {} on your device!"),
+            self.BROWSER_TEXT_3 : self.tr("3. Set it to visible and press enter for network scanning!"),
+            self.BROWSER_TEXT_4 : self.tr("4. Choose your device!"),
+            self.BROWSER_TEXT_5 : self.tr("5. Try enable/disable {} if you device not found!"),
+            self.BROWSER_TEXT_6 : self.tr("6. Your device will be notified, when it is your turn!"),
+            self.BROWSER_TEXT_7 : self.tr("7. Play music on from your device!"),
             }
 
     def __init__(self, timerService,
@@ -237,8 +251,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def generateInfoBrowserHtml(self):
         return """
         <html>
-        <body>""" + self.texts[self.INFO_BROWSER_TEXT].format(
-            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />") + """
+        <body>""" + self.texts[self.BROWSER_TEXT_1] + "<br>" + self.texts[self.BROWSER_TEXT_2].format(
+            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />") + "<br>" + self.texts[self.BROWSER_TEXT_3] + "<br>" + self.texts[self.BROWSER_TEXT_4] + "<br>" + self.texts[self.BROWSER_TEXT_5].format(
+            "<img src=\"qrc:/images/bluetooth.png\" height=\"40\" height=\"40\" />") + "<br>" + self.texts[self.BROWSER_TEXT_6] + "<br>" + self.texts[self.BROWSER_TEXT_7] + """
         </body>
         </html>
         """
@@ -595,7 +610,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         data = self.wheelFortuneService.getActualFortuneTryLevels()
         self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
         currentCurrencyClass = AppSettings.currencyClass()
-        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format(currentCurrencyClass.toString(data[0]), currentCurrencyClass.shortString()))
+        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format(currentCurrencyClass.toString(data[0]), currentCurrencyClass.longString()))
         self.ui.actualFortuneCount.setVisible(True)
         self.ui.actualNeedFortuneMoney.setVisible(True)
 
