@@ -55,7 +55,8 @@ class InputHandler(QtCore.QObject):
         l = deque(self.listOfProxies)
         l.rotate(value)
         self.listOfProxies = list(l)
-        rotateAgain = (not self.listOfProxies[0].getManangedWidget().isEnabled()) or (not self.listOfProxies[0].getManangedWidget().isVisible())
+        rotateAgain = (not self.listOfProxies[0].getManangedWidget().isEnabled()) or (not self.listOfProxies[0].getManangedWidget().isVisible()) 
+        rotateAgain = rotateAgain or self.listOfProxies[0].notInterestedInFocus()
         if rotateAgain:
             self.rotate(value)
 
@@ -114,6 +115,9 @@ class FocusNullObject:
     def getManangedWidget(self):
         return self.widget
 
+    def notInterestedInFocus(self):
+        return False
+
 class SimpleInputFocusProxy:
     def __init__(self, inputWidget, ledButtonService, arrowsEnabled=True):
         self.inputWidget = inputWidget
@@ -146,14 +150,18 @@ class SimpleInputFocusProxy:
     def getManangedWidget(self):
         return self.inputWidget
 
+    def notInterestedInFocus(self):
+        return False
+
 class TableWidgetFocusProxy(QtCore.QObject):
-    def __init__(self, widget, confirmHandler, ledButtonService, musicControl = None):
+    def __init__(self, widget, confirmHandler, ledButtonService, musicControl = None, notInterestedInFocusFunc = None):
         super().__init__()
         self.widget = widget
         self.confirmHandler = confirmHandler
         self.ledButtonService = ledButtonService
 
         self.musicControl = musicControl
+        self.notInterestedInFocusFunc = notInterestedInFocusFunc
 
     def onLeft(self):
         if self.musicControl:
@@ -203,9 +211,14 @@ class TableWidgetFocusProxy(QtCore.QObject):
         if self.confirmHandler:
             self.confirmHandler()
 
+    def notInterestedInFocus(self):
+        if self.notInterestedInFocusFunc is not None:
+            return self.notInterestedInFocusFunc()
+        return False
+
 class MusicWidgetFocusProxy(TableWidgetFocusProxy):
-    def __init__(self, widget, confirmHandler, ledButtonService, musicControl):
-        super().__init__(widget, confirmHandler, ledButtonService)
+    def __init__(self, widget, confirmHandler, ledButtonService, musicControl, notInterestedInFocusFunc=None):
+        super().__init__(widget, confirmHandler, ledButtonService, notInterestedInFocusFunc=notInterestedInFocusFunc)
         self.musicControl = musicControl
 
     def onLeft(self):

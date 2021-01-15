@@ -269,7 +269,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(stackIndex)
         if stackIndex == 0:
             self.setActiveFocusHandler(FocusHandler.InputHandler([
-                FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController),
+                FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController,
+                    notInterestedInFocusFunc=lambda: self.ui.adminSettingsButton.isVisible()),
                 FocusHandler.SimpleInputFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
                 FocusHandler.SimpleInputFocusProxy(self.ui.leaveAdminButton, self.ledButtonService),
                 FocusHandler.SimpleInputFocusProxy(self.ui.addCreditButton, self.ledButtonService)
