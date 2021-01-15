@@ -20,6 +20,7 @@ def setLabelMovie(label, language):
     w = label.width()
     h = label.height()
     pixmap = pixmap.scaled(w-10,h-10)
+    label.setMinimumSize(w,h)
     label.setPixmap(pixmap)
     label.setMask(pixmap.mask())
 
