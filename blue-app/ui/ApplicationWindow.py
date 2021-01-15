@@ -271,7 +271,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.setActiveFocusHandler(FocusHandler.InputHandler([
                 FocusHandler.MusicWidgetFocusProxy(self.ui.songsWidget, self.onPlaySong, self.ledButtonService, self.musicController),
                 FocusHandler.SimpleInputFocusProxy(self.ui.withdrawMoneyButton, self.ledButtonService),
-                FocusHandler.SimpleInputFocusProxy(self.ui.leaveAdminButton, self.ledButtonService)
+                FocusHandler.SimpleInputFocusProxy(self.ui.leaveAdminButton, self.ledButtonService),
+                FocusHandler.SimpleInputFocusProxy(self.ui.addCreditButton, self.ledButtonService)
             ]))
         elif stackIndex == 1:
             self.setActiveFocusHandler(FocusHandler.InputHandler([FocusHandler.TextBrowserFocusProxy(self.ui.stackedWidgetPage1, self.ledButtonService, self.musicController, self.onScan)]))
