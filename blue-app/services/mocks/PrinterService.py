@@ -4,6 +4,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.HwErrorHandling import HwErrorHandling
+from services import PathSettings
 
 class PrintingService(QtCore.QObject):
 
@@ -14,6 +15,8 @@ class PrintingService(QtCore.QObject):
     enoughPaper = QtCore.pyqtSignal()
     printStatusUpdated = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
+
+    SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/print-tracking.conf"
 
     def __init__(self, hwErrorHandler, wheelFortuneService):
         super().__init__()

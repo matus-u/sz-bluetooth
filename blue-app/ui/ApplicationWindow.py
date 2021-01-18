@@ -390,7 +390,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.musicController.selectModel()
 
     def onAdminSettingsButton(self):
-        w = SettingsWindow.SettingsWindow(self, self.moneyTracker, self.wheelFortuneService, self.creditService)
+        w = SettingsWindow.SettingsWindow(self, self.moneyTracker, self.wheelFortuneService, self.creditService, self.printingService)
         w.finished.connect(self.onSettingsFinished)
         self.openSubWindow(w)
 

@@ -453,9 +453,9 @@
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>305</x>
-       <y>60</y>
-       <width>391</width>
+       <x>300</x>
+       <y>20</y>
+       <width>321</width>
        <height>221</height>
       </rect>
      </property>
@@ -570,6 +570,19 @@
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QPushButton" name="resetMoneyButton">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>270</y>
+       <width>481</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Reset to money settings defaults</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3">

@@ -5,16 +5,19 @@ from generated.Settings import Ui_Settings
 
 from services.AppSettings import AppSettings
 from services.AppSettings import CoinSettingsIndexes
+from services.PlayTrackCounter import PlayTrackCounter
+import os
 from ui import WaitUserWindow
 
 class SettingsWindow(QtWidgets.QDialog):
-    def __init__(self, parent, moneyTracker, fortuneService, creditService):
+    def __init__(self, parent, moneyTracker, fortuneService, creditService, printingService):
         super(SettingsWindow, self).__init__(parent)
         self.ui = Ui_Settings()
         self.ui.setupUi(self)
         self.moneyTracker = moneyTracker
         self.fortuneService = fortuneService
         self.creditService = creditService
+        self.printingService = printingService
 
         self.ui.okButton.clicked.connect(self.onOkButton)
         self.ui.cancelButton.clicked.connect(self.onCancelButton)
@@ -51,6 +54,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.ui.languageCombobox.setCurrentText(AppSettings.actualLanguage())
         self.enableCheckBoxes()
         self.waitUserWindow = WaitUserWindow.WaitUserWindow(self)
+        self.ui.resetMoneyButton.clicked.connect(self.onResetMoneyButton)
 
     def rePopulageLanguageCombobox(self):
         currentLang = self.ui.languageCombobox.currentText()
@@ -120,6 +124,23 @@ class SettingsWindow(QtWidgets.QDialog):
 
         QtCore.QTimer.singleShot(500, self.onOkWork)
         self.waitUserWindow.exec()
+
+    def onResetMoneyButton(self):
+        shouldReset = QtWidgets.QMessageBox.question(self, self.tr("Reset all money related settings?!"), self.tr("It will resets all internal money counters, wheel settings and reboot the board, proceed?"))
+        if shouldReset == QtWidgets.QMessageBox.Yes:
+
+            shouldReset = QtWidgets.QMessageBox.question(self, self.tr("Proceed?"), self.tr("Settings are going to be set to defaults. Board will reboot!"))
+            if shouldReset == QtWidgets.QMessageBox.Yes:
+                self.moneyTracker.resetAllCounters()
+                self.creditService.clearCredit()
+                AppSettings.resetMoneyRelatedSettings()
+                self.fortuneService.resetActualFortuneTryLevels()
+                self.fortuneService.resetFortuneToDefault()
+                if os.path.exists(self.printingService.SettingsPath):
+                  os.remove(self.printingService.SettingsPath)
+                if os.path.exists(PlayTrackCounter.SettingsPath):
+                  os.remove(PlayTrackCounter.SettingsPath)
+                os.system("shutdown -r now")
 
     def onOkWork(self):
         AppSettings.storeSettings(self.ui.languageCombobox.currentText(),

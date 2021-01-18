@@ -8,6 +8,7 @@ from services import PathSettings
 import json
 import random
 import copy
+import os
 
 class WheelFortuneService(QtCore.QObject):
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/wheel-fortune.conf"
@@ -171,6 +172,10 @@ class WheelFortuneService(QtCore.QObject):
         self.counter = 0.0
         self.winTries = 0
         self.fortuneDataChanged.emit()
+
+    def resetFortuneToDefault(self):
+        if os.path.exists(WheelFortuneService.SettingsPath):
+          os.remove(WheelFortuneService.SettingsPath)
 
     def lowestPrizeIndex(self, probabilityValues):
         ind = -1

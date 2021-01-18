@@ -231,67 +231,67 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../generated/MainWindow.py" line="568"/>
+        <location filename="../generated/MainWindow.py" line="569"/>
         <source>MainWindow</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="574"/>
+        <location filename="../generated/MainWindow.py" line="575"/>
         <source>Admin settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="570"/>
+        <location filename="../generated/MainWindow.py" line="571"/>
         <source>PlayLabel</source>
         <translation>Aktuálna pesnička</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="571"/>
+        <location filename="../generated/MainWindow.py" line="572"/>
         <source>Empty playlist</source>
         <translation>Zoznam skladieb je prázdny</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="573"/>
+        <location filename="../generated/MainWindow.py" line="574"/>
         <source>Withdraw money</source>
         <translation>Vyber peniaze</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="580"/>
+        <location filename="../generated/MainWindow.py" line="581"/>
         <source>Disconnect</source>
         <translation>Odpojiť</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="577"/>
+        <location filename="../generated/MainWindow.py" line="578"/>
         <source>Leave admin mode</source>
         <translation>Opustiť admin mód</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="575"/>
+        <location filename="../generated/MainWindow.py" line="576"/>
         <source>Wifi settings</source>
         <translation>Wifi nastavenia</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="579"/>
+        <location filename="../generated/MainWindow.py" line="580"/>
         <source>Add credit</source>
         <translation>Kredit</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="572"/>
+        <location filename="../generated/MainWindow.py" line="573"/>
         <source>Time of playqueue:</source>
         <translation>Čas playlistu:</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="576"/>
+        <location filename="../generated/MainWindow.py" line="577"/>
         <source>Wheel settings</source>
         <translation>Nastavenia losovania</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="578"/>
+        <location filename="../generated/MainWindow.py" line="579"/>
         <source>Test menu</source>
         <translation>Test menu</translation>
     </message>
     <message>
-        <location filename="../generated/MainWindow.py" line="569"/>
+        <location filename="../generated/MainWindow.py" line="570"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
@@ -314,227 +314,247 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../generated/Settings.py" line="363"/>
+        <location filename="../generated/Settings.py" line="366"/>
         <source>Dialog</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="374"/>
+        <location filename="../generated/Settings.py" line="377"/>
         <source>Time zone selection:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="364"/>
+        <location filename="../generated/Settings.py" line="367"/>
         <source>ok</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="365"/>
+        <location filename="../generated/Settings.py" line="368"/>
         <source>cancel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="367"/>
+        <location filename="../generated/Settings.py" line="370"/>
         <source>UTC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="368"/>
+        <location filename="../generated/Settings.py" line="371"/>
         <source>Europe/Budapest</source>
         <translation>Budapest</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="369"/>
+        <location filename="../generated/Settings.py" line="372"/>
         <source>Europe/Bratislava</source>
         <translation>Blava</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="370"/>
+        <location filename="../generated/Settings.py" line="373"/>
         <source>Europe/London</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="377"/>
+        <location filename="../generated/Settings.py" line="380"/>
         <source>Currency:</source>
         <translation>Mena:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="375"/>
+        <location filename="../generated/Settings.py" line="378"/>
         <source>EUR</source>
         <translation>EUR</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="376"/>
+        <location filename="../generated/Settings.py" line="379"/>
         <source>HUF</source>
         <translation>HUF</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="384"/>
+        <location filename="../generated/Settings.py" line="387"/>
         <source>COIN 3:</source>
         <translation>MINCA 3:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="385"/>
+        <location filename="../generated/Settings.py" line="388"/>
         <source>COIN 4:</source>
         <translation>MINCA 4:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="386"/>
+        <location filename="../generated/Settings.py" line="389"/>
         <source>COIN 5:</source>
         <translation>MINCA 5:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="387"/>
+        <location filename="../generated/Settings.py" line="390"/>
         <source>COIN 6:</source>
         <translation>MINCA 6:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="388"/>
+        <location filename="../generated/Settings.py" line="391"/>
         <source>CPP:</source>
         <translation>CPP:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="389"/>
+        <location filename="../generated/Settings.py" line="392"/>
         <source>COIN 1:</source>
         <translation>MINCA 1:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="390"/>
+        <location filename="../generated/Settings.py" line="393"/>
         <source>COIN 2:</source>
         <translation>MINCA 2:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="392"/>
+        <location filename="../generated/Settings.py" line="395"/>
         <source>One song costs:</source>
         <translation>Jedna pieseň stojí:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="382"/>
+        <location filename="../generated/Settings.py" line="385"/>
         <source>Money tracking server address:</source>
         <translation>Adresa servera:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="366"/>
+        <location filename="../generated/Settings.py" line="369"/>
         <source>Bluetooth enabled:</source>
         <translation>Bluetooth zapnutý:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="379"/>
+        <location filename="../generated/Settings.py" line="382"/>
         <source>Song times visible:</source>
         <translation>Viditeľnosť časov piesní:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="371"/>
+        <location filename="../generated/Settings.py" line="374"/>
         <source>Genre based</source>
         <translation>Usporiadať žánrami</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="372"/>
+        <location filename="../generated/Settings.py" line="375"/>
         <source>Alphabetical</source>
         <translation>Usporiadať abecedne</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="373"/>
+        <location filename="../generated/Settings.py" line="376"/>
         <source>View type:</source>
         <translation>Typ usporiadania:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="383"/>
+        <location filename="../generated/Settings.py" line="386"/>
         <source>General settings</source>
         <translation>Všeobecné nastavenia</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="393"/>
+        <location filename="../generated/Settings.py" line="396"/>
         <source>Coin machine locked at:</source>
         <translation>Mincovník zamknúť pri:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="396"/>
+        <location filename="../generated/Settings.py" line="400"/>
         <source>Money settings</source>
         <translation>Nastavenie peňazí</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="398"/>
+        <location filename="../generated/Settings.py" line="402"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="399"/>
+        <location filename="../generated/Settings.py" line="403"/>
         <source>Available languages:</source>
         <translation>Dostupné jazyky:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="400"/>
+        <location filename="../generated/Settings.py" line="404"/>
         <source>Actual selected language</source>
         <translation>Aktuálny jazyk</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="401"/>
+        <location filename="../generated/Settings.py" line="405"/>
         <source>Language settings</source>
         <translation>Jazykové nastavenia</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="378"/>
+        <location filename="../generated/Settings.py" line="381"/>
         <source>Genre selection type:</source>
         <translation>Typ výberu žánra:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="380"/>
+        <location filename="../generated/Settings.py" line="383"/>
         <source>Type 1</source>
         <translation>Typ 1</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="381"/>
+        <location filename="../generated/Settings.py" line="384"/>
         <source>Type 2</source>
         <translation>Typ 2</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="391"/>
+        <location filename="../generated/Settings.py" line="394"/>
         <source>1 minute of bluetooth costs:</source>
         <translation>1min bluetooth stojí:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="394"/>
+        <location filename="../generated/Settings.py" line="397"/>
         <source>Price for one BT pairing:</source>
         <translation>Cena za jedno BT párovanie:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="395"/>
+        <location filename="../generated/Settings.py" line="398"/>
         <source>Inkeeper:</source>
         <translation>Prevádzkar:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="402"/>
+        <location filename="../generated/Settings.py" line="406"/>
         <source>Volume at start:</source>
         <translation>Hlasitosť pri spustení:</translation>
     </message>
     <message>
-        <location filename="../generated/Settings.py" line="403"/>
+        <location filename="../generated/Settings.py" line="407"/>
         <source>Volume settings</source>
         <translation>Nastavenie hlasitosti</translation>
+    </message>
+    <message>
+        <location filename="../generated/Settings.py" line="399"/>
+        <source>Reset to money settings defaults</source>
+        <translation>Zmazať peňažné nastavenia do predvolených</translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="108"/>
+        <location filename="../ui/SettingsWindow.py" line="111"/>
         <source>Currency has changed!</source>
         <translation>Mena bola zmenená!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="108"/>
+        <location filename="../ui/SettingsWindow.py" line="111"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>Zmena meny resetne všetky interné počítadlá, pokračovať?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="111"/>
+        <location filename="../ui/SettingsWindow.py" line="114"/>
         <source>Currency is goin to change!</source>
         <translation>Ideš zmeniť menu!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="111"/>
+        <location filename="../ui/SettingsWindow.py" line="131"/>
         <source>Proceed?</source>
         <translation>Pokračovať?</translation>
+    </message>
+    <message>
+        <location filename="../ui/SettingsWindow.py" line="128"/>
+        <source>Reset all money related settings?!</source>
+        <translation>Zmazať všetky peňažné nastavenia?!</translation>
+    </message>
+    <message>
+        <location filename="../ui/SettingsWindow.py" line="128"/>
+        <source>It will resets all internal money counters, wheel settings and reboot the board, proceed?</source>
+        <translation>Budú zmazané všetky peňažné počítadlá, nastavenia kolesa a zariadenie bude reštartované, pokračovať?</translation>
+    </message>
+    <message>
+        <location filename="../ui/SettingsWindow.py" line="131"/>
+        <source>Settings are going to be set to defaults. Board will reboot!</source>
+        <translation>Nastavenia budú zmazané. Zariadenie bude reštartované!</translation>
     </message>
 </context>
 <context>

@@ -194,14 +194,18 @@ class AppSettings:
         return AppSettings.DefaultCoinValues[currency]
 
     @staticmethod
-    def actualCoinLockLevel(appSettings = None):
+    def defaultCoinLockLevel(currency):
         defaultCoinLevel = 0.0
-        if AppSettings.actualCurrency(appSettings) == "EUR":
+        if currency == "EUR":
             defaultCoinLevel = 4.0
 
-        if AppSettings.actualCurrency(appSettings) == "HUF":
+        if currency == "HUF":
             defaultCoinLevel = 1000
-        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinLockLevel, defaultCoinLevel, float)
+        return defaultCoinLevel
+
+    @staticmethod
+    def actualCoinLockLevel(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.CoinLockLevel, AppSettings.defaultCoinLockLevel(AppSettings.actualCurrency(appSettings)), float)
 
     @staticmethod
     def currencyStringByIndex(index):
@@ -227,6 +231,15 @@ class AppSettings:
     def storeLanguage(cls, language):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, language)
+
+    @classmethod
+    def resetMoneyRelatedSettings(cls):
+        settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
+        currency = AppSettings.actualCurrency()
+        settings.setValue(AppSettings.InkeeperPercentileString, 0)
+        settings.setValue(AppSettings.CoinValuesString, AppSettings.defaultCoinSettings(currency))
+        settings.setValue(AppSettings.CoinLockLevel, AppSettings.defaultCoinLockLevel(currency))
+        settings.sync()
 
     @classmethod
     def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile, volumeAtStart):
