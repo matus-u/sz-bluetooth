@@ -161,6 +161,12 @@ class PrintingService(QtCore.QObject):
             LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
             self.errorFunc()
 
+    def printWithdrawTicket(self, gain, prizes, inkeeperPerc):
+        print ("Print withdraw ticket!")
+        print ("Gain: %0.2f" % gain)
+        print ("InkeeperPerc: %0.2f" % inkeeperPerc)
+        print (prizes)
+
     def printTestTicket(self):
         try:
             self.statusValid = False

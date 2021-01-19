@@ -6,6 +6,8 @@ from services.LoggingService import LoggingService
 from datetime import date, timedelta
 from services import PathSettings
 
+import json
+
 class MoneyTracker(QtCore.QObject):
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/money-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
@@ -22,6 +24,12 @@ class MoneyTracker(QtCore.QObject):
 
     PreviousDate = "PreviousDate"
     ActualDate = "ActualDate"
+
+    FromLastWithdrawGain = "FromLastWithdrawGain"
+
+    WonPrizesCounter = "WonPrizesCounter"
+
+    withdrawHappened = QtCore.pyqtSignal(float, object)
 
     def __init__(self):
         super().__init__()
@@ -58,10 +66,34 @@ class MoneyTracker(QtCore.QObject):
         self.settings.setValue(MoneyTracker.ActualGain, self.settings.value(MoneyTracker.ActualGain, 0.0, float) + money)
         #self.settings.sync()
 
+    def addPrizeWin(self, name, prize):
+        key = name + "-" + "%0.2f" % prize
+        prizesCounts = json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))
+        prizesCounts[key] = prizesCounts.get(key, 0) + 1
+        self.settings.setValue(MoneyTracker.WonPrizesCounter, json.dumps(prizesCounts))
+
     def withdraw(self):
         LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
+
+        gainBeforeLastWithdraw = self.settings.value(MoneyTracker.FromLastWithdrawGain, 0.0, float)
+        gainBeforeLastWithdraw += self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float)
+
+        prizesCounts = json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))
+        for key, count in prizesCounts.items():
+            name, prize = key.rsplit('-',1)
+            gainBeforeLastWithdraw -= (float(prize) * count)
+
+        self.withdrawHappened.emit(gainBeforeLastWithdraw, prizesCounts)
+
+        if gainBeforeLastWithdraw > 0:
+            gainBeforeLastWithdraw = 0
+
+        self.settings.setValue(MoneyTracker.WonPrizesCounter, json.dumps({}))
+        self.settings.setValue(MoneyTracker.FromLastWithdrawGain, gainBeforeLastWithdraw)
         self.settings.setValue(MoneyTracker.FromLastWithdrawCounter, 0.0)
         self.settings.setValue(MoneyTracker.LastWithdrawDate, str(date.today()))
+
+
         self.settings.sync()
 
     def resetAllCounters(self):
@@ -73,6 +105,8 @@ class MoneyTracker(QtCore.QObject):
         self.settings.setValue(MoneyTracker.ActualGain, 0.0)
         self.settings.setValue(MoneyTracker.PreviousDate, "")
         self.settings.setValue(MoneyTracker.ActualDate, "")
+        self.settings.setValue(MoneyTracker.FromLastWithdrawGain, 0)
+        self.settings.setValue(MoneyTracker.WonPrizesCounter, json.dumps({}))
         self.settings.sync()
 
     def getCounters(self):

@@ -26,8 +26,6 @@ class CreditBluetoothRepresentation:
         credit = self.creditService.getCredit()
         bluetoothThreshold = self.creditService.getCoinSettings()[CoinSettingsIndexes.MONEY_BLUETOOTH_OVERTAKING_VALUE]
 
-        print (credit)
-        print (bluetoothThreshold)
         if credit > bluetoothThreshold:
             self.creditService.changeCredit(-1*bluetoothThreshold)
             return self._calcValueRepr(bluetoothThreshold)

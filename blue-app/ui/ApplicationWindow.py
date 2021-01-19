@@ -314,10 +314,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def getActualFocusHandler(self):
         return self.activeFocusHandler
 
-    def onFortuneServiceTry(self, indexOfPrize, prizeName):
+    def onFortuneServiceTry(self, indexOfPrize, prizeName, cost):
         w = FortuneWheelWindow.FortuneWheelWindow(self, indexOfPrize, prizeName, self.printingService, self.ledButtonService)
         self.wheelWindow = w
         w.finished.connect(lambda: self.onWheelFortuneFinished(w))
+        if indexOfPrize > 0:
+            self.moneyTracker.addPrizeWin(prizeName, cost)
         self.openSubWindow(w)
 
     def onTestMenuButton(self, printerService, ledButtonService, volumeService, arrowHandler):

@@ -19,7 +19,7 @@ class WheelFortuneService(QtCore.QObject):
     InitProbabilities = "InitProbabilities"
 
     reducePrizeCount = QtCore.pyqtSignal(int)
-    win = QtCore.pyqtSignal(int, str)
+    win = QtCore.pyqtSignal(int, str, float)
 
     probabilitiesUpdated = QtCore.pyqtSignal()
 
@@ -146,9 +146,9 @@ class WheelFortuneService(QtCore.QObject):
                 self.settings.setValue(WheelFortuneService.Probabilities, json.dumps(self.probabilityValues))
                 self.reducePrizeCount.emit(win)
                 LoggingService.getLogger().info("Toss number " + str(win) + " " + self.getAllNames()[win])
-                self.win.emit(win, self.getAllNames()[win])
+                self.win.emit(win, self.getAllNames()[win], self.getAllCosts()[win])
             else:
-                self.win.emit(0, self.getAllNames()[0])
+                self.win.emit(0, self.getAllNames()[0], 0.0)
 
     def actualProbs(self):
         return self.probabilityValues

@@ -52,3 +52,9 @@ class PrintingService(QtCore.QObject):
 
     def printTestTicket(self):
         print ("Print test ticket!")
+
+    def printWithdrawTicket(self, gain, prizes, inkeeperPerc):
+        print ("Print withdraw ticket!")
+        print ("Gain: %0.2f" % gain)
+        print ("InkeeperPerc: %0.2f" % inkeeperPerc)
+        print (prizes)

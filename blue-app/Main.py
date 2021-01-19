@@ -47,6 +47,8 @@ def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus
     adminModeTracker.adminModeLeaveTime.connect(applicationWindow.onAdminRemaining)
     applicationWindow.adminModeLeaveButton.connect(adminModeTracker.disableAdminMode)
 
+def withdrawHappened(printingService, gain, prizes):
+    printingService.printWithdrawTicket(gain, prizes, AppSettings().actualInkeeperPercentile())
 
 def main():
     os.environ["QML2_IMPORT_PATH"]="resources/kbstyle"
@@ -78,7 +80,6 @@ def main():
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
-
     gpioTimerService = TimerService()
     gpioService = GpioService()
     gpioTimerService.addTimerWorker(gpioService)
@@ -87,6 +88,7 @@ def main():
 
     wheelFortuneService = WheelFortuneService()
     printingService = PrintingService(errorHandler, wheelFortuneService)
+    moneyTracker.withdrawHappened.connect(lambda gain, prizes: withdrawHappened(printingService, gain, prizes))
 
     pixmapService = PixmapService()
 
