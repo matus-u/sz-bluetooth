@@ -18,6 +18,7 @@ class MoneyTracker(QtCore.QObject):
 
     FROM_LAST_WITHDRAW_COUNTER_INDEX = 0
     TOTAL_COUNTER_INDEX = 1
+    ACTUAL_GAIN_FROM_LAST_WITHDRAW = 2
 
     PreviousGain = "PreviousGain"
     ActualGain = "ActualGain"
@@ -72,8 +73,7 @@ class MoneyTracker(QtCore.QObject):
         prizesCounts[key] = prizesCounts.get(key, 0) + 1
         self.settings.setValue(MoneyTracker.WonPrizesCounter, json.dumps(prizesCounts))
 
-    def withdraw(self):
-        LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
+    def calculateActualGainFromPreviousWithdraw(self):
 
         gainBeforeLastWithdraw = self.settings.value(MoneyTracker.FromLastWithdrawGain, 0.0, float)
         gainBeforeLastWithdraw += self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float)
@@ -83,6 +83,12 @@ class MoneyTracker(QtCore.QObject):
             name, prize = key.rsplit('-',1)
             gainBeforeLastWithdraw -= (float(prize) * count)
 
+        return gainBeforeLastWithdraw
+
+    def withdraw(self):
+        LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
+
+        gainBeforeLastWithdraw = self.calculateActualGainFromPreviousWithdraw()
         self.withdrawHappened.emit(gainBeforeLastWithdraw, prizesCounts)
 
         if gainBeforeLastWithdraw > 0:
@@ -110,7 +116,7 @@ class MoneyTracker(QtCore.QObject):
         self.settings.sync()
 
     def getCounters(self):
-        return [self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float), self.settings.value(MoneyTracker.TotalCounter, 0.0, float) ]
+        return [self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float), self.settings.value(MoneyTracker.TotalCounter, 0.0, float), self.calculateActualGainFromPreviousWithdraw() ]
 
     def getGainData(self):
         return {
