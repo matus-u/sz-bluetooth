@@ -110,9 +110,9 @@ class AppSettings:
     def actualAppVersion():
         try:
             f = open("scripts/version", "r")
-            return f.read()
+            return f.read().strip()
         except:
-            return AppVersion.AppVersion
+            return AppSettings.AppVersion
 
     @staticmethod
     def actualAvailableLanguages(appSettings = None):

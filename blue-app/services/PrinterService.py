@@ -54,7 +54,7 @@ class PrintingService(QtCore.QObject):
 
         wheelFortuneService.enabledNotification.connect(lambda enabled: self.onWheelFortuneEnabledNotification(enabled, hwErrorHandler))
 
-        self.initFunc = lambda: self.onWheelFortuneEnabledNotification(wheelFortuneService.isEnabled(), hwErrorHandler)
+        self.initFunc = lambda: self.onWheelFortuneEnabledNotification(True, hwErrorHandler)
 
     def initialize(self):
         self.initFunc()
@@ -90,6 +90,7 @@ class PrintingService(QtCore.QObject):
 
         if self.errorStatus != 18:
             self.printError.emit()
+            LoggingService.getLogger().error("PrintingService: error: {}".format(self.errorStatus))
 
         s.write([0x10, 0x04, 0x04])
         self.paperError = ord(self.readOneByte(s))
@@ -161,11 +162,54 @@ class PrintingService(QtCore.QObject):
             LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
             self.errorFunc()
 
-    def printWithdrawTicket(self, gain, prizes, inkeeperPerc):
-        print ("Print withdraw ticket!")
-        print ("Gain: %0.2f" % gain)
-        print ("InkeeperPerc: %0.2f" % inkeeperPerc)
-        print (prizes)
+    def printWithdrawTicket(self, device, gain, prizes, inkeeperPerc, currency, owner, swVersion, moneyTotal, moneyFromLastWithdraw):
+        def printWithInt():
+            try:
+                self.ticketCounter = self.ticketCounter + 1
+                self.statusValid = False
+                s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
+                s.write([0x1b, 0x40])
+                s.write(("DEVICE: " + device + "\n").encode())
+                s.write(("OWNER: " + owner + "\n").encode())
+                s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+                s.write(("CURRENCY: " + currency + "\n").encode())
+                s.write(("SW-version: " + swVersion + "\n").encode())
+                s.write(("Ticket counter: " + str(self.ticketCounter) + "\n").encode())
+                s.write(("Money total: " + "{0:g}".format(moneyTotal) + "\n").encode())
+                s.write(("Money from withdraw: " + "{0:g}".format(moneyFromLastWithdraw) + "\n").encode())
+                s.write(("Total gain: " + "{0:g}".format(gain) + "\n").encode())
+                inkeeperGain = gain * inkeeperPerc /100 if gain > 0 else 0
+                ownerGain = gain - inkeeperGain if gain > 0 else 0
+                s.write(("Gain owner: " + "{0:g}".format(ownerGain) + "\n").encode())
+                s.write(("Gain inkeeper: " + "{0:g}".format(inkeeperGain) + "\n").encode())
+                s.write(("Won prizes: " + "\n").encode())
+
+                for key, count in prizes.items():
+                    name, prize = key.rsplit('-',1)
+                    s.write((name[0:18] + "/" + "{0:g}".format(float(prize)) + "/" + str(count) + "x\n").encode())
+
+                s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
+
+                #CUT PAPER#
+                s.write([0x1d, 0x56, 0])
+                #s.write(b"\n")
+                self.checkError(s)
+                s.close()
+                LoggingService.getLogger().info("Printed  withdraw ticket!")
+
+                self.statusValid = True
+                self.printStatusUpdated.emit()
+                self.clearPrintCorruptedFunc()
+                self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
+            except:
+                LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
+                self.errorFunc()
+
+        printWithInt()
+        printWithInt()
 
     def printTestTicket(self):
         try:

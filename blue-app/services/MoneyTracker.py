@@ -30,7 +30,7 @@ class MoneyTracker(QtCore.QObject):
 
     WonPrizesCounter = "WonPrizesCounter"
 
-    withdrawHappened = QtCore.pyqtSignal(float, object)
+    withdrawHappened = QtCore.pyqtSignal(float, object, float, float)
 
     def __init__(self):
         super().__init__()
@@ -73,12 +73,11 @@ class MoneyTracker(QtCore.QObject):
         prizesCounts[key] = prizesCounts.get(key, 0) + 1
         self.settings.setValue(MoneyTracker.WonPrizesCounter, json.dumps(prizesCounts))
 
-    def calculateActualGainFromPreviousWithdraw(self):
+    def calculateActualGainFromPreviousWithdraw(self, prizesCounts):
 
         gainBeforeLastWithdraw = self.settings.value(MoneyTracker.FromLastWithdrawGain, 0.0, float)
         gainBeforeLastWithdraw += self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float)
 
-        prizesCounts = json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))
         for key, count in prizesCounts.items():
             name, prize = key.rsplit('-',1)
             gainBeforeLastWithdraw -= (float(prize) * count)
@@ -88,8 +87,9 @@ class MoneyTracker(QtCore.QObject):
     def withdraw(self):
         LoggingService.getLogger().info("Widthraw money " + str(self.getCounters()))
 
-        gainBeforeLastWithdraw = self.calculateActualGainFromPreviousWithdraw()
-        self.withdrawHappened.emit(gainBeforeLastWithdraw, prizesCounts)
+        prizesCounts = json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))
+        gainBeforeLastWithdraw = self.calculateActualGainFromPreviousWithdraw(prizesCounts)
+        self.withdrawHappened.emit(gainBeforeLastWithdraw, prizesCounts, self.settings.value(MoneyTracker.TotalCounter, 0.0, float), self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float))
 
         if gainBeforeLastWithdraw > 0:
             gainBeforeLastWithdraw = 0
@@ -116,7 +116,7 @@ class MoneyTracker(QtCore.QObject):
         self.settings.sync()
 
     def getCounters(self):
-        return [self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float), self.settings.value(MoneyTracker.TotalCounter, 0.0, float), self.calculateActualGainFromPreviousWithdraw() ]
+        return [self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float), self.settings.value(MoneyTracker.TotalCounter, 0.0, float), self.calculateActualGainFromPreviousWithdraw(json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))) ]
 
     def getGainData(self):
         return {

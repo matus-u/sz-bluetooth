@@ -53,8 +53,23 @@ class PrintingService(QtCore.QObject):
     def printTestTicket(self):
         print ("Print test ticket!")
 
-    def printWithdrawTicket(self, gain, prizes, inkeeperPerc):
-        print ("Print withdraw ticket!")
-        print ("Gain: %0.2f" % gain)
-        print ("InkeeperPerc: %0.2f" % inkeeperPerc)
-        print (prizes)
+    def printWithdrawTicket(self, device, gain, prizes, inkeeperPerc, currency, owner, swVersion, moneyTotal, moneyFromLastWithdraw):
+        print("DEVICE: " + device)
+        print("OWNER: " + owner)
+        print(datetime.now().strftime("%H:%M:%S         %d/%m/%Y"))
+        print("CURRENCY: " + currency)
+        print("SW-version: " + swVersion)
+        print("Ticket counter: " + str(self.ticketCounter))
+        print("Money total: " + "{0:g}".format(moneyTotal))
+        print("Money from withdraw: " + "{0:g}".format(moneyFromLastWithdraw))
+        print("Total gain: " + "{0:g}".format(gain))
+        inkeeperGain = gain * inkeeperPerc /100 if gain > 0 else 0
+        ownerGain = gain - inkeeperGain if gain > 0 else 0
+        print("Gain owner: " + "{0:g}".format(ownerGain))
+        print("Gain inkeeper: " + "{0:g}".format(inkeeperGain))
+        print("Won prizes: ")
+
+        for key, count in prizesCounts.items():
+            name, prize = key.rsplit('-',1)
+            print(str(name) + " - " + str(prize) + " - " + str(count))
+
