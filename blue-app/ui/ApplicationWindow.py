@@ -612,7 +612,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         data = self.wheelFortuneService.getActualFortuneTryLevels()
         self.ui.actualFortuneCount.setText(self.texts[self.TOSS_COUNT].format(str(data[1])))
         currentCurrencyClass = AppSettings.currencyClass()
-        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format(currentCurrencyClass.toString(data[0]), currentCurrencyClass.longString()))
+        self.ui.actualNeedFortuneMoney.setText(self.texts[self.TOSS_MONEY_NEEDED].format(currentCurrencyClass.toString(data[0]), currentCurrencyClass.longStringCorrectSpelling()))
         self.ui.actualFortuneCount.setVisible(True)
         self.ui.actualNeedFortuneMoney.setVisible(True)
 

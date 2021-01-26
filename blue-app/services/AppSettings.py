@@ -19,6 +19,9 @@ class CurrencyEur:
     def toString(value):
         return '%.2f' % value
 
+    def longStringCorrectSpelling():
+        return "eur"
+
     def longString():
         return "eur"
 
@@ -30,6 +33,9 @@ class CurrencyHuf:
         return '%.0f' % value
 
     def longString():
+        return "forint"
+
+    def longStringCorrectSpelling():
         return "forintot"
 
     def shortString():
