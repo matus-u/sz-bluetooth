@@ -23,7 +23,7 @@ class SongModel:
         self.playTrackCounter = playTrackCounter
         self.musicByPath = {}
         self.actualSongs = {}
-        self.originalGenreLabelList = [v for v in genreLabelList]
+        self.mainLabelIndex = 2
         self.genreLabelMoving = False
 
     def rotate(self, value, listToRotate):
@@ -32,26 +32,27 @@ class SongModel:
         return list(l)
 
     def nextGenre(self):
-        self.actualGenreList = self.rotate(1, self.actualGenreList)
-        if self.genreLabelMoving and self.genreLabelList[2] != self.originalGenreLabelList[0]:
-            self.genreLabelList = self.rotate(1, self.genreLabelList)
+        self.actualGenreList = self.rotate(-1, self.actualGenreList)
+        if self.genreLabelMoving and self.mainLabelIndex != 4:
+            self.mainLabelIndex = self.mainLabelIndex + 1
         self.reloadSongsWidget()
 
     def previousGenre(self):
-        self.actualGenreList = self.rotate(-1, self.actualGenreList)
-        if self.genreLabelMoving and self.genreLabelList[2] != self.originalGenreLabelList[4]:
-            self.genreLabelList = self.rotate(-1, self.genreLabelList)
+        self.actualGenreList = self.rotate(1, self.actualGenreList)
+        if self.genreLabelMoving and self.mainLabelIndex != 0:
+            self.mainLabelIndex = self.mainLabelIndex - 1
+
         self.reloadSongsWidget()
 
     def centerGenreLabel(self):
-        self.genreLabelList = self.originalGenreLabelList
-        self.reloadGenreWidgets()
+        self.mainLabelIndex = 2
+        self.reloadGenreWidgets(self.generateLabelIndexes())
 
     def rowCount(self):
         return len(self.actualSongs)
 
-    def reloadGenreWidgets(self):
-        for i in (0,1,3,4):
+    def reloadGenreWidgets(self, nonUsedIndexes):
+        for i in nonUsedIndexes:
             self.genreLabelList[i].setStyleSheet("""
                 background-color: rgba(0, 0, 0, 65%);
                 border-top: 2px solid #ABABAB;
@@ -63,34 +64,45 @@ class SongModel:
             self.genreLabelList[i].setMinimumSize(0,30)
             self.genreLabelList[i].setMaximumSize(16777215,30)
 
-        self.genreLabelList[2].setStyleSheet("""
+        self.genreLabelList[self.mainLabelIndex].setStyleSheet("""
             background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);
             border: 2px solid white;
             border-radius: 15;
             font-size: 18px;
             color: white;
             """)
-        self.genreLabelList[2].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding);
-        self.genreLabelList[2].setMinimumSize(0,30)
-        self.genreLabelList[2].setMaximumSize(16777215,16777215)
+        self.genreLabelList[self.mainLabelIndex].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding);
+        self.genreLabelList[self.mainLabelIndex].setMinimumSize(0,30)
+        self.genreLabelList[self.mainLabelIndex].setMaximumSize(16777215,16777215)
+
+    def generateLabelIndexes(self):
+        indexes = [0,1,2,3,4]
+        indexes.remove(self.mainLabelIndex)
+        indexes.sort()
+        return indexes
 
     def reloadSongsWidget(self):
+
+        nonUsedGenreIndexes = self.generateLabelIndexes()
+
         if self.genreLabelMoving:
-            self.reloadGenreWidgets()
+            self.reloadGenreWidgets(nonUsedGenreIndexes)
 
         if self.isBluetooth():
             pix = QtGui.QPixmap(":/images/bluetooth.png")
-            self.genreLabelList[2].setMinimumSize(54,54)
-            self.genreLabelList[2].setMaximumSize(54,54)
-            self.genreLabelList[2].setPixmap(pix.scaled(50,50))
+            self.genreLabelList[self.mainLabelIndex].setMinimumSize(54,54)
+            self.genreLabelList[self.mainLabelIndex].setMaximumSize(54,54)
+            self.genreLabelList[self.mainLabelIndex].setPixmap(pix.scaled(50,50))
         else:
-            self.genreLabelList[2].setText(self.actualGenreList[0])
-            self.genreLabelList[2].setMinimumSize(204,54)
-            self.genreLabelList[2].setMaximumSize(204,54)
-        self.genreLabelList[0].setText(self.actualGenreList[-2])
-        self.genreLabelList[1].setText(self.actualGenreList[-1])
-        self.genreLabelList[3].setText(self.actualGenreList[1])
-        self.genreLabelList[4].setText(self.actualGenreList[2])
+            self.genreLabelList[self.mainLabelIndex].setText(self.actualGenreList[0])
+            self.genreLabelList[self.mainLabelIndex].setMinimumSize(204,54)
+            self.genreLabelList[self.mainLabelIndex].setMaximumSize(204,54)
+
+        self.genreLabelList[nonUsedGenreIndexes[0]].setText(self.actualGenreList[(0-self.mainLabelIndex + nonUsedGenreIndexes[0]) % len(self.actualGenreList)])
+        self.genreLabelList[nonUsedGenreIndexes[1]].setText(self.actualGenreList[(0-self.mainLabelIndex + nonUsedGenreIndexes[1]) % len(self.actualGenreList)])
+        self.genreLabelList[nonUsedGenreIndexes[2]].setText(self.actualGenreList[(0-self.mainLabelIndex + nonUsedGenreIndexes[2]) % len(self.actualGenreList)])
+        self.genreLabelList[nonUsedGenreIndexes[3]].setText(self.actualGenreList[(0-self.mainLabelIndex + nonUsedGenreIndexes[3]) % len(self.actualGenreList)])
+
         genreKey = self.actualGenreList[0]
         self.actualGenre = genreKey
         self.actualSongs = self.music[genreKey]()
