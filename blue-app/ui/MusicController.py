@@ -32,16 +32,15 @@ class SongModel:
         return list(l)
 
     def nextGenre(self):
-        self.actualGenreList = self.rotate(-1, self.actualGenreList)
-        if self.genreLabelMoving and self.mainLabelIndex != 4:
-            self.mainLabelIndex = self.mainLabelIndex + 1
-        self.reloadSongsWidget()
-
-    def previousGenre(self):
         self.actualGenreList = self.rotate(1, self.actualGenreList)
         if self.genreLabelMoving and self.mainLabelIndex != 0:
             self.mainLabelIndex = self.mainLabelIndex - 1
+        self.reloadSongsWidget()
 
+    def previousGenre(self):
+        self.actualGenreList = self.rotate(-1, self.actualGenreList)
+        if self.genreLabelMoving and self.mainLabelIndex != 4:
+            self.mainLabelIndex = self.mainLabelIndex + 1
         self.reloadSongsWidget()
 
     def centerGenreLabel(self):
