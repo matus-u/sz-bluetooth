@@ -120,6 +120,7 @@ def main():
 
     AppSettings.getNotifier().moneyServerChanged.connect(lambda serverAddr: QtCore.QProcess.execute("scripts/update-money-server-logger.sh", [serverAddr]))
 
+    LoggingService.getLogger().info("APPLICATION STARTED!0")
     application = ApplicationWindow.ApplicationWindow(timerService,
                                                       moneyTracker,
                                                       ledButtonService,
@@ -136,16 +137,22 @@ def main():
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
     webUpdateStatus.actualStateChanged.connect(application.onActualServerStateChanged, QtCore.Qt.QueuedConnection)
 
+    LoggingService.getLogger().info("APPLICATION STARTED!1")
     application.show()
+    LoggingService.getLogger().info("APPLICATION STARTED!2")
     printingService.initialize()
+    LoggingService.getLogger().info("APPLICATION STARTED!3")
     volumeService.start()
+    LoggingService.getLogger().info("APPLICATION STARTED!4")
     gpioService.start()
+    LoggingService.getLogger().info("APPLICATION STARTED!5")
 
     application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
 
     app.installEventFilter(adminModeTracker)
 
+    LoggingService.getLogger().info("APPLICATION STARTED!")
     ret = app.exec_()
 
     volumeService.stop()
