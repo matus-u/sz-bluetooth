@@ -264,7 +264,7 @@ class PrintingService(QtCore.QObject):
             s.write(b"\n")
             s.write(b"      MUSICBOX\n")
             s.write(("         #"+ str(winNumber) +"\n").encode())
-            s.write((" "+ prizeName[0:20] + "\n").encode())
+            s.write((" "+ prizeName[0:20] + "\n").encode(encoding='cp437'))
             s.write(b"\n")
             s.write([0x1d, 0x21, 0x00])
             s.write([0x1d, 0x21, 0x71])
