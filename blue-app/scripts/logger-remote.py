@@ -40,6 +40,7 @@ class WebSocketLogService(QtCore.QObject):
         if self.moneyServer is not "":
             URL = self.moneyServer + "/socket/websocket"# + self.macAddr
             self.URL = URL.replace("https://", "wss://")
+            self.URL = URL.replace("http://", "ws://")
             self.websocket = QtWebSockets.QWebSocket(parent=self)
             self.websocket.connected.connect(self.onConnect)
             self.websocket.disconnected.connect(self.onDisconnect)
