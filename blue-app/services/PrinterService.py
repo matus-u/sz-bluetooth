@@ -139,10 +139,10 @@ class PrintingService(QtCore.QObject):
             s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
             s.write([0x1b, 0x40])
             s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
-            s.write(("DEVICE: " + name + "\n").encode())
+            s.write(("DEVICE: " + name + "\n").encode(encoding='cp852'))
 
             for i in range(1,10):
-                s.write((str(i) + " - " + prizeNames[i][0:18] + " - " + str(initPrizeCounts[i]) + "/" + str(prizeCounts[i]) + "\n").encode())
+                s.write((str(i) + " - " + prizeNames[i][0:18] + " - " + str(initPrizeCounts[i]) + "/" + str(prizeCounts[i]) + "\n").encode(encoding='cp852'))
 
             s.write(b"\n")
             s.write(b"\n")
@@ -158,8 +158,8 @@ class PrintingService(QtCore.QObject):
             self.statusValid = True
             self.printStatusUpdated.emit()
             self.clearPrintCorruptedFunc()
-        except:
-            LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
+        except Exception as e:
+            LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called {}".format(e))
             self.errorFunc()
 
     def printWithdrawTicket(self, device, gain, prizes, inkeeperPerc, currency, owner, swVersion, moneyTotal, moneyFromLastWithdraw):
@@ -169,8 +169,8 @@ class PrintingService(QtCore.QObject):
                 self.statusValid = False
                 s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
                 s.write([0x1b, 0x40])
-                s.write(("DEVICE: " + device + "\n").encode())
-                s.write(("OWNER: " + owner + "\n").encode())
+                s.write(("DEVICE: " + device + "\n").encode(encoding='cp852'))
+                s.write(("OWNER: " + owner + "\n").encode(encoding='cp852'))
                 s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
                 s.write(("CURRENCY: " + currency + "\n").encode())
                 s.write(("SW-version: " + swVersion + "\n").encode())
@@ -186,7 +186,7 @@ class PrintingService(QtCore.QObject):
 
                 for key, count in prizes.items():
                     name, prize = key.rsplit('-',1)
-                    s.write((name[0:18] + "/" + "{0:g}".format(float(prize)) + "/" + str(count) + "x\n").encode())
+                    s.write((name[0:18] + "/" + "{0:g}".format(float(prize)) + "/" + str(count) + "x\n").encode(encoding='cp852'))
 
                 s.write(b"\n")
                 s.write(b"\n")
@@ -204,8 +204,8 @@ class PrintingService(QtCore.QObject):
                 self.printStatusUpdated.emit()
                 self.clearPrintCorruptedFunc()
                 self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
-            except:
-                LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called")
+            except Exception as e:
+                LoggingService.getLogger().error("PrintingService: printWithdrawTicket: Error func called {}".format(e))
                 self.errorFunc()
 
         printWithInt()
@@ -234,8 +234,8 @@ class PrintingService(QtCore.QObject):
             self.statusValid = True
             self.printStatusUpdated.emit()
             self.clearPrintCorruptedFunc()
-        except:
-            LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called")
+        except Exception as e:
+            LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called {}".format(e))
             self.errorFunc()
 
     def checkState(self):
@@ -247,8 +247,8 @@ class PrintingService(QtCore.QObject):
             self.statusValid = True
             self.printStatusUpdated.emit()
             self.clearPrintCorruptedFunc()
-        except:
-            LoggingService.getLogger().error("Check state func called")
+        except Exception as e:
+            LoggingService.getLogger().error("Check state func called {}".format(e))
             self.errorFunc()
 
     def printTicket(self, name, winNumber, prizeName):
@@ -264,13 +264,13 @@ class PrintingService(QtCore.QObject):
             s.write(b"\n")
             s.write(b"      MUSICBOX\n")
             s.write(("         #"+ str(winNumber) +"\n").encode())
-            s.write((" "+ prizeName[0:20] + "\n").encode(encoding='cp437'))
+            s.write((" "+ prizeName[0:20] + "\n").encode(encoding='cp852'))
             s.write(b"\n")
             s.write([0x1d, 0x21, 0x00])
             s.write([0x1d, 0x21, 0x71])
-            s.write((self.tr("DEVICE: ") + name + "\n").encode(encoding='cp437'))
-            s.write(("ID: "+ randomString(8) +"\n").encode(encoding='cp437'))
-            s.write(self.tr("Thank you for playing!\n").encode(encoding='cp437'))
+            s.write((self.tr("DEVICE: ") + name + "\n").encode(encoding='cp852'))
+            s.write(("ID: "+ randomString(8) +"\n").encode(encoding='cp852'))
+            s.write(self.tr("Thank you for playing!\n").encode(encoding='cp852'))
             s.write(b"\n")
             s.write(b"\n")
             s.write(b"\n")
@@ -286,7 +286,7 @@ class PrintingService(QtCore.QObject):
             self.printStatusUpdated.emit()
             self.clearPrintCorruptedFunc()
             self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
-        except:
-            LoggingService.getLogger().error("PrintingService: printTicket: Error func called")
+        except Exception as e:
+            LoggingService.getLogger().error("PrintingService: printTicket: Error func called {}".format(e))
             self.errorFunc()
 
