@@ -13,7 +13,7 @@ class PlayWavFile(QtCore.QObject):
         self.process.finished.connect(self.onFinished)
 
     def playWav(self, path):
-        self.process.start("aplay " + path)
+        self.process.start("aplay -Dsoftvolsound " + path)
 
     def onFinished(self,a,b):
         self.deleteLater()

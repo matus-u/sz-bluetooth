@@ -37,10 +37,12 @@ fi
 # close blueman applet
 killall -9 blueman-applet
 
+scripts/./add_separate_volume_control.sh
+
 #start blue-alsa
 export LIBASOUND_THREAD_SAFE=0
 bluealsa -p a2dp-sink 2> /dev/null &
-bluealsa-aplay 00:00:00:00:00:00 2> /dev/null &
+bluealsa-aplay -dsoftvolbluetooth 00:00:00:00:00:00 2> /dev/null &
 
 #while true; do
 ./start-app.sh

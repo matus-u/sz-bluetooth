@@ -64,6 +64,7 @@ def main():
     setStyle(app)
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
+    AppSettings.applySystemSoundVolumeLevel()
 
     errorHandler = HwErrorHandling()
 

@@ -390,6 +390,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         if dialogResult == 1:
             self.musicController.selectModel()
+            AppSettings.applySystemSoundVolumeLevel()
 
     def onAdminSettingsButton(self):
         w = SettingsWindow.SettingsWindow(self, self.moneyTracker, self.wheelFortuneService, self.creditService, self.printingService)

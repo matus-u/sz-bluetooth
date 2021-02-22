@@ -3,6 +3,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtCore
 
+import os
+
 from services import PathSettings
 
 class AppSettingsNotifier(QtCore.QObject):
@@ -93,6 +95,7 @@ class AppSettings:
     CoinLockLevel = "CoinLockLevel"
 
     VolumeAtStartString = "VolumeAtStart"
+    SystemSoundVolumeLevelString = "SystemSoundVolumeLevel"
 
     Notifier = AppSettingsNotifier()
 
@@ -196,6 +199,10 @@ class AppSettings:
         return AppSettings.checkSettingsParam(appSettings).value(AppSettings.VolumeAtStartString, 30, int)
 
     @staticmethod
+    def actualSystemSoundVolumeLevel(appSettings = None):
+        return AppSettings.checkSettingsParam(appSettings).value(AppSettings.SystemSoundVolumeLevelString, 50, int)
+
+    @staticmethod
     def defaultCoinSettings(currency):
         return AppSettings.DefaultCoinValues[currency]
 
@@ -248,7 +255,7 @@ class AppSettings:
         settings.sync()
 
     @classmethod
-    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile, volumeAtStart):
+    def storeSettings(cls, language, availableLanguages, timeZoneIndex, currencyIndex, coinSettingsList, moneyServer, bluetoothEnabled, songTimeVisEnabled, viewTypeIndex, genreIteratingIndex, coinLockLevel, inkeeperPercentile, volumeAtStart, systemSoundVolumeLevel):
         settings = QtCore.QSettings(AppSettings.SettingsPath, AppSettings.SettingsFormat)
         settings.setValue(AppSettings.LanguageString, language)
         settings.setValue(AppSettings.AvailableLanguagesListString, availableLanguages)
@@ -271,6 +278,7 @@ class AppSettings:
         settings.setValue(AppSettings.BluetoothEnabledString, bluetoothEnabled)
         settings.setValue(AppSettings.InkeeperPercentileString, inkeeperPercentile)
         settings.setValue(AppSettings.VolumeAtStartString, volumeAtStart)
+        settings.setValue(AppSettings.SystemSoundVolumeLevelString, systemSoundVolumeLevel)
 
         settings.sync()
         QtCore.QProcess.execute("scripts/set-time-zone.sh", [AppSettings.TimeZoneList[timeZoneIndex]])
@@ -335,4 +343,9 @@ class AppSettings:
     @classmethod
     def getNotifier(cls):
         return cls.Notifier
+
+
+    @staticmethod
+    def applySystemSoundVolumeLevel():
+        os.system("amixer sset 'SoftSoundMaster' {}%".format(AppSettings.actualSystemSoundVolumeLevel()))
 
