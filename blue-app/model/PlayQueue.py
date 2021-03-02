@@ -2,8 +2,6 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
-from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
-
 class PlayQueue(QtCore.QAbstractTableModel):
 
     playQueueEmpty = QtCore.pyqtSignal()

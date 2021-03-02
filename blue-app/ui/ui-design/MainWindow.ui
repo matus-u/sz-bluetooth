@@ -476,6 +476,13 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="page">
+           <layout class="QVBoxLayout" name="verticalLayout_21">
+            <item>
+             <layout class="QVBoxLayout" name="videoLayout"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
         <item>

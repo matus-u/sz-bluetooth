@@ -38,4 +38,12 @@ RUN apt-get update \
     && apt-get install -y \
     zip
 
+RUN apt-get update \
+    && apt-get install -y \
+    gstreamer1.0-qt5 \
+    libqt5multimedia5-plugins \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-libav
+
 ENV RUN_FROM_DOCKER TRUE

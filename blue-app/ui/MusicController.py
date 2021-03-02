@@ -4,12 +4,13 @@ from PyQt5 import QtCore
 
 from collections import deque
 from mutagen.mp3 import MP3
+from mutagen.mp4 import MP4
 import os
 
 from ui import SongTableWidgetImpl
 from services.AppSettings import AppSettings
 
-from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueueObject import LocalPlayQueueObject, BluetoothPlayQueueObject
 
 import operator
 
@@ -218,9 +219,14 @@ class MusicController(QtCore.QObject):
         self.actualModel.previousGenre()
         self.notifyBluetoothModel()
 
-    def getMp3Info(self, fileName, fullFileName, genre):
+    def getMp3Metadata(self, fileName, fullFileName, genre):
         mp3 = MP3(fullFileName)
-        return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, genre]
+        return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, genre, False]
+
+    def getMp4Metadata(self, fileName, fullFileName, genre):
+        #TODO get mp4 length
+        mp4 = MP4(fullFileName)
+        return [fileName[:len(fileName)-4], fullFileName, mp4.info.length, genre, True]
 
     def parseMusicStorage(self):
         songs = []
@@ -235,7 +241,10 @@ class MusicController(QtCore.QObject):
                 for fileItem in os.listdir(subPath):
                     fileSubPath = os.path.join(subPath, fileItem)
                     if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp3"):
-                        files.append(Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item)))
+                        files.append(LocalPlayQueueObject(self.getMp3Metadata(fileItem, fileSubPath, item)))
+
+                    if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp4"):
+                        files.append(LocalPlayQueueObject(self.getMp4Metadata(fileItem, fileSubPath, item)))
 
         files.sort(key=lambda x:x.path())
         self.genreBasedModel.addSongs(files)

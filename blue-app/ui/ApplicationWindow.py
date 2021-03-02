@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+
 from generated.MainWindow import Ui_MainWindow
 
 from generated import Resources
@@ -17,7 +19,7 @@ from services.PlayTrackCounter import PlayTrackCounter
 from services.LangBasedSettings import LangBasedSettings
 
 from model.PlayQueue import PlayQueue
-from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueueObject import LocalPlayQueueObject, BluetoothPlayQueueObject
 
 from ui import SongTableWidgetImpl
 from ui import SettingsWindow
@@ -144,7 +146,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.bluetoothService.moveToThread(self.blueThread)
         self.bluetoothService.afterMove()
 
-        self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue)
+        self.videoWidget = QVideoWidget()
+        self.videoWidget.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding))
+        self.ui.verticalLayout_3.addWidget(self.videoWidget)
+        self.videoWidget.setMinimumSize(396,170)
+        self.videoWidget.setMaximumSize(396,170)
+        self.videoWidget.hide()
+
+        self.playLogicService = PlayLogicService(self.bluetoothService, self.playQueue, self.videoWidget)
         self.playLogicService.refreshTimerSignal.connect(self.onRefreshTimer)
         self.playLogicService.playingInitialized.connect(self.onPlayingInitialized)
         self.playLogicService.playingStarted.connect(self.onPlayingStarted)
@@ -455,15 +464,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         if playQueueObject != None:
             if self.creditService.getSongsRepresentation().enoughMoney():
-                info = playQueueObject.mp3Info()
+                info = playQueueObject.metadata()
                 if not self.noStartImmediatellyCheck.check(info):
                     self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
                 else:
-                    self.playLogicService.play(Mp3PlayQueueObject(info))
+                    self.playLogicService.play(LocalPlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()
                     self.wheelFortuneService.overtakeWinTries()
 
     def onPlayingInitialized(self):
+        self.videoWidget.hide()
         self.ui.playSlider.setValue(0)
         self.ui.playSlider.setMaximum(self.playLogicService.getActualPlayingInfo().duration())
         self.ui.totalTimeLabel.setText(Helpers.formatDuration(self.playLogicService.getActualPlayingInfo().duration()))
@@ -480,6 +490,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.disconnectButton.setEnabled(False)
             self.ui.playLabel.setText(self.playLogicService.getActualPlayingInfo().name())
 
+            if self.playLogicService.getActualPlayingInfo().isVideoSupported():
+                self.videoWidget.show()
+
 
     def onPlayingStopped(self):
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
@@ -490,9 +503,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.disconnectButton.setEnabled(False)
         self.ui.playSlider.setValue(0)
         self.ui.playSlider.setMaximum(1.0)
+        self.videoWidget.hide()
 
     def onPlayingFailed(self, deviceName):
         self.showStatusInfo(2000, self.texts[self.CONNECTION_FAILED_STR].format(deviceName), self.ui.infoLabel)
+        self.videoWidget.hide()
 
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
