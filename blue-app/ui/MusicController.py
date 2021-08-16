@@ -11,6 +11,8 @@ from services.AppSettings import AppSettings
 
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
+from services.LangBasedSettings import ThemeManager
+
 import operator
 
 class SongModel:
@@ -52,24 +54,12 @@ class SongModel:
 
     def reloadGenreWidgets(self, nonUsedIndexes):
         for i in nonUsedIndexes:
-            self.genreLabelList[i].setStyleSheet("""
-                background-color: rgba(0, 0, 0, 65%);
-                border-top: 2px solid #ABABAB;
-                border-bottom: 2px solid #ABABAB;
-                font-size: 16px;
-                color: white;
-                """)
+            self.genreLabelList[i].setStyleSheet(ThemeManager.inactiveGenreStyle())
             self.genreLabelList[i].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed);
             self.genreLabelList[i].setMinimumSize(0,30)
             self.genreLabelList[i].setMaximumSize(16777215,30)
 
-        self.genreLabelList[self.mainLabelIndex].setStyleSheet("""
-            background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f70202, stop: 1 #430909);
-            border: 2px solid white;
-            border-radius: 15;
-            font-size: 18px;
-            color: white;
-            """)
+        self.genreLabelList[self.mainLabelIndex].setStyleSheet(ThemeManager.selectedGenreStyle())
         self.genreLabelList[self.mainLabelIndex].setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding);
         self.genreLabelList[self.mainLabelIndex].setMinimumSize(0,30)
         self.genreLabelList[self.mainLabelIndex].setMaximumSize(16777215,16777215)

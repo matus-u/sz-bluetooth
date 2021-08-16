@@ -17,6 +17,7 @@ from services.LedButtonService import LedButtonService
 from services.HwErrorHandling import HwErrorHandling
 from services.PixmapService import PixmapService
 from services.TestModeService import TestModeService
+from services.LangBasedSettings import LangBasedSettings
 
 from generated import Resources
 
@@ -31,7 +32,8 @@ else:
 
 def setStyle(app):
     QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("motif"))
-    styleFile = QtCore.QFile(":/dark-orange.qss")
+    stylePath = ":/magento.qss" if LangBasedSettings.existMagentoTheme() else ":/dark-orange.qss" 
+    styleFile = QtCore.QFile(stylePath)
     styleFile.open(QtCore.QIODevice.ReadOnly)
     data = styleFile.readAll()
     app.setStyleSheet(str(data, encoding="utf-8"))

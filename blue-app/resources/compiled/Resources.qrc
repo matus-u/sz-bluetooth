@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>dark-orange.qss</file>
+        <file>magento.qss</file>
         <file>dynamic-images/HU/fortune-style.qss</file>
         <file>dynamic-images/SK/fortune-style.qss</file>
         <file>arial-black.ttf</file>
@@ -8,6 +9,10 @@
         <file>dynamic-images/HU/coin.png</file>
         <file>dynamic-images/SK/coin.png</file>
         <file>dynamic-images/EN/fortune-style.qss</file>
+        <file>dynamic-images/HU/fortune-style-brick.qss</file>
+        <file>dynamic-images/SK/fortune-style-brick.qss</file>
+        <file>dynamic-images/EN/fortune-style-brick.qss</file>
+        <file>dynamic-images/magento-coin.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>coin180.png</file>
@@ -22,5 +27,6 @@
         <file>poland.png</file>
         <file>slovak.png</file>
         <file>hourglass.png</file>
+        <file>dynamic-images/.png</file>
     </qresource>
 </RCC>
