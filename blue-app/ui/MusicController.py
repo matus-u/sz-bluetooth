@@ -178,7 +178,7 @@ class AlphaBasedModel(SongModel):
         super().__init__(songsWidget, genreLabelList, playTrackCounter)
 
     def getSelector(self, song):
-        return song.name().lower()[0]
+        return song.name().upper()[0]
 
 class MusicController(QtCore.QObject):
 
