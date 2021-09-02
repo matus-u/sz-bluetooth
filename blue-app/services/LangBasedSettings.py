@@ -31,11 +31,12 @@ class LangBasedSettings:
 
     @staticmethod
     def getCurrBasedCoinImage():
-        if LangBasedSettings.existMagentoTheme():
-            return QtGui.QPixmap(":/dynamic-images/magento-coin.png")
         currency = AppSettings.actualCurrency()
         if currency == AppSettings.CurrencyList[1]:
             return QtGui.QPixmap(":/dynamic-images/HU/coin.png")
+
+        if LangBasedSettings.existMagentoTheme():
+            return QtGui.QPixmap(":/dynamic-images/magento-coin.png")
 
         return QtGui.QPixmap(":/dynamic-images/SK/coin.png")
 
