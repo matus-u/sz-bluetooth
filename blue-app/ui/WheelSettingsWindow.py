@@ -7,7 +7,7 @@ from services.WheelFortuneService import WheelFortuneService
 from services.AppSettings import AppSettings
 
 class WheelSettingsWindow(QtWidgets.QDialog):
-    def __init__(self, parent, wheelFortuneService, printerService):
+    def __init__(self, parent, wheelFortuneService, printerService, errorHandler):
         super(WheelSettingsWindow, self).__init__(parent)
         self.ui = Ui_WheelSettings()
         self.ui.setupUi(self)
@@ -33,8 +33,14 @@ class WheelSettingsWindow(QtWidgets.QDialog):
             self.wheelFortuneService.getAllNames(),
             self.wheelFortuneService.getInitialProbabilityCounts(),
         ))
+        self.errorHandler = errorHandler
 
     def onOkButton(self):
+        if self.ui.fortuneCheckBox.isChecked():
+            if self.errorHandler.isPrinterErrorSet():
+                QtWidgets.QMessageBox.warning(self, self.tr("Wheel fortune enabling failed - printer errors:"), "\n".join(self.errorHandler.getPrinterErrorDescs()))
+                return
+
         self.service.setSettings(self.ui.fortuneCheckBox.isChecked())
         self.printerService.setNewTicketCounter(self.ui.ticketCounterBox.value())
         self.accept()

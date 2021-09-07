@@ -68,8 +68,6 @@ def main():
     AppSettings.restoreTimeZone()
     AppSettings.applySystemSoundVolumeLevel()
 
-    errorHandler = HwErrorHandling()
-
     testModeService = TestModeService()
 
     volumeTimerService = TimerService()
@@ -90,7 +88,9 @@ def main():
     adminModeTracker = AdminModeTracker(gpioService)
 
     wheelFortuneService = WheelFortuneService()
-    printingService = PrintingService(errorHandler, wheelFortuneService)
+    errorHandler = HwErrorHandling(wheelFortuneService)
+
+    printingService = PrintingService(errorHandler)
     moneyTracker.withdrawHappened.connect(lambda gain, prizes, moneyTotal, moneyFromLastWithdraw: withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw))
 
     pixmapService = PixmapService()

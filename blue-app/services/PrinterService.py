@@ -33,7 +33,7 @@ class PrintingService(QtCore.QObject):
     TicketCounter = "TicketCounter"
 
 
-    def __init__(self, hwErrorHandler, wheelFortuneService):
+    def __init__(self, hwErrorHandler):
         super().__init__()
 
         self.errorStatus = 0
@@ -51,8 +51,6 @@ class PrintingService(QtCore.QObject):
 
         self.testTimer = QtCore.QTimer(self)
         self.testTimer.timeout.connect(self.checkState)
-
-        wheelFortuneService.enabledNotification.connect(lambda enabled: self.onWheelFortuneEnabledNotification(enabled, hwErrorHandler))
 
         self.initFunc = lambda: self.onWheelFortuneEnabledNotification(True, hwErrorHandler)
 

@@ -200,7 +200,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.selectStackWidget(0)
 
         self.wheelFortuneService = wheelFortuneService
-        self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService)))
+        self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService, errorHandler)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
         self.wheelFortuneService.fortuneDataChanged.connect(self.onFortuneDataChanged)
         self.wheelFortuneService.winCounterChanged.connect(self.onWinCounterChange)

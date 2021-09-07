@@ -38,7 +38,7 @@ class TestHwWindow(QtWidgets.QDialog):
 
         self.disableLedButtonStates(ledButtonService)
 
-        self.ui.testPrinterButton.setFocus()
+        self.ui.testSoundButton.setFocus()
         self.ui.fortuneWheelTest.clicked.connect(lambda: self.ui.fortuneWheelTestOutput.setText(wheelService.testWinn()))
 
     def onTestLedButton(self, ledButtonService):

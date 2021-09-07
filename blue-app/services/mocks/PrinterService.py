@@ -18,12 +18,13 @@ class PrintingService(QtCore.QObject):
 
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/print-tracking.conf"
 
-    def __init__(self, hwErrorHandler, wheelFortuneService):
+    def __init__(self, hwErrorHandler):
         super().__init__()
-        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit("Printer machine corrupted! Call service!")
+        self.errorFunc = lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED)
         self.ticketCounter = 0
 
-        #QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.COIN_MACHINE_CORRUPTED))
+        QtCore.QTimer.singleShot(10000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED))
+        QtCore.QTimer.singleShot(11000, lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER))
 
     def initialize(self):
         self.printStatusUpdated.emit()
@@ -69,7 +70,7 @@ class PrintingService(QtCore.QObject):
         print("Gain inkeeper: " + "{0:g}".format(inkeeperGain))
         print("Won prizes: ")
 
-        for key, count in prizesCounts.items():
+        for key, count in prizes.items():
             name, prize = key.rsplit('-',1)
             print(str(name) + " - " + str(prize) + " - " + str(count))
 
