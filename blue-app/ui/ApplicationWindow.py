@@ -247,6 +247,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.arrowHandler.remoteClicked.connect(self.creditService.clearCredit)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
+        self.errorHandler = errorHandler
 
     def generateInfoBrowserHtml(self):
         return """
@@ -324,7 +325,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onTestMenuButton(self, printerService, ledButtonService, volumeService, arrowHandler):
         self.testModeService.enableTestMode()
-        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService, self.creditService.getCoinService(), volumeService, arrowHandler, self.wheelFortuneService)
+        w = TestHwWindow.TestHwWindow(self, printerService, ledButtonService, self.creditService.getCoinService(), volumeService, arrowHandler, self.wheelFortuneService, self.errorHandler)
         w.finished.connect(self.onTestHwWindowClosed)
         self.openSubWindow(w)
 
@@ -562,8 +563,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def onWithdrawWindowFinished(self, result):
         if result == QtWidgets.QDialog.Accepted:
-            self.moneyTracker.withdraw()
-            w = WithdrawInfoWindow.WithdrawInfoWindow(self, self.ledButtonService, self.arrowHandler, self.texts[self.WITHDRAW_MONEY_TEXT_INFO], self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER])
+            inventoryValues = self.moneyTracker.withdraw()
+            w = WithdrawInfoWindow.WithdrawInfoWindow(self, self.ledButtonService, self.arrowHandler, self.texts[self.WITHDRAW_MONEY_TEXT_INFO], self.texts[self.WITHDRAW_MONEY_TEXT_INFO_HEADER], inventoryValues)
             self.openSubWindow(w)
             w.move(w.pos().x(), self.pos().y() + 150)
             w.setFocus()

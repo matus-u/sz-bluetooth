@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from services import PathSettings
 
 import json
+import copy
 
 class MoneyTracker(QtCore.QObject):
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/money-tracking.conf"
@@ -89,6 +90,11 @@ class MoneyTracker(QtCore.QObject):
 
         prizesCounts = json.loads(self.settings.value(MoneyTracker.WonPrizesCounter, json.dumps({})))
         gainBeforeLastWithdraw = self.calculateActualGainFromPreviousWithdraw(prizesCounts)
+        toReturn = []
+        toReturn.append(copy.deepcopy(gainBeforeLastWithdraw))
+        toReturn.append(prizesCounts)
+        toReturn.append(self.settings.value(MoneyTracker.TotalCounter, 0.0, float))
+        toReturn.append(self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float))
         self.withdrawHappened.emit(gainBeforeLastWithdraw, prizesCounts, self.settings.value(MoneyTracker.TotalCounter, 0.0, float), self.settings.value(MoneyTracker.FromLastWithdrawCounter, 0.0, float))
 
         if gainBeforeLastWithdraw > 0:
@@ -101,6 +107,7 @@ class MoneyTracker(QtCore.QObject):
 
 
         self.settings.sync()
+        return toReturn
 
     def resetAllCounters(self):
         LoggingService.getLogger().info("Reset all counters")

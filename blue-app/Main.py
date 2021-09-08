@@ -49,7 +49,9 @@ def connectAdminModeTracker(adminModeTracker, applicationWindow, webUpdateStatus
     adminModeTracker.adminModeLeaveTime.connect(applicationWindow.onAdminRemaining)
     applicationWindow.adminModeLeaveButton.connect(adminModeTracker.disableAdminMode)
 
-def withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw):
+def withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw, errorHandler):
+    if errorHandler.isPrinterErrorSet():
+        return
     printingService.printWithdrawTicket(AppSettings.actualDeviceName(), gain, prizes, AppSettings().actualInkeeperPercentile(), AppSettings().actualCurrency(), AppSettings.actualOwner(), AppSettings.actualAppVersion(), moneyTotal, moneyFromLastWithdraw)
 
 def main():
@@ -91,7 +93,7 @@ def main():
     errorHandler = HwErrorHandling(wheelFortuneService)
 
     printingService = PrintingService(errorHandler)
-    moneyTracker.withdrawHappened.connect(lambda gain, prizes, moneyTotal, moneyFromLastWithdraw: withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw))
+    moneyTracker.withdrawHappened.connect(lambda gain, prizes, moneyTotal, moneyFromLastWithdraw: withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw, errorHandler))
 
     pixmapService = PixmapService()
 

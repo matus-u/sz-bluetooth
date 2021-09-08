@@ -7,13 +7,13 @@ from services.PlayFileService import PlayWavFile
 from services.LedButtonService import LedButtonService
 
 class TestHwWindow(QtWidgets.QDialog):
-    def __init__(self, parent, printerService, ledButtonService, coinProtocolService, volumeService, arrowHandler, wheelService):
+    def __init__(self, parent, printerService, ledButtonService, coinProtocolService, volumeService, arrowHandler, wheelService, errorHwHandler):
         super(TestHwWindow, self).__init__(parent)
 
         self.ui = Ui_TestHw()
         self.ui.setupUi(self)
 
-        self.ui.testPrinterButton.clicked.connect(lambda: printerService.printTestTicket())
+        self.ui.testPrinterButton.clicked.connect(lambda: self.onTestPrinterButton(printerService, errorHwHandler))
         self.ui.testSoundButton.clicked.connect(self.onTestSoundButton)
         self.ui.testLedButton.clicked.connect(lambda: self.onTestLedButton(ledButtonService))
         self.ui.closeButton.clicked.connect(self.accept)
@@ -41,6 +41,12 @@ class TestHwWindow(QtWidgets.QDialog):
         self.ui.testSoundButton.setFocus()
         self.ui.fortuneWheelTest.clicked.connect(lambda: self.ui.fortuneWheelTestOutput.setText(wheelService.testWinn()))
 
+    def onTestPrinterButton(self, printerService, errorHwHandler):
+        if errorHwHandler.isPrinterErrorSet():
+            QtWidgets.QMessageBox.warning(self, self.tr("Printer errors:"), "\n".join(errorHwHandler.getPrinterErrorDescs()))
+            return
+        printerService.printTestTicket()
+    
     def onTestLedButton(self, ledButtonService):
         self.ui.testLedButton.setEnabled(False)
         self.onLedButtonTimer(ledButtonService)
