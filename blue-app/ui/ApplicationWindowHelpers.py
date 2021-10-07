@@ -38,11 +38,11 @@ class StandardArrowHandler(QtCore.QObject):
         self.arrowHandler.upClicked.disconnect(self.onUp)
         self.arrowHandler.confirmClicked.disconnect(self.onConfirm)
 
-    def onUp(self):
-        self.appWindow.getActualFocusHandler().onUp()
+    def onUp(self, factor):
+        self.appWindow.getActualFocusHandler().onUp(factor)
 
-    def onDown(self):
-        self.appWindow.getActualFocusHandler().onDown()
+    def onDown(self, factor):
+        self.appWindow.getActualFocusHandler().onDown(factor)
 
     def onLeft(self):
         self.appWindow.getActualFocusHandler().onLeft()

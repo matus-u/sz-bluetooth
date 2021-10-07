@@ -14,14 +14,14 @@ class ArrowHandler(QtCore.QObject):
 
     leftClicked = QtCore.pyqtSignal()
     rightClicked = QtCore.pyqtSignal()
-    downClicked = QtCore.pyqtSignal()
-    upClicked = QtCore.pyqtSignal()
+    downClicked = QtCore.pyqtSignal(int)
+    upClicked = QtCore.pyqtSignal(int)
     confirmClicked = QtCore.pyqtSignal()
     leftAndRightClicked = QtCore.pyqtSignal()
     remoteClicked = QtCore.pyqtSignal()
 
-    def connectGpioContinous(self, gpioService, num, contTime, callback):
-        gpioCall = GpioCallbackContinous(self, num, contTime, gpioService)
+    def connectGpioContinous(self, gpioService, num, contTime, callback, withFactor):
+        gpioCall = GpioCallbackContinous(self, num, contTime, gpioService, withFactor=withFactor)
         gpioCall.callbackGpio.connect(callback)
 
     def connectGpioOnce(self, gpioService, num, callback):
@@ -30,10 +30,10 @@ class ArrowHandler(QtCore.QObject):
 
     def __init__(self, gpioService):
         super().__init__()
-        self.connectGpioContinous(gpioService, 29, 300, lambda: self.leftClicked.emit())
-        self.connectGpioContinous(gpioService, 31, 300, lambda: self.rightClicked.emit())
-        self.connectGpioContinous(gpioService, 33, 150, lambda: self.downClicked.emit())
-        self.connectGpioContinous(gpioService, 35, 150, lambda: self.upClicked.emit())
+        self.connectGpioContinous(gpioService, 29, 300, lambda factor: self.leftClicked.emit(), False)
+        self.connectGpioContinous(gpioService, 31, 300, lambda factor: self.rightClicked.emit(), False)
+        self.connectGpioContinous(gpioService, 33, 150, lambda factor: self.downClicked.emit(factor), True)
+        self.connectGpioContinous(gpioService, 35, 150, lambda factor: self.upClicked.emit(factor), True)
         self.connectGpioOnce(gpioService, 37, lambda: self.confirmClicked.emit())
 
         gpioBothCall = DoubleButtonHandler(self, gpioService, 29, 31)
@@ -77,11 +77,11 @@ class InputHandler(QtCore.QObject):
                 return w
         return FocusNullObject()
 
-    def onUp(self):
-        self.findFocusedWidget().onUp()
+    def onUp(self, factor=1):
+        self.findFocusedWidget().onUp(factor)
 
-    def onDown(self):
-        self.findFocusedWidget().onDown()
+    def onDown(self, factor=1):
+        self.findFocusedWidget().onDown(factor)
 
     def onConfirm(self):
         proxy = self.findFocusedWidget().onConfirm()
@@ -97,10 +97,10 @@ class FocusNullObject:
     def setFocus(self):
         pass
 
-    def onUp(self):
+    def onUp(self, factor):
         pass
 
-    def onDown(self):
+    def onDown(self, factor):
         pass
 
     def onLeft(self):
@@ -132,10 +132,10 @@ class SimpleInputFocusProxy:
         self.ledButtonService.setButtonState(LedButtonService.DOWN, False)
         self.ledButtonService.setButtonState(LedButtonService.CONFIRM, True)
 
-    def onUp(self):
+    def onUp(self, factor):
         pass
 
-    def onDown(self):
+    def onDown(self, factor):
         pass
 
     def onLeft(self):
@@ -185,23 +185,23 @@ class TableWidgetFocusProxy(QtCore.QObject):
     def getUnderlyingWidgetRowCount(self):
         return self.widget.rowCount()
 
-    def onUp(self):
+    def onUp(self, factor):
         if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
-                if (self.getUnderlyingWidgetRowCount() - 1) > row:
-                    self.widget.selectRow(row + 1)
+                if (self.getUnderlyingWidgetRowCount() - factor) > row:
+                    self.widget.selectRow(row + factor)
                 else:
                     self.widget.selectRow(0)
             else:
                 self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
 
-    def onDown(self):
+    def onDown(self, factor):
         if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
-                if row > 0:
-                    self.widget.selectRow(row - 1)
+                if row - factor > 0:
+                    self.widget.selectRow(row - factor)
                 else:
                     self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
             else:

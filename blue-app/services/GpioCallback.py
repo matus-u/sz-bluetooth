@@ -44,16 +44,19 @@ class GpioCallback(QtCore.QObject):
 
 class GpioCallbackContinous(QtCore.QObject):
 
-    callbackGpio = QtCore.pyqtSignal()
+    callbackGpio = QtCore.pyqtSignal(int)
     risingGpio = QtCore.pyqtSignal()
     fallingGpio = QtCore.pyqtSignal()
 
-    def __init__(self, parent, number, timeCont, gpioService):
+    def __init__(self, parent, number, timeCont, gpioService, withFactor=False):
         super().__init__(parent)
         self.gpioTimer = QtCore.QTimer(self)
         self.contTime = timeCont
+        self.withFactor = withFactor
+        self.actualTimeoutCounter = 0
+        self.factors = [1,1,1,2,3,5,7,10]
 
-        self.risingGpio.connect(lambda: self.gpioTimer.stop(), QtCore.Qt.QueuedConnection)
+        self.risingGpio.connect(self.onRisingGpio, QtCore.Qt.QueuedConnection)
         self.fallingGpio.connect(self.onTimeout, QtCore.Qt.QueuedConnection)
 
         gpioService.registerCallback(number, gpioService.RISING, self.onLowLevelGpioUp)
@@ -61,8 +64,16 @@ class GpioCallbackContinous(QtCore.QObject):
 
         self.gpioTimer.timeout.connect(self.onTimeout)
 
+
+    def onRisingGpio(self):
+        self.actualTimeoutCounter = 0
+        self.gpioTimer.stop()
+
     def onTimeout(self):
-        self.callbackGpio.emit()
+        if self.withFactor and self.actualTimeoutCounter < (len(self.factors) - 1):
+                self.actualTimeoutCounter = self.actualTimeoutCounter + 1
+
+        self.callbackGpio.emit(self.factors[self.actualTimeoutCounter])
         self.gpioTimer.start(self.contTime)
 
     def onLowLevelGpioUp(self):
