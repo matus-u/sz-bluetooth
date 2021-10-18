@@ -192,7 +192,8 @@ class TableWidgetFocusProxy(QtCore.QObject):
                 if (self.getUnderlyingWidgetRowCount() - factor) > row:
                     self.widget.selectRow(row + factor)
                 else:
-                    self.widget.selectRow(0)
+                    self.widget.selectRow(self.getUnderlyingWidgetRowCount()-1)
+                #    self.widget.selectRow(0)
             else:
                 self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
 
@@ -200,10 +201,11 @@ class TableWidgetFocusProxy(QtCore.QObject):
         if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
-                if row - factor > 0:
+                if row - factor >= 0:
                     self.widget.selectRow(row - factor)
                 else:
-                    self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
+                    self.widget.selectRow(0)
+                #    self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
             else:
                 self.widget.selectRow(0)
 
