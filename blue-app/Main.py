@@ -5,6 +5,7 @@ import sys, os
 
 from ui import ApplicationWindow
 from ui import FocusHandler
+from ui import InitWindow
 
 from services.AppSettings import AppSettings
 from services.TimerService import TimerService
@@ -62,9 +63,12 @@ def main():
     #os.environ["QT_LOGGING_RULES"]="qt.virtualkeyboard=true"
 
     LoggingService.init()
+    LoggingService.getLogger().info("APPLICATION STARTING!!!!")
     app = QtWidgets.QApplication(sys.argv)
+    initWindow = InitWindow.InitWindow(None)
     QtGui.QFontDatabase.addApplicationFont(":/arial-black.ttf")
 
+    initWindow.appendText("Restoring settings")
     setStyle(app)
     AppSettings.restoreLanguage()
     AppSettings.restoreTimeZone()
@@ -72,6 +76,7 @@ def main():
 
     testModeService = TestModeService()
 
+    initWindow.appendText("Volume service - init")
     volumeTimerService = TimerService()
     volumeService = VolumeService()
     volumeService.setVolume(AppSettings.actualVolumeAtStart())
@@ -80,6 +85,7 @@ def main():
     testModeService.testModeEnabled.connect(volumeService.testModeEnabled, QtCore.Qt.QueuedConnection)
     testModeService.testModeDisabled.connect(volumeService.testModeDisabled, QtCore.Qt.QueuedConnection)
 
+    initWindow.appendText("Money tracker service - init")
     updateStatusTimerService = TimerService()
     moneyTracker = MoneyTracker()
 
@@ -92,6 +98,7 @@ def main():
     wheelFortuneService = WheelFortuneService()
     errorHandler = HwErrorHandling(wheelFortuneService)
 
+    initWindow.appendText("Printing service - init")
     printingService = PrintingService(errorHandler)
     moneyTracker.withdrawHappened.connect(lambda gain, prizes, moneyTotal, moneyFromLastWithdraw: withdrawHappened(printingService, gain, prizes, moneyTotal, moneyFromLastWithdraw, errorHandler))
 
@@ -116,6 +123,7 @@ def main():
     printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel())
     printingService.enoughPaper.connect(lambda: wheelFortuneService.unlockWheel())
 
+    initWindow.appendText("Timer service - init")
     timerService = TimerService()
     ledButtonService = LedButtonService(gpioService)
     timerService.addTimerWorker(ledButtonService)
@@ -125,7 +133,7 @@ def main():
 
     AppSettings.getNotifier().moneyServerChanged.connect(lambda serverAddr: QtCore.QProcess.execute("scripts/update-money-server-logger.sh", [serverAddr]))
 
-    LoggingService.getLogger().info("APPLICATION STARTED!0")
+    initWindow.appendText("Initializing main window")
     application = ApplicationWindow.ApplicationWindow(timerService,
                                                       moneyTracker,
                                                       ledButtonService,
@@ -134,7 +142,9 @@ def main():
                                                       arrowHandler,
                                                       errorHandler,
                                                       testModeService,
-                                                      volumeService)
+                                                      volumeService,
+                                                      initWindow,
+                                                      )
 
     #app.setOverrideCursor(QtCore.Qt.BlankCursor)
 
@@ -142,17 +152,18 @@ def main():
     connectAdminModeTracker(adminModeTracker, application, webUpdateStatus)
     webUpdateStatus.actualStateChanged.connect(application.onActualServerStateChanged, QtCore.Qt.QueuedConnection)
 
-    LoggingService.getLogger().info("APPLICATION STARTED!1")
+    initWindow.appendText("Openning main Window")
     application.show()
-    LoggingService.getLogger().info("APPLICATION STARTED!2")
+    initWindow.show()
+    initWindow.activateWindow()
+    initWindow.appendText("Starting priniting service")
     printingService.initialize()
-    LoggingService.getLogger().info("APPLICATION STARTED!3")
+    initWindow.appendText("Starting volume service")
     volumeService.start()
-    LoggingService.getLogger().info("APPLICATION STARTED!4")
+    initWindow.appendText("Starting gpio service")
     gpioService.start()
-    LoggingService.getLogger().info("APPLICATION STARTED!5")
+    initWindow.appendText("Starting http service")
 
-    application.onAdminMode(False)
     webUpdateStatus.asyncConnect()
 
     app.installEventFilter(adminModeTracker)

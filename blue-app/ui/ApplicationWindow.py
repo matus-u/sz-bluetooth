@@ -1,11 +1,14 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from PyQt5.QtCore import QThreadPool
+
 from generated.MainWindow import Ui_MainWindow
 
 from generated import Resources
 
 import os
+import time
 from services.BluetoothService import BluetoothService
 from services.CreditService import CreditService
 from services.AppSettings import AppSettings,AppSettingsNotifier,CoinSettingsIndexes
@@ -15,6 +18,7 @@ from services.PlayFileService import PlayWavFile
 from services.PlayLogicService import PlayLogicService
 from services.PlayTrackCounter import PlayTrackCounter
 from services.LangBasedSettings import LangBasedSettings
+from services.LoggingService import LoggingService
 
 from model.PlayQueue import PlayQueue
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
@@ -121,7 +125,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                  arrowHandler,
                  errorHandler,
                  testModeService,
-                 volumeService):
+                 volumeService,
+                 initWindow):
 
         super(ApplicationWindow, self).__init__()
 
@@ -197,8 +202,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.songsWidget.cellClicked.connect(lambda x,y: self.getActualFocusHandler().onConfirm())
         self.ui.playLabel.setText(self.texts[self.NOT_PLAYING])
 
-        self.selectStackWidget(0)
-
         self.wheelFortuneService = wheelFortuneService
         self.ui.wheelFortuneButton.clicked.connect(lambda: self.openSubWindow(WheelSettingsWindow.WheelSettingsWindow(self, self.wheelFortuneService, self.printingService, errorHandler)))
         self.creditService.moneyInserted.connect(self.wheelFortuneService.moneyInserted)
@@ -237,8 +240,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.languageSwitcher.languageChanged.connect(lambda language: self.onLanguageChange(language, True))
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+x"), self, self.focusLanguageChange)
 
-        self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
-        self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
 
         self.onLanguageChange(AppSettings.actualLanguage())
         self.movie = QtGui.QMovie(":/images/blue-scan.gif")
@@ -248,6 +249,27 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.arrowHandler.remoteClicked.connect(self.creditService.clearCredit)
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
         self.errorHandler = errorHandler
+
+        initWindow.appendText("Init timer executed")
+        r = self.musicController.onInitAsync(initWindow)
+
+        def onMusicControllerInit():
+            self.musicController.selectModel()
+            self.selectStackWidget(0)
+
+            self.musicController.bluetoothSelected.connect(self.onBluetoothGenre)
+            self.musicController.bluetoothNotSelected.connect(self.onNonBluetoothGenre)
+
+            self.onAdminMode(False)
+            initWindow.appendText("Init timer finished - App initialized")
+            time.sleep(2)
+            initWindow.hide()
+            if not self.damagedDeviceWindow.isVisible():
+                self.activateWindow()
+                self.getActualFocusHandler().setFocus()
+
+        r.emiter.finished.connect(onMusicControllerInit, QtCore.Qt.QueuedConnection)
+        QtCore.QTimer.singleShot(1000, lambda: QThreadPool.globalInstance().start(r))
 
     def generateInfoBrowserHtml(self):
         return """

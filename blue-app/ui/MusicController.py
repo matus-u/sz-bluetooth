@@ -8,6 +8,8 @@ import os
 
 from ui import SongTableWidgetImpl
 from services.AppSettings import AppSettings
+from services.LoggingService import LoggingService
+from services import Runnable
 
 from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
 
@@ -135,7 +137,8 @@ class SongModel:
     def generateTopTracks(self):
         l = list()
         for i in self.playTrackCounter.topTrackNames():
-            l.append(self.musicByPath[i[0]])
+            if i in self.musicByPath:
+                l.append(self.musicByPath[i[0]])
         return l
 
     def afterModelChange(self):
@@ -191,8 +194,11 @@ class MusicController(QtCore.QObject):
         self.genreBasedModel = GenreBasedModel(songsWidget, genreLabelList, playTrackCounter)
         self.alphaBasedModel = AlphaBasedModel(songsWidget, genreLabelList, playTrackCounter)
         self.actualModel = None
-        self.parseMusicStorage()
-        self.selectModel()
+
+    def onInitAsync(self, initWindow):
+        def asyncFunc():
+            self.parseMusicStorage(initWindow)
+        return Runnable.Runnable(asyncFunc)
 
     def nextGenre(self):
         self.actualModel.nextGenre()
@@ -212,18 +218,21 @@ class MusicController(QtCore.QObject):
         mp3 = MP3(fullFileName)
         return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, genre]
 
-    def parseMusicStorage(self):
+    def parseMusicStorage(self, initWindow):
         songs = []
         path = "/src/music"
         if os.getenv('RUN_FROM_DOCKER', False) == False:
             path = "/media/usbstick/music"
 
+        initWindow.appendTextThreadSafe("Parsing started!")
         files = []
         for item in os.listdir(path):
             subPath = os.path.join(path, item)
+            initWindow.appendTextThreadSafe("Parsing dir: {}".format(subPath))
             if os.path.isdir(subPath):
                 for fileItem in os.listdir(subPath):
                     fileSubPath = os.path.join(subPath, fileItem)
+                    #initWindow.appendTextThreadSafe("Parsing file: {}".format(fileSubPath))
                     if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp3"):
                         files.append(Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item)))
 
@@ -232,6 +241,7 @@ class MusicController(QtCore.QObject):
         self.alphaBasedModel.addSongs(files)
         self.genreBasedModel.addSpecials()
         self.alphaBasedModel.addSpecials()
+        initWindow.appendTextThreadSafe("Parsing finished!")
 
     def getSelectedPlayObject(self):
         return self.actualModel.getSelectedPlayObject()
