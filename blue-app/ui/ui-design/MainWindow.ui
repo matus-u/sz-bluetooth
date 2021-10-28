@@ -244,6 +244,12 @@
         <property name="leftMargin">
          <number>6</number>
         </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
         <item>
          <widget class="QStackedWidget" name="stackedWidget">
           <property name="currentIndex">
