@@ -12,7 +12,9 @@ class LoggingService():
         LoggingService.logger.setLevel(logging.INFO)
 
         # add a rotating handler
-        handler = RotatingFileHandler(PathSettings.AppBasePath() + "../blue-app-configs/logging/blue-app.log", maxBytes=2000000,
+
+        #handler = RotatingFileHandler(PathSettings.AppBasePath() + "../blue-app-configs/logging/blue-app.log", maxBytes=2000000,
+        handler = RotatingFileHandler("/tmp/logging/blue-app.log", maxBytes=2000000,
                                       backupCount=2)
         FORMAT = "[%(asctime)s - %(filename)s: %(funcName)s() ] %(message)s"
         formatter = logging.Formatter(FORMAT)

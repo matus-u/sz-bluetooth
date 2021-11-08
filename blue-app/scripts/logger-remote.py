@@ -98,7 +98,7 @@ class WebSocketLogService(QtCore.QObject):
         return content
 
     def getLogs(self):
-        return self.readContent("../blue-app-configs/logging/blue-app.log.2") + self.readContent("../blue-app-configs/logging/blue-app.log.1") + self.readContent("../blue-app-configs/logging/blue-app.log")
+        return self.readContent("/tmp/logging/blue-app.log.2") + self.readContent("/tmp/logging/blue-app.log.1") + self.readContent("/tmp/logging/blue-app.log")
 
     def onTextMessageReceived(self, js):
         text = json.loads(js)

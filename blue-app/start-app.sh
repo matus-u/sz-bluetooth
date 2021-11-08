@@ -3,7 +3,7 @@
 MAC=$(ifconfig eth0 | grep ether | tr -s ' ' | cut -f 3 -d ' ' | tr -s ':' '_')
 
 mkdir -p ../blue-app-configs/images
-mkdir -p ../blue-app-configs/logging
+mkdir -p /tmp/logging
 
 if [ "${RUN_FROM_DOCKER}" == "TRUE" ]; then
 	. generate-from-uic.sh
