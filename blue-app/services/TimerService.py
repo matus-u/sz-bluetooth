@@ -2,6 +2,21 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+import time
+from services.LoggingService import LoggingService
+
+from contextlib import contextmanager
+
+@contextmanager
+def TimerMeasure(message):
+    start_time = time.time()
+    yield
+    elapsed_time = time.time() - start_time
+    diff = elapsed_time * 1000.0
+    mes = "{} finished time: {:.3f}".format(message, diff)
+    LoggingService.getLogger().info(mes)
+    print(mes)
+
 class TimerStatusObject(QtCore.QObject):
 
     startCheckStatus = QtCore.pyqtSignal()
