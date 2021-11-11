@@ -189,11 +189,11 @@ class TableWidgetFocusProxy(QtCore.QObject):
         if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
+                factor = 1
                 if (self.getUnderlyingWidgetRowCount() - factor) > row:
                     self.widget.selectRow(row + factor)
                 else:
                     self.widget.selectRow(self.getUnderlyingWidgetRowCount()-1)
-                #    self.widget.selectRow(0)
             else:
                 self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
 
@@ -201,11 +201,11 @@ class TableWidgetFocusProxy(QtCore.QObject):
         if self.getUnderlyingWidgetRowCount() > 0:
             if len(self.widget.selectionModel().selectedRows()) > 0:
                 row = self.widget.selectionModel().selectedRows()[0].row()
+                factor = 1
                 if row - factor >= 0:
                     self.widget.selectRow(row - factor)
                 else:
                     self.widget.selectRow(0)
-                #    self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
             else:
                 self.widget.selectRow(0)
 
@@ -223,6 +223,26 @@ class MusicWidgetFocusProxy(TableWidgetFocusProxy):
         super().__init__(widget, confirmHandler, ledButtonService, notInterestedInFocusFunc=notInterestedInFocusFunc)
         self.musicControl = musicControl
 
+    def onDown(self, factor):
+        if self.getUnderlyingWidgetRowCount() > 0:
+            if len(self.widget.selectionModel().selectedRows()) > 0:
+                row = self.widget.selectionModel().selectedRows()[0].row()
+                if row == 0:
+                    self.musicControl.pageIndexDown()
+                    self.widget.selectRow(0)
+                    return
+        super(MusicWidgetFocusProxy, self).onDown(factor)
+
+    def onUp(self, factor):
+        if self.getUnderlyingWidgetRowCount() > 0:
+            if len(self.widget.selectionModel().selectedRows()) > 0:
+                row = self.widget.selectionModel().selectedRows()[0].row()
+                if row == (self.getUnderlyingWidgetRowCount() - 1):
+                    self.musicControl.pageIndexUp()
+                    self.widget.selectRow(self.getUnderlyingWidgetRowCount() - 1)
+                    return
+        super(MusicWidgetFocusProxy, self).onUp(factor)
+
     def onLeft(self):
         self.musicControl.previousGenre()
 
@@ -230,7 +250,7 @@ class MusicWidgetFocusProxy(TableWidgetFocusProxy):
         self.musicControl.nextGenre()
 
     def getUnderlyingWidgetRowCount(self):
-        return self.musicControl.rowCount()
+        return self.musicControl.actualRowCount()
 
 class LanguageLabelFocusProxy(SimpleInputFocusProxy):
     def __init__(self, widget, ledButtonService, tempLanguageChanger):

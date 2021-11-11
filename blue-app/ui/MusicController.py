@@ -17,6 +17,8 @@ from services.LangBasedSettings import ThemeManager
 
 import operator
 
+MAX_ROW_IN_PAGE = 12
+
 class SongModel:
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         self.music = {}
@@ -29,6 +31,9 @@ class SongModel:
         self.actualSongs = {}
         self.mainLabelIndex = 2
         self.genreLabelMoving = False
+        self.actualPage = 0
+        self.pagesCount = 0
+        self.actualPageRowCount = 0
 
     def rotate(self, value, listToRotate):
         l = deque(listToRotate)
@@ -51,9 +56,6 @@ class SongModel:
         self.mainLabelIndex = 2
         self.reloadGenreWidgets(self.generateLabelIndexes())
 
-    def rowCount(self):
-        return len(self.actualSongs)
-
     def reloadGenreWidgets(self, nonUsedIndexes):
         for i in nonUsedIndexes:
             self.genreLabelList[i].setStyleSheet(ThemeManager.inactiveGenreStyle())
@@ -71,6 +73,41 @@ class SongModel:
         indexes.remove(self.mainLabelIndex)
         indexes.sort()
         return indexes
+
+    def actualRowCount(self):
+        return self.actualPageRowCount
+
+    def _startIndexForActualPage(self):
+        startIndex = self.actualPage * MAX_ROW_IN_PAGE
+        if self.actualPage >= (self.pagesCount-1):
+            startIndex = max(0, len(self.actualSongs) - MAX_ROW_IN_PAGE)
+        return startIndex
+
+    def reloadSongsPage(self):
+
+        for index in range(0, self.songsWidget.rowCount()):
+            self.songsWidget.hideRow(index)
+
+        if len(self.actualSongs) == 0:
+            return
+
+        startIndex = self._startIndexForActualPage()
+
+        counter = 0 
+        durationVisible = AppSettings.actualSongTimeVisible()
+        for item in self.actualSongs[startIndex:]:
+            w = self.songsWidget.cellWidget(counter,0)
+            w.updateFromPlayQueueObject(item,durationVisible)
+            self.songsWidget.showRow(counter)
+            counter = counter + 1
+            startIndex = startIndex + 1
+
+            if startIndex == len(self.actualSongs):
+                break
+            if counter == MAX_ROW_IN_PAGE:
+                break
+
+        self.actualPageRowCount = counter
 
     def reloadSongsWidget(self):
 
@@ -97,24 +134,37 @@ class SongModel:
         genreKey = self.actualGenreList[0]
         self.actualGenre = genreKey
         self.actualSongs = self.music[genreKey]()
-        durationVisible = AppSettings.actualSongTimeVisible()
 
-        for index in range(0, self.songsWidget.rowCount()):
-            self.songsWidget.hideRow(index)
+        self.pagesCount = int(len(self.actualSongs)/MAX_ROW_IN_PAGE)
+        if len(self.actualSongs) % MAX_ROW_IN_PAGE > 0:
+            self.pagesCount = self.pagesCount + 1
 
-        for index, item in enumerate(self.actualSongs):
-            w = self.songsWidget.cellWidget(index,0)
-            w.updateFromPlayQueueObject(item,durationVisible)
-            self.songsWidget.showRow(index)
+        self.actualPage = 0
+        self.actualPageRowCount = 0
 
-        if self.rowCount() > 0:
+        self.reloadSongsPage()
+
+        if len(self.actualSongs) > 0:
             self.songsWidget.selectRow(0)
 
     def getSelectedPlayObject(self):
-        if self.rowCount() > 0:
+        if self.pagesCount > 0:
             if len(self.songsWidget.selectionModel().selectedRows()) > 0:
-                return self.actualSongs[self.songsWidget.selectionModel().selectedRows()[0].row()]
+                index = self._startIndexForActualPage() + self.songsWidget.selectionModel().selectedRows()[0].row()
+                return self.actualSongs[index]
         return None
+
+    def pageIndexUp(self):
+        if self.actualPage >= (self.pagesCount-1):
+            return
+        self.actualPage = self.actualPage + 1
+        self.reloadSongsPage()
+
+    def pageIndexDown(self):
+        if self.actualPage == 0:
+            return
+        self.actualPage = self.actualPage - 1
+        self.reloadSongsPage()
 
     def addSongs(self, songs):
         helpDict = {}
@@ -137,16 +187,9 @@ class SongModel:
     def generateTopTracks(self):
         l = list()
         for i in self.playTrackCounter.topTrackNames():
-            if i in self.musicByPath:
+            if i[0] in self.musicByPath:
                 l.append(self.musicByPath[i[0]])
         return l
-
-    def afterModelChange(self):
-        maxRowCount = len(max(self.music.items(), key=lambda x: len(x[1]()))[1]())
-        self.songsWidget.clear()
-        self.songsWidget.setRowCount(maxRowCount)
-        for index in range(0, maxRowCount):
-            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl("", BluetoothPlayQueueObject("", "", 0), True, True, self.playTrackCounter))
 
     def generateGenreList(self):
         self.actualGenreList = list(self.music.keys())
@@ -168,6 +211,13 @@ class SongModel:
 
     def isBluetooth(self):
         return self.actualGenreList[0] == "Bluetooth"
+
+    def afterModelChange(self):
+        self.songsWidget.clear()
+        self.songsWidget.setRowCount(MAX_ROW_IN_PAGE)
+        for index in range(0, MAX_ROW_IN_PAGE):
+            self.songsWidget.setCellWidget(index,0, SongTableWidgetImpl.SongTableWidgetImpl("", BluetoothPlayQueueObject("", "", 0), True, True, self.playTrackCounter))
+
 
 class GenreBasedModel(SongModel):
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
@@ -261,5 +311,14 @@ class MusicController(QtCore.QObject):
         self.actualModel.reloadSongsWidget()
         self.notifyBluetoothModel()
 
-    def rowCount(self):
-        return self.actualModel.rowCount()
+    def maxRowCount(self):
+        return MAX_ROW_IN_PAGE
+
+    def pageIndexUp(self):
+        self.actualModel.pageIndexUp()
+
+    def pageIndexDown(self):
+        self.actualModel.pageIndexDown()
+
+    def actualRowCount(self):
+        return self.actualModel.actualRowCount()
