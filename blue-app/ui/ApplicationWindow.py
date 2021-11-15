@@ -213,8 +213,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.wheelFortuneService.probabilitiesUpdated.connect(lambda: self.showStatusInfo(4000, self.texts[self.WIN_PROB_UPDATED], self.ui.infoLabel))
 
         self.printingService = printingService
-        printingService.lowPaper.connect(lambda: self.showError(self.texts[self.LOW_PAPER]))
-        printingService.lowPaperClear.connect(lambda: self.hideError())
+        printingService.lowPaper.connect(lambda: self.showError(self.texts[self.LOW_PAPER]), QtCore.Qt.QueuedConnection)
+        printingService.lowPaperClear.connect(lambda: self.hideError(), QtCore.Qt.QueuedConnection)
 
         self.wheelWindow = None
 

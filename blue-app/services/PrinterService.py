@@ -26,6 +26,10 @@ class PrintingService(QtCore.QObject):
     enoughPaper = QtCore.pyqtSignal()
     printStatusUpdated = QtCore.pyqtSignal()
     ticketCounterChanged = QtCore.pyqtSignal()
+    clearPrint = QtCore.pyqtSignal()
+    errorEmit = QtCore.pyqtSignal()
+
+    runFunc = QtCore.pyqtSignal(object)
 
     SettingsPath = PathSettings.AppBasePath() + "../blue-app-configs/print-tracking.conf"
     SettingsFormat = QtCore.QSettings.NativeFormat
@@ -42,24 +46,33 @@ class PrintingService(QtCore.QObject):
 
         self.hwErrorHandler = hwErrorHandler
 
+
+        self.testTimer = QtCore.QTimer()
+
+        self.thread = QtCore.QThread()
+        self.moveToThread(self.thread)
+        self.testTimer.moveToThread(self.thread)
+        self.thread.start()
+
         self.settings = QtCore.QSettings(PrintingService.SettingsPath, PrintingService.SettingsFormat)
         self.ticketCounter = self.settings.value(PrintingService.TicketCounter, 0, int)
 
-        self.noPaper.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER))
-        self.enoughPaper.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER))
-        self.clearPrintCorruptedFunc = lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED)
+        self.noPaper.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.NO_PAPER), QtCore.Qt.QueuedConnection)
+        self.enoughPaper.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.NO_PAPER), QtCore.Qt.QueuedConnection)
+        self.clearPrint.connect(lambda: hwErrorHandler.hwErrorClear(HwErrorHandling.PRINTER_CORRUPTED), QtCore.Qt.QueuedConnection)
+        self.errorEmit.connect(lambda: hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED), QtCore.Qt.QueuedConnection)
+        self.runFunc.connect(self.onRunFunc, QtCore.Qt.QueuedConnection)
 
-        self.testTimer = QtCore.QTimer(self)
         self.testTimer.timeout.connect(self.checkState)
 
-        self.initFunc = lambda: self.onWheelFortuneEnabledNotification(True, hwErrorHandler)
-
     def initialize(self):
-        self.initFunc()
+        def _initialize():
+            self.onWheelFortuneEnabledNotification(True, self.hwErrorHandler)
+        self.runFunc.emit(_initialize)
 
     def errorFunc(self):
         self.printStatusUpdated.emit()
-        self.hwErrorHandler.hwErrorEmit(HwErrorHandling.PRINTER_CORRUPTED)
+        self.errorEmit.emit()
 
     def onWheelFortuneEnabledNotification(self, enabled, hwErrorHandler):
         if enabled:
@@ -70,7 +83,7 @@ class PrintingService(QtCore.QObject):
             if self.testTimer.isActive():
                 self.testTimer.stop()
                 self.enoughPaper.emit()
-                self.clearPrintCorruptedFunc()
+                self.clearPrint.emit()
 
     def readOneByte(self, serial):
         byt = serial.read(1)
@@ -126,39 +139,43 @@ class PrintingService(QtCore.QObject):
         return self.ticketCounter
 
     def setNewTicketCounter(self, value):
-        if value != self.ticketCounter:
-            self.ticketCounter = value
-            self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
-            self.ticketCounterChanged.emit()
+        def _setNewTicketCounter():
+            if value != self.ticketCounter:
+                self.ticketCounter = value
+                self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
+                self.ticketCounterChanged.emit()
+        self.runFunc.emit(_setNewTicketCounter)
 
     def printDescTicket(self, name, prizeCounts, prizeNames, initPrizeCounts):
-        try:
-            self.statusValid = False
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
-            s.write([0x1b, 0x40])
-            s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
-            s.write(("DEVICE: " + name + "\n").encode(encoding='cp852'))
+        def _printDescTicket():
+            try:
+                self.statusValid = False
+                s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
+                s.write([0x1b, 0x40])
+                s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+                s.write(("DEVICE: " + name + "\n").encode(encoding='cp852'))
 
-            for i in range(1,10):
-                s.write((str(i) + " - " + prizeNames[i][0:18] + " - " + str(initPrizeCounts[i]) + "/" + str(prizeCounts[i]) + "\n").encode(encoding='cp852'))
+                for i in range(1,10):
+                    s.write((str(i) + " - " + prizeNames[i][0:18] + " - " + str(initPrizeCounts[i]) + "/" + str(prizeCounts[i]) + "\n").encode(encoding='cp852'))
 
-            s.write(b"\n")
-            s.write(b"\n")
-            s.write(b"\n")
-            s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
 
-            #CUT PAPER#
-            s.write([0x1d, 0x56, 0])
-            #s.write(b"\n")
-            self.checkError(s)
-            s.close()
+                #CUT PAPER#
+                s.write([0x1d, 0x56, 0])
+                #s.write(b"\n")
+                self.checkError(s)
+                s.close()
 
-            self.statusValid = True
-            self.printStatusUpdated.emit()
-            self.clearPrintCorruptedFunc()
-        except Exception as e:
-            LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called {}".format(e))
-            self.errorFunc()
+                self.statusValid = True
+                self.printStatusUpdated.emit()
+                self.clearPrint.emit()
+            except Exception as e:
+                LoggingService.getLogger().error("PrintingService: printDescTicket: Error func called {}".format(e))
+                self.errorFunc()
+        self.runFunc.emit(_printDescTicket)
 
     def printWithdrawTicket(self, device, gain, prizes, inkeeperPerc, currency, owner, swVersion, moneyTotal, moneyFromLastWithdraw):
         def printWithInt():
@@ -200,41 +217,43 @@ class PrintingService(QtCore.QObject):
 
                 self.statusValid = True
                 self.printStatusUpdated.emit()
-                self.clearPrintCorruptedFunc()
+                self.clearPrint.emit()
                 self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
             except Exception as e:
                 LoggingService.getLogger().error("PrintingService: printWithdrawTicket: Error func called {}".format(e))
                 self.errorFunc()
 
-        printWithInt()
-        printWithInt()
+        self.runFunc.emit(printWithInt)
+        self.runFunc.emit(printWithInt)
 
     def printTestTicket(self):
-        try:
-            self.statusValid = False
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
-            s.write([0x1b, 0x40])
-            s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
-            s.write(("THIS IS TEST TICKET\n").encode())
+        def _printTestTicket():
+            try:
+                self.statusValid = False
+                s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
+                s.write([0x1b, 0x40])
+                s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+                s.write(("THIS IS TEST TICKET\n").encode())
 
-            for i in range(1,10):
-                s.write(("TEST " + " - " + str(i) + " - "  + "\n").encode())
+                for i in range(1,10):
+                    s.write(("TEST " + " - " + str(i) + " - "  + "\n").encode())
 
-            s.write(b"\n")
-            s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
 
-            #CUT PAPER#
-            s.write([0x1d, 0x56, 0])
-            #s.write(b"\n")
-            self.checkError(s)
-            s.close()
+                #CUT PAPER#
+                s.write([0x1d, 0x56, 0])
+                #s.write(b"\n")
+                self.checkError(s)
+                s.close()
 
-            self.statusValid = True
-            self.printStatusUpdated.emit()
-            self.clearPrintCorruptedFunc()
-        except Exception as e:
-            LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called {}".format(e))
-            self.errorFunc()
+                self.statusValid = True
+                self.printStatusUpdated.emit()
+                self.clearPrint.emit()
+            except Exception as e:
+                LoggingService.getLogger().error("PrintingService: printTestTicket: Error func called {}".format(e))
+                self.errorFunc()
+        self.runFunc.emit(_printTestTicket)
 
     def checkState(self):
         try:
@@ -244,47 +263,51 @@ class PrintingService(QtCore.QObject):
             s.close()
             self.statusValid = True
             self.printStatusUpdated.emit()
-            self.clearPrintCorruptedFunc()
+            self.clearPrint.emit()
         except Exception as e:
             LoggingService.getLogger().error("Check state func called {}".format(e))
             self.errorFunc()
 
     def printTicket(self, name, winNumber, prizeName):
-        try:
-            self.statusValid = False
-            s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
+        def _printTicket():
+            try:
+                self.statusValid = False
+                s = serial.Serial('/dev/ttyS2', baudrate=19200, bytesize=8, parity='N', stopbits=1, timeout=3, xonxoff=0, rtscts=0)
 
-            s.write([0x1b, 0x40])
-            s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
-            s.write([0x1b, 0x4D, 49])
-            s.write([0x1b, 0x4A, 10])
-            s.write([0x1d, 0x21, 0x11])
-            s.write(b"\n")
-            s.write(b"      MUSICBOX\n")
-            s.write(("         #"+ str(winNumber) +"\n").encode())
-            s.write((" "+ prizeName[0:20] + "\n").encode(encoding='cp852'))
-            s.write(b"\n")
-            s.write([0x1d, 0x21, 0x00])
-            s.write([0x1d, 0x21, 0x71])
-            s.write((self.tr("DEVICE: ") + name + "\n").encode(encoding='cp852'))
-            s.write(("ID: "+ randomString(8) +"\n").encode(encoding='cp852'))
-            s.write(self.tr("Thank you for playing!\n").encode(encoding='cp852'))
-            s.write(b"\n")
-            s.write(b"\n")
-            s.write(b"\n")
+                s.write([0x1b, 0x40])
+                s.write(datetime.now().strftime("%H:%M:%S         %d/%m/%Y\n").encode())
+                s.write([0x1b, 0x4D, 49])
+                s.write([0x1b, 0x4A, 10])
+                s.write([0x1d, 0x21, 0x11])
+                s.write(b"\n")
+                s.write(b"      MUSICBOX\n")
+                s.write(("         #"+ str(winNumber) +"\n").encode())
+                s.write((" "+ prizeName[0:20] + "\n").encode(encoding='cp852'))
+                s.write(b"\n")
+                s.write([0x1d, 0x21, 0x00])
+                s.write([0x1d, 0x21, 0x71])
+                s.write((self.tr("DEVICE: ") + name + "\n").encode(encoding='cp852'))
+                s.write(("ID: "+ randomString(8) +"\n").encode(encoding='cp852'))
+                s.write(self.tr("Thank you for playing!\n").encode(encoding='cp852'))
+                s.write(b"\n")
+                s.write(b"\n")
+                s.write(b"\n")
 
-            #CUT PAPER#
-            s.write([0x1d, 0x56, 0])
-            #s.write(b"\n")
-            self.checkError(s)
-            s.close()
+                #CUT PAPER#
+                s.write([0x1d, 0x56, 0])
+                #s.write(b"\n")
+                self.checkError(s)
+                s.close()
 
-            self.statusValid = True
-            self.ticketCounter = self.ticketCounter + 1
-            self.printStatusUpdated.emit()
-            self.clearPrintCorruptedFunc()
-            self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
-        except Exception as e:
-            LoggingService.getLogger().error("PrintingService: printTicket: Error func called {}".format(e))
-            self.errorFunc()
+                self.statusValid = True
+                self.ticketCounter = self.ticketCounter + 1
+                self.printStatusUpdated.emit()
+                self.clearPrint.emit()
+                self.settings.setValue(PrintingService.TicketCounter, self.ticketCounter)
+            except Exception as e:
+                LoggingService.getLogger().error("PrintingService: printTicket: Error func called {}".format(e))
+                self.errorFunc()
+        self.runFunc.emit(_printTicket)
 
+    def onRunFunc(self, func):
+        func()

@@ -119,9 +119,9 @@ def main():
 
     printingService.printStatusUpdated.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
     printingService.ticketCounterChanged.connect(webUpdateStatus.sendPrintStatus, QtCore.Qt.QueuedConnection)
-    printingService.printError.connect(lambda: wheelFortuneService.lockWheel())
-    printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel())
-    printingService.enoughPaper.connect(lambda: wheelFortuneService.unlockWheel())
+    printingService.printError.connect(lambda: wheelFortuneService.lockWheel(), QtCore.Qt.QueuedConnection)
+    printingService.noPaper.connect(lambda: wheelFortuneService.lockWheel(), QtCore.Qt.QueuedConnection)
+    printingService.enoughPaper.connect(lambda: wheelFortuneService.unlockWheel(), QtCore.Qt.QueuedConnection)
 
     initWindow.appendText("Timer service - init")
     timerService = TimerService()
