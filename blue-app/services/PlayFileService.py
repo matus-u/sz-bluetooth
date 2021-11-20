@@ -22,11 +22,13 @@ class PlayFileService(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     refreshTimerSignal = QtCore.pyqtSignal(int)
 
-    def __init__(self, parent):
+    def __init__(self, parent, videoWidget):
         super().__init__(parent)
         self.player = QtMultimedia.QMediaPlayer()
         self.player.stateChanged.connect(self.onPlayerChanged)
         self.player.error.connect(self.onError)
+        self.videoWidget = videoWidget
+        self.player.setVideoOutput(videoWidget)
 
     def onPlayerChanged(self, state):
         if state == QtMultimedia.QMediaPlayer.StoppedState:
@@ -38,9 +40,10 @@ class PlayFileService(QtCore.QObject):
             return
 
         LoggingService.getLogger().info("Mp3 finished.")
+        self.videoWidget.hide()
         self.finished.emit()
 
-    def playMp3(self, path):
+    def play(self, path, withVideo):
         url = QtCore.QUrl.fromLocalFile(path)
         content = QtMultimedia.QMediaContent(url)
         LoggingService.getLogger().info("Mp3 play:".format(path))

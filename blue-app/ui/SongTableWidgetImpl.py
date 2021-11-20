@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from generated.SongTableWidget import Ui_SongTableWidget
 
-from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueueObject import LocalPlayQueueObject, BluetoothPlayQueueObject
 
 from ui import Helpers
 
@@ -57,7 +57,7 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
                 nameToShow = Helpers.formatNameWithStartTime(playQueueObject.name(), playQueueObject.startTime())
             return cls(nameToShow, playQueueObject, durationVisible, False, None)
 
-        if isinstance(playQueueObject, Mp3PlayQueueObject):
+        if isinstance(playQueueObject, LocalPlayQueueObject):
             return cls(playQueueObject.name(), playQueueObject, durationVisible, countVisible, playTrackCounter)
 
 

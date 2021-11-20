@@ -4,22 +4,25 @@ from PyQt5 import QtCore
 
 from datetime import timedelta
 
-class Mp3PlayQueueObject:
-    def __init__(self, mp3Info):
-        self.mp3info = mp3Info
+class LocalPlayQueueObject:
+    def __init__(self, metadata):
+        self._metadata = metadata
         self._startTime = None
 
-    def mp3Info(self):
-        return self.mp3info
+    def isVideoSupported(self):
+        return self._metadata[4]
+
+    def metadata(self):
+        return self._metadata
 
     def duration(self):
-        return self.mp3info[2]
+        return self._metadata[2]
 
     def name(self):
-        return self.mp3info[0]
+        return self._metadata[0]
 
     def path(self):
-        return self.mp3info[1]
+        return self._metadata[1]
 
     def setStartTime(self, startTime):
         self._startTime = startTime
@@ -31,7 +34,7 @@ class Mp3PlayQueueObject:
         return self._startTime + timedelta(seconds=self.duration())
 
     def genre(self):
-        return self.mp3info[3]
+        return self._metadata[3]
 
 class BluetoothPlayQueueObject:
     def __init__(self,  name, macAddr, duration):

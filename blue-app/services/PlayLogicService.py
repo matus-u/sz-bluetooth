@@ -3,7 +3,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from services.PlayFileService import PlayFileService
-from model.PlayQueueObject import Mp3PlayQueueObject, BluetoothPlayQueueObject
+from model.PlayQueueObject import LocalPlayQueueObject, BluetoothPlayQueueObject
 from datetime import datetime
 from services.LoggingService import LoggingService
 
@@ -18,7 +18,7 @@ class PlayLogicService(QtCore.QObject):
     PLAY_RETURN_QUEUE = 0
     PLAY_RETURN_IMMEDIATELLY = 1
 
-    def __init__(self, bluetoothService, playQueue):
+    def __init__(self, bluetoothService, playQueue, videoWidget):
         super().__init__()
         self.playQueue = playQueue
         self.bluetoothService = bluetoothService
@@ -27,7 +27,7 @@ class PlayLogicService(QtCore.QObject):
         self.bluetoothService.disconnectedEndSignal.connect(self.onPlayingFinished, QtCore.Qt.QueuedConnection)
         self.bluetoothService.connectedSignal.connect(self.onConnectedSignal, QtCore.Qt.QueuedConnection)
         self.actualPlayInfo = None
-        self.playService = PlayFileService(self)
+        self.playService = PlayFileService(self, videoWidget)
         self.playService.finished.connect(self.onPlayingFinished)
 
         self.refreshTimer = QtCore.QTimer()
@@ -47,9 +47,9 @@ class PlayLogicService(QtCore.QObject):
                 self.bluetoothService.asyncConnect(playQueueObject.macAddr(), playQueueObject.duration())
                 self.playingInitialized.emit()
 
-            if isinstance(playQueueObject, Mp3PlayQueueObject):
+            if isinstance(playQueueObject, LocalPlayQueueObject):
                 self.state = "PLAYING"
-                self.playService.playMp3(playQueueObject.path())
+                self.playService.play(playQueueObject.path(), playQueueObject.isVideoSupported())
                 self.playingInitialized.emit()
                 self.playingStarted.emit()
                 self.counter = 0
