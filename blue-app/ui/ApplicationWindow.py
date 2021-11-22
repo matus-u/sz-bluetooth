@@ -250,6 +250,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
         self.errorHandler = errorHandler
 
+        self.activeFocusHandler = None
+
         initWindow.appendText("Init timer executed")
         r = self.musicController.onInitAsync(initWindow)
 
@@ -394,9 +396,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.wheelFortuneButton.setVisible(enable)
             self.ui.testMenuButton.setVisible(enable)
             if not enable:
-                self.getActualFocusHandler().onLeft()
-                self.getActualFocusHandler().onRight()
-                self.getActualFocusHandler().setFocus()
+                handler = self.getActualFocusHandler()
+                if handler:
+                    handler.onLeft()
+                    handler.onRight()
+                    handler.setFocus()
 
     def openSubWindow(self, window):
         window.show()

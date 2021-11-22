@@ -90,7 +90,7 @@ class WebSocketLogService(QtCore.QObject):
         content = ""
         if os.path.exists(p):
             try:
-                with open(p, 'r') as contentFile:
+                with open(p, 'r', encoding="utf-8") as contentFile:
                     content = contentFile.read()
                     return content
             except:
