@@ -19,6 +19,14 @@ import operator
 
 MAX_ROW_IN_PAGE = 12
 
+import icu
+
+def sorted_strings(strings, locale=None):
+    if locale is None:
+       return sorted(strings)
+    collator = icu.Collator.createInstance(icu.Locale(locale))
+    return sorted(strings, key=collator.getSortKey)
+
 class SongModel:
     def __init__(self, songsWidget, genreLabelList, playTrackCounter):
         self.music = {}
@@ -175,8 +183,10 @@ class SongModel:
             helpDict[selector] = l
             self.musicByPath[song.path()] = song
 
+        collator = icu.Collator.createInstance(icu.Locale("sk_SK"))
         for key, value in helpDict.items():
-            self.music[key] = lambda val=value: val
+            sorted_value = sorted(value, key=lambda v: collator.getSortKey(v.name()))
+            self.music[key] = lambda val=sorted_value: val
 
         self.generateGenreList()
 
@@ -199,7 +209,7 @@ class SongModel:
         if "Bluetooth" in self.actualGenreList:
             self.actualGenreList.remove("Bluetooth")
 
-        self.actualGenreList.sort()
+        self.actualGenreList = sorted_strings(self.actualGenreList, "sk_SK")
         self.actualGenreList.append("Top 50")
         self.actualGenreList.append("Bluetooth")
 
@@ -286,7 +296,7 @@ class MusicController(QtCore.QObject):
                     if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp3"):
                         files.append(Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item)))
 
-        files.sort(key=lambda x:x.path())
+        #files.sort(key=lambda x:x.path())
         self.genreBasedModel.addSongs(files)
         self.alphaBasedModel.addSongs(files)
         self.genreBasedModel.addSpecials()

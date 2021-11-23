@@ -250,7 +250,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+q"), self, self.creditService.clearCredit)
         self.errorHandler = errorHandler
 
-        self.activeFocusHandler = None
+        self.activeFocusHandler = FocusHandler.FocusNullObject()
 
         initWindow.appendText("Init timer executed")
         r = self.musicController.onInitAsync(initWindow)

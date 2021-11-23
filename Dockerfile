@@ -36,6 +36,12 @@ RUN apt-get update \
 
 RUN apt-get update \
     && apt-get install -y \
+    python3-pip python3-dev \
+    pkg-config libicu-dev \
     zip
+
+RUN pip3 install wheel
+RUN pip3 install setuptools
+RUN pip3 install --no-binary=:pyicu: pyicu
 
 ENV RUN_FROM_DOCKER TRUE

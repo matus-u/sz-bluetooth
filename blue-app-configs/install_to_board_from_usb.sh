@@ -12,6 +12,11 @@ pip3 install --upgrade OPi.GPIO
 
 apt-get install -y gstreamer1.0-alsa python3-mutagen
 
+apt-get install -y python3-dev pkg-config libicu-dev
+pip3 install wheel
+pip3 install setuptools
+pip3 install --no-binary=:pyicu: pyicu
+
 
 ##bluez-alsa##
 apt-get install libdbus1-dev libdbus-1-dev libasound2-dev dh-autoreconf libortp-dev bluez bluetooth bluez-tools libbluetooth-dev libusb-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev libsbc1 libsbc-dev libfdk-aac-dev
