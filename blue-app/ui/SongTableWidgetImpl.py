@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+from PyQt5 import QtCore
 from generated.SongTableWidget import Ui_SongTableWidget
 
 from model.PlayQueue import Mp3PlayQueueObject, BluetoothPlayQueueObject
@@ -19,7 +20,11 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.setDurationVisible(durationVisible)
         self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
         self.playQueueObject = playQueueObject
-        self.playTrackCounter= playTrackCounter
+        self.playTrackCounter = playTrackCounter
+        self.originalText = ""
+        self.justifiedText = ""
+        self.movingTextTimer = QtCore.QTimer(self)
+        self.movingTextTimer.timeout.connect(self.onMovingTimer)
 
         if (countVisible):
             self.ui.playCountLabel.setText(self.formatCountValue(playTrackCounter.getCount(playQueueObject.path())))
@@ -43,6 +48,8 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.ui.songNameLabel.setText(self.playQueueObject.name())
         self.duration = playQueueObject.duration()
         self.setDurationVisible(durationVisible)
+        self.originalText = self.playQueueObject.name()
+        self._resetJustifiedText()
 
         if not isinstance(playQueueObject, BluetoothPlayQueueObject):
             self.ui.playCountLabel.setText(self.formatCountValue(self.playTrackCounter.getCount(playQueueObject.path())))
@@ -65,8 +72,25 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         if not self.property(SongTableWidgetImpl.SELECT_STRING):
             self.setProperty(SongTableWidgetImpl.SELECT_STRING, True)
             self.setStyleSheet("/* */")
+        self.ui.songNameLabel.setText(self.originalText)
+        self._resetJustifiedText()
+        self.movingTextTimer.start(150)
+
 
     def deselect(self):
         if self.property(SongTableWidgetImpl.SELECT_STRING):
             self.setProperty(SongTableWidgetImpl.SELECT_STRING, False)
             self.setStyleSheet("/*  */")
+
+        self.ui.songNameLabel.setText(self.originalText)
+        self.movingTextTimer.stop()
+
+    def onMovingTimer(self):
+        self.justifiedText = self.justifiedText[1:] + self.justifiedText[0]
+        self.ui.songNameLabel.setText(self.justifiedText)
+
+    def _resetJustifiedText(self):
+        if len(self.originalText) > 45:
+            self.justifiedText = self.originalText + "     "
+        else:
+            self.justifiedText = "{:45}".format(self.originalText)
