@@ -20,6 +20,8 @@ import operator
 MAX_ROW_IN_PAGE = 12
 
 import icu
+import json
+from services import PathSettings
 
 def sorted_strings(strings, locale=None):
     if locale is None:
@@ -278,14 +280,44 @@ class MusicController(QtCore.QObject):
         mp3 = MP3(fullFileName)
         return [fileName[:len(fileName)-4], fullFileName, mp3.info.length, genre]
 
+    def readMusicDatabase(self):
+        metadata_path = PathSettings.AppBasePath() + "../blue-app-configs/songs-metadata.json"
+        metadata_json = {}
+        try:
+            with open(metadata_path, "r") as metadata_file:
+                metadata_json = json.load(metadata_file)
+        except:
+            LoggingService.getLogger().info("Cannot read metadata database")
+
+
+        metadata = {}
+        for key,val in metadata_json.items():
+            metadata[key] = Mp3PlayQueueObject(**val)
+
+        return metadata
+
+    def writeMusicDatabase(self, metadata):
+        metadata_path = PathSettings.AppBasePath() + "../blue-app-configs/songs-metadata.json"
+
+        metadata_json = {}
+        for key,val in metadata.items():
+            metadata_json[key] = {"mp3Info" : val.mp3info }
+
+        with open(metadata_path, "w") as metadata_file:
+            json.dump(metadata_json, metadata_file, indent=2)
+
     def parseMusicStorage(self, initWindow):
         songs = []
         path = "/src/music"
         if os.getenv('RUN_FROM_DOCKER', False) == False:
             path = "/media/usbstick/music"
 
+        initWindow.appendTextThreadSafe("Reading metadata file!")
+        metadata = self.readMusicDatabase()
+        metadata_keys = metadata.keys()
+
         initWindow.appendTextThreadSafe("Parsing started!")
-        files = []
+        parsed_files = []
         for item in os.listdir(path):
             subPath = os.path.join(path, item)
             initWindow.appendTextThreadSafe("Parsing dir: {}".format(subPath))
@@ -294,13 +326,22 @@ class MusicController(QtCore.QObject):
                     fileSubPath = os.path.join(subPath, fileItem)
                     #initWindow.appendTextThreadSafe("Parsing file: {}".format(fileSubPath))
                     if os.path.isfile(fileSubPath) and fileSubPath.endswith(".mp3"):
-                        files.append(Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item)))
+                        parsed_files.append(fileSubPath)
+                        if fileSubPath not in metadata_keys:
+                            metadata[fileSubPath] = Mp3PlayQueueObject(self.getMp3Info(fileItem, fileSubPath, item))
 
-        #files.sort(key=lambda x:x.path())
-        self.genreBasedModel.addSongs(files)
-        self.alphaBasedModel.addSongs(files)
+
+        initWindow.appendTextThreadSafe("Updating song database!")
+        to_remove = set(metadata_keys) - set(parsed_files)
+        for i in to_remove:
+            metadata.pop(i)
+        values = metadata.values()
+
+        self.genreBasedModel.addSongs(values)
+        self.alphaBasedModel.addSongs(values)
         self.genreBasedModel.addSpecials()
         self.alphaBasedModel.addSpecials()
+        self.writeMusicDatabase(metadata)
         initWindow.appendTextThreadSafe("Parsing finished!")
 
     def getSelectedPlayObject(self):
