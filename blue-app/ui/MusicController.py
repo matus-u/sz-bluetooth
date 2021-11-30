@@ -322,13 +322,14 @@ class MusicController(QtCore.QObject):
     def parseMusicStorage(self, initWindow):
         songs = []
         path = PathSettings.MusicBasePath() 
+        initWindow.appendTextThreadSafe("Computing music size!")
         actual_size = getFolderSize(path)
 
         initWindow.appendTextThreadSafe("Reading metadata file!")
         previous_size, metadata = self.readMusicDatabase()
 
         if actual_size != previous_size:
-            print ("AAA")
+            initWindow.appendTextThreadSafe("Size changed, initial database update!")
             metadata_keys = metadata.keys()
 
             initWindow.appendTextThreadSafe("Parsing started!")
