@@ -5,3 +5,9 @@ def AppBasePath():
         return "/media/usbstick/blue-app/"
     else:
         return "/src/blue-app/"
+
+def MusicBasePath():
+    if os.getenv('RUN_FROM_DOCKER', False) == False:
+        return "/media/usbstick/music"
+    else:
+        return "/src/music"
