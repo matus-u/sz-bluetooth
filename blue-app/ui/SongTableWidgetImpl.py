@@ -73,8 +73,10 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
             self.setProperty(SongTableWidgetImpl.SELECT_STRING, True)
             self.setStyleSheet("/* */")
         self.ui.songNameLabel.setText(self.originalText)
-        self._resetJustifiedText()
-        self.movingTextTimer.start(150)
+        if self._resetJustifiedText():
+            self.movingTextTimer.start(150)
+        else:
+            self.movingTextTimer.stop()
 
 
     def deselect(self):
@@ -90,7 +92,9 @@ class SongTableWidgetImpl(QtWidgets.QWidget):
         self.ui.songNameLabel.setText(self.justifiedText)
 
     def _resetJustifiedText(self):
-        if len(self.originalText) > 45:
+        if len(self.originalText) > 36:
             self.justifiedText = self.originalText + "     "
-        else:
-            self.justifiedText = "{:45}".format(self.originalText)
+            return True
+
+        self.justifiedText = "{:36}".format(self.originalText)
+        return False

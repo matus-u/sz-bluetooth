@@ -168,6 +168,7 @@ class SongModel:
 
         if len(self.actualSongs) > 0:
             self.songsWidget.selectRow(0)
+            self.songsWidget.itemSelectionChanged.emit()
 
     def getSelectedPlayObject(self):
         if self.pagesCount > 0:
