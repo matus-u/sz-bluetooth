@@ -95,7 +95,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.SONGS : self.tr("songs"),
             self.PLAYING_FROM_BLUETOOTH : self.tr("Playing from bluetooth"),
             self.NOT_PLAYING : self.tr("Not playing"),
-            self.WAIT_WITH_START : self.tr("Start is possible at least 5s after previous"),
+            self.WAIT_WITH_START : self.tr("Cannot play same song sooner than after {} minutes"),
             self.ADDED_TO_QUEUE : self.tr("Bluetooth will be connected at: {} "),
             self.CONNECTION_INITIALIZED : self.tr("Connecting to device: {}"),
             self.WIN_PROB_UPDATED : self.tr("Prize counts and probabilities were updated"),
@@ -467,6 +467,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.devicesWidget.clearContents()
             code, startTime = self.playLogicService.play(BluetoothPlayQueueObject(name, macAddr, self.creditService.getBluetoothRepresentation().overTakeMoney()))
 
+            self.noStartImmediatellyCheck.check(None)
             if code == PlayLogicService.PLAY_RETURN_QUEUE:
                 self.showStatusInfo(2000, self.texts[self.ADDED_TO_QUEUE].format(Helpers.formatStartTime(startTime)), self.ui.infoLabel)
                 self.wheelFortuneService.overtakeWinTries()
@@ -484,7 +485,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.creditService.getSongsRepresentation().enoughMoney():
                 info = playQueueObject.mp3Info()
                 if not self.noStartImmediatellyCheck.check(info):
-                    self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START], self.ui.infoLabel)
+                    self.showStatusInfo(4000, self.texts[self.WAIT_WITH_START].format(str(10)), self.ui.infoLabel)
                 else:
                     self.playLogicService.play(Mp3PlayQueueObject(info))
                     self.creditService.getSongsRepresentation().overTakeMoney()

@@ -27,6 +27,5 @@
         <file>poland.png</file>
         <file>slovak.png</file>
         <file>hourglass.png</file>
-        <file>dynamic-images/.png</file>
     </qresource>
 </RCC>

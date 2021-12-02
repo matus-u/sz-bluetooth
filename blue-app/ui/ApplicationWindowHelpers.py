@@ -8,13 +8,16 @@ class NotStartSameImmediatellyCheck:
         self.lastStartedInfo = None
 
     def check(self, info):
-        prevLastStarted = self.lastStarted
-        self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
-        prevLastStartedInfo = self.lastStartedInfo
-        self.lastStartedInfo = info
-        if ((QtCore.QDateTime.currentMSecsSinceEpoch() - prevLastStarted) < 4000) and (self.lastStartedInfo == prevLastStartedInfo):
-            return False
-        return True
+        if (self.lastStartedInfo is None) or (info != self.lastStartedInfo):
+            self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+            self.lastStartedInfo = info
+            return True
+
+        if (QtCore.QDateTime.currentMSecsSinceEpoch() - self.lastStarted) > 600000:
+            self.lastStarted = QtCore.QDateTime.currentMSecsSinceEpoch()
+            return True
+
+        return False
 
 class StandardArrowHandler(QtCore.QObject):
     def __init__(self, parent, arrowHandler):
