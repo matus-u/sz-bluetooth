@@ -6,6 +6,7 @@
 killall -9 start-temperature.sh
 scripts/./start-temperature.sh &
 
+for i in $(seq 1 9); do echo on > /sys/bus/usb/devices/usb$i/power/control; done
 
 # set volume
 amixer set 'Line In' 0
