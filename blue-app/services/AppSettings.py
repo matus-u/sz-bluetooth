@@ -30,6 +30,9 @@ class CurrencyEur:
     def shortString():
         return "eur"
 
+    def bonusThreshold():
+        return 1
+
 class CurrencyHuf:
     def toString(value):
         return '%.0f' % value
@@ -42,6 +45,9 @@ class CurrencyHuf:
 
     def shortString():
         return "Ft"
+
+    def bonusThreshold():
+        return 200
 
 class CoinSettingsIndexes:
     COIN_1 = 0

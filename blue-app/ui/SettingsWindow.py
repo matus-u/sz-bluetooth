@@ -109,6 +109,7 @@ class SettingsWindow(QtWidgets.QDialog):
         self.enableCheckBoxes()
 
     def onOkButton(self):
+        resetBonus = False
         if AppSettings.actualCurrency() != AppSettings.currencyStringByIndex(self.ui.currencyCombobox.currentIndex()):
             shouldChangeCurrency = QtWidgets.QMessageBox.question(self, self.tr("Currency has changed!"), self.tr("Changing currency resets all internal money counters, proceed?"))
             if shouldChangeCurrency == QtWidgets.QMessageBox.Yes:
@@ -117,13 +118,14 @@ class SettingsWindow(QtWidgets.QDialog):
                 if shouldChangeCurrency == QtWidgets.QMessageBox.Yes:
                     self.moneyTracker.resetAllCounters()
                     self.creditService.clearCredit()
+                    resetBonus = True
                     self.fortuneService.resetActualFortuneTryLevels()
                 else:
                     return
             else:
                 return
 
-        QtCore.QTimer.singleShot(500, self.onOkWork)
+        QtCore.QTimer.singleShot(500, lambda: self.onOkWork(resetBonus))
         self.waitUserWindow.exec()
 
     def onResetMoneyButton(self):
@@ -143,7 +145,7 @@ class SettingsWindow(QtWidgets.QDialog):
                   os.remove(PlayTrackCounter.SettingsPath)
                 os.system("shutdown -r now")
 
-    def onOkWork(self):
+    def onOkWork(self, resetBonus):
         AppSettings.storeSettings(self.ui.languageCombobox.currentText(),
                                   [self.ui.languageCombobox.itemText(i) for i in range(self.ui.languageCombobox.count())],
                                   self.ui.timeZoneCombobox.currentIndex(),
@@ -159,6 +161,8 @@ class SettingsWindow(QtWidgets.QDialog):
                                   self.ui.volumeAtStartBox.value(),
                                   self.ui.systemVolumeLevelBox.value()
                                   )
+        if resetBonus:
+            self.creditService.bonusCounter.resetNewCurrency()
         self.accept()
         self.waitUserWindow.accept()
 

@@ -575,6 +575,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         values = list(filter(lambda x: (x != 0.0), self.creditService.getCoinSettings()[CoinSettingsIndexes.COIN_1:CoinSettingsIndexes.MINUTE_COST_VALUE]))
         if values:
             value = min(values)
+        if not(os.getenv('RUN_FROM_DOCKER', False) == False):
+            self.creditService.bonusCounter.addCredit(value)
         self.creditService.changeCredit(value)
         if not(os.getenv('RUN_FROM_DOCKER', False) == False):
             self.moneyTracker.addToCounters(value)
