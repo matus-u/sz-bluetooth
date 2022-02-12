@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="hu" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>ApplicationWindow</name>
     <message>
@@ -172,7 +173,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="98"/>
         <source>Cannot play same song sooner than after {} minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Azonos számot {} perc eltelte után lehet kiválasztani </translation>
     </message>
 </context>
 <context>
@@ -539,37 +540,37 @@ Válasszon ki egy zenét.</translation>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="113"/>
+        <location filename="../ui/SettingsWindow.py" line="114"/>
         <source>Currency has changed!</source>
         <translation>Pénznem megváltozott!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="113"/>
+        <location filename="../ui/SettingsWindow.py" line="114"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>A Valuta változtatása törli a belsõ változókat, mehet ?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="116"/>
+        <location filename="../ui/SettingsWindow.py" line="117"/>
         <source>Currency is goin to change!</source>
         <translation>Pénznemváltoztatás!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="133"/>
+        <location filename="../ui/SettingsWindow.py" line="135"/>
         <source>Proceed?</source>
         <translation>Mehet?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="130"/>
+        <location filename="../ui/SettingsWindow.py" line="132"/>
         <source>Reset all money related settings?!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="130"/>
+        <location filename="../ui/SettingsWindow.py" line="132"/>
         <source>It will resets all internal money counters, wheel settings and reboot the board, proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="133"/>
+        <location filename="../ui/SettingsWindow.py" line="135"/>
         <source>Settings are going to be set to defaults. Board will reboot!</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sk_SK">
+<!DOCTYPE TS><TS version="2.0" language="sk_SK" sourcelanguage="">
 <context>
     <name>ApplicationWindow</name>
     <message>
@@ -540,37 +539,37 @@ Vyberte skladbu a losovanie sa vykoná.</translation>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="113"/>
+        <location filename="../ui/SettingsWindow.py" line="114"/>
         <source>Currency has changed!</source>
         <translation>Mena bola zmenená!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="113"/>
+        <location filename="../ui/SettingsWindow.py" line="114"/>
         <source>Changing currency resets all internal money counters, proceed?</source>
         <translation>Zmena meny resetne všetky interné počítadlá, pokračovať?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="116"/>
+        <location filename="../ui/SettingsWindow.py" line="117"/>
         <source>Currency is goin to change!</source>
         <translation>Ideš zmeniť menu!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="133"/>
+        <location filename="../ui/SettingsWindow.py" line="135"/>
         <source>Proceed?</source>
         <translation>Pokračovať?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="130"/>
+        <location filename="../ui/SettingsWindow.py" line="132"/>
         <source>Reset all money related settings?!</source>
         <translation>Zmazať všetky peňažné nastavenia?!</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="130"/>
+        <location filename="../ui/SettingsWindow.py" line="132"/>
         <source>It will resets all internal money counters, wheel settings and reboot the board, proceed?</source>
         <translation>Budú zmazané všetky peňažné počítadlá, nastavenia kolesa a zariadenie bude reštartované, pokračovať?</translation>
     </message>
     <message>
-        <location filename="../ui/SettingsWindow.py" line="133"/>
+        <location filename="../ui/SettingsWindow.py" line="135"/>
         <source>Settings are going to be set to defaults. Board will reboot!</source>
         <translation>Nastavenia budú zmazané. Zariadenie bude reštartované!</translation>
     </message>
