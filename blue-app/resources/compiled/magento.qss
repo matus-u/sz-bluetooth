@@ -545,8 +545,3 @@ QLabel#waitUserLabel
 {
     background-color: transparent;
 }
-
-QMainWindow
-{
-     background-image: url('./resources/dynamic-images/brick_bg.jpg')
-}

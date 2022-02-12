@@ -1,3 +1,7 @@
+QMainWindow
+{
+     background-image: url('./resources/dynamic-images/SK/brick_bg.jpg')
+}
 QWidget#timeCounterWidget
 {
     border-image: url('./resources/dynamic-images/SK/get_ready.jpg') 0 0 0 0 stretch stretch; 
