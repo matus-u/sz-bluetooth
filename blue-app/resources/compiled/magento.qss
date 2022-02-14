@@ -486,6 +486,7 @@ QWidget#actualNeedFortuneMoney
 QWidget#infoLabel
 {
     font-size: 16px;
+    margin-top: 5px;
 }
 
 QTableWidget#playQueueWidget QScrollBar,
