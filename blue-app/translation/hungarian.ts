@@ -61,7 +61,7 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="95"/>
         <source>songs</source>
-        <translation>Zene</translation>
+        <translation>Szám</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="96"/>
@@ -96,7 +96,7 @@
     <message>
         <location filename="../ui/ApplicationWindow.py" line="103"/>
         <source>Continue with music selection.</source>
-        <translation>Zenekiválasztás.</translation>
+        <translation>Számkiválasztás.</translation>
     </message>
     <message>
         <location filename="../ui/ApplicationWindow.py" line="104"/>
@@ -256,7 +256,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/MainWindow.py" line="571"/>
         <source>PlayLabel</source>
-        <translation>Aktuális zene</translation>
+        <translation>Aktuális szám</translation>
     </message>
     <message>
         <location filename="../generated/MainWindow.py" line="572"/>
@@ -434,7 +434,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/Settings.py" line="401"/>
         <source>Song times visible:</source>
-        <translation>Zene idejének ábrázolása:</translation>
+        <translation>Szám idejének ábrázolása:</translation>
     </message>
     <message>
         <location filename="../generated/Settings.py" line="393"/>
@@ -585,7 +585,7 @@ Válasszon ki egy zenét.</translation>
     <message>
         <location filename="../generated/SongTableWidget.py" line="63"/>
         <source>songName</source>
-        <translation>Zene név</translation>
+        <translation>Szám név</translation>
     </message>
     <message>
         <location filename="../generated/SongTableWidget.py" line="64"/>
