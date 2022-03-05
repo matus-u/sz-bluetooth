@@ -466,6 +466,7 @@ QWidget#actualFortuneCount,
 QWidget#actualNeedFortuneMoney
 {
     font-size: 23px;
+    margin-left: 50px;
 }
 
 QWidget#infoLabel

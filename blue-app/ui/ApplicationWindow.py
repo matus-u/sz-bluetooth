@@ -39,6 +39,19 @@ from ui import TestHwWindow
 from ui import LanguageSwitcher
 
 from ui.ApplicationWindowHelpers import NotStartSameImmediatellyCheck, AppWindowArrowHandler
+import types
+
+def paintEvent(self, ev):
+    off = 50;
+    painter = QtGui.QPainter(self);
+    path = QtGui.QPainterPath()
+    drawFont = QtGui.QFont("arial-black", 20)
+    drawFont.setWeight(QtGui.QFont.Bold)
+    path.addText(off, drawFont.pointSize() + 3, drawFont, self.text())
+    painter.setRenderHints(QtGui.QPainter.Antialiasing)
+    painter.strokePath(path, QtGui.QPen(QtGui.QColor("#FFFFFF"), 2))
+    painter.fillPath(path, QtGui.QBrush(QtGui.QColor("#ba4dc7")))
+
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
@@ -132,6 +145,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.actualCreditValue.paintEvent = types.MethodType(paintEvent, self.ui.actualCreditValue)
         self.showFullScreen()
         self.moneyTracker = moneyTracker
         self.scanData = []
@@ -548,11 +562,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def updateCreditLabel(self):
         if self.ui.stackedWidget.currentIndex() == 0:
-            self.ui.actualCreditValue.setText(str(int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())) + " " + self.texts[self.SONGS])
+            self.ui.actualCreditValue.setText("KREDIT: " + str(int(self.creditService.getSongsRepresentation().getCreditValueRepresentation())))
         else:
             self.ui.actualCreditValue.setText(str(self.creditService.getBluetoothRepresentation().getCreditValueRepresentation()/60) + " " + self.texts[self.MINUTES])
         currentCurrencyClass = AppSettings.currencyClass()
-        self.ui.actualMoneyValue.setText(currentCurrencyClass.toString(self.creditService.getCredit()) + " " + currentCurrencyClass.longString())
+        self.ui.actualMoneyValue.setVisible(False)
+        #self.ui.actualMoneyValue.setText(currentCurrencyClass.toString(self.creditService.getCredit()) + " " + currentCurrencyClass.longString())
 
     def onCreditChange(self, credit):
         self.updateCreditLabel()
